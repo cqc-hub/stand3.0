@@ -92,14 +92,6 @@
       });
   });
 
-  onShow(() => {
-    if (!isFirstIn) {
-      uni.navigateBack({
-        delta: 1,
-      });
-    }
-    isFirstIn = false;
-  });
 </script>
 
 <style lang="scss" scoped>

@@ -512,7 +512,7 @@
     let message = '反馈成功,感谢您的支持';
     let args = {
       ...data,
-       photo: uploadImgList.value.toString(),
+      photo: uploadImgList.value.toString(),
     };
     if (options.value.selectRecords === '1') {
       args = {
@@ -567,6 +567,10 @@
   };
 
   const getListData = async () => {
+    if (options.value.selectRecords === '2') {
+      const { patientName } = gStores.userStore.patChoose;
+      formData.value.name = patientName;
+    }
     let tempList: any = [];
     try {
       const { result } = await api.getOutpatientHospitalList({
@@ -621,8 +625,9 @@
       return;
     }
     // #ifdef MP-ALIPAY
-    const { patientName, mobile } = gStores.userStore.patChoose||gStores.userStore.cacheUser;
-    formData.value.name = patientName;
+
+    const { userName, mobile } = gStores.userStore.cacheUser;
+    formData.value.name = userName;
     formData.value.phone = mobile;
     // #endif
 

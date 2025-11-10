@@ -39,7 +39,7 @@
           <view v-if="item.distanceFormat" class="hos-away g-flex-rc-cc">
             距离{{ item.distanceFormat }}km
           </view>
-          <view v-else class="hos-away g-flex-rc-cc">导航</view>
+          <!-- <view v-else class="hos-away g-flex-rc-cc">导航</view> -->
         </view>
       </view>
     </view>

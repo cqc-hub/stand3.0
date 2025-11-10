@@ -888,7 +888,7 @@
     const { costTypeCode } = props.value;
     const isMedicalMode = getIsMedicalMode();
     const onlineMedicalConfig = await getOnlineMedicalConfig();
-
+    const { cardNumber } = gStores.userStore.patChoose;
     const {
       sConfig: { medicalMHelp },
     } = globalGl;
@@ -905,11 +905,11 @@
 
     if (isMedicalMode && onlineMedicalConfig.isMedicalPay === '1') {
       //现在不判断是否本人医保,交给微信医保去判断
-      // flag = await isMedicalSelf(
-      //   props.value.cardNumber || cardNumber,
-      //   props.value.params
-      // );
-      flag = true;
+      flag = await isMedicalSelf(
+        props.value.cardNumber || cardNumber,
+        props.value.params
+      );
+      // flag = true;
     }
 
     changeRefPayList([PayType.Online]);
@@ -1069,7 +1069,7 @@
 
   const payAfter = async () => {
     const { clinicType, cardNumber } = props.value;
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     await wait(1000);
     uni.hideLoading();
 
@@ -1211,7 +1211,7 @@
     }
     await init();
     if (!isShowRefreshQrCode.value && payState.value === '0' && qrCode.value) {
-      uni.showLoading({ title: '加载中'});;
+      uni.showLoading({ title: '加载中' });
       await wait(1000);
       uni.hideLoading();
       capture();
