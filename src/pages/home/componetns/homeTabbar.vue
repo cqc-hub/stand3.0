@@ -307,6 +307,22 @@
         loginInterception: '0',
         sort: 2,
       },
+       {
+        label: 'home-tabbar:科普',
+        icon: global.BASE_IMG + 'oral-mall-home-icon.png',
+        iconActive: global.BASE_IMG + 'oral-mall-home-icon-active.png',
+        url: '/pagesC/commonHosNet/commonHosNet?returnUrl=pages%2Fv3%2FfreeClinic%2FchooseDept%3FhosId%3D480%26isHealthSciencePopularization%3D1',
+        loginInterception: '1',
+        sort: 2,
+      },
+       {
+        label: 'home-tabbar:便民',
+        icon:  '/static/image/wlyy.png',
+        iconActive: global.BASE_IMG + 'oral-mall-home-icon-active.png',
+        url: '/pagesD/common/homeGrid?showTab=5',
+        loginInterception: '0',
+        sort: 3,
+      },
       {
         label: 'home-tabbar:消息中心',
         icon: '/static/image/wlyy.png',
@@ -363,6 +379,12 @@
       // tabList.push('home-tabbar:健康商城');
     }
 
+      if (global.SYS_CODE === '1001036') {
+      //东总煞笔需求
+      tabList.push('home-tabbar:便民');
+      tabList.push('home-tabbar:科普');
+    }
+
     if (global.SYS_CODE === '1001082') {
       tabList.push('home-tabbar:服务');
       tabBarList[0].url = '/pagesA/intelMedicalAssist/intelMedicalAssist';
@@ -379,7 +401,7 @@
       .sort((a, b) => a.sort - b.sort);
 
     // 固定插入中间
-    if (!(tabBars.value.length % 2) && !isAreaProgram()) {
+    if (!(tabBars.value.length % 2) && !isAreaProgram()&& global.SYS_CODE !== '1001036') {
       const d = {
         label: 'home-tabbar:就诊码/医保码',
         icon: '/static/image/my.png',

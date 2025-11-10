@@ -88,6 +88,7 @@
                           v-if="personConfig.isQrCodeDisabled !== '1'"
                           @tap="cardClick"
                           class="iconfont icon-size"
+                          :class="getSysCode() == '1001036' ? 'revent' : ''"
                         >
                           &#xe6a7;
                         </view>
@@ -411,7 +412,11 @@
 
   import { useGlobalStore, isAreaProgram, type IPat } from '@/stores';
   import { useViewerStore } from '@/stores/modules/viewer';
-  import { getLocalStorage, removeLocation } from '@/common/useToken';
+  import {
+    getLocalStorage,
+    getSysCode,
+    removeLocation,
+  } from '@/common/useToken';
 
   import {
     aliLogin,
@@ -565,8 +570,9 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
-    healthCounselConfig.value =
-      await ServerStaticData.getSystemConfig('HEALTH_COUNSEL');
+    healthCounselConfig.value = await ServerStaticData.getSystemConfig(
+      'HEALTH_COUNSEL'
+    );
 
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');
@@ -1191,5 +1197,12 @@
         }
       }
     }
+  }
+  .revent {
+    background-color: #fff;
+    color: var(--h-qrcode-2) !important;
+    border-radius: 50%;
+    padding: 6px;
+    font-size: 56rpx !important;
   }
 </style>

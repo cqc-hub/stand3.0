@@ -834,7 +834,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001036: {
     // isOpenHomeTabBarNetWorkBtn: '1',
-    isOpenPopularSci: '1',
+    // isOpenPopularSci: '1',
     homeTopBanner: {
       topShow: true,
       bannerHeight: 230,

@@ -903,6 +903,12 @@
           }
         },
          {
+          "path": "common/homeGrid",
+          "style": {
+            "navigationBarTitleText": " "
+          }
+        },
+         {
           "path": "common/chooseTabJump",
           "style": {
             "navigationBarTitleText": " "
