@@ -42,6 +42,7 @@ export const useFaceVerify1001082 = () => {
       path: joinQuery('/pages/appScene', {
         app_scene,
         apply_id: authInfo.value.applyId,
+        protocol:'wzHealthAuth'
         // action_type: 'faceAuth',
       }),
       envVersion: 'release',

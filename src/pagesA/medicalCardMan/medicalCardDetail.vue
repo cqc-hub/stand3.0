@@ -109,6 +109,11 @@
 
   const deletePat = async () => {
     isShow.value = false;
+    const { isNotDeleteSelf } = pageConfig.value;
+    if(isNotDeleteSelf === '1' && formData.value.relationship === '本人'){
+      gStores.messageStore.showMessage('不可删除本人账号', 2000)
+      return;
+    }
     await patientUtils.deletePat({
       patientId: gStores.userStore.clickPat.patientId,
     });
