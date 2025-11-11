@@ -491,7 +491,7 @@
     if (_cpc_img) {
       ctx.drawImage(
         _cpc_img,
-        avatarBox.left - 40,
+        avatarBox.left - 42,
         avatarBox.top / 2 + 63,
         painWidthAvatar + 10,
         painHeightAvatar - 66

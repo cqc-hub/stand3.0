@@ -227,11 +227,11 @@
         flex-shrink: 0;
       }
       .CPC-icon {
-        width: 136rpx;
+        width: 126rpx;
         height: 45rpx;
         position: absolute;
         top: 78rpx;
-         transform: translate(-20rpx, 0px);
+         transform: translate(-15rpx, 0px);
       }
 
       .doc-info-introduce {

@@ -1166,7 +1166,7 @@
         width: 156rpx;
         height: 50rpx;
         position: absolute;
-        bottom: -35rpx;
+        bottom: -25rpx;
         transform: translate(-10rpx, 0px);
       }
 

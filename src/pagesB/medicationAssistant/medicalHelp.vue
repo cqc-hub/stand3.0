@@ -318,7 +318,7 @@
 
       if (idx === -1) {
         if (gStores.globalStore.sysCode === '1001035') {
-          selSZPayListItem(item);
+          selectAll1001035(item);
           return;
         }
         const list = [...selList.value, item];
@@ -486,9 +486,9 @@
         // o.visitType = '1';
       });
     }
+    dealWith1001035();
   };
 
-  const unSelItemClick = (item: IWaitListItem) => {};
   const selItemClick = (item: IWaitListItem) => {
     dealWith1001067();
     const pageArg = {
@@ -519,16 +519,27 @@
       waitSelList.value.length
     ) {
       const firstItem = waitSelList.value[0];
-      selPayListItem(firstItem);
-      const otherItems = waitSelList.value.slice(1);
+      selectAll1001035(firstItem);
+    }
+  };
+
+  const selectAll1001035 = (clickItem: any) => {
+    //省中默认选择与第一条数据符合多选的数据
+    if (globalGl.SYS_CODE === '1001035') {
+      selList.value = [];
+      selSZPayListItem(clickItem);
+      const otherItems = waitSelList.value.filter(
+        (item) => item._id !== clickItem._id
+      );
+
       if (otherItems.length) {
         otherItems.forEach((item) => {
           if (
-            item.hosId === firstItem.hosId &&
-            item.prescVisitType === firstItem.prescVisitType &&
-            item.deliveryType === firstItem.deliveryType
+            item.hosId === clickItem?.hosId &&
+            item.prescVisitType === clickItem.prescVisitType &&
+            item.deliveryType === clickItem.deliveryType
           ) {
-            selPayListItem(item);
+            selSZPayListItem(item);
           }
         });
       }
@@ -577,7 +588,6 @@
 
     await getListData(tabField.value[tabCurrent.value]?.key);
     dealWith1001067();
-    dealWith1001035();
   };
 
   const wayClick = (item: IOptions) => {

@@ -138,11 +138,11 @@
         margin-right: 24rpx;
       }
       .CPC-icon {
-        width: 136rpx;
+        width: 126rpx;
         height: 45rpx;
         position: absolute;
         bottom: -22rpx;
-        transform: translate(-20rpx, 0px);
+        transform: translate(-15rpx, 0px);
       }
 
       .doc-info-introduce {
