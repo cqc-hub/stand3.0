@@ -336,14 +336,14 @@
         <view v-if="dialogType === 'smsVerifyImgCode'">
           <view @click="requestVerify(cacheItem!)" class="mb12 pr32 pl32">
             <img :src="smsVerifyImg" mode="widthFix" class="w-full" />
-            <view class="f28 color-blue">看不清楚，换一张?</view>
+            <view class="f28 color-blue text-right">看不清楚，换一张?</view>
           </view>
 
           <view class="pr32 pl32 pb32">
             <easy-input
               v-model="smsVerifyImgCodeVal"
               :styles="{
-                height: '60rpx',
+                height: '80rpx',
               }"
               placeholder="请输入验证码"
             />
