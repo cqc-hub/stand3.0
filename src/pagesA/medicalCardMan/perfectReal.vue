@@ -256,7 +256,7 @@
     [formKey.patientType]: '-1',
     [formKey.defaultFalg]: true,
     // patientName: '陈钦川',
-    // [formKey.patientPhone]: '13868529891',
+    [formKey.patientPhone]: '13868529891',
   });
   let envContainer = '';
   // #ifdef MP-ALIPAY

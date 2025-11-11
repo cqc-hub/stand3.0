@@ -371,6 +371,7 @@
   import {
     cacheUtil,
     FileUtil,
+    GStores,
     ServerStaticData,
     upImgOss,
     useOcr,
@@ -405,6 +406,7 @@
       showRequireIcon: false,
     }
   );
+  const gStores = new GStores();
   const fileUtil = new FileUtil();
   const imgCanvas = ref({
     imgWidth: 0,
@@ -589,7 +591,19 @@
               ? api.sendVerifyCodeByCode
               : api.sendVerifyCode;
 
-          await action(reqArg);
+          await action(reqArg).catch((e) => {
+            const { message = '验证码发送失败' } = e;
+
+            gStores.messageStore.showMessage(message, 1500, {
+              closeCallBack() {
+                if (isSmsVerifyWithImgCode === '1') {
+                  requestVerify(cacheItem as any);
+                }
+              },
+            });
+
+            throw new Error(message);
+          });
         }
 
         let waitTime = item.verifySecond;
