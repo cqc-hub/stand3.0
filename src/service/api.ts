@@ -1,12 +1,16 @@
 import { envBasic } from '@/config/env';
 import service from './index';
-import { getSysCode } from '@/common/useToken';
 import globalGl from '@/config/global';
 import global from '@/config/global';
 import { useGlobalStore, IPat } from '@/stores';
 
 // 参数的额外配置
-let parm = (data: any, payload: any = {}) => {
+let parm = (
+  data: any,
+  payload: {
+    outArg?: boolean;
+  } = {}
+) => {
   const { outArg } = payload;
   const globalStore = useGlobalStore();
   const sysCode = globalStore.sysCode;
@@ -190,6 +194,17 @@ const queryApi = {
     service.post<T>('/phs-base/medical/authorize', parm(data), {
       hideLoading: false,
     }),
+
+  getSecurityCode: (data) =>
+    service.post(
+      '/phs-base/kaptcha/getSecurityCode',
+      parm(data, {
+        // outArg: true,
+      }),
+      {
+        hideLoading: false,
+      }
+    ),
 
   // 医保授权
   medicalCostInfoUpload: <T>(data, hideLoading = false) =>
@@ -580,10 +595,10 @@ const regApi = {
   getGuidanceUrl: <T = any>(data: any) =>
     service.post<T>('/phs-query/regIntelligence/getGuidanceUrl', parm(data)),
 
-   addContribOrder: <T = any>(data: any) =>
+  addContribOrder: <T = any>(data: any) =>
     service.post<T>('/phs-query/contribution/addContribOrder', parm(data)),
 
-    contribPayInform: <T = any>(data: any) =>
+  contribPayInform: <T = any>(data: any) =>
     service.post<T>('/contribution/contribution/contribPayInform', parm(data)),
 
   getConsultationUrl: <T = any>(data: any) =>
@@ -870,6 +885,10 @@ const userApi = {
   // 发送短信验证码
   sendVerifyCode: (data) =>
     service.post('/phs-user/message/sendVerifyCode', parm(data), {
+      hideLoading: false,
+    }),
+  sendVerifyCodeByCode: (data) =>
+    service.post('/phs-user/message/sendVerifyCodeByCode', parm(data), {
       hideLoading: false,
     }),
 

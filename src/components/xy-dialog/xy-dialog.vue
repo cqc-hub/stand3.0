@@ -14,7 +14,7 @@
       </view>
       <scroll-view
         class="xy-dialog__content"
-        :style="{ 'text-align': textalign ,'max-height':`${maxHeight}rpx`}"
+        :style="{ 'text-align': textalign, 'max-height': `${maxHeight}rpx` }"
         scroll-y
       >
         <template v-if="content">
@@ -25,6 +25,7 @@
         </template>
       </scroll-view>
       <view
+        v-if="isShowFooter"
         :class="{
           footer__reverse: isReverseBtn,
           'footer__row f32': isVerticalBtn,
@@ -34,14 +35,14 @@
         <view
           v-if="isShowCancel"
           class="xy-dialog__btn xy-dialog__footer-cancel g-bold w100p"
-          :style="{ color: cancelColor ,fontWeight: cancelFontWeight }"
+          :style="{ color: cancelColor, fontWeight: cancelFontWeight }"
           @click="clickCancel"
         >
           <slot name="cancelBtn">{{ cancelText }}</slot>
         </view>
         <view
           class="xy-dialog__btn xy-dialog__footer-confirm w100p"
-          :style="{ color: confirmColor , fontWeight: confirmFontWeight }"
+          :style="{ color: confirmColor, fontWeight: confirmFontWeight }"
           :class="[isShowCancel ? '' : 'xy-dialog__btn-row']"
           @click="clickConfirm"
         >
@@ -141,10 +142,15 @@
       },
 
       //最大高度
-      maxHeight:{
+      maxHeight: {
         type: Number,
         default: 600,
-      }
+      },
+
+      isShowFooter: {
+        type: Boolean,
+        default: true,
+      },
     },
     data() {
       return {
@@ -299,7 +305,6 @@
         }
         &.xy-dialog__footer-confirm {
           color: var(--hr-brand-color-6);
-          
         }
         &.xy-dialog__btn-row {
           width: 100%;

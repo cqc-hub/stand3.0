@@ -246,6 +246,8 @@ export interface ISystemConfig_ {
     isHidePatientTypeInPerfect?: '1' | '0';
     /** 开启短信验证？ 完善时候没有 */
     isSmsVerify?: '1';
+    /** 短信验证时候图形验证? */
+    isSmsVerifyWithImgCode?: '1';
     // /** 就诊人列表存在补充证件号入口 */
     isCanAddPatCardNo?: '1';
     /** 就诊人列表存在补充监护人入口 */

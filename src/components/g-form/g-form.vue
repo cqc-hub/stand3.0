@@ -324,6 +324,33 @@
       canvas-id="canvasForBase64"
       class="my-display-none"
     />
+
+    <xy-dialog
+      :title="dialogTitle"
+      :show="isDialogShow"
+      @confirmButton="confirmAsync"
+      @cancelButton="cancelAsync"
+      is-mask-click
+    >
+      <view class="">
+        <view v-if="dialogType === 'smsVerifyImgCode'">
+          <view @click="requestVerify(cacheItem!)" class="mb12 pr32 pl32">
+            <img :src="smsVerifyImg" mode="widthFix" class="w-full" />
+            <view class="f28 color-blue">看不清楚，换一张?</view>
+          </view>
+
+          <view class="pr32 pl32 pb32">
+            <easy-input
+              v-model="smsVerifyImgCodeVal"
+              :styles="{
+                height: '60rpx',
+              }"
+              placeholder="请输入验证码"
+            />
+          </view>
+        </view>
+      </view>
+    </xy-dialog>
   </view>
 </template>
 
@@ -352,6 +379,7 @@
   import api from '@/service/api';
 
   import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
+  import easyInput from '@/components/uni-search-input/easyInput.vue';
 
   /**
    * 部分函数、正则等特殊对象在小程序无法prop传递， 请使用 setList(list)
@@ -389,6 +417,20 @@
       uniToast: props.warningInUni || false,
     };
   });
+
+  const isDialogShow = ref(false);
+  const dialogTitle = ref('');
+  const dialogType = ref<'smsVerifyImgCode'>();
+  let resolve: (...any) => any = () => {};
+  let reject: (...any) => any = () => {};
+  const confirmAsync = (e?: any) => {
+    isDialogShow.value = false;
+    resolve(e);
+  };
+  const cancelAsync = () => {
+    isDialogShow.value = false;
+    reject();
+  };
 
   const emits = defineEmits([
     'update:value',
@@ -491,7 +533,10 @@
     return props.value[item.key];
   };
 
+  const smsVerifyImg = ref('');
+  const smsVerifyImgCodeVal = ref('');
   const requestVerify = async (item: IInputVerifyInstance) => {
+    cacheItem = item;
     if (timer) {
       clearTimer();
     } else {
@@ -502,6 +547,34 @@
       if (phoneItem) {
         const phone = props.value[phoneItem.key];
         await validatorItem(phoneItem, phone);
+        const { isSmsVerifyWithImgCode } =
+          await ServerStaticData.getSystemConfig('person');
+
+        const reqArg = {
+          patientPhone: phone,
+          enCode: '',
+          securityCode: '',
+        };
+        if (isSmsVerifyWithImgCode === '1') {
+          dialogType.value = 'smsVerifyImgCode';
+          smsVerifyImgCodeVal.value = '';
+          dialogTitle.value = '验证';
+          isDialogShow.value = true;
+          const {
+            result: { securityCode, enCode },
+          } = await api.getSecurityCode({
+            keyParam: phone,
+          });
+
+          smsVerifyImg.value = `data:image/png;base64,${securityCode}`;
+          reqArg.enCode = enCode;
+
+          await new Promise((r, j) => {
+            resolve = r;
+            reject = j;
+          });
+          reqArg.securityCode = smsVerifyImgCodeVal.value;
+        }
 
         uni.showLoading({
           title: '请求中...',
@@ -511,9 +584,12 @@
         if (item.submitVerify) {
           await item.submitVerify(phone);
         } else {
-          await api.sendVerifyCode({
-            patientPhone: phone,
-          });
+          const action =
+            isSmsVerifyWithImgCode === '1'
+              ? api.sendVerifyCodeByCode
+              : api.sendVerifyCode;
+
+          await action(reqArg);
         }
 
         let waitTime = item.verifySecond;
