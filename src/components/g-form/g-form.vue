@@ -615,7 +615,7 @@
           if (waitTime <= -1) {
             clearTimer();
           }
-        }, 1000) as unknown as number;
+        }, 1000);
         uni.hideLoading();
       } else {
         messageStore.showMessage(
