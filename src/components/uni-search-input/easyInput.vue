@@ -54,6 +54,7 @@
             'padding-right':
               type === 'password' || clearable || prefixIcon ? '' : '10px',
             'padding-left': prefixIcon ? '' : '10px',
+            height: styles.height,
           }"
           :name="name"
           :value="val"

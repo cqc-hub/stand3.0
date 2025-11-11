@@ -41,6 +41,7 @@ export const isOpenSm4 = false;
 Request.interceptors.request((request: IRequest) => {
   const globalStore = useGlobalStore();
   const specialUrls1001035 = ['https://phs.jshtcm.com'];
+  console.log(request);
 
   if (
     globalStore.ev === 'web' &&
@@ -184,7 +185,9 @@ Request.interceptors.response(
     const messageStore = useMessageStore();
 
     messageStore.showMessage(
-      err.data.message || err.data.error || '网络连接异常，请尝试切换网络或开启飞行模式再恢复后重试！',
+      err.data.message ||
+        err.data.error ||
+        '网络连接异常，请尝试切换网络或开启飞行模式再恢复后重试！',
       3000
     );
 

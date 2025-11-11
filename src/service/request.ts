@@ -116,8 +116,8 @@ class requestClass {
     });
   }
 
-  get(url: string, data: any = {}, options: TRequestOption = {}) {
-    return this.request({ ...options, url, data, method: 'GET' });
+  get<T = any>(url: string, data: any = {}, options: TRequestOption = {}) {
+    return this.request<T>({ ...options, url, data, method: 'GET' });
   }
 
   post<T = any>(url: string, data: any = {}, options: TRequestOption = {}) {
