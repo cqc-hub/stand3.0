@@ -72,7 +72,7 @@
         </view>
       </view>
 
-      <view v-if="isShowFooter(item)" class="footer flex-between btn-normal">
+      <view class="footer flex-between btn-normal">
         <view class="f36 color-error g-bold">
           <!-- {{ item.fee }}元 -->
         </view>
@@ -130,18 +130,20 @@
             院内导航
           </button>
 
-          <slot :item="item" />
+          <slot name="footer" :item="item" />
 
-          <block v-for="btn in getCustomBtns" :key="btn.text">
-            <!-- useTBanner(btn, 'navigateTo', item) -->
+          <block v-if="isShowFooter(item)">
+            <block v-for="btn in getCustomBtns" :key="btn.text">
+              <!-- useTBanner(btn, 'navigateTo', item) -->
 
-            <button
-              v-if="isShowCustomBtn(item, btn)"
-              @click="customBtnClick(btn, item)"
-              class="btn btn-round btn-size-small btn-border cancel-btn"
-            >
-              {{ btn.text }}
-            </button>
+              <button
+                v-if="isShowCustomBtn(item, btn)"
+                @click="customBtnClick(btn, item)"
+                class="btn btn-round btn-size-small btn-border cancel-btn"
+              >
+                {{ btn.text }}
+              </button>
+            </block>
           </block>
         </view>
       </view>
