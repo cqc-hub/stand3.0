@@ -772,6 +772,8 @@ export type TBannerConfigBase = {
     // 传入保证需要完善
     herenId?: string;
 
+    openId?: string;
+
     // useTBanner 传入 additionData (配合业务手动注入 additionData)
     [key: string]: any;
   };

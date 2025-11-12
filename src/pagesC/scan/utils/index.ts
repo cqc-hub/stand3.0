@@ -1,5 +1,12 @@
 import { computed, ref } from 'vue';
-import { getLocation, GStores, TBannerConfig, useTBanner, wait } from '@/utils';
+import {
+  getLocation,
+  GStores,
+  PatientUtils,
+  TBannerConfig,
+  useTBanner,
+  wait,
+} from '@/utils';
 import { encryptDes, joinQueryForUrl } from '@/common';
 import api from '@/service/api';
 import globalGl from '@/config/global';
@@ -29,6 +36,7 @@ export const useScan = () => {
        * - 18 健康温州 云影像
        * - 19 江苏省中 健康商城
        * - 20 健康温州 学生体检
+       * - 21 新疆中医 患者实名认证页面
        */
       type:
         | '_1'
@@ -49,9 +57,10 @@ export const useScan = () => {
         | '15'
         | '16'
         | '17'
-        | '18'  
+        | '18'
         | '19'
-        | '20';
+        | '20'
+        | '21';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
@@ -441,84 +450,84 @@ export const useScan = () => {
    */
   const aijiance1001082 = () => {
     useTBanner({
-      "isExpired": "1",
-      "type": "h5",
-      "path": "https://azyy.wzswsj.gov.cn/index.html",
-      "addition": {
-        "token": "token",
-        "patientId": "patientId",
-        "herenId": "herenId"
+      isExpired: '1',
+      type: 'h5',
+      path: 'https://azyy.wzswsj.gov.cn/index.html',
+      addition: {
+        token: 'token',
+        patientId: 'patientId',
+        herenId: 'herenId',
       },
-      "extraData": {
-        "sysCode": "1001082",
-        "reqForward": "true",
-        "source": "19",
-         "verify1001082":"1"
-      }
+      extraData: {
+        sysCode: '1001082',
+        reqForward: 'true',
+        source: '19',
+        verify1001082: '1',
+      },
     });
   };
 
-    /**
+  /**
    * 健康温州——云影像
    */
   const yun1001082 = () => {
     useTBanner({
-      "isExpired": "1",
-      "type": "h5",
-      "path": " https://cloud-exam-view-wzswsj.wzxcpacs.kayicloud.com/hisLogin",
-      "addition": {
-        "token": "token",
-        "patientId": "patientId",
-        "herenId": "herenId"
+      isExpired: '1',
+      type: 'h5',
+      path: ' https://cloud-exam-view-wzswsj.wzxcpacs.kayicloud.com/hisLogin',
+      addition: {
+        token: 'token',
+        patientId: 'patientId',
+        herenId: 'herenId',
       },
-      "extraData": {
-        "sysCode": "1001082",
-        "reqForward": "true",
-        "source": "19",
-        "verify1001082":"1"
-      }
+      extraData: {
+        sysCode: '1001082',
+        reqForward: 'true',
+        source: '19',
+        verify1001082: '1',
+      },
     });
   };
 
-    /**
+  /**
    * 健康温州——温心在线
    */
   const wenxinzaixian1001082 = () => {
     useTBanner({
-      "isExpired": "1", 
-      "type": "h5",
-      "path": "https://xljk.wzswsj.gov.cn/municipalCitizen/#/pages/skip/index?origin=%E6%B8%A9%E5%B7%9E%E6%99%BA%E5%BA%B7",
-      "addition": {
-        "token": "token",
-        "patientId": "patientId",
-        "herenId": "herenId"
+      isExpired: '1',
+      type: 'h5',
+      path: 'https://xljk.wzswsj.gov.cn/municipalCitizen/#/pages/skip/index?origin=%E6%B8%A9%E5%B7%9E%E6%99%BA%E5%BA%B7',
+      addition: {
+        token: 'token',
+        patientId: 'patientId',
+        herenId: 'herenId',
       },
-      "extraData": {
-        "sysCode": "1001082",
-        "reqForward": "true",
-        "source": "19"
-      }
+      extraData: {
+        sysCode: '1001082',
+        reqForward: 'true',
+        source: '19',
+      },
     });
   };
 
-    /**
+  /**
    * 健康温州——学生体检
    */
   const healthCheckUp1001082 = () => {
     useTBanner({
-      "isExpired": "1", 
-      "type": "h5",
-      "path": "https://health.wzswsj.gov.cn/wzwjwh5_wzapp/#/pages/parent/home/home",
-      "addition": {
-        "token": "token",
-        "patientId": "patientId",
-        "herenId": "herenId"
+      isExpired: '1',
+      type: 'h5',
+      path: 'https://health.wzswsj.gov.cn/wzwjwh5_wzapp/#/pages/parent/home/home',
+      addition: {
+        token: 'token',
+        patientId: 'patientId',
+        herenId: 'herenId',
       },
-      "extraData": {
-        "sysCode": "1001082",
-        "reqForward": "true",
-        "source": "19"
-      }
+      extraData: {
+        sysCode: '1001082',
+        reqForward: 'true',
+        source: '19',
+      },
     });
   };
   /**
@@ -526,20 +535,81 @@ export const useScan = () => {
    */
   const healthMall1001035 = () => {
     useTBanner({
-        type: 'h5',
-        path: globalGl.env === 'prod'? 'https://shop.jshtcm.com/mobile/pages/login/index':"https://jksc.eheren.com/mobile/pages/login/index",
-        addition: {
-          TOKEN: 'token',
-          PATIENTID: 'patientId',
-          HERENID: 'herenId',
-          OPENID: 'openId',
+      type: 'h5',
+      path:
+        globalGl.env === 'prod'
+          ? 'https://shop.jshtcm.com/mobile/pages/login/index'
+          : 'https://jksc.eheren.com/mobile/pages/login/index',
+      addition: {
+        TOKEN: 'token',
+        PATIENTID: 'patientId',
+        HERENID: 'herenId',
+        OPENID: 'openId',
+      },
+      extraData: {
+        sysCode: gStores.globalStore.sysCode,
+        reqForward: 'true',
+        source: gStores.globalStore.browser.source,
+      },
+    });
+  };
+
+  const tjyy1001067 = () => {
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/choosePat/choosePat',
+      text: '',
+      extraData: {
+        _type: 'Wfe_check',
+      },
+      addition: {
+        patientId: '_patientId',
+      },
+    });
+  };
+
+  /** 患者实名认证页面 */
+  const pluginCloudSign1001094 = async (data: any = {}) => {
+    await beforeEach({
+      _isPatient: true,
+    });
+
+    const patientUtils = new PatientUtils();
+
+    const { idCard: s_idCard } = await patientUtils.getPatientPersonalInfo({
+      idCard: true,
+    });
+
+    uni.redirectTo({
+      url: joinQueryForUrl(
+        'plugin://medicalLetterPlugins/idcard?s_globalUrl=https://canew.xjtcm.com/hospital_pre',
+        {
+          s_idCard,
+          s_openId: gStores.globalStore.openId,
+          s_hosCode: 'h001',
+          s_appKey: '6e6aa3995f3c4f82bcc2aa12220895c0',
+          s_appSecret: '6e6aa3995f3c4f82bcc2aa12220895c0',
+          s_type: '3',
+          ...data,
+        }
+      ),
+
+      events: {
+        async userRealNameFace({ idCard, name }) {
+          const { verifyResult: s_verifyResult } =
+            await patientUtils.faceVerify({
+              idCardNumber: idCard,
+              name,
+            });
+
+          pluginCloudSign1001094({
+            s_verifyResult,
+            s_idCard: idCard,
+          });
         },
-        extraData: {
-          sysCode: gStores.globalStore.sysCode,
-          reqForward: 'true',
-          source: gStores.globalStore.browser.source,
-          },
-      });
+      },
+    });
   };
 
   return {
@@ -559,24 +629,12 @@ export const useScan = () => {
     initQuestionList58,
     initAddPat,
     initQuestion52,
-    tjyy1001067() {
-      useTBanner({
-        type: 'h5',
-        isSelfH5: '1',
-        path: 'pagesC/choosePat/choosePat',
-        text: '',
-        extraData: {
-          _type: 'Wfe_check',
-        },
-        addition: {
-          patientId: '_patientId',
-        },
-      });
-    },
+    tjyy1001067,
     aijiance1001082,
     yun1001082,
     wenxinzaixian1001082,
     healthCheckUp1001082,
-    healthMall1001035
+    healthMall1001035,
+    pluginCloudSign1001094,
   };
 };

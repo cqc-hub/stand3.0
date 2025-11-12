@@ -1,7 +1,6 @@
 /// <reference types="node" />
 /// <reference path="./src/index.d.ts" />
 
-import globalGl from './src/config/global';
 import { getSConfig } from './src/config/sConfig';
 
 const fs = require('fs');
@@ -178,10 +177,10 @@ const harmonyConfig = manifestFileDataObj['mp-harmony'];
 const wxPlugin: any = {};
 const aliPlugin: any = {};
 //分包引入插件
-const pagesPlugins: any = {
-  'pagesA-plugins': { wx: {}, ali: {} },
-  'pagesB-plugins': { wx: {}, ali: {} },
-  'pagesC-plugins': { wx: {}, ali: {} },
+const pagesPlugins = {
+  'pagesA-plugins': { wx: {} as any, ali: {} as any },
+  'pagesB-plugins': { wx: {} as any, ali: {} as any },
+  'pagesC-plugins': { wx: {} as any, ali: {} as any },
 };
 
 if (isOpenHealthCard) {
@@ -240,6 +239,13 @@ if (medicalMHelp) {
       };
     }
   }
+}
+
+if (sysCode === '1001094') {
+  pagesPlugins['pagesC-plugins'].wx['medicalLetterPlugins'] = {
+    version: '1.0.20',
+    provider: 'wx08b6b6e7153f00e3',
+  };
 }
 
 wxConfig.appid = wxAppid;

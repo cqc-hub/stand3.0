@@ -171,6 +171,7 @@ export const useTBanner = async (
   const cacheStore = useCacheStore();
 
   const { source } = gStores.globalStore.browser;
+  const { openId, token, modeOld, sysCode, isTcmStyle } = gStores.globalStore;
   const {
     type,
     extraData = {},
@@ -183,6 +184,9 @@ export const useTBanner = async (
 
   additionData = {
     source,
+    openId,
+    token: token?.accessToken,
+    ...gStores.userStore.patChoose,
     ...additionData,
   };
 
@@ -194,7 +198,7 @@ export const useTBanner = async (
   };
 
   if (addition) {
-    const { token, patientId, herenId, cardNumber } = addition;
+    const { token, patientId, herenId, cardNumber, openId } = addition;
 
     if (patientId) {
       isPatient = true;
@@ -223,6 +227,7 @@ export const useTBanner = async (
       token && (extraData[token] = gStores.globalStore.getToken);
 
       herenId && (extraData[herenId] = gStores.globalStore.herenId || '');
+      openId && (extraData[openId] = gStores.globalStore.openId || '');
       extraData.token = gStores.globalStore.getToken;
       // extraData.isTcmStyle = (gStores.globalStore.isTcmStyle && '1') || '0';
     }
@@ -261,8 +266,6 @@ export const useTBanner = async (
     // debugger
     if (config.isSelfH5) {
       let baseUrl: string = globalGl.h5Url;
-      const { modeOld, sysCode, isTcmStyle } = gStores.globalStore;
-
       if (
         (await getMiniProgramEnv()) === 'develop' &&
         globalGl.env !== 'prod'
