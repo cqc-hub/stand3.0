@@ -330,16 +330,15 @@
       :show="isDialogShow"
       @confirmButton="confirmAsync"
       @cancelButton="cancelAsync"
-      is-mask-click
     >
       <view class="">
-        <view v-if="dialogType === 'smsVerifyImgCode'">
-          <view @click="requestVerify(cacheItem!)" class="mb12 pr32 pl32">
+        <view v-if="dialogType === 'smsVerifyImgCode'" class="pl32 mr32">
+          <view @click="requestVerify(cacheItem!)" class="mb12">
             <img :src="smsVerifyImg" mode="widthFix" class="w-full" />
             <view class="f28 color-blue text-right">看不清楚，换一张?</view>
           </view>
 
-          <view class="pr32 pl32 pb32">
+          <view class="pb32">
             <easy-input
               v-model="smsVerifyImgCodeVal"
               :styles="{

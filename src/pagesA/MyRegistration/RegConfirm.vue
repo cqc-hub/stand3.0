@@ -174,7 +174,13 @@
 
       <view class="flex1">
         <button class="btn btn-primary" @click="regConfirm">
-          {{ isWaitReg ? '候补预约' : '确定预约' }}
+          {{
+            isWaitReg
+              ? '候补预约'
+              : pageConfig.isConfirmOrderWithPay === '1'
+                ? '去支付'
+                : '确定预约'
+          }}
         </button>
       </view>
     </view>
@@ -1039,7 +1045,7 @@
         .getDeptDetail({
           hosDeptId: props.value.hosDeptId,
         })
-        .catch(() => ({} as any));
+        .catch(() => ({}) as any);
 
       if (promptMessage) {
         await new Promise<{ confirm: boolean }>((r) => {

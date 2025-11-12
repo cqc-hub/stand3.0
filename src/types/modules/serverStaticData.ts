@@ -126,6 +126,8 @@ export interface ISystemConfig_ {
     isConfirmOrderWithDeptTip?: '1';
     /** 挂号确认页面点击我已阅读时候需要弹窗 */
     isConfirmOrderWithConfirmDialog?: '1';
+    /** 挂号确认页面 去预约变成去支付&跳到详情后自动拉起支付 */
+    isConfirmOrderWithPay?: '1';
 
     /** 医生名片 */
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？(不用 固定的)

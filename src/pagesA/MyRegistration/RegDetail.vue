@@ -470,12 +470,9 @@
     getIsMedicalMode,
     TWxAuthorize,
     getQxMedicalNation,
-    isMedicalSelf,
     getIsAliMedicalNation,
     _getQxMedicalNation,
-    getMedicalConfigInfo,
     getMedicalArgWithFamily,
-    getMedicalAuthCode,
     getMedical1001035Info,
     handlerMedicalPay1001035,
     getMedicalNationInfo,
@@ -1470,12 +1467,18 @@
     }
     await beforeEach(routeArg);
     await init();
-    if (
-      pageProps.value.preWz === '1' &&
-      orderRegInfo.value.orderStatus === '0' &&
-      gStores.globalStore.sysCode === '1001048'
-    ) {
-      showConsultationDialog1001048();
+
+    if (pageProps.value.preWz === '1') {
+      if (
+        orderRegInfo.value.orderStatus === '0' &&
+        gStores.globalStore.sysCode === '1001048'
+      ) {
+        showConsultationDialog1001048();
+      }
+
+      // if () {
+
+      // }
     }
 
     if (needOrderStatus && orderRegInfo.value.orderStatus !== needOrderStatus) {
