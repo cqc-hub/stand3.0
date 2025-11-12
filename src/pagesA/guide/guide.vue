@@ -534,7 +534,7 @@ const getHistory = async () => {
             }
           });
         }
-        if (t.completionStatus === 0) {
+        if (t.completionStatus === 1) {
           //全部完成添加节点
           t.itemList.push({
             ...info,
@@ -615,6 +615,7 @@ const orderRefound = async (item: IRegistrationCardItem, opt = {} as {}) => {
       prop: ref({
         orderId: item.orderId,
         hosOrderId: item.hosOrderId,
+        typeId:'1'
       } as any),
       orderConfig,
     },
@@ -647,6 +648,7 @@ const goRegDetail = (item: IRegistrationCardItem) => {
       hosOrderId: item.hosOrderId,
       preWz: item.orderStatus === "10" && "1",
       _type: "znpz",
+      typeId:'1'
     }),
   });
 };

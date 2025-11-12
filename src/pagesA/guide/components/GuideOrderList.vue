@@ -83,13 +83,14 @@
             >
               预问诊留言
             </button>
-
+            <!-- 目前只支持取消号源 不支持线上退号 因为是全部挂号的接口 -->
             <button
-              v-if="['0'].includes(item.orderStatus)"
+              v-if="['0'].includes(item.orderStatus) && config.isOrderPay !== '1'  "
               @click.stop="refoundOrder(item)"
               class="btn btn-round btn-size-small btn-border cancel-btn"
             >
-              {{ config.isOrderPay === '1' ? '退号' : '取消预约' }}
+            取消预约
+              <!-- {{ config.isOrderPay === '1' ? '退号' : '取消预约' }} -->
             </button>
 
             <block v-for="btn in getCustomBtns" :key="btn.text">

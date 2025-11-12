@@ -503,7 +503,7 @@ export class RegDetailUtil {
   ) {}
 
   getSourceInHos() {
-    return this.orderConfig.value.isCanSelOrderStatus === '1';
+    return this.orderConfig.value.isCanSelOrderStatus === '1' || this.prop.value.typeId === '1';
   }
 
   /** 请求内部数据库 */
@@ -550,7 +550,7 @@ export class RegDetailUtil {
       this.orderRegInfo = await this.getForWardDetailData();
       console.log();
     } else {
-      this.gStores.messageStore.showMessage('入参错误, 调用详情失败');
+      this.gStores.messageStore.showMessage('入参错误, 调用详情失败',2000);
       throw new Error('入参错误, 调用详情失败');
     }
 
@@ -635,7 +635,6 @@ export class RegDetailUtil {
       });
     }
     // #endif
-
     if (isOrderPay === '1' && !['111'].includes(orderStatus)) {
       const { orderId, searchType } = this.prop.value;
       const { ev } = this.gStores.globalStore;
