@@ -346,6 +346,7 @@
                 height: '80rpx',
               }"
               placeholder="请输入验证码"
+              adjust-position
             />
           </view>
         </view>
