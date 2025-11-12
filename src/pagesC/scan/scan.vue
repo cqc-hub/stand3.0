@@ -49,6 +49,7 @@
     healthMall1001035,
     healthCheckUp1001082,
     pluginCloudSign1001094,
+    pluginCloudSignDocument1001094,
   } = useScan();
 
   const init = async () => {
@@ -179,6 +180,10 @@
 
       case '21':
         pluginCloudSign1001094();
+        break;
+
+      case '22':
+        pluginCloudSignDocument1001094('0');
         break;
 
       default:

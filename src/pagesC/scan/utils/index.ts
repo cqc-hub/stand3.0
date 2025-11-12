@@ -7,7 +7,7 @@ import {
   useTBanner,
   wait,
 } from '@/utils';
-import { encryptDes, joinQueryForUrl } from '@/common';
+import { encryptDes, joinQuery, joinQueryForUrl } from '@/common';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 import { beforeEach } from '@/router';
@@ -60,7 +60,8 @@ export const useScan = () => {
         | '18'
         | '19'
         | '20'
-        | '21';
+        | '21'
+        | '22';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
@@ -69,6 +70,8 @@ export const useScan = () => {
   );
 
   const gStores = new GStores();
+  const patientUtils = new PatientUtils();
+
   const _props = computed(() => {
     return {
       ...pageProps.value,
@@ -569,31 +572,30 @@ export const useScan = () => {
     });
   };
 
+  const pluginCloudSignData1001094 = {
+    s_hosCode: 'h001',
+    s_appKey: '6e6aa3995f3c4f82bcc2aa12220895c0',
+    s_appSecret: '6e6aa3995f3c4f82bcc2aa12220895c0',
+    s_globalUrl: 'https://canew.xjtcm.com/hospital_pre',
+  };
   /** 患者实名认证页面 */
   const pluginCloudSign1001094 = async (data: any = {}) => {
     await beforeEach({
       _isPatient: true,
     });
 
-    const patientUtils = new PatientUtils();
-
     const { idCard: s_idCard } = await patientUtils.getPatientPersonalInfo({
       idCard: true,
     });
 
     uni.redirectTo({
-      url: joinQueryForUrl(
-        'plugin://medicalLetterPlugins/idcard?s_globalUrl=https://canew.xjtcm.com/hospital_pre',
-        {
-          s_idCard,
-          s_openId: gStores.globalStore.openId,
-          s_hosCode: 'h001',
-          s_appKey: '6e6aa3995f3c4f82bcc2aa12220895c0',
-          s_appSecret: '6e6aa3995f3c4f82bcc2aa12220895c0',
-          s_type: '3',
-          ...data,
-        }
-      ),
+      url: joinQuery('plugin://medicalLetterPlugins/idcard', {
+        s_idCard,
+        s_openId: gStores.globalStore.openId,
+        s_type: '3',
+        ...data,
+        ...pluginCloudSignData1001094,
+      }),
 
       events: {
         async userRealNameFace({ idCard, name }) {
@@ -609,6 +611,27 @@ export const useScan = () => {
           });
         },
       },
+    });
+  };
+  /** 患者签署文件列表页面 */
+  const pluginCloudSignDocument1001094 = async (
+    s_documentStatus: '0' | '1'
+  ) => {
+    await beforeEach({
+      _isPatient: true,
+    });
+    const { idCard: s_idCard } = await patientUtils.getPatientPersonalInfo({
+      idCard: true,
+    });
+
+    uni.redirectTo({
+      url: joinQuery('plugin://medicalLetterPlugins/signDocumentList', {
+        s_openId: gStores.globalStore.openId,
+        s_type: '3',
+        s_documentStatus,
+        s_idCard,
+        ...pluginCloudSignData1001094,
+      }),
     });
   };
 
@@ -636,5 +659,6 @@ export const useScan = () => {
     healthCheckUp1001082,
     healthMall1001035,
     pluginCloudSign1001094,
+    pluginCloudSignDocument1001094,
   };
 };
