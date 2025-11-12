@@ -39,12 +39,15 @@
             >
               {{ visitTypeLabel[item.visitType].label }}
             </text>
-            <text v-if="item.prescVisitType" class="f24 item-title-type base f30">
+            <text
+              v-if="item.prescVisitType"
+              class="f24 item-title-type base f30"
+            >
               ({{ prescVisitTypeList[item.prescVisitType] }})
             </text>
           </view>
 
-          <view @click.stop="arrowClick(item)" class="g-flex-rc-cc arrow ">
+          <view @click.stop="arrowClick(item)" class="g-flex-rc-cc arrow">
             <!-- <view
               v-if="
                 showStatus &&
@@ -60,6 +63,17 @@
             </view> -->
             <view v-if="!showStatus" class="iconfont color-888 f48">
               &#xe66b;
+            </view>
+          </view>
+        </view>
+        <view
+          v-if="item.prescNo && gStores.globalStore.sysCode === '1001035'"
+          class="item-box f28"
+        >
+          <view class="row flex-normal">
+            <view class="row-label color-888">处方号</view>
+            <view class="flex1 g-break-word color-444">
+              {{ item.prescNo }}
             </view>
           </view>
         </view>
@@ -107,27 +121,40 @@
                     : `${deliveryTypeList[item.deliveryType]}`
                 }}
                 {{
-                  item.drugTypeName === '中药' ?
-                  (item.tcmDecoctionIndicator &&
-                  item.tcmDecoctionIndicator == '1'
-                    ? '(代煎)'
-                    : '(自煎)'):''
+                  item.drugTypeName === '中药'
+                    ? item.tcmDecoctionIndicator &&
+                      item.tcmDecoctionIndicator == '1'
+                      ? '(代煎)'
+                      : '(自煎)'
+                    : ''
                 }}
               </view>
             </view>
           </view>
         </view>
-         <view v-if="item.deliveryType==='2'&&gStores.globalStore.sysCode === '1001035'" class="item-box f28">
+        <view
+          v-if="
+            item.deliveryType === '2' &&
+            gStores.globalStore.sysCode === '1001035'
+          "
+          class="item-box f28"
+        >
           <view class="row flex-normal">
             <view class="row-label color-888">备注</view>
             <view class="flex1 g-break-word color-444 flex-normal">
-              <view class="text-ellipsis color-warn">{{ item.deliveryType == '2' ? '含有特殊药品，请前往医院窗口自提' : '可配送' }}</view>
+              <view class="text-ellipsis color-warn">
+                {{
+                  item.deliveryType == '2'
+                    ? '含有特殊药品，请前往医院窗口自提'
+                    : '可配送'
+                }}
+              </view>
             </view>
           </view>
         </view>
 
         <view
-          v-if="item.takenDrugType && !showStatus &&!item.deliveryType "
+          v-if="item.takenDrugType && !showStatus && !item.deliveryType"
           class="item-box f28"
         >
           <view class="row flex-normal">
@@ -320,7 +347,7 @@
             margin-left: 8rpx;
 
             &.base {
-              color: var(--hr-brand-color-6)
+              color: var(--hr-brand-color-6);
             }
 
             &.blue {
@@ -425,7 +452,7 @@
       color: var(--hr-neutral-color-7);
     }
   }
-  .color-warn{
-    color:$uni-color-warning;
+  .color-warn {
+    color: $uni-color-warning;
   }
 </style>

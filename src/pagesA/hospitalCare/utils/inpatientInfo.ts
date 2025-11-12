@@ -1,5 +1,6 @@
 //获取住院信息 入参类型
 export interface getInHospitalInfoParam {
+  idType?: string;
   cardNumber?: string;
   hosId?: string;
   idCard?: string;

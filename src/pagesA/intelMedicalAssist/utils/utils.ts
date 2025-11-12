@@ -1709,6 +1709,12 @@ export const regConfirm = async (pageArg) => {
       } else if (respCode === 884802) {
         //接口拦截 去实名认证 —— 省中
         await handlerConfirmPatReal();
+      } else if (respCode === 884804) {
+        //接口拦截 跳转到全部挂号列表 —— 新疆中医院
+        uni.reLaunch({
+          url: '/pagesA/MyRegistration/MyRegistration?typeId=1',
+        });
+
       } else if (code !== 4000) {
         message && gStores.messageStore.showMessage(message, 3000);
       }

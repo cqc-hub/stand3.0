@@ -129,6 +129,8 @@
   type IPageProps = {
     patientName?: string;
     patientPhone?: string; // 代缴的时候带
+    idCard?: string; // 代缴的时候带
+    idType?: string; // 代缴的时候带
     params?: string; // 扫码时候带的加密参数
     _m?: string; // 默认充值金额
   };
@@ -226,10 +228,18 @@
 
   //根据姓名手机号查询的接口
   const init = async () => {
-    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
+    const args={
       patientName: pageProps.value.patientName,
       patientPhone: pageProps.value.patientPhone,
+      idCard: pageProps.value.idCard,
+      idType: pageProps.value.idType,
+    }
+    Object.keys(args).forEach(key => {
+      if (!args[key]) {
+        delete args[key];
+      }
     });
+    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>(args);
     // result.prepaymentQuota = '5654';
     hosInfoResObj.value = result;
     Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';

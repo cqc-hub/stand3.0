@@ -54,6 +54,7 @@
             'padding-right':
               type === 'password' || clearable || prefixIcon ? '' : '10px',
             'padding-left': prefixIcon ? '' : '10px',
+            height: styles.height,
           }"
           :name="name"
           :value="val"
@@ -66,7 +67,7 @@
           :focus="focused"
           :confirmType="confirmType"
           :enableNative="false"
-          :adjust-position="false"
+          :adjust-position="adjustPosition"
           @focus="onFocus"
           @blur="onBlur"
           @input="onInput"
@@ -186,6 +187,10 @@
       clearable: {
         type: Boolean,
         default: true,
+      },
+      adjustPosition: {
+        type: Boolean,
+        default: false,
       },
       autoHeight: {
         type: Boolean,

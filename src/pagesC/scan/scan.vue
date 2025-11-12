@@ -16,18 +16,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, onMounted, ref } from 'vue';
+  import { onMounted } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import {
-    getLocation,
-    GStores,
-    TBannerConfig,
-    useTBanner,
-    wait,
-  } from '@/utils';
-  import api from '@/service/api';
-  import { deQueryForUrl, joinQuery, joinQueryForUrl } from '@/common';
+  import { GStores, TBannerConfig, useTBanner, wait } from '@/utils';
+  import { deQueryForUrl } from '@/common';
   import { BASE_IMG } from '@/config/global';
   import { useScan } from './utils';
 
@@ -54,15 +47,13 @@
     wenxinzaixian1001082,
     yun1001082,
     healthMall1001035,
-    healthCheckUp1001082
+    healthCheckUp1001082,
+    pluginCloudSign1001094,
+    pluginCloudSignDocument1001094,
   } = useScan();
 
   const init = async () => {
-    const { type, btn, _type, params } = pageProps.value;
-    const _props = {
-      ...pageProps.value,
-      type: undefined,
-    };
+    const { type, btn, _type } = pageProps.value;
 
     if (btn) {
       const btnParse = JSON.parse(btn) as TBannerConfig;
@@ -187,6 +178,14 @@
         healthCheckUp1001082();
         break;
 
+      case '21':
+        pluginCloudSign1001094();
+        break;
+
+      case '22':
+        pluginCloudSignDocument1001094('0');
+        break;
+
       default:
         break;
     }
@@ -229,7 +228,7 @@
   });
 
   onMounted(async () => {
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
 
     if (!isContinue) {
       return;

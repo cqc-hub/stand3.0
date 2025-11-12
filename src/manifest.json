@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx41ed9678ac802d7e",
+    "appid": "wxacb96ee66c3dee84",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -66,7 +66,12 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "SIPlugin": {
+        "version": "0.3.6",
+        "provider": "wx069ba97219f66d99"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -76,7 +81,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "",
+    "appid": "2021003104670597",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -92,7 +97,9 @@
     }
   },
   "mp-harmony": {
-    "distribute": {}
+    "distribute": {
+      "bundleName": "com.atomicservice.6917564602329951506"
+    }
   },
   "mp-baidu": {
     "usingComponents": true
@@ -104,7 +111,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "义乌市中心医院",
+  "name": "江苏省中医院",
   "h5": {
     "optimization": {
       "treeShaking": {

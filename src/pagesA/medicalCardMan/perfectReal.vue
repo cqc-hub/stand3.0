@@ -264,7 +264,6 @@
   // #endif
   const refKeyboard = ref('' as any);
   const openKeyBoard = () => {
-    console.log(refKeyboard.value);
     refKeyboard.value?.open();
   };
 

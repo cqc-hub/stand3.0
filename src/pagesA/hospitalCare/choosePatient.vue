@@ -21,7 +21,10 @@
             placeholder="请输入"
           />
           <view>
-            <g-login @handler-next="chooseAction">
+            <g-login
+              @handler-next="chooseAction"
+              v-if="!pageProps.isClosePatChoose"
+            >
               <view class="pat-choose" @tap="chooseAction">选择就诊人</view>
             </g-login>
           </view>
@@ -42,37 +45,70 @@
             placeholder="请输入"
           />
         </view>
+        <view class="input-item" v-if="pageProps.showIdType === '1'">
+          <text>证件类型</text>
+          <input
+            class="uni-input flex-1"
+            placeholder-style="font-size:32rpx;color:#bbb"
+            type="number"
+            :value="
+              idTypeTerms.find((item) => hosInfoParam.idType === item.value)
+                ?.label
+            "
+            readonly
+            placeholder="请输入"
+            @click="_actionSheet.show()"
+          />
+          <view class="iconfont icon-resize icon_arrow color-888">
+            &#xe66b;
+          </view>
+        </view>
+        <view class="input-item" v-if="pageProps.showIdType === '1'">
+          <text>证件号</text>
+          <input
+            class="uni-input flex-1"
+            placeholder-style="font-size:32rpx;color:#bbb"
+            type="number"
+            v-model="hosInfoParam.idCard"
+            placeholder="请输入"
+          />
+        </view>
       </view>
 
       <button
-        :disabled="
-          hosInfoParam.patientName != '' &&
-          hosInfoParam.patientPhone != '' &&
-          phoneStatus == true
-            ? false
-            : true
-        "
-        :class="
-          hosInfoParam.patientName != '' &&
-          hosInfoParam.patientPhone != '' &&
-          phoneStatus == true
-            ? 'activeSubmitBtn'
-            : 'submitBtn'
-        "
+        :disabled="!searchStatus"
+        :class="searchStatus ? 'activeSubmitBtn' : 'submitBtn'"
         @click="toSearch"
       >
         查询
       </button>
       <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
+      <view class="form-picker">
+        <uni-data-picker
+          :map="{ text: 'label', value: 'value' }"
+          :localdata="idTypeTerms"
+          :clear-icon="false"
+          @change="pickerChange"
+          isHideSlot
+          ref="_actionSheet"
+        >
+          <view />
+        </uni-data-picker>
+      </view>
       <g-message />
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { getAvatar, isAreaProgram, useUserStore, IPat } from '@/stores';
-  import { GStores, type TButtonConfig, useTBanner } from '@/utils';
+  import {
+    GStores,
+    type TButtonConfig,
+    ServerStaticData,
+    useTBanner,
+  } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import api from '@/service/api';
   import {
@@ -82,8 +118,7 @@
   import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import { onLoad, onReady } from '@dcloudio/uni-app';
   import { decryptDes } from '@/common/des';
-  import { assertTypeofTypeAnnotation } from '@babel/types';
-
+  import { idValidator } from '@/utils/modules/idCard';
   const pageProps = ref(
     <
       {
@@ -92,7 +127,8 @@
          * - 2 多住院记录
          */
         type?: '1' | '2';
-
+        showIdType?: '1' | '0';
+        isClosePatChoose?: '1' | '0';
         // 页面透传
         [key: string]: any;
       }
@@ -106,6 +142,8 @@
   const hosInfoResObj = ref<getInHospitalInfoResult>(
     {} as getInHospitalInfoResult
   );
+  const idTypeTerms = ref<any[]>([{ label: '身份证', value: '01' }]);
+  const _actionSheet = ref();
   const userSore = useUserStore();
   const gStores = new GStores();
 
@@ -120,6 +158,24 @@
   };
   // 就诊人
   const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
+
+  const searchStatus = computed(() => {
+    const comomStatus =
+      hosInfoParam.value.patientName != '' &&
+      hosInfoParam.value.patientPhone != '' &&
+      phoneStatus.value == true;
+    if (pageProps.value.showIdType === '1') {
+      return (
+        comomStatus &&
+        hosInfoParam.value.idCard !== '' &&
+        (hosInfoParam?.value.idType !== '01' ||
+          (hosInfoParam?.value.idType === '01' &&
+            idValidator.check18IdCardNo(hosInfoParam.value.idCard || '')))
+      );
+    }
+    return comomStatus;
+  });
+
   const chooseAction = () => {
     if (actionSheet.value) {
       actionSheet.value.show();
@@ -137,13 +193,26 @@
     hosInfoParam.value.cardNumber = item.cardNumber;
   };
   const init = async () => {
-    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
+    const args = {
+      ...hosInfoParam.value,
       patientName: hosInfoParam.value.patientName,
       patientPhone: hosInfoParam.value.patientPhone,
+    };
+    Object.keys(args).forEach((key) => {
+      if (!args[key]) {
+        delete args[key];
+      }
     });
+    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>(
+      args
+    );
     hosInfoResObj.value = result;
     uni.navigateTo({
-      url: `choosePatientInfo?patientName=${hosInfoParam.value.patientName}&patientPhone=${hosInfoParam.value.patientPhone}`,
+      url: `choosePatientInfo?patientName=${
+        hosInfoParam.value.patientName
+      }&patientPhone=${hosInfoParam.value.patientPhone}&idCard=${
+        hosInfoParam.value.idCard || ''
+      }&idType=${hosInfoParam.value.idType || ''}`,
     });
   };
   const toSearch = async () => {
@@ -214,9 +283,22 @@
     });
   });
 
-  onLoad((opt) => {
+  const pickerChange = (e) => {
+    console.log(' pickerChange', e);
+
+    hosInfoParam.value.idType = e.detail.value[0].value;
+    hosInfoParam.value.idCard = '';
+    console.log('hosInfoParam.value', hosInfoParam.value);
+  };
+
+  onLoad(async (opt) => {
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+      if (pageProps.value?.showIdType) {
+        hosInfoParam.value.idType = '01';
+        idTypeTerms.value = await ServerStaticData.getIdTypeTerms();
+        console.log('idTypeTerms.value', idTypeTerms.value);
+      }
     }
   });
 </script>

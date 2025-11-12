@@ -54,7 +54,7 @@
           @go-detail="goDetail"
           @go-hos-navigate="goHosNavigate"
         >
-          <template #default="{ item }">
+          <template #footer="{ item }">
             <view class="footer-btns flex">
               <button
                 v-if="isShowRegCancel(getBtnData(item))"
@@ -67,7 +67,7 @@
               <button
                 v-if="isShowRegPay(getBtnData(item))"
                 @click="goDetail(item)"
-                class="btn btn-round btn-size-small btn-border cancel-btn color-111"
+                class="btn btn-round btn-primary btn-size-small btn-border cancel-btn"
               >
                 去支付
               </button>

@@ -19,7 +19,10 @@
               <view class="suffix-right f28 mr12" @click="cancelInput">
                 取消
               </view>
-              <view class="suffix-right f28 color-blue" @click="confirmInput">
+              <view
+                class="suffix-right f28 color-blue"
+                @click="confirmInput(r.searchText.value)"
+              >
                 查询
               </view>
             </view>
