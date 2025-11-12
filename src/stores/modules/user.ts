@@ -18,6 +18,7 @@ const userStore = defineStore('user', {
       'patChoose',
       'clickPat',
       'authPhoneVerify',
+      'prevPatientId',
     ],
   },
 
@@ -35,6 +36,7 @@ const userStore = defineStore('user', {
 
       // 页面传递时候用
       clickPat: <IPat>{},
+      prevPatientId: '',
 
       cacheUser: {
         userName: '',
@@ -88,12 +90,19 @@ const userStore = defineStore('user', {
       this.patList = patList;
       if (patList.length) {
         if (!Object.keys(this.patChoose).length) {
-          const patDefault = patList.find((o) => o.defaultFlag === '1');
-          if (patDefault) {
-            this.updatePatChoose(patDefault);
+          const prevChoose =
+            this.prevPatientId &&
+            patList.find((o) => o.patientId === this.prevPatientId);
+          if (prevChoose) {
+            this.updatePatChoose(prevChoose);
           } else {
-            if (patList.length) {
-              this.updatePatChoose(patList[0]);
+            const patDefault = patList.find((o) => o.defaultFlag === '1');
+            if (patDefault) {
+              this.updatePatChoose(patDefault);
+            } else {
+              if (patList.length) {
+                this.updatePatChoose(patList[0]);
+              }
             }
           }
         }
@@ -167,7 +176,14 @@ const userStore = defineStore('user', {
     },
 
     clearStore() {
+      const { patientId } = this.patChoose;
       this.$reset();
+
+      setTimeout(() => {
+        if (patientId) {
+          this.prevPatientId = patientId;
+        }
+      }, 20);
     },
 
     getPatName(pat?: IPat): string {
