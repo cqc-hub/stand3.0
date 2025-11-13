@@ -45,7 +45,7 @@
       }
     }
 
-    //  历史才有 1 未执行 2部分执行 3已执行
+    //  历史才有 1 未执行 2部分执行 3已执行 ———— 改为只有1未执行  2已执行 和导诊单一致
     if (disposeStatus.length && lab) {
       if (!disposeStatus.includes(lab.disposeStatus)) {
         return false;

@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores';
 
 import globalGl from '@/config/global';
 
-type T_ENV_H5 = 'web' | 'wx' | 'alipay';
+export type T_ENV_H5 = 'web' | 'wx' | 'alipay';
 
 interface IStateGlobal {
   token: {

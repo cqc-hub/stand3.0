@@ -12,5 +12,7 @@ export default {
   ar_shadow_noxhrurls,
   ar_shadow_publickeyurl
 };
+// #ifndef H5
 exports.ar_shadow_noxhrurls = ar_shadow_noxhrurls;
 exports.ar_shadow_publickeyurl = ar_shadow_publickeyurl;
+// #endif

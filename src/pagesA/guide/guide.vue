@@ -397,8 +397,8 @@ const getHistory = async () => {
   if (result && result.length) {
     const _disposeStatusLabelMap = {
       1: "未执行",
-      2: "部分执行",
-      3: "已执行",
+      2: "已执行",
+      3: "部分执行",
     };
     result = result
       .filter((o) => o.disposeTime !== toDay)
@@ -453,17 +453,22 @@ const getHistory = async () => {
             key: "others",
             sort: 7,
           },
-          1: {
+          "A": {
             title: "门诊取药",
             key: "drugs",
             sort: 8,
           },
-          2: {
+         "B": {
+            title: "门诊取药",
+            key: "drugs",
+            sort: 9,
+          },
+          "D": {
             title: "检验项目",
             key: "labs",
             sort: 5,
           },
-          3: {
+          "C": {
             title: "检查项目",
             key: "exams",
             sort: 6,
@@ -474,8 +479,8 @@ const getHistory = async () => {
           processResultList.map((q) => {
             // q.title =
             const {
-              orderClass, // 1药品 2检验 3检查
-              disposeStatus, // 1 未执行 2部分执行 3已执行
+              orderClass, // A 西药中药 B草药 C检查 D检验  E处置
+              disposeStatus, // 1 未执行 2已执行 3 部分执行
               reportPlace,
             } = q;
 
@@ -494,7 +499,7 @@ const getHistory = async () => {
             }
 
             if (item.completionStatus === 1) {
-              item.completionStatus = (disposeStatus === "3" && 1) || 0;
+              item.completionStatus = (disposeStatus === "2" && 1) || 0;
             }
 
             if (reportPlace && !item.reportPlace) {
@@ -516,7 +521,7 @@ const getHistory = async () => {
         if (t.itemList.length) {
           t.itemList.map((o) => {
             const {
-              orderClass, // 1药品 2检验 3检查
+              orderClass, //  A 西药中药 B草药 C检查 D检验  E处置
             } = o;
 
             const { key } = typeMap[orderClass] || typeMap["-1"];
@@ -524,7 +529,7 @@ const getHistory = async () => {
             o.completionStatus = o.completionStatus || 0;
 
             if (itemList.length) {
-              o.completionStatus = (itemList.every((p) => p.disposeStatus === "3") && 1) || 0;
+              o.completionStatus = (itemList.every((p) => p.disposeStatus === "2") && 1) || 0;
             }
 
             if (t.itemList.some((item) => item.completionStatus === 0)) {

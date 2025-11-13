@@ -902,13 +902,13 @@
             "navigationBarTitleText": " "
           }
         },
-         {
+        {
           "path": "common/homeGrid",
           "style": {
             "navigationBarTitleText": " "
           }
         },
-         {
+        {
           "path": "common/chooseTabJump",
           "style": {
             "navigationBarTitleText": " "
@@ -962,7 +962,7 @@
       ],
       "pagesE-plugins": ""
     },
-        {
+    {
       "root": "pagesF",
       "pages": [
         {
@@ -973,6 +973,30 @@
         }
       ],
       "pagesE-plugins": ""
+    },
+    {
+      "root": "pagesG",
+      "pages": [
+        {
+          "path": "1001094/medicalLetter",
+          "style": {
+            "navigationBarTitleText": "信使患签"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+        {
+          "path": "pat/bound",
+          "style": {
+            "navigationBarTitleText": "被绑定查询"
+          },
+          "extend": {
+            "patient": true
+          }
+        }
+      ],
+      "plugins":  {}
     },
     {
       "root": "cacheUtil",

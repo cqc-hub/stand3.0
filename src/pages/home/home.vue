@@ -103,7 +103,6 @@
                         </view>
                       </view>
                       <view
-                        v-if="!onlySelf"
                         class="switchPatient"
                         @tap="chooseAction"
                       >
@@ -311,7 +310,6 @@
                       </view>
                     </view>
                     <view
-                      v-if="!onlySelf"
                       class="switchPatient"
                       @tap="chooseAction"
                     >
@@ -391,8 +389,7 @@
     <g-message v-else />
 
     <choose-pat-action
-      ref="actionSheet"
-      :onlySelf="onlySelf"
+      ref="actionSheet" 
       @choose-pat="choosePatHandler"
     />
 
@@ -501,39 +498,18 @@
     gStores.userStore.updatePatChoose(item);
   };
 
-  const onlySelf = computed(() => gStores.globalStore.sysCode === '1001082');
   const getShowName = computed(() => {
-    if (onlySelf.value) {
-      return getSelfPat()?.patientName;
-    }
-
     return gStores.userStore.patChoose.patientName;
   });
   const getShowPatId = computed(() => {
     if (isAreaProgram()) {
       return '';
     }
-
-    if (onlySelf.value) {
-      return getSelfPat()?._showId;
-    }
-
     return gStores.userStore.patChoose._showId;
   });
 
   onShow(async () => {
     viewerStore.init();
-
-    if (onlySelf.value) {
-      const selfPat = gStores.userStore.patList.find(
-        (pat: IPat) => pat.relationship === '本人'
-      );
-      // 如果找到了关系为"本人"的就诊人，且当前选择的不是本人
-      if (selfPat && gStores.userStore.patChoose.relationship !== '本人') {
-        gStores.userStore.updatePatChoose(selfPat);
-      }
-    }
-
     // if (global.SYS_CODE === '1001067' && globalStore.openId) {
     //   const { ev } = gStores.globalStore;
     //   const userTag =

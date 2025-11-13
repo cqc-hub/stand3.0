@@ -31,7 +31,6 @@ import type {
   IHosInfo,
   TButtonConfig,
 } from '@/types';
-import { getUtils1001082 } from '../1001082';
 
 const _cacheMap = new WeakMap();
 
@@ -150,16 +149,7 @@ const tBannerIntercept = async (
   extraData: BaseObject,
   inst: (...args: any[]) => any = () => {}
 ) => {
-  const gStores = new GStores();
-
-  if (gStores.globalStore.sysCode === '1001082') {
-    const { verify1001082 } = extraData;
-
-    if (verify1001082 === '1') {
-      const u = await getUtils1001082();
-      await u.useFaceVerify1001082().intercept1001082();
-    }
-  }
+ 
 };
 
 export const useTBanner = async (

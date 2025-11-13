@@ -68,6 +68,18 @@
           <view>
             <view class="button-line">
               <view
+                v-if="pageConfig.isSearchPatBound === '1'"
+                class="pat-btns flex-normal mt16 ml12"
+              >
+                <view
+                  @click="goPatBound(pat)"
+                  class="btn btn-round btn-border btn-plain btn-size-small color-dark"
+                >
+                  被绑定查询
+                </view>
+              </view>
+
+              <view
                 v-if="getRealNameAuth.length"
                 class="pat-btns flex-normal mt16 ml12"
               >
@@ -79,6 +91,7 @@
                   去认证
                 </view>
               </view>
+
               <view
                 v-if="pageConfig.isEditPatPhone == '1' && pat.idType == '01'"
                 class="pat-btns flex-normal mt16 ml12"
@@ -90,6 +103,7 @@
                   修改手机号
                 </view>
               </view>
+
               <view
                 v-if="isCanAddGuardian(pat)"
                 class="pat-btns flex-normal mt16 ml12"
@@ -101,6 +115,7 @@
                   补充监护人
                 </view>
               </view>
+
               <view
                 v-if="isCanAddPatCardNo(pat)"
                 class="pat-btns flex-normal mt16 ml12"
@@ -231,6 +246,7 @@
     useAuthPerson,
     isShowAddPatCardNo,
     goEditPhone,
+    goPatBound,
   } from './utils/index';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { goElectronicMedicalCard } from '@/pages/home/utils';

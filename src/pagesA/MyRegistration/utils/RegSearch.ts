@@ -131,7 +131,7 @@ export class UseRegSearch extends GStores {
       // deptName,
       docName,
       hosDocId,
-      hosId: (this.cacheStore.isShowChooseHos || sysCode === '1001082') ? hosId : '',
+      hosId: this.cacheStore.isShowChooseHos  ? hosId : '',
       docTitleName,
       hosDeptId,
       clinicalType

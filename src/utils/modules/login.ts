@@ -1130,11 +1130,12 @@ export class PatientUtils extends LoginUtils {
 
   // 获取当前就诊人隐私数据
   async getPatientPersonalInfo(
-    opt: { phone?: boolean; idCard?: boolean } = {}
+    opt: { phone?: boolean; idCard?: boolean; pat?: IPat } = {}
   ) {
     const { phone, idCard } = opt;
-    const { patientId, cellPhoneNumber, idCardEncry, upIdCardEncry } =
-      this.userStore.patChoose;
+    const pat = opt.pat || this.userStore.patChoose;
+
+    const { patientId, cellPhoneNumber, idCardEncry, upIdCardEncry } = pat;
 
     const arg: any = {
       source: this.globalStore.browser.source,
@@ -1235,12 +1236,6 @@ export class PatientUtils extends LoginUtils {
     payload = {
       ...payload,
     };
-
-    if (this.globalStore.sysCode === '1001082') {
-      payload.relationship = '本人'; // 仅健康温州 实际relationship需要传的是1
-      payload.relationshipCode = 1;
-    }
-
     const {
       idCard: idNo,
       idType,

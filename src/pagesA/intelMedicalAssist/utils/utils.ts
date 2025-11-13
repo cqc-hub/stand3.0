@@ -27,11 +27,10 @@ import {
   getLocalStorage,
 } from '@/common';
 import type { TInstance } from '@/components/g-form/index';
-import { IPat, useDeptStore, useGlobalStore } from '@/stores';
+import { useDeptStore, useGlobalStore } from '@/stores';
 import { isOpenSm4 } from '@/service';
 import { getMyPowerQx } from '@/components/greenPower';
 import { checkLoginExpired } from '@/common/checkJump';
-import HTMLParser from '@/common/html-parser';
 import globalGl from '@/config/global';
 import api from '@/service/api';
 import env from '@/config/env';
@@ -186,9 +185,7 @@ export const init = async (props) => {
     simpleHeadInit: false, //初始服务居中
     historyMess: false,
     headerLineMenu:
-      props?.type?.includes('homePage') || globalGl.SYS_CODE === '1001082'
-        ? 'homePage'
-        : 'back',
+      props?.type?.includes('homePage') ||  'back',
   };
   const gStores = new GStores();
   const distinctiveImageList =
@@ -202,10 +199,7 @@ export const init = async (props) => {
       result?.content && (distinctiveImage.value = result?.content);
       result?.content && globalStore.setIntAssistantImg(result?.content);
     }
-  }
-  if (gStores.globalStore.sysCode === '1001082') {
-    title.value = '健康瓯管家';
-  }
+  } 
 
   props?.isMess && props?.isMess == '1' && initWithMess();
   props?.isMess && props?.isMess === '2' && initWithTheMess(props?.openid);
@@ -666,11 +660,11 @@ export const sendImg = async () => {
   }
   const gStores = new GStores();
   const maxSize = 4 * 1024 * 1024; // 4MB 限制大小
-  const { tempFilePaths } = await apiAsync(uni.chooseImage, {
+  const { tempFilePaths } = (await apiAsync(uni.chooseImage, {
     count: 1,
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
-  });
+  })) as any;
   try {
     if (tempFilePaths.length === 0) {
       return;
@@ -680,7 +674,6 @@ export const sendImg = async () => {
     const file = await uni.getFileInfo({
       filePath: tempFilePath,
     });
-    // @ts-expect-error
     if (file.size > maxSize) {
       gStores.messageStore.showMessage(
         '图片大小超过4MB，请选择较小的图片',
@@ -708,12 +701,8 @@ export const sendImg = async () => {
       scrollToNewMsg();
     }, 500);
 
-    let baseApi =
-      gStores.globalStore.sysCode === '1001082'
-        ? 'https://eservice.wzswsj.gov.cn'
-        : 'https://netphs.eheren.com/gateway';
+    let baseApi = 'https://netphs.eheren.com/gateway';
 
-    // @ts-expect-error
     const { data } = await apiAsync(uni.uploadFile, {
       url: `${baseApi}/phs-extend/customer/picOcr?sysCode=${
         gStores.globalStore.sysCode
@@ -1250,10 +1239,7 @@ let taskQueue = new TaskQueue();
 
 const typeInAsk = async (value, answertype) => {
   const gStores = new GStores();
-  let baseApi =
-    gStores.globalStore.sysCode === '1001082'
-      ? 'https://eservice.wzswsj.gov.cn'
-      : `https://${
+  let baseApi =  `https://${
           globalGl.env === 'prod' ? 'net' : 'test'
         }phs.eheren.com/gateway`;
   const settings = {
@@ -1714,7 +1700,6 @@ export const regConfirm = async (pageArg) => {
         uni.reLaunch({
           url: '/pagesA/MyRegistration/MyRegistration?typeId=1',
         });
-
       } else if (code !== 4000) {
         message && gStores.messageStore.showMessage(message, 3000);
       }

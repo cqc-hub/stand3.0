@@ -604,12 +604,7 @@ export const getDefaultFormData = async (
       const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
       data[formKey.patientPhone] = wxPhone;
     }
-
-    // 完善默认展示本人
-    if (globalGl.SYS_CODE === '1001082') {
-      data[formKey.relationship] = '本人'; //仅限健康温州  正常relationship为1
-      data[formKey.relationshipCode] = '1';
-    }
+ 
   } else if (ev === 'alipay') {
     const patList = gStores.userStore.patList;
 
@@ -1297,7 +1292,7 @@ const wxFacialVerifyByKey = async (
 ): Promise<{ verifyResult: string; errCode: string; errMsg: string }> => {
   const gStores = new GStores();
   return new Promise((rl, rj) => {
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     wx.checkIsSupportFacialRecognition({
       checkAliveType: 2,
       success() {
@@ -1563,4 +1558,13 @@ export const goEditPhone = async (pat: IPat) => {
       url: joinQueryForUrl('/pagesA/medicalCardMan/editPhone', q),
     });
   }
+};
+
+export const goPatBound = (pat: IPat) => {
+  const gStores = new GStores();
+  gStores.userStore.updatePatClick(pat);
+
+  uni.navigateTo({
+    url: '/pagesG/pat/bound',
+  });
 };

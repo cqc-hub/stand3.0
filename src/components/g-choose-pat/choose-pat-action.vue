@@ -8,7 +8,7 @@
     <g-popup :title="title" @hide="onActionSheetHide" ref="actionSheet">
       <view class="choose-pat-container g-flex-rc-cc">
         <view style="width: 100%">
-          <Pat-List :isShowAll="isShowAll" :onlySelf="onlySelf" @choose-pat="actionSheetItemClick" />
+          <Pat-List :isShowAll="isShowAll" @choose-pat="actionSheetItemClick" />
         </view>
 
         <view class="add-pat-box">
@@ -52,12 +52,7 @@
       isShowAll: {
         type: Boolean,
         default: false,
-      },
-
-      onlySelf: {
-        type: Boolean,
-        default: false,
-      },
+      }, 
 
       pat: {
         type: Object as PropType<IPat>,

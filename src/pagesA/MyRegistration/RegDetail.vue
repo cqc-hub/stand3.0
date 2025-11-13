@@ -485,6 +485,7 @@
   import api from '@/service/api';
 
   import refreshQrcode from '@/components/refresh-qrcode/refresh-qrcode.vue';
+  import { pageConfig } from '../intelMedicalAssist/utils/utils';
 
   const orderConfig = ref({} as ISystemConfig['order']);
   const refForm = ref<any>('');
@@ -1476,9 +1477,12 @@
         showConsultationDialog1001048();
       }
 
-      // if () {
-
-      // }
+      if (
+        orderConfig.value.isConfirmOrderWithPay === '1' &&
+        isShowRegPay(_d.value)
+      ) {
+        payOrder();
+      }
     }
 
     if (needOrderStatus && orderRegInfo.value.orderStatus !== needOrderStatus) {

@@ -1,8 +1,7 @@
-import env from '@/config/env';
+import env, { globalEv } from '@/config/env';
 import { getCurrentInstance } from 'vue';
 import { getSysCode } from '@/common/useToken';
 import type { TBannerConfig } from '@/types/modules/serverStaticData';
-import { GStores } from '@/utils';
 
 //公用方法
 /**
@@ -17,7 +16,11 @@ export const showLoading = (tips: string = '加载中...') => {
     mask: true,
     // #endif
   });
-  // uni.showNavigationBarLoading();
+  uni.showNavigationBarLoading();
+};
+export const hideLoading = () => {
+  uni.hideLoading();
+  uni.hideNavigationBarLoading();
 };
 
 export function cloneUtil<T = any>(target: T): T {
@@ -106,12 +109,10 @@ export const deQueryForUrl = <T = BaseObject>(props): T => {
  * @returns
  */
 export const getChooseAddress = function (): Promise<UniApp.ChooseAddressRes> {
-  const gStores = new GStores();
-  const { ev } = gStores.globalStore;
   return new Promise((resolve, reject) => {
     uni.chooseAddress({
       success(res) {
-        if (ev === 'alipay') {
+        if (globalEv.ev === 'alipay') {
           if ((res as any).resultStatus == '9000') {
             // 针对支付宝单独处理
             res.countyName = (res as any).result.area;
@@ -121,7 +122,7 @@ export const getChooseAddress = function (): Promise<UniApp.ChooseAddressRes> {
             reject('未选择地址');
           }
         }
-        if (ev === 'wx') {
+        if (globalEv.ev === 'wx') {
           resolve(res);
         }
       },

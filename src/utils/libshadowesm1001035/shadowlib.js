@@ -1089,5 +1089,6 @@ const shadowlib = {
 export { shadowlib };
 export { ar_shadow_addparametertourl, ar_shadow_initPub, AR_SHADOW_GetRandom as ar_shadow_getrandom };
 export default shadowlib;
-
+// #ifndef H5
 exports.shadowlib = shadowlib;
+// #endif

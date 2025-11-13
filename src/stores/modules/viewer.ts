@@ -108,9 +108,7 @@ const viewerStore = defineStore('viewer', {
       const gStores = new GStores();
       const sysCode = gStores.globalStore.sysCode;
       return this.viewConfig[8]?.showFlag == 1
-        ? sysCode === '1001082'
-          ? '点击前往智能对话搜索科室/医生/症状/药品/...'
-          : '搜索科室、医生或疾病'
+        ? '搜索科室、医生或疾病'
         : '搜索疾病、症状或药品';
     },
 

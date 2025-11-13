@@ -7,35 +7,6 @@
       'simple-mess': headerConfig?.isMessage || headerConfig?.historyMess,
     }"
   >
-    <!-- #ifdef MP-WEIXIN -->
-    <view class="navBar">
-      <GCustomNavbar
-        :title="headerConfig?.headerLineMenu !== 'homePage' ? title : ''"
-        :showBack="headerConfig?.headerLineMenu !== 'homePage'"
-      >
-        <template v-if="headerConfig?.headerLineMenu === 'homePage'">
-          <g-tabs
-            v-model:value="tabCurrent"
-            :tabs="tabField"
-            @change="tabChange"
-            :bgColor="'#0000'"
-            :lineScale="0"
-            :allBlod="false"
-            :transitionDuration="'0'"
-          />
-          <!--  <g-tabs
-          v-show="tabField.length && tabField.length > 1 && !isModeMedicalHelp"
-          v-model:value="tabCurrent"
-          :tabs="tabField"
-          :scroll="false"
-          @change="tabChange"
-          field="label"
-          style="width: 100%"
-        /> -->
-        </template>
-      </GCustomNavbar>
-    </view>
-    <!-- #endif -->
 
     <img
       :src="globalGl.BASE_IMG + 'intelMedicalAssist_bg.png'"
@@ -70,12 +41,12 @@
         <!-- {{ `Hi,亲爱的用户` }} -->
         <view>
           {{
-            `Hi,${ (onlySelf ? getSelfPat()?.patientName : gStores?.userStore?.patChoose?.patientName) || '亲爱的用户'}`
+            `Hi,${  gStores?.userStore?.patChoose?.patientName || '亲爱的用户'}`
           }}
         </view>
         <view
           @click="chooseAction"
-          v-if="gStores?.userStore?.patChoose?.patientName && !onlySelf"
+          v-if="gStores?.userStore?.patChoose?.patientName"
         >
           <img
             :src="globalGl.BASE_IMG + 'intelMedica-swich.png'"
@@ -126,7 +97,7 @@
         </view>
       </view>
     </view>
-    <choose-pat-action ref="actionSheet" :onlySelf="onlySelf" @choose-pat="choosePatHandler" />
+    <choose-pat-action ref="actionSheet"  @choose-pat="choosePatHandler" />
   </view>
 </template>
 <script setup lang="ts">
@@ -153,10 +124,7 @@
     guessAskList?: Array<{ label: string; value: string }>;
     headerConfig: StyleConfigType;
     isMess?: string;
-  }>();
-  const onlySelf =  gStores.globalStore.sysCode === '1001082'? true : false;
-  const tabField = ['首页', '服务', '我的'];
-  const tabCurrent = ref(0);
+  }>(); 
   const emits = defineEmits(['click-guess']);
 
   const getSelfPat = (): IPat  => {
@@ -181,28 +149,6 @@
     }
   });
 
-  const tabChange = (value) => {
-    tabCurrent.value = value;
-    if (value === 1) {
-      let url = 'pages/home/home';
-      useTBanner(
-        {
-          type: 'self',
-          path: url,
-        },
-        'reLaunch'
-      );
-    } else if (value === 2) {
-      let url = 'pages/home/my';
-      useTBanner(
-        {
-          type: 'self',
-          path: url,
-        },
-        'reLaunch'
-      );
-    }
-  };
   const handleClickGuess = (guessItem) => {
     emits('click-guess', guessItem);
   };

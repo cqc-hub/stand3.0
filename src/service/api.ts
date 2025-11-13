@@ -902,6 +902,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  getRelPatientBindInfo: (data) =>
+    service.post('/phs-user/rePat/getRelPatientBindInfo', parm(data), {
+      hideLoading: false,
+    }),
+
   rpGetPlain: (data) =>
     service.post('/phs-user/rePat/rpGetPlain', parm(data), {
       hideLoading: false,

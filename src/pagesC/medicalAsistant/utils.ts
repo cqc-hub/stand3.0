@@ -1,7 +1,7 @@
 export const getItemStyle = item => {
   const {
     appointIndicator, // 是否需要预约 0否1是
-    disposeStatus, // 1 未执行 2部分执行 3已执行
+    disposeStatus, // 1 未执行 2已执行 3部分执行
     isAppoint, // 是否已预约 0否1是
     orderClass, // 1药品 2检验 3检查
     performDeptCode, // 执行科室代码
