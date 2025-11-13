@@ -5,11 +5,6 @@
     }"
     class="page"
   >
-    <g-flag
-      v-if="gStores.globalStore.sysCode == '1001082' && pageProps.pageType === 'addPatient'"
-      isShowFg
-      typeFg="55"
-    />
     <view class="container" scroll-y>
 
       <view class="form-container">
@@ -497,12 +492,7 @@
 
           if (minAge && maxAge) {
             shouldProceed = age >= minAge && age <= maxAge;
-          }
-
-          // 新增判断 健康温州去除年龄判断
-          if (sysCode === '1001082') {
-            shouldProceed = true;
-          }
+          } 
         }
 
         if (shouldProceed) {
@@ -1204,14 +1194,7 @@
         // 证件类型身份证 , 新生儿 时候必填,  其余可选
         o.required = cardType === '01' || value === '0' || false;
       }
-
-      // 地址+地区不强制填写
-      if (
-        ['1001082'].includes(gStores.globalStore.sysCode) &&
-        [formKey.address, formKey.location].includes(key as any)
-      ) {
-        o.required = false;
-      }
+ 
     });
 
     gform.value.setList([]);

@@ -27,21 +27,7 @@ if (global.SYS_CODE === '1001035') {
       baseApi: 'https://netphs.eheren.com/gateway',
     },
   });
-}
-
-if (global.SYS_CODE === '1001082') {
-  Object.assign(env, {
-    dev: {
-      baseApi: 'https://eservice.wzswsj.gov.cn/gateway',
-    },
-    test: {
-      baseApi: 'https://eservice.wzswsj.gov.cn/gateway',
-    },
-    prod: {
-      baseApi: 'https://eservice.wzswsj.gov.cn/gateway',
-    },
-  });
-}
+} 
 
 export const envBasic = _envBasic[global.env];
 export default env[global.env];

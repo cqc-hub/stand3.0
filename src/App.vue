@@ -66,24 +66,7 @@
           }
         }, 3000);
       }
-    }
-
-    if (
-      globalStore.sysCode === '1001082' &&
-      ![1035, 1017, 1001, 1038].includes(opt.scene) &&
-      opt.path === 'pages/home/home'
-      // ![
-      //   'pagesC/openMiniProgram/h5UseMiniFunc',
-      //   'pagesA/webView/webView',
-      //   'pagesC/cloudHospital/myPath',
-      //   'pagesA/intelMedicalAssist/intelMedicalAssist',
-      // ].includes(opt.path)
-    ) {
-      // 非自定义菜单的时候
-      uni.reLaunch({
-        url: '/pagesA/intelMedicalAssist/intelMedicalAssist',
-      });
-    }
+    } 
 
     if (opt && opt.query) {
       const { query, path, _pd } = opt as any;

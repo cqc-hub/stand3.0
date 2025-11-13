@@ -604,12 +604,7 @@ export const getDefaultFormData = async (
       const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
       data[formKey.patientPhone] = wxPhone;
     }
-
-    // 完善默认展示本人
-    if (globalGl.SYS_CODE === '1001082') {
-      data[formKey.relationship] = '本人'; //仅限健康温州  正常relationship为1
-      data[formKey.relationshipCode] = '1';
-    }
+ 
   } else if (ev === 'alipay') {
     const patList = gStores.userStore.patList;
 

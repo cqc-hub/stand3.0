@@ -93,7 +93,6 @@
   }>();
 
   const gStores = new GStores();
-  const onlySelf =  gStores.globalStore.sysCode === '1001082'? true : false;
 
   const scrollChangeView = (e) => {
     // console.log('e.scrollTop,styleConfig.value.showHeader',e.scrollTop,styleConfig.value.showHeader)
@@ -150,16 +149,6 @@
 
   onShow(() => {
     reload(props?.isMess);
-    
-    if (onlySelf) {
-    const selfPat = gStores.userStore.patList.find(
-      (pat: IPat) => pat.relationship === '本人'
-    );
-    // 如果找到了关系为"本人"的就诊人，且当前选择的不是本人
-    if (selfPat && gStores.userStore.patChoose.relationship !== '本人') {
-      gStores.userStore.updatePatChoose(selfPat);
-    }
-  }
   });
 
   onLoad(() => {

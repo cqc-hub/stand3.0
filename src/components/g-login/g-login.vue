@@ -27,7 +27,6 @@
   import { handlerLogin, GStores, cacheUtil } from '@/utils';
   import { useRouterStore } from '@/stores';
   import globalGl from '@/config/global';
-  import { getUtils1001082 } from '@/utils/1001082';
 
   const gStores = new GStores();
   const routeStore = useRouterStore();
@@ -103,12 +102,7 @@
     await handlerLogin({
       ...(e || {}),
       onlyLogin: props.onlyLogin,
-    });
-
-    if (gStores.globalStore.sysCode === '1001082') {
-      const u = await getUtils1001082();
-      await u.useFaceVerify1001082().intercept1001082();
-    }
+    }); 
     nextStep();
   };
 

@@ -1235,12 +1235,6 @@ export class PatientUtils extends LoginUtils {
     payload = {
       ...payload,
     };
-
-    if (this.globalStore.sysCode === '1001082') {
-      payload.relationship = '本人'; // 仅健康温州 实际relationship需要传的是1
-      payload.relationshipCode = 1;
-    }
-
     const {
       idCard: idNo,
       idType,
