@@ -3,7 +3,6 @@
   import monitor from '@/js_sdk/alipay/alipayLogger.js';
   // #endif
   import { onLaunch, onShow } from '@dcloudio/uni-app';
-  import { useGlobalStore, useUserStore } from '@/stores';
   import { beforeEach } from '@/router';
   import global from '@/config/global';
   import 'polyfill-object.fromentries';
@@ -12,22 +11,24 @@
   import '@/utils/dynamicUtil';
   import { useLunchInit1001035 } from '@/utils/1001035';
   import { reloadUni } from './utils/reloadUni';
+  import { GStores } from './utils';
 
-  const globalStore = useGlobalStore();
+  const gStores = new GStores();
+
   let _cacheChangePatTime = '',
     showTime = 0;
 
   onLaunch(async (opt) => {
     console.log('App Launch', opt);
     reloadUni();
-    globalStore.initBrowser();
-    globalStore.onAppLaunch(opt);
+    gStores.globalStore.initBrowser();
+    gStores.globalStore.onAppLaunch(opt);
 
-    if (globalStore.sysCode === '1001035') {
+    if (gStores.globalStore.sysCode === '1001035') {
       // const { appLaunchInit1001035 } = useLunchInit1001035();
       // appLaunchInit1001035();
     } else {
-      globalStore.setShowFlag(true);
+      gStores.globalStore.setShowFlag(true);
     }
     // #ifdef MP-ALIPAY
     const alipayPid = global.systemInfo.alipayPid;
@@ -49,9 +50,9 @@
   onShow(async (opt: any) => {
     console.log('App Show', opt);
 
-    globalStore.onAppShow(opt);
+    gStores.globalStore.onAppShow(opt);
 
-    if (globalStore.ev === 'wx') {
+    if (gStores.globalStore.ev === 'wx') {
       if (!showTime) {
         showTime = ((new Date() as unknown as number) * 1) / 1000;
         wx.login();
@@ -66,7 +67,7 @@
           }
         }, 3000);
       }
-    } 
+    }
 
     if (opt && opt.query) {
       const { query, path, _pd } = opt as any;
@@ -116,20 +117,20 @@
             }
           }
 
-          const userStore = useUserStore();
-
-          if (userStore.patList.length) {
+          if (gStores.userStore.patList.length) {
             if (_pd) {
-              if (userStore.patChoose.patientId !== _pd) {
-                const pat = userStore.patList.find((o) => o.patientId === _pd);
-                userStore.updatePatChoose(pat!);
+              if (gStores.userStore.patChoose.patientId !== _pd) {
+                const pat = gStores.userStore.patList.find(
+                  (o) => o.patientId === _pd
+                );
+                gStores.userStore.updatePatChoose(pat!);
               }
             } else if (_hosPd) {
-              if (userStore.patChoose.cardNumber !== _hosPd) {
-                const pat = userStore.patList.find(
+              if (gStores.userStore.patChoose.cardNumber !== _hosPd) {
+                const pat = gStores.userStore.patList.find(
                   (o) => o.cardNumber === _hosPd
                 );
-                userStore.updatePatChoose(pat!);
+                gStores.userStore.updatePatChoose(pat!);
               }
             }
           }
