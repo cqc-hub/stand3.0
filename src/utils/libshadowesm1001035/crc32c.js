@@ -78,4 +78,6 @@ export { AR_SHADOW_CRC32 };
 
 // 也可以使用默认导出
 export default AR_SHADOW_CRC32;
+// #ifndef H5
 exports.AR_SHADOW_CRC32 = AR_SHADOW_CRC32;
+// #endif

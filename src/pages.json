@@ -985,6 +985,15 @@
           "extend": {
             "patient": true
           }
+        },
+        {
+          "path": "pat/bound",
+          "style": {
+            "navigationBarTitleText": "被绑定查询"
+          },
+          "extend": {
+            "patient": true
+          }
         }
       ],
       "plugins":  {}
