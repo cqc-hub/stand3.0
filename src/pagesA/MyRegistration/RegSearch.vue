@@ -17,13 +17,14 @@
           <template #suffixRight>
             <view v-if="r.searchText.value" class="flex">
               <view class="suffix-right f28 mr12" @click="cancelInput">
-                取消
+                <text class="text-no-wrap">取消</text>
               </view>
+
               <view
                 class="suffix-right f28 color-blue"
                 @click="confirmInput(r.searchText.value)"
               >
-                查询
+                <text class="text-no-wrap">查询</text>
               </view>
             </view>
           </template>
