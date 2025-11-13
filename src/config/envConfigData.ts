@@ -5,7 +5,7 @@ import { type TBannerConfig } from '@/utils';
  */
 
 export const sysConfigEnv = <const>{
-  // 'person.isSmsVerify': '0',
+  'person.isSmsVerify': '0',
   // 'person.isCanAddPatCardNo': '1',
   'order.isConfirmOrderWithPay': '1',
 };

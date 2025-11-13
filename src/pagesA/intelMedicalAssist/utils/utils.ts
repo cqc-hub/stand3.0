@@ -27,11 +27,10 @@ import {
   getLocalStorage,
 } from '@/common';
 import type { TInstance } from '@/components/g-form/index';
-import { IPat, useDeptStore, useGlobalStore } from '@/stores';
+import { useDeptStore, useGlobalStore } from '@/stores';
 import { isOpenSm4 } from '@/service';
 import { getMyPowerQx } from '@/components/greenPower';
 import { checkLoginExpired } from '@/common/checkJump';
-import HTMLParser from '@/common/html-parser';
 import globalGl from '@/config/global';
 import api from '@/service/api';
 import env from '@/config/env';
@@ -666,11 +665,11 @@ export const sendImg = async () => {
   }
   const gStores = new GStores();
   const maxSize = 4 * 1024 * 1024; // 4MB 限制大小
-  const { tempFilePaths } = await apiAsync(uni.chooseImage, {
+  const { tempFilePaths } = (await apiAsync(uni.chooseImage, {
     count: 1,
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
-  });
+  })) as any;
   try {
     if (tempFilePaths.length === 0) {
       return;
@@ -680,7 +679,6 @@ export const sendImg = async () => {
     const file = await uni.getFileInfo({
       filePath: tempFilePath,
     });
-    // @ts-expect-error
     if (file.size > maxSize) {
       gStores.messageStore.showMessage(
         '图片大小超过4MB，请选择较小的图片',
@@ -713,7 +711,6 @@ export const sendImg = async () => {
         ? 'https://eservice.wzswsj.gov.cn'
         : 'https://netphs.eheren.com/gateway';
 
-    // @ts-expect-error
     const { data } = await apiAsync(uni.uploadFile, {
       url: `${baseApi}/phs-extend/customer/picOcr?sysCode=${
         gStores.globalStore.sysCode
@@ -1714,7 +1711,6 @@ export const regConfirm = async (pageArg) => {
         uni.reLaunch({
           url: '/pagesA/MyRegistration/MyRegistration?typeId=1',
         });
-
       } else if (code !== 4000) {
         message && gStores.messageStore.showMessage(message, 3000);
       }

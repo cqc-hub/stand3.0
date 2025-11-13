@@ -181,6 +181,7 @@ const pagesPlugins = {
   'pagesA-plugins': { wx: {} as any, ali: {} as any },
   'pagesB-plugins': { wx: {} as any, ali: {} as any },
   'pagesC-plugins': { wx: {} as any, ali: {} as any },
+  'pagesG-plugins': { wx: {} as any, ali: {} as any },
 };
 
 if (isOpenHealthCard) {
@@ -243,7 +244,7 @@ if (medicalMHelp) {
 
 if (sysCode === '1001094') {
   // https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wx08b6b6e7153f00e3&token=1520196324&lang=zh_CN#1-
-  pagesPlugins['pagesC-plugins'].wx['medicalLetterPlugins'] = {
+  pagesPlugins['pagesG-plugins'].wx['medicalLetterPlugins'] = {
     version: '1.0.20',
     provider: 'wx08b6b6e7153f00e3',
   };

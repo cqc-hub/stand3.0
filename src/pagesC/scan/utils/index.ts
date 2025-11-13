@@ -35,8 +35,6 @@ export const useScan = () => {
        * - 17 健康温州 温心在线
        * - 18 健康温州 云影像
        * - 19 江苏省中 健康商城
-       * - 20 健康温州 学生体检
-       * - 21 新疆中医 患者实名认证页面
        */
       type:
         | '_1'
@@ -572,69 +570,6 @@ export const useScan = () => {
     });
   };
 
-  const pluginCloudSignData1001094 = {
-    s_hosCode: 'h001',
-    s_appKey: '6e6aa3995f3c4f82bcc2aa12220895c0',
-    s_appSecret: '6e6aa3995f3c4f82bcc2aa12220895c0',
-    s_globalUrl: 'https://canew.xjtcm.com/hospital_pre',
-  };
-  /** 患者实名认证页面 */
-  const pluginCloudSign1001094 = async (data: any = {}) => {
-    await beforeEach({
-      _isPatient: true,
-    });
-
-    const { idCard: s_idCard } = await patientUtils.getPatientPersonalInfo({
-      idCard: true,
-    });
-
-    uni.redirectTo({
-      url: joinQuery('plugin://medicalLetterPlugins/idcard', {
-        s_idCard,
-        s_openId: gStores.globalStore.openId,
-        s_type: '3',
-        ...data,
-        ...pluginCloudSignData1001094,
-      }),
-
-      events: {
-        async userRealNameFace({ idCard, name }) {
-          const { verifyResult: s_verifyResult } =
-            await patientUtils.faceVerify({
-              idCardNumber: idCard,
-              name,
-            });
-
-          pluginCloudSign1001094({
-            s_verifyResult,
-            s_idCard: idCard,
-          });
-        },
-      },
-    });
-  };
-  /** 患者签署文件列表页面 */
-  const pluginCloudSignDocument1001094 = async (
-    s_documentStatus: '0' | '1'
-  ) => {
-    await beforeEach({
-      _isPatient: true,
-    });
-    const { idCard: s_idCard } = await patientUtils.getPatientPersonalInfo({
-      idCard: true,
-    });
-
-    uni.redirectTo({
-      url: joinQuery('plugin://medicalLetterPlugins/signDocumentList', {
-        s_openId: gStores.globalStore.openId,
-        s_type: '3',
-        s_documentStatus,
-        s_idCard,
-        ...pluginCloudSignData1001094,
-      }),
-    });
-  };
-
   return {
     pageProps,
     childNewborn10001067,
@@ -658,7 +593,5 @@ export const useScan = () => {
     wenxinzaixian1001082,
     healthCheckUp1001082,
     healthMall1001035,
-    pluginCloudSign1001094,
-    pluginCloudSignDocument1001094,
   };
 };
