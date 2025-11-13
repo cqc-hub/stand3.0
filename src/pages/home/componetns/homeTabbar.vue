@@ -385,11 +385,6 @@
       tabList.push('home-tabbar:科普');
     }
 
-    if (global.SYS_CODE === '1001082') {
-      tabList.push('home-tabbar:服务');
-      tabBarList[0].url = '/pagesA/intelMedicalAssist/intelMedicalAssist';
-    }
-
     const {
       HomeTabBar: { tabs = [] },
     } = await cacheUtil.getSystemConfig('HomeTabBar')();

@@ -73,20 +73,6 @@ Request.interceptors.request((request: IRequest) => {
     request.url = request.url + '=' + encryptDes(getSysCode(), 'hrtest22');
   }
 
-  // ========== 动态修改内网部署 baseURL 的逻辑放在这里 ==========
-  // const skipBaseURLChangeApis = [
-  //   '/phs-user/authUser/allinoneAuthApi',
-  //   '/phs-extend/customer/evaluate',
-  //   '/phs-base/cms/getCmsTypeList',
-  //   '/phs-base/cms/getCmsList',
-  // ];
-  // if (
-  //   globalStore.sysCode === '1001082' &&
-  //   !skipBaseURLChangeApis.some((api) => request.url.includes(api))
-  // ) {
-  //   request.baseURL = 'https://eservice.wzswsj.gov.cn/gateway';
-  // }
-  // ========== END ==========
 
   // @ts-expect-error
   request._data = request.data;

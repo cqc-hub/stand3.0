@@ -8,7 +8,6 @@ import { toPayPull } from '@/components/g-pay';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 import { deQueryForUrl, joinQueryForUrl } from '@/common';
-import { getUtils1001082 } from '../1001082';
 
 type NeverTurnsAny<T> = T extends never ? any : T;
 
@@ -184,11 +183,7 @@ export const routerJump = async (url?: `/${string}`,type?:string) => {
   const gStores = new GStores();
 
   const routerStore = useRouterStore();
-  if (gStores.globalStore.sysCode === '1001082' && type !='add') {
-    const u = await getUtils1001082();
-    await u.useFaceVerify1001082().intercept1001082();
-  }
-
+ 
   if (routerStore.isWork) {
     const _p = routerStore._p;
     if (_p) {

@@ -185,9 +185,7 @@ export const init = async (props) => {
     simpleHeadInit: false, //初始服务居中
     historyMess: false,
     headerLineMenu:
-      props?.type?.includes('homePage') || globalGl.SYS_CODE === '1001082'
-        ? 'homePage'
-        : 'back',
+      props?.type?.includes('homePage') ||  'back',
   };
   const gStores = new GStores();
   const distinctiveImageList =
@@ -201,10 +199,7 @@ export const init = async (props) => {
       result?.content && (distinctiveImage.value = result?.content);
       result?.content && globalStore.setIntAssistantImg(result?.content);
     }
-  }
-  if (gStores.globalStore.sysCode === '1001082') {
-    title.value = '健康瓯管家';
-  }
+  } 
 
   props?.isMess && props?.isMess == '1' && initWithMess();
   props?.isMess && props?.isMess === '2' && initWithTheMess(props?.openid);
@@ -706,10 +701,7 @@ export const sendImg = async () => {
       scrollToNewMsg();
     }, 500);
 
-    let baseApi =
-      gStores.globalStore.sysCode === '1001082'
-        ? 'https://eservice.wzswsj.gov.cn'
-        : 'https://netphs.eheren.com/gateway';
+    let baseApi = 'https://netphs.eheren.com/gateway';
 
     const { data } = await apiAsync(uni.uploadFile, {
       url: `${baseApi}/phs-extend/customer/picOcr?sysCode=${
@@ -1247,10 +1239,7 @@ let taskQueue = new TaskQueue();
 
 const typeInAsk = async (value, answertype) => {
   const gStores = new GStores();
-  let baseApi =
-    gStores.globalStore.sysCode === '1001082'
-      ? 'https://eservice.wzswsj.gov.cn'
-      : `https://${
+  let baseApi =  `https://${
           globalGl.env === 'prod' ? 'net' : 'test'
         }phs.eheren.com/gateway`;
   const settings = {

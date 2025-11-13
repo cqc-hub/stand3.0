@@ -15,8 +15,7 @@
       ref="selHosRef"
     />
     <g-choose-pat
-      :onlySelf="onlySelf"
-      :disabled="onlySelf ? true : false"
+      :disabled="false"
       @choose-pat="choosePat"
     />
     <g-tbanner
@@ -258,10 +257,7 @@
     verifyType?: '1';
     orderId?: string;
     redirectUrl?: string;
-    registerOrderId?: string;
-
-    // 1001082
-    verify1001082?: '1';
+    registerOrderId?: string; 
   }
   const pageProps = ref(<IPageProps>{});
   // 在父组件中
@@ -289,7 +285,6 @@
   const verifyData = ref('');
   const verifyIdCardVal = ref('');
   const refVerifyIdCardPopup = ref('' as any);
-  const onlySelf = gStores.globalStore.sysCode === '1001082' ? true : false;
   const isOpenFilterTime = computed(
     () => pageConfig.value.isOpenFilterReportByTime === '1'
   );
@@ -796,9 +791,6 @@
   });
   //切换就诊人
   const choosePat = () => {
-    if (onlySelf) {
-      return;
-    }
     pageList.value = { '0': [], '1': [], '2': [] };
     isRefresh.value = [true, true, true];
     nextTick(() => {
