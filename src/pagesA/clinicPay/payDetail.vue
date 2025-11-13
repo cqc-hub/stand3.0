@@ -666,12 +666,24 @@
       // 预结算 (_t === '1' 为濮阳直接扫码进详情不需要预结算)
       if (pageConfig.value.isPreSettle === '1' && props.value._t !== '1') {
         const list = selList.value;
-        const { hosId, childOrder, visitDate, visitNo, params, clinicType } =
-          props.value;
+        const {
+          hosId,
+          childOrder,
+          visitDate,
+          visitNo,
+          params,
+          clinicType,
+          serialNo,
+        } = props.value;
 
+        let serialNoStr = list.map((o) => o.serialNo).join(',');
+        if (serialNoStr.replaceAll(',', '') === '') {
+          serialNoStr = serialNo || '';
+        }
+        console.log('serialNoStr',serialNoStr);
         goConfirmPage({
           hosId,
-          serialNo: list.map((o) => o.serialNo).join(','),
+          serialNo: serialNoStr,
           mergeOrder: childOrder,
           visitNo: visitNo!,
           visitDate: visitDate!,

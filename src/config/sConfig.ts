@@ -532,7 +532,7 @@ const scJson: Record<string, ISConfig> = {
       },
       alipay: {
         medicalPlugin: {
-          orgId: { 12930: 'H33060200131', 13178: 'H33060200131' },
+          orgId: { 12930: 'H33060200131', 13178: 'H3306020013120' },
           appId: { 13178: '20' },
           cardType: '01',
         },

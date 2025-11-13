@@ -478,50 +478,50 @@
         }
       }
 
-      // if (isFace === '1') {
-      //   const [minAge, maxAge] = faceAgeRange;
-      //   const { sysCode } = gStores.globalStore;
-      //   let shouldProceed = false;
+      if (isFace === '1') {
+        const [minAge, maxAge] = faceAgeRange;
+        const { sysCode } = gStores.globalStore;
+        let shouldProceed = false;
 
-      //   if (isUpFace === '1' && upIdCard) {
-      //     shouldProceed = true;
-      //   } else {
-      //     const { age } = idValidator.getIdCardInfo(idCard);
-      //     if (!shouldProceed && minAge && age >= minAge) {
-      //       shouldProceed = true;
-      //     }
+        if (isUpFace === '1' && upIdCard) {
+          shouldProceed = true;
+        } else {
+          const { age } = idValidator.getIdCardInfo(idCard);
+          if (!shouldProceed && minAge && age >= minAge) {
+            shouldProceed = true;
+          }
 
-      //     if (!shouldProceed && maxAge && age < maxAge) {
-      //       shouldProceed = true;
-      //     }
+          if (!shouldProceed && maxAge && age < maxAge) {
+            shouldProceed = true;
+          }
 
-      //     if (minAge && maxAge) {
-      //       shouldProceed = age >= minAge && age <= maxAge;
-      //     }
+          if (minAge && maxAge) {
+            shouldProceed = age >= minAge && age <= maxAge;
+          }
 
-      //     // 新增判断 健康温州去除年龄判断
-      //     if (sysCode === '1001082') {
-      //       shouldProceed = true;
-      //     }
-      //   }
+          // 新增判断 健康温州去除年龄判断
+          if (sysCode === '1001082') {
+            shouldProceed = true;
+          }
+        }
 
-      //   if (shouldProceed) {
-      //     await new Promise((rl, rj) => {
-      //       resolve = rl;
-      //       reject = () => {
-      //         gStores.messageStore.showMessage('取消人脸识别', 3000);
-      //         rj();
-      //       };
-      //       faceDialog.value.show();
-      //     });
-      //     const { pData } = await patientUtils.faceVerifyAndPData({
-      //       idCardNumber: cardNo,
-      //       name: name,
-      //     });
-      //     data.pData = pData;
-      //     data.realNameAuth = '1';
-      //   }
-      // }
+        if (shouldProceed) {
+          await new Promise((rl, rj) => {
+            resolve = rl;
+            reject = () => {
+              gStores.messageStore.showMessage('取消人脸识别', 3000);
+              rj();
+            };
+            faceDialog.value.show();
+          });
+          const { pData } = await patientUtils.faceVerifyAndPData({
+            idCardNumber: cardNo,
+            name: name,
+          });
+          data.pData = pData;
+          data.realNameAuth = '1';
+        }
+      }
     }
   };
 
