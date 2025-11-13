@@ -46,7 +46,7 @@
         @confirm="onConfirm"
       ></textarea>
 
-      <view v-else class="keep-normal">
+      <view v-else class="flex1 keep-normal">
         <input
           :type="type === 'password' ? 'text' : type"
           class="uni-easyinput__content-input"
@@ -54,7 +54,6 @@
             'padding-right':
               type === 'password' || clearable || prefixIcon ? '' : '10px',
             'padding-left': prefixIcon ? '' : '10px',
-            height: styles.height,
           }"
           :name="name"
           :value="val"
@@ -188,16 +187,16 @@
         type: Boolean,
         default: true,
       },
-      adjustPosition: {
-        type: Boolean,
-        default: false,
-      },
       autoHeight: {
         type: Boolean,
         default: false,
       },
       placeholder: String,
       placeholderStyle: String,
+      adjustPosition: {
+        type: Boolean,
+        default: false,
+      },
       focus: {
         type: Boolean,
         default: false,
