@@ -231,6 +231,11 @@ export interface ISystemConfig_ {
     isEditPatPhone?: '1';
     /** 允许该平台访问院内此用户的就诊数据 */
     isUserInfoShareAgree?: '1';
+    /** 就诊人列表/详情 开放被绑定查询及解绑 */
+    isSearchPatBound?: '1';
+    /** 被绑定查询页面中解绑是否要人脸验证 */
+    isRemoveBindingByFaceVerify?: '1';
+
     /**
      * 表单填写补充字段
      * referenceId - 备注
