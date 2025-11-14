@@ -1184,6 +1184,10 @@ const userApi = {
     service.post('/phs-user/relevantPatient/deletePat', parm(data), {
       hideLoading: true,
     }),
+  deletePatByHerenId: (data) =>
+    service.post('/phs-user/relevantPatient/deletePatByHerenId', parm(data), {
+      hideLoading: true,
+    }),
 
   //添加相关就诊人
   addPat: (data) =>

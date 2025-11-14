@@ -637,7 +637,7 @@ export class ServerStaticData {
     //type:home 首页每次都调用一下
     const arg = {
       version: '',
-      source: 1,
+      source: gStores.globalStore.browser.source,
     };
 
     if (gStores.globalStore.modeOld) {
@@ -647,6 +647,8 @@ export class ServerStaticData {
         arg.source = 2;
       } else if (gStores.globalStore.ev === 'web') {
         arg.source = 3;
+      } else if (gStores.globalStore.ev === 'wx') {
+        arg.source = 1;
       }
     }
 

@@ -378,7 +378,7 @@ const globalStore = defineStore('global', {
       // #ifdef MP-HARMONY
       this.ev = 'harmony';
       updateBrowser({
-        source: '',
+        source: '77',
         accountType: '',
       });
       // #endif

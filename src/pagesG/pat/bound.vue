@@ -27,6 +27,7 @@
 
   import { onLoad } from '@dcloudio/uni-app';
   import {
+    apiAsync,
     GStores,
     ISystemConfig,
     PatientUtils,
@@ -48,6 +49,14 @@
     const { patientName } = gStores.userStore.clickPat;
     const { herenId: otherHerenId, patientId } = item;
 
+    const { confirm } = await apiAsync(uni.showModal, {
+      content: '确认解绑?',
+    });
+
+    if (!confirm) {
+      return Promise.reject('取消解绑');
+    }
+
     if (isRemoveBindingByFaceVerify === '1') {
       const { idCard } = await patientUtils.getPatientPersonalInfo({
         idCard: true,
@@ -60,9 +69,10 @@
       });
     }
 
-    await patientUtils.deletePat({
+    await api.deletePatByHerenId({
       otherHerenId,
       patientId,
+      source: gStores.globalStore.browser.source,
     });
 
     if (otherHerenId === gStores.globalStore.herenId) {
