@@ -1641,12 +1641,12 @@ export class PatientUtils extends LoginUtils {
   /**
    * 删除就诊人
    */
-  async deletePat(data: { patientId: string }) {
+  async deletePat(data: { patientId: string } & BaseObject) {
     const { patientId } = data;
 
-    const pat = <IPat>(
-      this.userStore.patList.find((o) => o.patientId === patientId)
-    );
+    // const pat = <IPat>(
+    //   this.userStore.patList.find((o) => o.patientId === patientId)
+    // );
 
     uni.showLoading({
       title: '请求中...',
@@ -1654,6 +1654,7 @@ export class PatientUtils extends LoginUtils {
     });
 
     await api.deletePat({
+      ...data,
       patientId,
       source: this.globalStore.browser.source,
     });

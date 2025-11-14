@@ -179,11 +179,11 @@ const getMenuById = (_id: string, _list: any[]) => {
 };
 
 // 存在回调情况下 跳某个地址(回调优先)
-export const routerJump = async (url?: `/${string}`,type?:string) => {
+export const routerJump = async (url?: `/${string}`, type?: string) => {
   const gStores = new GStores();
 
   const routerStore = useRouterStore();
- 
+
   if (routerStore.isWork) {
     const _p = routerStore._p;
     if (_p) {
@@ -248,6 +248,19 @@ export const nameConvert = (name: string) => {
     userName += name.slice(-1);
   }
   return userName;
+};
+
+/**
+ *
+ * 脱敏-phone
+ * @returns string
+ */
+export const phoneConvert = (phone: string) => {
+  if (phone) {
+    return phone.replace(/(\d{3})\d*(\d{4})/, '$1******$2');
+  }
+
+  return '';
 };
 
 export const isTypeofIdCard = (idCard: string) =>

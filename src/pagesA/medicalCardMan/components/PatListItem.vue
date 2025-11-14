@@ -3,10 +3,12 @@
     <view class="pat-profile" @click="profileClick">
       <view class="pat-label">
         <!-- <text class="pat-name bold">{{pat.healthQrCodeText ? pat.patientNameEncry : pat.patientName }}</text> -->
-        <text class="pat-name bold">{{ gStores.userStore.getPatName(pat) }}</text>
+        <text class="pat-name bold">
+          {{ gStores.userStore.getPatName(pat) }}
+        </text>
         <text class="pat-sex bold">{{ pat.patientSex }}</text>
-          <g-tag
-          v-if="pageConfig().relationShip === '1' && pat.relationship"
+        <g-tag
+          v-if="(pageConfig() as any).relationShip === '1' && pat.relationship"
           type="blue"
           :text="pat.relationship"
           class="mr12"
@@ -147,7 +149,7 @@
         pageConfig,
         getRealNameAuth,
         globalGl,
-        gStores
+        gStores,
       };
     },
   });
@@ -218,7 +220,8 @@
         align-items: center;
         position: relative;
 
-        background-image: radial-gradient(
+        background-image:
+          radial-gradient(
             circle at 20rpx 0,
             #fff,
             #fff 10rpx,

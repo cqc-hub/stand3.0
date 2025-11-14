@@ -19,7 +19,11 @@ import {
   ApiParamsConfig,
   addHosIdForSelfH5Path,
 } from '@/utils';
-import { sysConfigEnv, apiConfigEnv } from '@/config/envConfigData';
+import {
+  sysConfigEnv,
+  apiConfigEnv,
+  sysConfigTrial,
+} from '@/config/envConfigData';
 import { useCacheStore } from '@/stores';
 
 import api from '@/service/api';
@@ -148,9 +152,7 @@ const h5LoginFun = (options) => {
 const tBannerIntercept = async (
   extraData: BaseObject,
   inst: (...args: any[]) => any = () => {}
-) => {
- 
-};
+) => {};
 
 export const useTBanner = async (
   config: TBannerConfig | TButtonConfig,
@@ -737,6 +739,8 @@ export class ServerStaticData {
         if (this.env === 'develop') {
           // ...
           insertsObject(sysConfigEnv, systemConfig);
+        } else if (this.env === 'trial') {
+          insertsObject(sysConfigTrial, systemConfig);
         }
       } catch (error) {
         console.error(error);

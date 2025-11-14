@@ -290,8 +290,12 @@ image {
 }
 
 .safe-height {
-  width: 1rpx;
-  height: 40rpx;
+  &::before {
+    content: "";
+    display: block;
+    height: 40rpx;
+    width: 1rpx;
+  }
 }
 
 .out-document,

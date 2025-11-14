@@ -68,14 +68,17 @@
           <view>
             <view class="button-line">
               <view
-                v-if="pageConfig.isSearchPatBound === '1'"
+                v-if="
+                  pageConfig.isSearchPatBound === '1' &&
+                  pat.realNameAuth === '1'
+                "
                 class="pat-btns flex-normal mt16 ml12"
               >
                 <view
                   @click="goPatBound(pat)"
                   class="btn btn-round btn-border btn-plain btn-size-small color-dark"
                 >
-                  被绑定查询
+                  绑定查询
                 </view>
               </view>
 

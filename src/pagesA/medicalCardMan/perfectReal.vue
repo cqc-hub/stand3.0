@@ -189,6 +189,7 @@
     getH5OpenidParam,
     ISystemConfig,
     wait,
+    phoneConvert,
   } from '@/utils';
 
   import {
@@ -731,13 +732,7 @@
       if (keys.includes('patientPhone') && key === formKey.patientPhone) {
         o.disabled = disabled;
 
-        o.inputMask = (v, item) => {
-          if (v) {
-            return v.replace(/(\d{3})\d*(\d{4})/, '$1******$2');
-          }
-
-          return '';
-        };
+        o.inputMask = phoneConvert;
       }
     });
   };
