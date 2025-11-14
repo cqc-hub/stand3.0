@@ -46,7 +46,7 @@
       s_idCard: string;
     } & BaseObject = {} as any
   ) => {
-    uni.redirectTo({
+    uni.navigateTo({
       url: joinQuery('plugin://medicalLetterPlugins/idcard', {
         s_openId: gStores.globalStore.openId,
         s_type: '3',

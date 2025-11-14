@@ -41,7 +41,6 @@ export const isOpenSm4 = false;
 Request.interceptors.request((request: IRequest) => {
   const globalStore = useGlobalStore();
   const specialUrls1001035 = ['https://phs.jshtcm.com'];
-  console.log(request);
 
   if (
     globalStore.ev === 'web' &&

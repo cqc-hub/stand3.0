@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores';
 
 import globalGl from '@/config/global';
 
-export type T_ENV_H5 = 'web' | 'wx' | 'alipay';
+export type T_ENV_H5 = 'web' | 'wx' | 'alipay' | 'harmony';
 
 interface IStateGlobal {
   token: {
@@ -372,6 +372,14 @@ const globalStore = defineStore('global', {
       updateBrowser({
         source: 21,
         accountType: 22,
+      });
+      // #endif
+
+      // #ifdef MP-HARMONY
+      this.ev = 'harmony';
+      updateBrowser({
+        source: '',
+        accountType: '',
       });
       // #endif
 

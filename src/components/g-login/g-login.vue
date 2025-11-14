@@ -38,7 +38,7 @@
   }>();
   const emits = defineEmits(['handler-next', 'handler-login']);
 
-  const _env = ref<'wx' | 'alipay' | 'h5' | 'tt'>('wx');
+  const _env = ref<'wx' | 'alipay' | 'h5' | 'tt' | 'harmony'>('wx');
 
   const isAliAuthBase = ref(globalGl.sConfig.login?.isAliAuthBase === '1');
 
@@ -52,6 +52,10 @@
 
   // #ifdef MP-TOUTIAO
   _env.value = 'tt';
+  // #endif
+
+  // #ifdef MP-HARMONY
+  _env.value = 'harmony';
   // #endif
 
   const getOpenType = computed(() => {
@@ -102,7 +106,7 @@
     await handlerLogin({
       ...(e || {}),
       onlyLogin: props.onlyLogin,
-    }); 
+    });
     nextStep();
   };
 

@@ -46,7 +46,7 @@
   const removeBinding = async (item: TBoundItem) => {
     const { isRemoveBindingByFaceVerify } = pageConfig.value;
     const { patientName } = gStores.userStore.clickPat;
-    const { herenId, patientId } = item;
+    const { herenId: otherHerenId, patientId } = item;
 
     if (isRemoveBindingByFaceVerify === '1') {
       const { idCard } = await patientUtils.getPatientPersonalInfo({
@@ -61,11 +61,11 @@
     }
 
     await patientUtils.deletePat({
-      herenId,
+      otherHerenId,
       patientId,
     });
 
-    if (herenId === gStores.globalStore.herenId) {
+    if (otherHerenId === gStores.globalStore.herenId) {
       await patientUtils.getPatCardList();
     }
 

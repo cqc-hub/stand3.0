@@ -94,6 +94,7 @@
         closeCallBack,
       });
     });
+    console.log(confirm, '我执行了233');
 
     uni.navigateTo({
       url: '/cacheUtil/index1',
