@@ -33,6 +33,17 @@
 
     <g-message />
 
+    <view
+      v-if="
+        pageConfig.isSearchPatBound === '1' &&
+        gStores.userStore.clickPat.realNameAuth === '1'
+      "
+      @click="goPatBound(gStores.userStore.clickPat)"
+      class="btn del-btn btn-primary color-blue"
+    >
+      <view class="del-btn-label">绑定查询</view>
+    </view>
+
     <view @click="isShow = true" class="btn del-btn btn-primary">
       <view class="del-btn-label">删除就诊人</view>
     </view>
@@ -67,6 +78,7 @@
     PatCardKeys,
     patCardDetailFormKey,
     goEditPhone,
+    goPatBound,
   } from './utils';
   import {
     apiAsync,
@@ -110,8 +122,8 @@
   const deletePat = async () => {
     isShow.value = false;
     const { isNotDeleteSelf } = pageConfig.value;
-    if(isNotDeleteSelf === '1' && formData.value.relationship === '本人'){
-      gStores.messageStore.showMessage('不可删除本人账号', 2000)
+    if (isNotDeleteSelf === '1' && formData.value.relationship === '本人') {
+      gStores.messageStore.showMessage('不可删除本人账号', 2000);
       return;
     }
     await patientUtils.deletePat({
