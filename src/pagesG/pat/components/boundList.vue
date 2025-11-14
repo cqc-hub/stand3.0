@@ -15,11 +15,11 @@
         当前账号
       </view>
 
-      <view class="flex mb32">
-        <view class="f36 g-bold mr8 color-111">{{ item.userName }}</view>
-        <view v-if="item.accountName" class="color-888">
+      <view class="flex items-center mb32">
+        <text class="f36 g-bold mr8 color-111">{{ item.userName }}</text>
+        <text v-if="item.accountName" class="color-888">
           {{ `(${phoneConvert(item.accountName)})` }}
-        </view>
+        </text>
       </view>
 
       <view v-if="item.accountTypeName" class="flex mb12">
