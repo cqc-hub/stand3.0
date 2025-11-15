@@ -626,7 +626,9 @@
   const getShowRow2 = computed(() => {
     const c: string[] = [];
     if (pageConfig.value.orderMode !== '1') {
-      c.push(docDetail.value.hosName!);
+      if (pageConfig.value.isHideHosName !== '1') {
+        c.push(docDetail.value.hosName!);
+      }
       c.push(docDetail.value.deptName!);
     }
 
