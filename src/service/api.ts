@@ -586,6 +586,9 @@ const regApi = {
   subPreinquiryMessage: (data: any) =>
     service.post('/phs-reg/regDoc/subPreinquiryMessage', parm(data)),
 
+  findByDocSchId: (data: any) =>
+    service.post('/phs-reg/regDoc/findByDocSchId', parm(data)),
+
   loginByThRegisterId: (data: any) =>
     service.post('/phs-reg/tencent/loginByThRegisterId', parm(data)),
 

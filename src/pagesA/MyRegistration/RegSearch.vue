@@ -6,6 +6,9 @@
     class="g-page"
   >
     <view class="search-header">
+      <view v-for="(banner, index) in bannerList" :key="index">
+        <g-tbanner :config="banner" />
+      </view>
       <view class="search-input">
         <uni-search-input
           v-model:value="r.searchText.value"
@@ -129,11 +132,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { useCacheStore, useDeptStore } from '@/stores';
-  import { deQueryForUrl } from '@/common';
-  import { GStores } from '@/utils';
+  import { deQueryForUrl, normalizeBannerConfig } from '@/common';
+  import { GStores, ISystemConfig, ServerStaticData } from '@/utils';
   import {
     UseRegSearch,
     clearSearchHistory,
@@ -145,6 +148,8 @@
   import SearchHisList from './components/RegSearch/searchHisList.vue';
 
   const r = new UseRegSearch();
+  const orderConfig = ref({} as ISystemConfig['order']);
+
   const isDelHisShow = ref(false);
   const gStores = new GStores();
   const cacheStore = useCacheStore();
@@ -199,7 +204,13 @@
     confirmInput(label);
   };
 
-  onLoad((opt) => {
+  const bannerList = computed(() => {
+    return normalizeBannerConfig(orderConfig.value.regSearchBanner);
+  });
+
+  onLoad(async (opt) => {
+    orderConfig.value = await ServerStaticData.getSystemConfig('order');
+
     r.init(deQueryForUrl(deQueryForUrl(opt)));
     deptStore.$patch({
       deptClickStep: [],

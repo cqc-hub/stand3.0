@@ -757,6 +757,16 @@
     checkedDay.value = item.fullDay;
   };
 
+  /** 联合门诊 */
+  const getJointClinicList = async (clinicForRegistId) => {
+    const { result = [] } = await api.findByDocSchId({
+      clinicForRegistId,
+    });
+
+    console.log('获取到联合门诊');
+    console.log(result);
+  };
+
   const getSchData = async () => {
     isComplete.value = false;
 
@@ -767,8 +777,18 @@
       });
 
     if (schList.length) {
-      checkedDay.value = schList[0].schDate;
+      const { schDate } = schList[0];
+      checkedDay.value = schDate;
       docSchList.value = schList;
+
+      if (schList[0].schDateList && schList[0].schDateList.length) {
+        const { specialIndicator, clinicForRegistId } =
+          schList[0].schDateList[0];
+
+        if (specialIndicator === '1') {
+          getJointClinicList(clinicForRegistId);
+        }
+      }
 
       //判断是否多院区
       let schListByhosId = groupedByHosId(schList);
@@ -1077,6 +1097,7 @@
   });
 
   onLoad(async (opt) => {
+    console.log('页面参数---', opt);
     //  weixin://dl/business/?t=LgnSWxNLRHs
     props.value = deQueryForUrl(deQueryForUrl(opt));
 
@@ -1086,8 +1107,9 @@
 
       props.value = deQueryForUrl(deQueryForUrl(queryParams));
     }
+    console.log(opt, Object.keys(props.value).length, props.value);
     // 扫码进来, 不处理
-    if (props.value.q) {
+    if (props.value.q || props.value.qrCode) {
       return;
     }
 

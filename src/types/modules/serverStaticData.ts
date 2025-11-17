@@ -37,6 +37,7 @@ export interface ISystemConfig_ {
      */
     // 搜索列表时候传入 hosId
     regSearchWithHosId?: '1';
+    regSearchBanner?: TBannerConfig | TBannerConfig[];
 
     /**
      * pagesA/MyRegistration/Register

@@ -24,6 +24,7 @@ export interface IProps {
   docTitleName?: string;
   hosDeptId: string;
   q?: string;
+  qrCode?: string;
 }
 
 export interface IDocDetail {

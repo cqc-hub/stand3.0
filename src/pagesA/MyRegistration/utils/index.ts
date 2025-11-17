@@ -144,6 +144,11 @@ export type TSchInfo = {
   specialClinicIndex?: '1';
   /** 症状 */
   symptomIndicator?: string;
+
+  /** 是否联合门诊 */
+  specialIndicator?: '1';
+  /** 联合门诊id */
+  clinicForRegistId?: string;
 } & IDocRow;
 
 type TSchDocAmPm = Pick<TSchInfo, 'ampm' | 'ampmName'> & {
@@ -475,10 +480,13 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     }
   };
 
-  const dateClick = async (e: {
-    item: IDocListAll;
-    schInfo: TAllDayTScInfo;
-  },cb:Function) => {
+  const dateClick = async (
+    e: {
+      item: IDocListAll;
+      schInfo: TAllDayTScInfo;
+    },
+    cb: Function
+  ) => {
     const { item, schInfo } = e;
     const schDocAmPm = schInfo.schDocAmPm;
     const { schDate, schState } = schInfo;
@@ -493,9 +501,11 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     }
 
     if (warnMsg) {
-      return gStores.messageStore.showMessage(warnMsg, 2000,{closeCallBack:()=>{
-        cb(item)
-      }});
+      return gStores.messageStore.showMessage(warnMsg, 2000, {
+        closeCallBack: () => {
+          cb(item);
+        },
+      });
     }
 
     selectSchInfos.value = [];
