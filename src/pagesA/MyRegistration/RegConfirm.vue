@@ -959,15 +959,9 @@
           throw new Error(e);
         });
 
-      if (pageConfig.value?.isTabWaitReg === '1') {
         uni.reLaunch({
           url: '/pagesA/MyRegistration/MyRegistration?typeId=2',
         });
-      } else {
-        uni.reLaunch({
-          url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
-        });
-      }
     } else {
       gStores.messageStore.showMessage('暂无可候补就诊时段', 1500);
     }
