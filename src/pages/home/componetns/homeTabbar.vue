@@ -287,16 +287,7 @@
         url: 'mDisease',
         loginInterception: '0',
         sort: 2,
-      },
-
-      {
-        label: 'home-tabbar:口腔商城',
-        icon: global.BASE_IMG + 'oral-mall-home-icon.png',
-        iconActive: global.BASE_IMG + 'oral-mall-home-icon-active.png',
-        url: '/pagesE/miniprogram_dist/pages/oralMall/oralMall?hospitalId=202505190001&subhospitalId=202505191001&isHome=true',
-        loginInterception: '0',
-        sort: 2,
-      },
+      }, 
       {
         label: 'home-tabbar:服务',
         icon: '/static/image/wlyy.png',
@@ -363,15 +354,6 @@
 
     if (global.SYS_CODE === '1001052') {
       tabList.push('home-tabbar:健康管理');
-    }
-
-    if (
-      gStores.globalStore.ev === 'wx' &&
-      ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
-        global.SYS_CODE
-      )
-    ) {
-      tabList.push('home-tabbar:口腔商城');
     }
 
     if (global.SYS_CODE === '1001035') {

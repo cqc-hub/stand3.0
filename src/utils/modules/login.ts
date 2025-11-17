@@ -11,7 +11,6 @@ import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
 import {
   apiAsync,
   cacheUtil,
-  getTcMallToken,
   nameConvert,
   ServerStaticData,
 } from '@/utils';
@@ -264,33 +263,6 @@ export class LoginUtils extends GStores {
 
         this.globalStore.setHerenId(herenId);
 
-        if (this.globalStore.ev === 'wx') {
-          // 口腔商城特殊处理
-          if (
-            ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
-              this.globalStore.sysCode
-            )
-          ) {
-            const appInstance = getApp();
-            const viewerStore = useViewerStore();
-            if (appInstance && appInstance.globalData) {
-              this.globalStore.updateOralMallData(appInstance, 'login');
-              appInstance.globalData.configData.mallToken =
-                await getTcMallToken();
-            }
-            console.log('小程序登录后全局参数', appInstance.globalData);
-            viewerStore.getMyOralCellMessage();
-          }
-
-          if (!this.globalStore.h5OpenId && globalGl.h5AppId) {
-            uni.reLaunch({
-              url: '/pages/home/startCome',
-            });
-
-            return Promise.reject('未获取 h5openid');
-          }
-        }
-
         if (!herenId && !justGetInfo) {
           this.messageStore.showMessage('未完善，请先完善', 1000);
           setTimeout(() => {
@@ -515,23 +487,6 @@ export class LoginUtils extends GStores {
     this.userStore.clearStore();
     this.globalStore.clearStore();
     useRouterStore().clear();
-
-    // #ifdef MP-WEIXIN
-    if (
-      ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
-        this.globalStore.sysCode
-      )
-    ) {
-      const viewerStore = useViewerStore();
-      const appInstance = getApp();
-      if (appInstance && appInstance.globalData) {
-        this.globalStore.updateOralMallData(appInstance);
-      }
-      // 未登录时清空 messageNum
-      viewerStore.clearMyMenuCellMessage();
-      uni.setStorageSync('fc-user-token', '');
-    }
-    // #endif
 
     setTimeout(() => {
       if (!isHideMessage) {

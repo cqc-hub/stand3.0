@@ -531,22 +531,6 @@ export const throughCharacterLineFeed = (
 
   return str;
 };
-export const getTcMallToken = () => {
-  return new Promise((resolve, reject) => {
-    const appInstance = getApp();
-    api
-      .getTcToken({})
-      .then((res) => {
-        if (appInstance && appInstance.globalData) {
-          appInstance.globalData.configData.mallToken = res.result.token;
-        }
-        resolve(res.result.token);
-      })
-      .catch(() => {
-        reject('未获取到token');
-      });
-  });
-};
 
 /**
  * 获取当前运行平台

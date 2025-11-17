@@ -20,17 +20,7 @@
               :list="viewerStore.myMenu1List"
               @open-share="openShare"
             ></homeGrid>
-          </view>
-          <view
-            v-if="viewerStore.myMenuCellList?.length"
-            class="list g-fade-in"
-          >
-            <view class="title">商城订单</view>
-            <homeGrid
-              :list="viewerStore.myMenuCellList"
-              @open-share="openShare"
-            ></homeGrid>
-          </view>
+          </view> 
           <view v-if="viewerStore.myMenu2List?.length" class="list g-fade-in">
             <view class="title">我的服务</view>
             <homeGrid
@@ -243,21 +233,6 @@
       messageStore.showMessage('未登录,请先登录', 1000);
     } else if (props._isOutLogin) {
       messageStore.showMessage('登录过期,请重新登录', 1000);
-    }
-
-    if (gStores.globalStore.ev === 'wx') {
-      if (
-        ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
-          gStores.globalStore.sysCode
-        )
-      ) {
-        if (!gStores.globalStore.isLogin) {
-          viewerStore.clearMyMenuCellMessage();
-          return;
-        } else {
-          viewerStore.getMyOralCellMessage();
-        }
-      }
     }
   });
 

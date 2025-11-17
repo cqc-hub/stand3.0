@@ -2,13 +2,6 @@
   <view class="cache">
     <view class="cache-img-container">
       <image
-        v-if="globalStore.sysCode === '1001063'"
-        mode="aspectFit"
-        class="cache-img"
-        :src="BASE_IMG + 'img_h5bg_hk@3x.png'"
-      />
-      <image
-        v-else
         mode="aspectFit"
         class="cache-img"
         :src="BASE_IMG + 'img_h5bg@3x.png'"

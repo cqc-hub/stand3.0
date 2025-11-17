@@ -45,13 +45,7 @@
                     :placeholder="viewerStore.homeSearchPlaceholder"
                   />
                 </view>
-              </view>
-              <view
-                @click="goClinicPay"
-                v-if="gStores.globalStore.sysCode === '1001063'"
-                class="ico_my_scon icon-font scan-icon ml16"
-              />
-
+              </view> 
               <view v-if="globalGl.sConfig.isLangUygur === '1'" class="ml16">
                 <chooseLang />
               </view>

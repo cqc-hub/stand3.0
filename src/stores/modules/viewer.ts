@@ -48,36 +48,6 @@ const viewerStore = defineStore('viewer', {
       const { result } = await api.getAnnouncementCms({});
       this.homeNoticeMenu = result;
     },
-    async getMyOralCellMessage() {
-      try {
-        const { result } = await api.getOrderCnt({
-          openId: JSON.parse(uni.getStorageSync('global')).openId,
-          source: '19', //微信环境
-        });
-
-        if (result) {
-          const { waitPayNum, waitWriteOff } = result;
-
-          this.myMenuCellList.map((item) => {
-            const query = item.query && JSON.parse(item.query);
-            if (query?.key === 'myOralCell-waitPayNum') {
-              item.messageNum = waitPayNum || 0;
-            } else if (query?.key === 'myOralCell-waitWriteOff') {
-              item.messageNum = waitWriteOff || 0;
-            }
-            return item;
-          });
-        }
-      } catch (error) {
-        console.error('获取订单统计失败:', error);
-        this.clearMyMenuCellMessage();
-      }
-    },
-    clearMyMenuCellMessage() {
-      this.myMenuCellList.forEach((item) => {
-        item.messageNum = 0;
-      });
-    },
     async getVersion(source = '') {
       const oldVersion = this.version;
       if (!oldVersion) {

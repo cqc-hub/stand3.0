@@ -1,6 +1,4 @@
-import { defineStore } from 'pinia';
-import { getCurrentInstance } from 'vue';
-import { getTcMallToken } from '@/common/utils';
+import { defineStore } from 'pinia'; 
 import { useUserStore } from '@/stores';
 
 import globalGl from '@/config/global';
@@ -42,14 +40,6 @@ interface IStateGlobal {
 
   intAssistantImg: string;
 }
-
-const SYS_CODE_MALL_APP_ID_MAP = {
-  '1001063': 'mallM39dpe4692n7',
-  '1001066': 'mallMXXXXXXX', // 请替换为实际的 mallAppId
-  '1001078': 'mallMYYYYYYY', // 请替换为实际的 mallAppId
-  '1001076': 'mallMZZZZZZZ', // 请替换为实际的 mallAppId
-  '1001071': 'mallMc58a05711ba6', // 请替换为实际的 mallAppId
-};
 
 let onAppShowCb: null | ((...args: any[]) => any);
 //页面存储token brower等
@@ -249,25 +239,6 @@ const globalStore = defineStore('global', {
         // #ifdef H5
         this.updataH5Info(opt);
         // #endif
-
-        // #ifdef MP-WEIXIN
-        if (
-          ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
-            this.sysCode
-          )
-        ) {
-          this.updateOralMallData();
-        }
-
-        if (
-          ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
-            this.sysCode
-          ) &&
-          !this.token.accessToken
-        ) {
-          this.setShowFlag(true);
-        }
-        // #endif
       }
     },
     updataH5Info(opt) {
@@ -295,30 +266,6 @@ const globalStore = defineStore('global', {
       // #endif
 
       globalGl.SYS_CODE = this.sysCode;
-    },
-
-    async updateOralMallData(app?, type?) {
-      // 口腔商城
-      let appData = app || getCurrentInstance()!.proxy;
-      if (appData) {
-        // 获取当前 sysCode 对应的 mallAppId，如果没有则使用默认值
-        const mallAppId =
-          SYS_CODE_MALL_APP_ID_MAP[this.sysCode] || 'mallM39dpe4692n7';
-        // @ts-ignore
-        appData.globalData.configData = {
-          // env: 2, //不设或0或'或空-线上，1=测试，2=模测，3=预发布，4=开发环境env:1，//
-          mallAppId: mallAppId,
-          loginPage: '/pages/home/my?isWarningLogin=1', // 小程序的登录页面地址
-          homePage: '/pages/home/home',
-          token: this.token.accessToken,
-          openId: this.openId,
-          sysCode: this.sysCode,
-          getMallToken: getTcMallToken,
-        };
-        if (!type) {
-          await getTcMallToken(app);
-        }
-      }
     },
 
     updateToken(token: typeof this.token) {
