@@ -46,7 +46,7 @@
             pl16: !index,
             pr16: index === list.length - 1,
           }"
-          class="mr36"
+          class="mr36 flex flex-col items-center"
           @click="docCLick(item)"
         >
           <image
