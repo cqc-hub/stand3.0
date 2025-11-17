@@ -503,7 +503,10 @@ export class RegDetailUtil {
   ) {}
 
   getSourceInHos() {
-    return this.orderConfig.value.isCanSelOrderStatus === '1' || this.prop.value.typeId === '1';
+    return (
+      this.orderConfig.value.isCanSelOrderStatus === '1' ||
+      this.prop.value.typeId === '1'
+    );
   }
 
   /** 请求内部数据库 */
@@ -550,7 +553,7 @@ export class RegDetailUtil {
       this.orderRegInfo = await this.getForWardDetailData();
       console.log();
     } else {
-      this.gStores.messageStore.showMessage('入参错误, 调用详情失败',2000);
+      this.gStores.messageStore.showMessage('入参错误, 调用详情失败', 2000);
       throw new Error('入参错误, 调用详情失败');
     }
 
@@ -822,7 +825,6 @@ export const useRegBtnShows = () => {
     const { isOrderPay } = orderConfig.value;
 
     if (orderStatus === '0' && orderId) {
-
       return typeId !== '3' && isOrderPay === '1';
     }
 
@@ -873,7 +875,7 @@ export const useRegBtnShows = () => {
   /** 立即支付 */
   const isShowRegPay = (item) => {
     const { orderStatus, typeId } = item;
-    if (typeId === '3') {
+    if (typeId !== '') {
       return false;
     }
 

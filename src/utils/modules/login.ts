@@ -15,6 +15,7 @@ import {
   ServerStaticData,
 } from '@/utils';
 import { useViewerStore } from '@/stores/modules/viewer';
+
 import api from '@/service/api';
 import globalGl from '@/config/global';
 import HTMLParser from '@/common/html-parser';
@@ -27,6 +28,7 @@ export enum LoginType {
   H5,
   TouTiao,
   PassWord,
+  Harmony,
 }
 
 type TAliLogin = {
@@ -1046,6 +1048,82 @@ class PassWordHandler extends LoginUtils implements LoginHandler {
   }
 }
 
+class HarmonyHandler extends LoginUtils implements LoginHandler {
+  authentication: any;
+  util: any;
+  hilog: any;
+  BusinessError: any;
+
+  constructor() {
+    super();
+    // #ifdef MP-HARMONY
+    try {
+      const _AccountKit = require('@kit.AccountKit');
+      this.authentication =
+        _AccountKit && _AccountKit.authentication
+          ? _AccountKit.authentication
+          : _AccountKit;
+    } catch (e) {}
+    try {
+      this.util = require('@kit.ArkTS')?.util;
+    } catch (e) {}
+    try {
+      this.hilog = require('@kit.PerformanceAnalysisKit')?.hilog;
+    } catch (e) {}
+    try {
+      this.BusinessError = require('@kit.BasicServicesKit')?.BusinessError;
+    } catch (e) {}
+    // #endif
+  }
+
+  dealAllError(error) {
+    this.hilog.error(
+      0x0000,
+      'testTag',
+      `Failed to get quickLoginAnonymousPhone, errorCode is ${error.code}, errorMessage is ${error.message}`
+    );
+  }
+
+  async handler(payload?: any): Promise<void> {
+    console.log('执行元服务登录');
+    //  创建授权请求，并设置参数
+    const authRequest =
+      new this.authentication.HuaweiIDProvider().createAuthorizationWithHuaweiIDRequest();
+    console.log(1);
+    // 获取匿名手机号需传quickLoginAnonymousPhone这个scope，传参之前需要先申请“华为账号一键登录”权限
+    authRequest.scopes = ['quickLoginAnonymousPhone'];
+    // 用于防跨站点请求伪造
+    authRequest.state = this.util.generateRandomUUID();
+    console.log(2);
+    // 一键登录场景该参数必须设置为false
+    authRequest.forceAuthorization = false;
+    console.log(authRequest);
+    const controller = new this.authentication.AuthenticationController();
+    const response = await controller
+      .executeRequest(authRequest)
+      .catch((error) => {
+        this.dealAllError(error);
+        throw new Error(error);
+      });
+
+    // 获取到UnionID、OpenID、匿名手机号
+    const unionID = response.data?.unionID;
+    const openID = response.data?.openID;
+    const anonymousPhone = response.data?.extraInfo
+      ?.quickLoginAnonymousPhone as string;
+    if (anonymousPhone) {
+      this.hilog.info(0x0000, 'testTag', 'Succeeded in authentication.');
+      const quickLoginAnonymousPhone: string = anonymousPhone;
+      return;
+    }
+    this.hilog.info(
+      0x0000,
+      'testTag',
+      'Succeeded in authentication. AnonymousPhone is empty.'
+    );
+  }
+}
+
 export class Login extends LoginUtils {
   public static handlerMap: Record<LoginType, LoginHandler> = {
     [LoginType.WeChat]: new WeChatLoginHandler(),
@@ -1054,6 +1132,7 @@ export class Login extends LoginUtils {
     [LoginType.WeChatThReg]: new WeChatThRegHandler(),
     [LoginType.TouTiao]: new TouTiaoHandler(),
     [LoginType.PassWord]: new PassWordHandler(),
+    [LoginType.Harmony]: new HarmonyHandler(),
   };
 
   static async handler(type: LoginType, payload?: any) {
@@ -1658,6 +1737,10 @@ export const handlerLogin = async (e: BaseObject = {}) => {
 
   // #ifdef MP-TOUTIAO
   _env = LoginType.TouTiao;
+  // #endif
+
+  // #ifdef MP-HARMONY
+  _env = LoginType.Harmony;
   // #endif
 
   await Login.handler(_env, e);

@@ -83,6 +83,8 @@
       if (!isAliAuthBase.value) {
         goLogin(e);
       }
+    } else if (_env.value === 'harmony') {
+      goLogin(e);
     }
   };
 
