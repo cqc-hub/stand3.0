@@ -615,7 +615,7 @@
     const actionApi = isOpenSignExist ? api.addOrder : api.addReg;
 
     let {
-      result: { orderId, hasCharge, hint },
+      result: { orderId, hasCharge, hint, hosOrderId },
     } = await actionApi(requestArg).catch(async (e) => {
       if (e) {
         const { respCode, message, code } = e;
@@ -723,14 +723,33 @@
       deptClickStep: [],
     });
 
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
-        orderId,
-        preWz: '1',
-        thRegisterId,
+    if (orderId) {
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
+          orderId,
+          preWz: '1',
+          thRegisterId,
+          patientId,
+        }),
+      });
+    } else if (hosOrderId) {
+      const { result = [] } = await api.hosRegOrderList<any[]>({
+        source: gStores.globalStore.browser.source,
         patientId,
-      }),
-    });
+      });
+
+      const findItem = result.find((o) => o.hosOrderId === hosOrderId);
+      if (findItem) {
+        // 全部挂号详情
+        uni.navigateTo({
+          url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
+            preWz: '1',
+            typeId: '1',
+            ...findItem,
+          }),
+        });
+      }
+    }
   }, 500);
 
   const OverlimiMessage = async (e) => {
@@ -959,9 +978,9 @@
           throw new Error(e);
         });
 
-        uni.reLaunch({
-          url: '/pagesA/MyRegistration/MyRegistration?typeId=2',
-        });
+      uni.reLaunch({
+        url: '/pagesA/MyRegistration/MyRegistration?typeId=2',
+      });
     } else {
       gStores.messageStore.showMessage('暂无可候补就诊时段', 1500);
     }
