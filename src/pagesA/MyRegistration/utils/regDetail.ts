@@ -806,9 +806,11 @@ export const useRegBtnShows = () => {
    * 取消预约
    */
   const isShowRegCancel = (item) => {
-    const { orderStatus } = item;
+    const { orderStatus, typeId } = item;
     const { isOrderPay } = orderConfig.value;
-
+    if (typeId && typeId !== '0') {
+      return false;
+    }
     if (['0', '10', '60', '101', '110', '111'].includes(orderStatus)) {
       if (orderStatus === '0' && isOrderPay === '1') {
         return false;
@@ -823,7 +825,9 @@ export const useRegBtnShows = () => {
   const isShowRegRefound = (item) => {
     const { orderStatus, typeId, hosOrderId, orderId } = item;
     const { isOrderPay } = orderConfig.value;
-
+    if (typeId && typeId !== '0') {
+      return false;
+    }
     if (orderStatus === '0' && orderId) {
       return typeId !== '3' && isOrderPay === '1';
     }
@@ -833,8 +837,10 @@ export const useRegBtnShows = () => {
 
   /** 再次预约 */
   const isShowRegReorder = (item) => {
-    const { orderStatus, hosDocId } = item;
-
+    const { orderStatus, hosDocId, typeId } = item;
+    if (typeId && typeId !== '0') {
+      return false;
+    }
     return (
       hosDocId && ['20', '23', '42', '43', '45', '70'].includes(orderStatus)
     );
@@ -845,7 +851,7 @@ export const useRegBtnShows = () => {
     const { orderId, rateFlag, orderStatus, typeId } = item;
     const { isOpenComment } = orderConfig.value;
 
-    if (typeId === '3') {
+    if (typeId && typeId !== '0') {
       return false;
     }
 
@@ -858,8 +864,7 @@ export const useRegBtnShows = () => {
   const isShowRegComment = (item) => {
     const { orderId, rateFlag, orderStatus, typeId } = item;
     const { isOpenComment } = orderConfig.value;
-
-    if (typeId === '3') {
+    if (typeId && typeId !== '0') {
       return false;
     }
 
@@ -893,7 +898,6 @@ export const useRegBtnShows = () => {
   /** 推迟预约日期 */
   const isShowRegDateDelay = (item) => {
     const { canUpdateStatus, typeId } = item;
-
     if (typeId === '3') {
       return false;
     }

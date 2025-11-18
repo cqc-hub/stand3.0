@@ -728,9 +728,9 @@ const scJson: Record<string, ISConfig> = {
    * 温州人民
    */
   1001083: {
-    // login: {
-    // isAliAuthBase: '1',
-    // },
+    login: {
+      isSkipPerfect: '1',
+    },
   },
   1001084: {
     login: {

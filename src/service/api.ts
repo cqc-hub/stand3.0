@@ -940,6 +940,10 @@ const userApi = {
       hideLoading: false,
     }),
 
+  wzrmPatSync: (data) =>
+    service.post('/phs-user/rePat/wzrmPatSync', parm(data), {
+      hideLoading: false,
+    }),
   mdifPhone: (data) =>
     service.post('/phs-user/rePat/mdifPhone', parm(data), {
       hideLoading: false,

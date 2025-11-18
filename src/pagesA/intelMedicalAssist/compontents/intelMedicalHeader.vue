@@ -7,6 +7,35 @@
       'simple-mess': headerConfig?.isMessage || headerConfig?.historyMess,
     }"
   >
+    <!-- #ifdef MP-WEIXIN -->
+    <view class="navBar">
+      <GCustomNavbar
+        :title="headerConfig?.headerLineMenu !== 'homePage' ? title : ''"
+        :showBack="headerConfig?.headerLineMenu !== 'homePage'"
+      >
+        <template v-if="headerConfig?.headerLineMenu === 'homePage'">
+          <g-tabs
+            v-model:value="tabCurrent"
+            :tabs="tabField"
+            @change="tabChange"
+            :bgColor="'#0000'"
+            :lineScale="0"
+            :allBlod="false"
+            :transitionDuration="'0'"
+          />
+          <!--  <g-tabs
+          v-show="tabField.length && tabField.length > 1 && !isModeMedicalHelp"
+          v-model:value="tabCurrent"
+          :tabs="tabField"
+          :scroll="false"
+          @change="tabChange"
+          field="label"
+          style="width: 100%"
+        /> -->
+        </template>
+      </GCustomNavbar>
+    </view>
+    <!-- #endif -->
 
     <img
       :src="globalGl.BASE_IMG + 'intelMedicalAssist_bg.png'"

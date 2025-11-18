@@ -239,6 +239,8 @@
     {} as {
       showNavBar?: '1';
       dp?: '1'; // 更新 clickPat 为 patChoose
+      _showId?:'';
+      patientName?: '';
     }
   );
   const isPageRender = ref(true);
@@ -295,7 +297,6 @@
 
   const choosePatHandler1 = async () => {
     const pat = gStores.userStore.patChoose;
-    gStores.userStore.updatePatClick(pat);
     gStores.userStore.updatePatClick(pat);
 
     await init();

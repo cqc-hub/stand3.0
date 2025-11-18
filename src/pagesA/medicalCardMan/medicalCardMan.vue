@@ -448,7 +448,7 @@
   };
 
   const cardClick = (pat: IPat) => {
-    gStores.userStore.updatePatClick(pat);
+    gStores.userStore.updatePatChoose(pat);
     goElectronicMedicalCard();
   };
 
