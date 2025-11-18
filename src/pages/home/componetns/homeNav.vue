@@ -1,6 +1,6 @@
 <template>
   <view>
-    <!-- #ifdef MP-WEIXIN | MP-ALIPAY  | MP-HARMONY -->
+    <!-- #ifdef MP-WEIXIN | MP-ALIPAY | MP-HARMONY   -->
     <view class="pb70">
       <view class="custom-nav" :style="{ height: navTotalHeight + 'px' }">
         <view :style="{ height: statusBarHeight + 'px' }"></view>

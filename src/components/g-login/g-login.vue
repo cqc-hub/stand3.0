@@ -5,6 +5,7 @@
     </view>
 
     <block v-else>
+      <!-- #ifndef MP-HARMONY-->
       <button
         :open-type="getOpenType"
         @getphonenumber="goLogin"
@@ -18,6 +19,19 @@
           <slot />
         </view>
       </button>
+      <!-- #endif -->
+
+      <!-- #ifdef MP-HARMONY-->
+      <button
+        open-type="getPhoneNumber"
+        @getphonenumber="goLogin"
+        class="login-btn"
+      >
+        <view class="my-disabled w100p h100p">
+          <slot />
+        </view>
+      </button>
+      <!-- #endif -->
     </block>
   </view>
 </template>
@@ -61,8 +75,7 @@
   const getOpenType = computed(() => {
     switch (_env.value) {
       case 'wx':
-        return 'getPhoneNumber';
-
+      case 'harmony':
       case 'tt':
         return 'getPhoneNumber';
 
@@ -76,6 +89,18 @@
     }
   });
 
+  const hhhh = () => {
+    uni.login({
+      provider: 'huawei',
+      success(res) {
+        console.log(res);
+      },
+      fail(err) {
+        console.error(err);
+      },
+    });
+  };
+
   const handlerClick = (e) => {
     if (['h5'].includes(_env.value)) {
       goLogin(e);
@@ -84,6 +109,7 @@
         goLogin(e);
       }
     } else if (_env.value === 'harmony') {
+      console.log('-----haramoamaomaoma');
       goLogin(e);
     }
   };

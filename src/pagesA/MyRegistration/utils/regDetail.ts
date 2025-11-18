@@ -823,7 +823,7 @@ export const useRegBtnShows = () => {
 
   /** 退号 */
   const isShowRegRefound = (item) => {
-    const { orderStatus, typeId, hosOrderId, orderId } = item;
+    const { orderStatus, typeId, orderId } = item;
     const { isOrderPay } = orderConfig.value;
     if (typeId && typeId !== '0') {
       return false;

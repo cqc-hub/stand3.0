@@ -183,6 +183,8 @@ const queryApi = {
   getRiskCode: (data) =>
     service.post('/phs-query/escort/getRiskCode', parm(data)),
 
+  loginHw: (data) => service.post('/phs-query/hw/loginHw', parm(data)),
+
   getProcessState: (data) =>
     service.post<any[]>('/phs-query/medical/getProcessState', parm(data)),
 
