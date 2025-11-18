@@ -875,7 +875,8 @@ export const useRegBtnShows = () => {
   /** 立即支付 */
   const isShowRegPay = (item) => {
     const { orderStatus, typeId } = item;
-    if (typeId !== '') {
+
+    if (typeId && typeId !== '0') {
       return false;
     }
 
