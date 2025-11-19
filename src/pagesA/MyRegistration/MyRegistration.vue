@@ -404,7 +404,7 @@
       //指定的预问诊跳转
       useTBanner(pageConfig.value.preConsultationBtn, 'navigateTo', item);
     } else {
-      const { orderId, hosDeptId, hosOrderId, hosData = '', patientId } = item;
+      const { orderId, hosDeptId, hosOrderId, hosData = '', patientId, deptName } = item;
       const preConsultation: TButtonConfig = {
         type: 'h5',
         isSelfH5: '1',
@@ -417,6 +417,7 @@
           hosOrderId,
           hosData: encodeURIComponent(hosData as string),
           patientId,
+          deptName
         },
         addition: {
           token: 'token',
