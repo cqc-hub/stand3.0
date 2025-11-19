@@ -4,12 +4,8 @@
     <view class="pb70">
       <view class="custom-nav" :style="{ height: navTotalHeight + 'px' }">
         <view :style="{ height: statusBarHeight + 'px' }"></view>
-        <view v-if="$global.systemInfo.homeNavTitleLogo" class="pl32">
-          <image
-            :src="$global.systemInfo.homeNavTitleLogo"
-            mode="widthFix"
-            class="logo"
-          />
+        <view v-if="homeNavTitleLogo" class="pl32">
+          <image :src="homeNavTitleLogo" mode="widthFix" class="logo" />
         </view>
         <view v-else class="nav-content g-bold">
           {{ $global.systemInfo.name }}
@@ -21,6 +17,7 @@
 </template>
 
 <script lang="ts" setup>
+  import globalGl from '@/config/global';
   import { onMounted, ref } from 'vue';
 
   const isIos = ref(false);
@@ -30,6 +27,8 @@
   const navContentHeight = ref(0);
   // 状态栏+导航栏总高度
   const navTotalHeight = ref(0);
+
+  const homeNavTitleLogo = globalGl.systemInfo.homeNavTitleLogo;
 
   uni.getSystemInfo({
     success(e) {
@@ -43,7 +42,10 @@
   onMounted(() => {
     const sysInfo = uni.getSystemInfoSync() as any;
     statusBarHeight.value = sysInfo.statusBarHeight;
-    navTotalHeight.value = statusBarHeight.value + navContentHeight.value + 12;
+    navTotalHeight.value =
+      statusBarHeight.value + navContentHeight.value + (homeNavTitleLogo
+        ? 12
+        : 0);
     hideNativeNavigation();
   });
 
