@@ -5,6 +5,8 @@
     }"
     class="g-page"
   >
+    <home-Nav />
+
     <scroll-view
       @scroll="pageScroll"
       @scrolltolower="handePageBottom"
@@ -19,7 +21,7 @@
         lazy-load
       />
       <view class="relative z-1">
-        <home-Nav />
+        <!-- <home-Nav /> -->
         <ls-skeleton
           :skeleton="skeletonProps.skeleton"
           :loading="viewerStore.loading"
@@ -45,7 +47,7 @@
                     :placeholder="viewerStore.homeSearchPlaceholder"
                   />
                 </view>
-              </view> 
+              </view>
               <view v-if="globalGl.sConfig.isLangUygur === '1'" class="ml16">
                 <chooseLang />
               </view>
@@ -96,10 +98,7 @@
                           </text>
                         </view>
                       </view>
-                      <view
-                        class="switchPatient"
-                        @tap="chooseAction"
-                      >
+                      <view class="switchPatient" @tap="chooseAction">
                         更换就诊人
                       </view>
                     </block>
@@ -303,10 +302,7 @@
                         </text>
                       </view>
                     </view>
-                    <view
-                      class="switchPatient"
-                      @tap="chooseAction"
-                    >
+                    <view class="switchPatient" @tap="chooseAction">
                       更换就诊人
                     </view>
                   </block>
@@ -382,10 +378,7 @@
     />
     <g-message v-else />
 
-    <choose-pat-action
-      ref="actionSheet" 
-      @choose-pat="choosePatHandler"
-    />
+    <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
 
     <homePopup ref="refOldDialog" />
     <homeH5SharePopup
@@ -540,9 +533,8 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
-    healthCounselConfig.value = await ServerStaticData.getSystemConfig(
-      'HEALTH_COUNSEL'
-    );
+    healthCounselConfig.value =
+      await ServerStaticData.getSystemConfig('HEALTH_COUNSEL');
 
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');

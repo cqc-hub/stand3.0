@@ -1052,6 +1052,8 @@ class HarmonyHandler extends LoginUtils implements LoginHandler {
     const code = payload.target?.code;
 
     if (code) {
+      console.log(code);
+      // throw Error('hahahah')
       const { result } = await api.loginHw({
         code,
       });
