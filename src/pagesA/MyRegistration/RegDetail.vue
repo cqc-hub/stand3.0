@@ -381,6 +381,14 @@
       </button>
 
       <button
+        v-if="isShowMedicalRefund(_d)"
+        @click="handleMedicalRefund"
+        class="btn btn-warning pay-btn"
+      >
+        去报销
+      </button>
+
+      <button
         v-if="isShowRegDateDelay(_d)"
         @click="goUpdateRegDate"
         class="btn g-border btn-primary"
@@ -485,7 +493,6 @@
   import api from '@/service/api';
 
   import refreshQrcode from '@/components/refresh-qrcode/refresh-qrcode.vue';
-  import { pageConfig } from '../intelMedicalAssist/utils/utils';
 
   const orderConfig = ref({} as ISystemConfig['order']);
   const refForm = ref<any>('');
@@ -508,6 +515,7 @@
   const isFirstIn = ref(true);
 
   const {
+    isShowMedicalRefund,
     isShowRegPay,
     isShowRegComment,
     isShowRegCommentViews,
@@ -527,6 +535,7 @@
 
   const isShowFooter = computed(() => {
     return (
+      isShowMedicalRefund(_d.value) ||
       isShowRegDateDelay(_d.value) ||
       isShowCancelRegWait(_d.value) ||
       isShowRegPay(_d.value) ||
@@ -936,6 +945,11 @@
           });
 
           refoundOrder();
+        } else if (getLocalStorage('get-medical-refund') === '1') {
+          setLocalStorage({
+            'get-medical-refund': '',
+          });
+          handleMedicalRefund();
         } else {
           // 挂号
           getPayInfo({
@@ -1002,6 +1016,41 @@
     setTimeout(() => {
       refPay.value.show();
     });
+  };
+
+  /** 自费后医保报销 */
+  const handleMedicalRefund = async () => {
+    setLocalStorage({
+      'get-medical-refund': '1',
+    });
+    const auth = await getQxMedicalNation({
+      returnUrl: joinQueryForUrl(
+        '/pagesA/MyRegistration/RegDetail',
+        pageProps.value
+      ),
+    });
+
+    await medicalNationWx(
+      auth,
+      {
+        businessType: 3,
+      },
+      async ({ payOrderId }) => {
+        const { hosId, cardNumber } = orderRegInfo.value;
+
+        await api.confirmRegisterSettle({
+          payOrderId,
+          hosId,
+          cardNumber,
+        });
+
+        uni.reLaunch({
+          url: '/pagesA/MyRegistration/MyRegistration?typeId=1',
+        });
+
+        return Promise.reject('医保报销');
+      }
+    );
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
@@ -1072,7 +1121,8 @@
     auth: TWxAuthorize,
     payload: any = {
       businessType: 3,
-    }
+    },
+    cbAfterUp: (...args: any[]) => any = () => {}
   ) => {
     const { hosId, orderId, ampm } = orderRegInfo.value;
     const { userLongitudeLatitude = {}, payAuthNo } = auth;
@@ -1124,6 +1174,8 @@
       });
       return;
     }
+
+    await cbAfterUp(result);
 
     uni.navigateTo({
       url: '/pagesA/clinicPay/clinicPayMedical',

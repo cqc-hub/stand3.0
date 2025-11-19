@@ -700,6 +700,11 @@ const regApi = {
       }
     ),
 
+  confirmRegisterSettle: (data: any) =>
+    service.post('/phs-reg/medical/confirmRegisterSettle', parm(data), {
+      hideLoading: false,
+    }),
+
   medicalUp: (data: any) =>
     service.post('/phs-reg/medical/medicalUp', parm(data), {
       hideLoading: false,
