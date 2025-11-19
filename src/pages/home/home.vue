@@ -5,8 +5,7 @@
     }"
     class="g-page"
   >
-    <home-Nav />
-
+    <home-Nav :opacity="navOpacity" />
     <scroll-view
       @scroll="pageScroll"
       @scrolltolower="handePageBottom"
@@ -457,6 +456,7 @@
   const HomeArticleRef = ref('' as any);
   const clickShareItem = ref<any>({});
   const docRecommendList = ref([] as any[]);
+  const navOpacity = ref(0);
 
   //骨架屏配置
   const skeletonProps = ref({
@@ -768,8 +768,10 @@
     gStores.globalStore.setShowFlag(false);
   };
 
-  const pageScroll = (e) => {
-    // console.log(e);
+  const pageScroll = ({ detail }) => {
+    const { scrollTop } = detail;
+    const top: number = scrollTop > 80 ? 100 : scrollTop;
+    navOpacity.value = top / 100;
   };
 </script>
 

@@ -1,7 +1,12 @@
 <template>
-  <view>
+  <view class="relative z-1">
     <!-- #ifdef MP-WEIXIN | MP-ALIPAY | MP-HARMONY   -->
-    <view class="pb70">
+    <view
+      :style="{
+        'background-color': `rgba(${colorRgb}, ${opacity})`,
+      }"
+      class="pb70"
+    >
       <view class="custom-nav" :style="{ height: navTotalHeight + 'px' }">
         <view :style="{ height: statusBarHeight + 'px' }"></view>
         <view v-if="homeNavTitleLogo" class="pl32">
@@ -18,7 +23,24 @@
 
 <script lang="ts" setup>
   import globalGl from '@/config/global';
-  import { onMounted, ref } from 'vue';
+  import { GStores } from '@/utils';
+  import { computed, onMounted, ref } from 'vue';
+
+  defineProps<{
+    opacity: number;
+  }>();
+
+  const gStores = new GStores();
+
+  const colorRgb = computed(() => {
+    switch (gStores.globalStore.sysCode) {
+      // case '1001093':
+      //   return '255,0,0';
+
+      default:
+        return '255,255,255';
+    }
+  });
 
   const isIos = ref(false);
 
@@ -43,9 +65,9 @@
     const sysInfo = uni.getSystemInfoSync() as any;
     statusBarHeight.value = sysInfo.statusBarHeight;
     navTotalHeight.value =
-      statusBarHeight.value + navContentHeight.value + (homeNavTitleLogo
-        ? 12
-        : 0);
+      statusBarHeight.value +
+      navContentHeight.value +
+      (homeNavTitleLogo ? 12 : 0);
     hideNativeNavigation();
   });
 

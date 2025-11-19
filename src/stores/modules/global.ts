@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'; 
+import { defineStore } from 'pinia';
 import { useUserStore } from '@/stores';
 
 import globalGl from '@/config/global';
@@ -326,7 +326,7 @@ const globalStore = defineStore('global', {
       this.ev = 'harmony';
       updateBrowser({
         source: '77',
-        accountType: '',
+        accountType: '77',
       });
       // #endif
 

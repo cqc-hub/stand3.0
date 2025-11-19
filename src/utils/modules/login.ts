@@ -1053,7 +1053,7 @@ class HarmonyHandler extends LoginUtils implements LoginHandler {
 
     if (code) {
       console.log(code);
-      // throw Error('hahahah')
+      throw Error('hahahah')
       const { result } = await api.loginHw({
         code,
       });
