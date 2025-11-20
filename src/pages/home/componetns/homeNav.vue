@@ -71,10 +71,7 @@
   onMounted(() => {
     const sysInfo = uni.getSystemInfoSync() as any;
     statusBarHeight.value = sysInfo.statusBarHeight;
-    navTotalHeight.value =
-      statusBarHeight.value +
-      navContentHeight.value +
-      (homeNavTitleLogo ? 12 : 0);
+    navTotalHeight.value = statusBarHeight.value + navContentHeight.value + 12;
     hideNativeNavigation();
     emit('update:height', navTotalHeight.value);
   });
