@@ -36,6 +36,10 @@
   }>();
 
   const colorRgb = computed(() => {
+    if (gStores.globalStore.isTcmStyle) {
+      return '248, 238, 231';
+    }
+
     switch (gStores.globalStore.sysCode) {
       case '1001093':
         return '76, 138, 242';
