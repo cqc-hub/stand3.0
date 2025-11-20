@@ -914,6 +914,8 @@ const scJson: Record<string, ISConfig> = {
       isAliAuthBase: '1',
       isSkipPerfect: '1',
     },
+    homeTopBg:
+      'https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-1001094-home-topbg.png',
     homeNavTitleLogo:
       'https://phsdevoss.eheren.com/pcloud/phs3.0/zhejiangshenzhongliunavtitle-white.png',
   },

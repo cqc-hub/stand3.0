@@ -31,11 +31,14 @@
   }>();
 
   const gStores = new GStores();
+  const emit = defineEmits<{
+    'update:height': [number];
+  }>();
 
   const colorRgb = computed(() => {
     switch (gStores.globalStore.sysCode) {
-      // case '1001093':
-      //   return '255,0,0';
+      case '1001093':
+        return '76, 138, 242';
 
       default:
         return '255,255,255';
@@ -69,6 +72,7 @@
       navContentHeight.value +
       (homeNavTitleLogo ? 12 : 0);
     hideNativeNavigation();
+    emit('update:height', navTotalHeight.value);
   });
 
   const hideNativeNavigation = () => {

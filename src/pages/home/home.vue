@@ -5,7 +5,10 @@
     }"
     class="g-page"
   >
-    <home-Nav :opacity="navOpacity" />
+    <view class="absolute home-nav z-999">
+      <home-Nav v-model:height="navHeight" :opacity="navOpacity" />
+    </view>
+
     <scroll-view
       @scroll="pageScroll"
       @scrolltolower="handePageBottom"
@@ -13,14 +16,26 @@
       scroll-y
     >
       <img
+        v-if="$global.sConfig.homeTopBg"
+        :src="$global.sConfig.homeTopBg"
+        class="w-full absolute home-top-bg"
+        mode="widthFix"
+      />
+
+      <img
         v-if="gStores.globalStore.isTcmStyle"
         :src="$global.BASE_IMG + `stand3_home_nav_bg-tcm.png`"
         class="w-full absolute home-nav-bg"
         mode="widthFix nav-img-bg"
         lazy-load
       />
-      <view class="relative z-1">
-        <!-- <home-Nav /> -->
+
+      <view
+        :style="{
+          'margin-top': `${navHeight + 24}px`,
+        }"
+        class="relative z-1"
+      >
         <ls-skeleton
           :skeleton="skeletonProps.skeleton"
           :loading="viewerStore.loading"
@@ -457,6 +472,7 @@
   const clickShareItem = ref<any>({});
   const docRecommendList = ref([] as any[]);
   const navOpacity = ref(0);
+  const navHeight = ref(0);
 
   //骨架屏配置
   const skeletonProps = ref({
@@ -784,6 +800,14 @@
     &.system-style-medical {
       --h-h-main-c: #a4695b;
     }
+  }
+
+  .home-nav {
+    left: 0;
+    right: 0;
+  }
+  .home-top-bg {
+    top: 0;
   }
 
   .home-nav-bg {
