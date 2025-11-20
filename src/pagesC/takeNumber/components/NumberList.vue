@@ -3,8 +3,8 @@
     <view v-for="item in list" :key="item.visitId" class="item mb16">
       <view class="flex-between f32 g-bold mb16">
         <view class="flex-normal">
-          <view class="mr12">{{ item.deptName || item.categorName }}</view>
-          <view>{{ item.docName }}</view>
+          <view class="mr12 lH1Half">{{ item.deptName || item.categorName }}</view>
+          <view class="g-nowrap mr12">{{ item.docName }}</view>
         </view>
 
         <view v-if="isShowFlagLabel()">
@@ -12,9 +12,9 @@
             :class="{
               'color-888': ['1', '2'].includes(item.reportFlag),
             }"
-            class="color-blue"
+            class="color-blue "
           >
-            <text>
+            <text class="g-nowrap">
               {{ getReportFlagInfo(item.reportFlag).label }}
             </text>
           </text>
@@ -243,4 +243,5 @@
       -webkit-transform: rotate(360deg);
     }
   }
+
 </style>

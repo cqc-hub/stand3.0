@@ -274,6 +274,8 @@
   import PatList from './components/PatList.vue';
 
   const gStores = new GStores();
+  // expose global config to the template as $global to avoid template type errors
+  const $global = globalGl;
   const routeStore = useRouterStore();
   const pageProps = ref(
     <

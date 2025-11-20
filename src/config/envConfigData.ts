@@ -7,7 +7,7 @@ import { type TBannerConfig } from '@/utils';
 export const sysConfigEnv = <const>{
   // 'person.isSmsVerify': '0',
   // 'person.isCanAddPatCardNo': '1',
-  'order.isConfirmOrderWithPay': '1',
+  // 'order.isConfirmOrderWithPay': '1',
 };
 
 /**
@@ -17,10 +17,10 @@ export const sysConfigTrial = <const>{
   // 'person.isSmsVerify': '0',
   // 'person.isCanAddPatCardNo': '1',
   // 'order.isConfirmOrderWithPay': '1',
-  'pay.medical': {
-    isMedicalOrder: '1',
-    isMedicalPay: '1',
-  },
+  // 'pay.medical': {
+  //   isMedicalOrder: '1',
+  //   isMedicalPay: '1',
+  // },
 };
 
 export const apiConfigEnv = <const>{

@@ -114,7 +114,7 @@ image {
 .g-split-line,
 .g-split-line1 {
   &::after {
-    content: "|";
+    content: '|';
     position: relative;
     left: 12rpx;
     font-size: 24rpx;
@@ -291,7 +291,7 @@ image {
 
 .safe-height {
   &::before {
-    content: "";
+    content: '';
     display: block;
     height: 40rpx;
     width: 1rpx;
@@ -433,8 +433,25 @@ image {
 .f60 {
   font-size: 60rpx !important;
 }
+
 .f80 {
   font-size: 80rpx !important;
+}
+
+.lH1 {
+  line-height: 1;
+}
+
+.lH1Half {
+  line-height: 1.5;
+}
+
+.lH2 {
+  line-height: 2;
+}
+
+.lH2Half {
+  line-height: 2.5;
 }
 
 .w100p,
