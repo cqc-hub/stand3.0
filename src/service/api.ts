@@ -183,6 +183,8 @@ const queryApi = {
   getRiskCode: (data) =>
     service.post('/phs-query/escort/getRiskCode', parm(data)),
 
+  loginHw: (data) => service.post('/phs-query/hw/loginHw', parm(data)),
+
   getProcessState: (data) =>
     service.post<any[]>('/phs-query/medical/getProcessState', parm(data)),
 
@@ -697,6 +699,11 @@ const regApi = {
         hideLoading: false,
       }
     ),
+
+  confirmRegisterSettle: (data: any) =>
+    service.post('/phs-reg/medical/confirmRegisterSettle', parm(data), {
+      hideLoading: false,
+    }),
 
   medicalUp: (data: any) =>
     service.post('/phs-reg/medical/medicalUp', parm(data), {

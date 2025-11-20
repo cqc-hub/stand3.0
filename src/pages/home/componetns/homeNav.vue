@@ -1,15 +1,16 @@
 <template>
-  <view>
-    <!-- #ifdef MP-WEIXIN | MP-ALIPAY  | MP-HARMONY -->
-    <view class="pb70">
+  <view class="relative z-1">
+    <!-- #ifdef MP-WEIXIN | MP-ALIPAY | MP-HARMONY   -->
+    <view
+      :style="{
+        'background-color': `rgba(${colorRgb}, ${opacity})`,
+      }"
+      class="pb70"
+    >
       <view class="custom-nav" :style="{ height: navTotalHeight + 'px' }">
         <view :style="{ height: statusBarHeight + 'px' }"></view>
-        <view v-if="$global.systemInfo.homeNavTitleLogo" class="pl32">
-          <image
-            :src="$global.systemInfo.homeNavTitleLogo"
-            mode="widthFix"
-            class="logo"
-          />
+        <view v-if="homeNavTitleLogo" class="pl32">
+          <image :src="homeNavTitleLogo" mode="widthFix" class="logo" />
         </view>
         <view v-else class="nav-content g-bold">
           {{ $global.systemInfo.name }}
@@ -21,7 +22,25 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+  import globalGl from '@/config/global';
+  import { GStores } from '@/utils';
+  import { computed, onMounted, ref } from 'vue';
+
+  defineProps<{
+    opacity: number;
+  }>();
+
+  const gStores = new GStores();
+
+  const colorRgb = computed(() => {
+    switch (gStores.globalStore.sysCode) {
+      // case '1001093':
+      //   return '255,0,0';
+
+      default:
+        return '255,255,255';
+    }
+  });
 
   const isIos = ref(false);
 
@@ -30,6 +49,8 @@
   const navContentHeight = ref(0);
   // 状态栏+导航栏总高度
   const navTotalHeight = ref(0);
+
+  const homeNavTitleLogo = globalGl.systemInfo.homeNavTitleLogo;
 
   uni.getSystemInfo({
     success(e) {
@@ -43,7 +64,10 @@
   onMounted(() => {
     const sysInfo = uni.getSystemInfoSync() as any;
     statusBarHeight.value = sysInfo.statusBarHeight;
-    navTotalHeight.value = statusBarHeight.value + navContentHeight.value;
+    navTotalHeight.value =
+      statusBarHeight.value +
+      navContentHeight.value +
+      (homeNavTitleLogo ? 12 : 0);
     hideNativeNavigation();
   });
 

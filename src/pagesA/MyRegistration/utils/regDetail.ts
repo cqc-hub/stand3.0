@@ -202,6 +202,30 @@ export const orderStatusMap = {
     title: '已挂号',
     cardColor: 'var(--hr-brand-color-6)',
   },
+  '04': {
+    headerClass: 'header-blue',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '已挂号', // 无需结转
+    cardColor: 'var(--hr-brand-color-6)',
+  },
+  '03': {
+    headerClass: 'header-blue',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '已报销', // 已结转
+    cardColor: 'var(--hr-brand-color-6)',
+  },
+  '02': {
+    headerClass: 'header-blue',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '未报销', // 未结转
+    cardColor: 'var(--hr-brand-color-6)',
+  },
   '60': {
     headerClass: 'header-dark',
     color: '#fff',
@@ -823,7 +847,7 @@ export const useRegBtnShows = () => {
 
   /** 退号 */
   const isShowRegRefound = (item) => {
-    const { orderStatus, typeId, hosOrderId, orderId } = item;
+    const { orderStatus, typeId, orderId } = item;
     const { isOrderPay } = orderConfig.value;
     if (typeId && typeId !== '0') {
       return false;
@@ -904,7 +928,15 @@ export const useRegBtnShows = () => {
     return canUpdateStatus === '0';
   };
 
+  /** 去报销 */
+  const isShowMedicalRefund = (item) => {
+    const { orderStatus, typeId } = item;
+
+    return typeId === '1' && orderStatus === '02';
+  };
+
   return {
+    isShowMedicalRefund,
     isShowRegDateDelay,
     isShowCancelRegWait,
     isShowRegPay,

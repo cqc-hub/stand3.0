@@ -83,6 +83,7 @@
     FileUtil,
     apiAsync,
     throughCharacterLineFeed,
+    ISystemConfig,
   } from '@/utils';
   import { type IDocDetail, type IProps } from '../../utils/DoctorDetails';
   import { joinQuery } from '@/common';
@@ -91,6 +92,7 @@
   const props = defineProps<{
     detail: IDocDetail;
     pageProp: IProps;
+    pageConfig: ISystemConfig['order'];
   }>();
 
   const change = ({ show }) => {};
@@ -555,11 +557,16 @@
 
     ctx.save();
     ctx.setFontSize(14);
-    const localName = (hosName || '') + (deptName ? `·${deptName}` : '');
+    const localName: (string | undefined)[] = [];
+    if (props.pageConfig.isHideHosName !== '1') {
+      localName.push(hosName);
+    }
+
+    localName.push(deptName);
 
     drawTextPrevWrap(
       ctx,
-      localName,
+      localName.filter((o) => o).join('·'),
       32,
       avatarBox.top + 24 + 24,
       20,

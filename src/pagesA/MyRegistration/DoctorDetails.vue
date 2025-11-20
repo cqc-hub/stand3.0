@@ -503,7 +503,12 @@
       />
     </Order-Reg-Confirm>
 
-    <Doc-Share :pageProp="props" :detail="docDetail" ref="refDocShare" />
+    <Doc-Share
+      :pageProp="props"
+      :detail="docDetail"
+      :pageConfig="pageConfig"
+      ref="refDocShare"
+    />
 
     <Order-Select-Source
       v-model:show="isSelectOrderSourceShow"

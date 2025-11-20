@@ -73,6 +73,14 @@
               </button>
 
               <button
+                v-if="isShowMedicalRefund(getBtnData(item))"
+                @click="goDetail(item)"
+                class="btn btn-round btn-primary btn-size-small btn-border cancel-btn"
+              >
+                去报销
+              </button>
+
+              <button
                 v-if="isShowRegRefound(getBtnData(item))"
                 @click="goDetail(item)"
                 class="btn btn-round btn-size-small btn-border cancel-btn color-111"
@@ -347,6 +355,7 @@
   };
 
   const {
+    isShowMedicalRefund,
     isShowRegPay,
     isShowRegComment,
     isShowRegCommentViews,
@@ -359,7 +368,7 @@
 
   const getBtnData = (item) => {
     return {
-      typeId: tabCurrentDetail.value?.typeId,
+      typeId: `${tabCurrentDetail.value?.typeId}`,
       ...item,
     };
   };
@@ -367,6 +376,14 @@
   const getList = async (patientId = '', cardNumber = '') => {
     isComplete.value = false;
     list.value = [];
+    let type: any = undefined;
+    if (
+      gStores.globalStore.sysCode === '1001094' &&
+      tabCurrentDetail.value?.typeId === 1
+    ) {
+      type = 2;
+    }
+
     const { result } = await listApi
       .value<IRegistrationCardItem[]>({
         source: gStores.globalStore.browser.source,
@@ -374,6 +391,7 @@
         searchType: tabCurrentDetail.value.searchType,
         patientId,
         cardNumber,
+        type,
       })
       .finally(() => {
         isComplete.value = true;
@@ -404,7 +422,7 @@
       //指定的预问诊跳转
       useTBanner(pageConfig.value.preConsultationBtn, 'navigateTo', item);
     } else {
-      const { orderId, hosDeptId, hosOrderId, hosData = '', patientId } = item;
+      const { orderId, hosDeptId, hosOrderId, hosData = '', patientId, deptName } = item;
       const preConsultation: TButtonConfig = {
         type: 'h5',
         isSelfH5: '1',
@@ -417,6 +435,7 @@
           hosOrderId,
           hosData: encodeURIComponent(hosData as string),
           patientId,
+          deptName
         },
         addition: {
           token: 'token',
