@@ -68,11 +68,11 @@
           class="card-body relative"
         >
           <view
-            v-if="globalGl.systemInfo.homeNavTitleLogo"
+            v-if="globalGl.sConfig.homeNavTitleLogo"
             class="flex justify-center relative z-1"
           >
             <image
-              :src="globalGl.systemInfo.homeNavTitleLogo"
+              :src="globalGl.sConfig.homeNavTitleLogo"
               mode="widthFix"
               class="logo"
             />

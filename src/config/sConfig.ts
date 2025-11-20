@@ -33,6 +33,10 @@ export interface ISConfig {
   medicalCardDetailPackageDomain?: `http${string}`;
 
   // 首页 ----------------------------
+  /** 替换首页标题(图片) */
+  homeNavTitleLogo?: string;
+  /** 首页顶部背景(图片) */
+  homeTopBg?: string;
   //底部是否放开互联网医院?
   isOpenHomeTabBarNetWorkBtn?: '1';
   //底部是否放开消息通知
@@ -364,6 +368,9 @@ const scJson: Record<string, ISConfig> = {
    * 咸阳市第一人民医院
    */
   1001054: {
+    homeNavTitleLogo:
+      'https://phsdevoss.eheren.com/pcloud/phs3.0/xianyannavtitle.png',
+
     isOpenHomeTabBarNetWorkBtn: '1',
     isHideHomeSearch: '1',
     isOpenWechatSI: true,
@@ -486,6 +493,11 @@ const scJson: Record<string, ISConfig> = {
    */
   1001041: {
     isOpenHomeTabBarMessageBtn: '1',
+  },
+
+  1001086: {
+    homeNavTitleLogo:
+      'https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png',
   },
 
   /**
@@ -768,6 +780,8 @@ const scJson: Record<string, ISConfig> = {
    * 江苏省中医院
    */
   1001035: {
+    homeNavTitleLogo:
+      'https://phsdevoss.eheren.com/pcloud/phs3.0/jiangsushengzhonnavtitle.png',
     isOpenMessageAuth: '1',
     isMessageBtnShowNew: '1',
     isOpenPopularSci: {
@@ -835,6 +849,9 @@ const scJson: Record<string, ISConfig> = {
   1001036: {
     // isOpenHomeTabBarNetWorkBtn: '1',
     // isOpenPopularSci: '1',
+    homeNavTitleLogo:
+      'https://phsdevoss.eheren.com/pcloud/image/1001036logo3.png',
+
     homeTopBanner: {
       topShow: true,
       bannerHeight: 230,
@@ -844,6 +861,9 @@ const scJson: Record<string, ISConfig> = {
    * 安康中医医院
    */
   1001044: {
+    homeNavTitleLogo:
+      'https://phsdevoss.eheren.com/pcloud/phs3.0/ankangzhongnavtitle.png',
+
     login: {},
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
@@ -894,8 +914,13 @@ const scJson: Record<string, ISConfig> = {
       isAliAuthBase: '1',
       isSkipPerfect: '1',
     },
+    homeNavTitleLogo:
+      'https://phsdevoss.eheren.com/pcloud/phs3.0/zhejiangshenzhongliunavtitle-white.png',
   },
   1001094: {
+    homeNavTitleLogo:
+      'https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png',
+
     isOpenHelpOld: '1',
     // isLangUygur: '1',
     isOpenPopularSci: '1',

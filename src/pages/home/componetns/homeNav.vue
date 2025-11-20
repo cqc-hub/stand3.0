@@ -50,7 +50,7 @@
   // 状态栏+导航栏总高度
   const navTotalHeight = ref(0);
 
-  const homeNavTitleLogo = globalGl.systemInfo.homeNavTitleLogo;
+  const homeNavTitleLogo = globalGl.sConfig.homeNavTitleLogo;
 
   uni.getSystemInfo({
     success(e) {

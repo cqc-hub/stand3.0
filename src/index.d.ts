@@ -10,7 +10,6 @@ declare const h5UrlLocal: string;
 declare const exports: any;
 declare const require: any;
 
-
 declare const __wxConfig: {
   envVersion: 'develop' | 'trial' | 'release';
 };
@@ -55,7 +54,6 @@ interface ISystemGlobalItem {
   // https://open.alipay.com/plugin/order-page?serviceCode=MP2020122300100215
   isOpenOcr: boolean;
   isHideHomeLogo: boolean;
-  homeNavTitleLogo?: string;
 
   //首页banner置顶
   homeTopBanner?: {
@@ -166,11 +164,12 @@ namespace UniNamespace {
   };
 }
 
-type PromiseReturnType<T> = ReturnType<T> extends Promise<infer R>
-  ? R extends Promise<infer S>
-    ? PromiseReturnType<() => R>
-    : R
-  : never;
+type PromiseReturnType<T> =
+  ReturnType<T> extends Promise<infer R>
+    ? R extends Promise<infer S>
+      ? PromiseReturnType<() => R>
+      : R
+    : never;
 
 declare module '*.vue' {
   import { DefineComponent } from 'vue';
