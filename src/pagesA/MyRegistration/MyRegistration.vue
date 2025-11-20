@@ -8,14 +8,20 @@
     <g-flag v-if="isRender" :typeFg="'405'" isShowFg />
     <g-message />
 
-    <g-choose-pat v-if="isWaitReg" @choose-pat="patientChange" />
+    <g-choose-pat
+      v-if="isWaitReg || props.isAllOrder1001094 === '1'"
+      @choose-pat="patientChange"
+    />
     <view
       v-if="pageConfig.MyRegistrationNavBtns && !isWaitReg"
       class="p32c pt12 pb12"
     >
       <g-tbbtns :btns="pageConfig.MyRegistrationNavBtns" />
     </view>
-    <view class="tab-box" v-show="tabs.length > 1 && !isWaitReg">
+    <view
+      class="tab-box"
+      v-show="tabs.length > 1 && !isWaitReg && props.hideTab !== '1'"
+    >
       <g-tabs
         v-model:value="tabCurrent"
         :tabs="tabs"
@@ -26,7 +32,7 @@
       />
     </view>
     <My-Registration-Head
-      v-if="!isWaitReg"
+      v-if="!isWaitReg && props.isAllOrder1001094 !== '1'"
       v-model:isSelStatus="isSelStatus"
       v-model:isSelPatient="isSelPatient"
       v-model:isSelOrderStatus="isSelOrderStatus"
@@ -227,7 +233,9 @@
         allPData?: '1';
         type?: 'waitReg' | 'forwardReg'; // 候补预约
         tabIndex?: '0' | '1' | '2';
+        hideTab?: '1';
         typeId?: number;
+        isAllOrder1001094?: '1'; // 自费挂号医保报销
       }
     >{}
   );
@@ -368,6 +376,7 @@
 
   const getBtnData = (item) => {
     return {
+      ...props.value,
       typeId: `${tabCurrentDetail.value?.typeId}`,
       ...item,
     };
@@ -378,6 +387,7 @@
     list.value = [];
     let type: any = undefined;
     if (
+      props.value.isAllOrder1001094 === '1' &&
       gStores.globalStore.sysCode === '1001094' &&
       tabCurrentDetail.value?.typeId === 1
     ) {
@@ -422,7 +432,14 @@
       //指定的预问诊跳转
       useTBanner(pageConfig.value.preConsultationBtn, 'navigateTo', item);
     } else {
-      const { orderId, hosDeptId, hosOrderId, hosData = '', patientId, deptName } = item;
+      const {
+        orderId,
+        hosDeptId,
+        hosOrderId,
+        hosData = '',
+        patientId,
+        deptName,
+      } = item;
       const preConsultation: TButtonConfig = {
         type: 'h5',
         isSelfH5: '1',
@@ -435,7 +452,7 @@
           hosOrderId,
           hosData: encodeURIComponent(hosData as string),
           patientId,
-          deptName
+          deptName,
         },
         addition: {
           token: 'token',
@@ -481,6 +498,7 @@
       });
     }
     const query = {
+      ...props.value,
       ...item,
       searchType: tabCurrentDetail.value.searchType,
       orderId,

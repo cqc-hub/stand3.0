@@ -733,22 +733,19 @@
         }),
       });
     } else if (hosOrderId) {
-      const { result = [] } = await api.hosRegOrderList<any[]>({
-        source: gStores.globalStore.browser.source,
-        patientId,
-      });
+      const pageArg: any = {
+        typeId: '1',
+      };
 
-      const findItem = result.find((o) => o.hosOrderId === hosOrderId);
-      if (findItem) {
-        // 全部挂号详情
-        uni.navigateTo({
-          url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
-            preWz: '1',
-            typeId: '1',
-            ...findItem,
-          }),
-        });
-      }
+      // if (gStores.globalStore.sysCode === '1001094') {
+      //   Object.assign(pageArg, {
+      //     isAllOrder1001094: '1',
+      //     hideTab: '1',
+      //   });
+      // }
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesA/MyRegistration/MyRegistration', pageArg),
+      });
     }
   }, 500);
 

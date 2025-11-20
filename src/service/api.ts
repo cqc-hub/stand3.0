@@ -767,6 +767,11 @@ const regApi = {
       hideLoading: false,
     }),
 
+  refundHosReg: (data: any) =>
+    service.post('/phs-reg/reg/refundHosReg', parm(data), {
+      hideLoading: false,
+    }),
+
   // 排班
   getDocSch: (data: any) =>
     service.post('/phs-reg/reg/getDocSch', parm(data), {

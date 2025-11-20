@@ -1382,6 +1382,8 @@
   };
 
   const refoundOrder = async () => {
+    const { typeId } = pageProps.value;
+
     if (isWaitReg.value) {
       return refoundWaitOrder();
     }
@@ -1404,6 +1406,15 @@
         pageProps.value
       ),
     });
+
+    if (typeId === '1') {
+      uni.reLaunch({
+        url: joinQueryForUrl('/pagesA/MyRegistration/MyRegistration', {
+          typeId,
+        }),
+      });
+      return;
+    }
 
     init();
   };
