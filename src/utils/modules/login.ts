@@ -203,9 +203,8 @@ export class LoginUtils extends GStores {
   //判断是否需要前往手机号登录
   async judgeLoginByPhoneVerify() {
     let flag = false;
-    const { isLoginByPhoneVerify } = await ServerStaticData.getSystemConfig(
-      'RestOfConfig'
-    );
+    const { isLoginByPhoneVerify } =
+      await ServerStaticData.getSystemConfig('RestOfConfig');
     if (isLoginByPhoneVerify === '1') {
       const { confirm } = await new Promise<any>((closeCallBack) => {
         this.messageStore.showMessage(
@@ -1052,14 +1051,33 @@ class HarmonyHandler extends LoginUtils implements LoginHandler {
     const code = payload.target?.code;
 
     if (code) {
-      console.log(code);
-      throw Error('hahahah')
-      const { result } = await api.loginHw({
-        code,
-      });
+      const { result } = await api.allinoneAuthApi(
+        packageAuthParams(
+          {
+            accountType: this.globalStore.browser.accountType,
+            code,
+          },
+          '/hw/hwLoginByPhoneCode'
+        )
+      );
 
-      const { accessToken, refreshToken } = result;
+      const {
+        accessToken,
+        refreshToken,
+        openId,
+        // idNo: certNo,
+        // cellPhoneNum: mobile,
+        // legalName: userName,
+      } = result;
+      console.log('---登录结果');
+      console.log(result);
 
+      // this.userStore.updateCacheUser({
+      //   mobile,
+      //   userName,
+      //   certNo,
+      // });
+      this.globalStore.setOpenId(openId);
       this.globalStore.setToken({
         accessToken,
         refreshToken,
@@ -1090,9 +1108,8 @@ export class Login extends LoginUtils {
 export class PatientUtils extends LoginUtils {
   usePatDynamicCode = {
     async isOpen(path: string) {
-      const { GlobalConfig } = await cacheUtil.getSystemConfig(
-        'GlobalConfig'
-      )();
+      const { GlobalConfig } =
+        await cacheUtil.getSystemConfig('GlobalConfig')();
 
       return (GlobalConfig.refreshQrCode || []).includes(path);
     },
@@ -1405,9 +1422,8 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
-        data
-      );
+      const { healthCardId, qrCodeText } =
+        await this.regHealthCardByPatInfo(data);
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;
@@ -1459,9 +1475,8 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
-        data
-      );
+      const { healthCardId, qrCodeText } =
+        await this.regHealthCardByPatInfo(data);
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;
