@@ -13,7 +13,7 @@
         :title="headerConfig?.headerLineMenu !== 'homePage' ? title : ''"
         :showBack="headerConfig?.headerLineMenu !== 'homePage'"
       >
-        <template v-if="headerConfig?.headerLineMenu === 'homePage'">
+        <!-- <template v-if="headerConfig?.headerLineMenu === 'homePage'">
           <g-tabs
             v-model:value="tabCurrent"
             :tabs="tabField"
@@ -23,16 +23,7 @@
             :allBlod="false"
             :transitionDuration="'0'"
           />
-          <!--  <g-tabs
-          v-show="tabField.length && tabField.length > 1 && !isModeMedicalHelp"
-          v-model:value="tabCurrent"
-          :tabs="tabField"
-          :scroll="false"
-          @change="tabChange"
-          field="label"
-          style="width: 100%"
-        /> -->
-        </template>
+        </template> -->
       </GCustomNavbar>
     </view>
     <!-- #endif -->
@@ -153,7 +144,7 @@
     guessAskList?: Array<{ label: string; value: string }>;
     headerConfig: StyleConfigType;
     isMess?: string;
-  }>(); 
+  }>();
   const emits = defineEmits(['click-guess']);
 
   const getSelfPat = (): IPat  => {
