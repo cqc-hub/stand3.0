@@ -34,11 +34,10 @@
           </view>
         </view>
         <view class="user-del yard">
-          <text>{{ hosInfoResObj.hosName }}</text>
-          <text class="line"></text>
-          <text>{{ hosInfoResObj.inpatientWard }}</text>
-          <text class="line"></text>
-          <text class="g-nowrap">{{ hosInfoResObj.inpatientBed }}床</text>
+          <block v-for="(r, i) in row1" :key="i">
+            <text class="g-nowrap">{{ r }}</text>
+            <text v-if="i !== row1.length - 1" class="line"></text>
+          </block>
         </view>
         <view class="user-del date">
           <text>{{ hosInfoResObj.beHosDate }}</text>
@@ -239,6 +238,15 @@
   });
 
   const hosInfoResObj = ref({} as getInHospitalInfoResult);
+  const row1 = computed(() => {
+    const { hosName, inpatientWard, inpatientBed } = hosInfoResObj.value;
+
+    return [
+      hosName,
+      inpatientWard,
+      inpatientBed ? `${inpatientBed}床` : '',
+    ].filter((o) => o);
+  });
   const toPayRecord = async () => {
     const { hosId } = hosInfoResObj.value || {};
     const { visitNo } = props.pageProps || {};
@@ -341,7 +349,7 @@
     useTBanner({
       type: 'h5',
       path: joinQuery(' https://yingyang.yqrmyy.com', {
-        patId: encryptDes(hosInfoResObj.value.cardNumber||'', 'phsDesKey'),
+        patId: encryptDes(hosInfoResObj.value.cardNumber || '', 'phsDesKey'),
       }),
       text: '订餐',
     });
@@ -493,9 +501,8 @@
         cardNumber,
       };
     }
-    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>(
-      args
-    );
+    const { result } =
+      await api.getInHospitalInfo<getInHospitalInfoResult>(args);
 
     hosInfoResObj.value = result;
 
