@@ -403,6 +403,16 @@
           </view>
         </view>
 
+        <view v-if="mdtDocList.length" class="content">
+          <view class="mb16 mt56">
+            <text class="f36 g-bold mr24">联合门诊</text>
+          </view>
+
+          <view class="">
+            <departmentDocList :list="mdtDocList" @item-click="mdtDocClick" />
+          </view>
+        </view>
+
         <block v-if="isDocServiceShow">
           <view class="mb16 mt56 p32c">
             <text class="f36 g-bold mr24">在线服务</text>
@@ -538,7 +548,6 @@
   import { computed, nextTick, ref, getCurrentInstance } from 'vue';
   import { onLoad, onShareAppMessage } from '@dcloudio/uni-app';
 
-  import globalGl from '@/config/global';
   import { useOrder, IChooseDays, TSchInfo, getChooseDays } from './utils';
 
   import {
@@ -551,7 +560,7 @@
     type IDocSchOutHosItem,
     type IDocHosSchListItem,
   } from './utils/DoctorDetails';
-  import { deQueryForUrl, joinQuery } from '@/common';
+  import { deQueryForUrl, joinQuery, joinQueryForUrl } from '@/common';
   import {
     previewImage,
     GStores,
@@ -561,6 +570,8 @@
     throughCharacterLineFeed,
     apiAsync,
   } from '@/utils';
+
+  import globalGl from '@/config/global';
   import HTMLParser from '@/common/html-parser';
 
   import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
@@ -574,6 +585,7 @@
   import DocComment from './components/DoctorDetails/DocComment.vue';
   import OrderPreSource from './components/orderSelectSource/OrderPreSource.vue';
   import DocSchOutHos from './components/DoctorDetails/DocSchOutHos.vue';
+  import departmentDocList from './components/DepartmentCard/departmentDocList.vue';
 
   import api from '@/service/api';
 
@@ -763,13 +775,25 @@
   };
 
   /** 联合门诊 */
+  const mdtDocList = ref<any[]>([]);
+  const mdtDocClick = (item) => {
+    const { docName, hosDocId, hosId } = item;
+
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
+        docName,
+        hosId,
+        hosDocId,
+        // hosDeptId,
+      }),
+    });
+  };
   const getJointClinicList = async (clinicForRegistId) => {
     const { result = [] } = await api.findByDocSchId({
       clinicForRegistId,
     });
 
-    console.log('获取到联合门诊');
-    console.log(result);
+    mdtDocList.value = result;
   };
 
   const getSchData = async () => {

@@ -31,11 +31,18 @@
   }>();
 
   const gStores = new GStores();
+  const emit = defineEmits<{
+    'update:height': [number];
+  }>();
 
   const colorRgb = computed(() => {
+    if (gStores.globalStore.isTcmStyle) {
+      return '248, 238, 231';
+    }
+
     switch (gStores.globalStore.sysCode) {
-      // case '1001093':
-      //   return '255,0,0';
+      case '1001093':
+        return '76, 138, 242';
 
       default:
         return '255,255,255';
@@ -50,7 +57,7 @@
   // 状态栏+导航栏总高度
   const navTotalHeight = ref(0);
 
-  const homeNavTitleLogo = globalGl.systemInfo.homeNavTitleLogo;
+  const homeNavTitleLogo = globalGl.sConfig.homeNavTitleLogo;
 
   uni.getSystemInfo({
     success(e) {
@@ -64,11 +71,9 @@
   onMounted(() => {
     const sysInfo = uni.getSystemInfoSync() as any;
     statusBarHeight.value = sysInfo.statusBarHeight;
-    navTotalHeight.value =
-      statusBarHeight.value +
-      navContentHeight.value +
-      (homeNavTitleLogo ? 12 : 0);
+    navTotalHeight.value = statusBarHeight.value + navContentHeight.value + 12;
     hideNativeNavigation();
+    emit('update:height', navTotalHeight.value);
   });
 
   const hideNativeNavigation = () => {

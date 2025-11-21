@@ -646,7 +646,8 @@ export class RegDetailUtil {
   ) {
     const { isOrderPay, wxOrderSubscribeMessage = [] } = this.orderConfig.value;
     let errMsg = '';
-    const { refundNeedAuth, source, orderStatus } = this.orderRegInfo;
+    const { refundNeedAuth, source, orderStatus, hosOrderId } =
+      this.orderRegInfo;
 
     // if (!Object.keys(this.orderRegInfo).length) {
     //   await this.getDataDetail();
@@ -663,10 +664,11 @@ export class RegDetailUtil {
     }
     // #endif
     if (isOrderPay === '1' && !['111'].includes(orderStatus)) {
-      const { orderId, searchType } = this.prop.value;
+      const { orderId, searchType, typeId } = this.prop.value;
       const { ev } = this.gStores.globalStore;
       const args = {
         orderId,
+        hosOrderId,
         searchType,
         source: this.gStores.globalStore.browser.source,
         payAuthNo: '',
@@ -728,7 +730,14 @@ export class RegDetailUtil {
       }
 
       // return
-      await api.refundOrder(args);
+      if (this.gStores.globalStore.sysCode === '1001094' && typeId === '1') {
+        await api.refundHosReg({
+          ...this.orderRegInfo,
+          ...args,
+        });
+      } else {
+        await api.refundOrder(args);
+      }
     } else {
       const { confirm } = await new Promise<any>((closeCallBack) => {
         this.gStores.messageStore.showMessage('', 0, {
@@ -830,9 +839,9 @@ export const useRegBtnShows = () => {
    * 取消预约
    */
   const isShowRegCancel = (item) => {
-    const { orderStatus, typeId } = item;
+    const { orderStatus, typeId, isAllOrder1001094 } = item;
     const { isOrderPay } = orderConfig.value;
-    if (typeId && typeId !== '0') {
+    if ((typeId && typeId !== '0') || isAllOrder1001094 === '1') {
       return false;
     }
     if (['0', '10', '60', '101', '110', '111'].includes(orderStatus)) {
@@ -847,12 +856,13 @@ export const useRegBtnShows = () => {
 
   /** 退号 */
   const isShowRegRefound = (item) => {
-    const { orderStatus, typeId, orderId } = item;
+    const { orderStatus, typeId, orderId, isAllOrder1001094 } = item;
     const { isOrderPay } = orderConfig.value;
-    if (typeId && typeId !== '0') {
+    if ((typeId && !['0', '1'].includes(typeId)) || isAllOrder1001094 === '1') {
       return false;
     }
-    if (orderStatus === '0' && orderId) {
+    if (orderStatus === '0') {
+      // if (orderStatus === '0' && orderId) {
       return typeId !== '3' && isOrderPay === '1';
     }
 
@@ -861,8 +871,8 @@ export const useRegBtnShows = () => {
 
   /** 再次预约 */
   const isShowRegReorder = (item) => {
-    const { orderStatus, hosDocId, typeId } = item;
-    if (typeId && typeId !== '0') {
+    const { orderStatus, hosDocId, typeId, isAllOrder1001094 } = item;
+    if ((typeId && typeId !== '0') || isAllOrder1001094 === '1') {
       return false;
     }
     return (
@@ -872,10 +882,10 @@ export const useRegBtnShows = () => {
 
   /** 查看评价 */
   const isShowRegCommentViews = (item) => {
-    const { orderId, rateFlag, orderStatus, typeId } = item;
+    const { orderId, rateFlag, orderStatus, typeId, isAllOrder1001094 } = item;
     const { isOpenComment } = orderConfig.value;
 
-    if (typeId && typeId !== '0') {
+    if ((typeId && typeId !== '0') || isAllOrder1001094 === '1') {
       return false;
     }
 
@@ -886,9 +896,9 @@ export const useRegBtnShows = () => {
 
   /** 服务评价 */
   const isShowRegComment = (item) => {
-    const { orderId, rateFlag, orderStatus, typeId } = item;
+    const { orderId, rateFlag, orderStatus, typeId, isAllOrder1001094 } = item;
     const { isOpenComment } = orderConfig.value;
-    if (typeId && typeId !== '0') {
+    if ((typeId && typeId !== '0') || isAllOrder1001094 === '1') {
       return false;
     }
 
@@ -903,9 +913,9 @@ export const useRegBtnShows = () => {
 
   /** 立即支付 */
   const isShowRegPay = (item) => {
-    const { orderStatus, typeId } = item;
+    const { orderStatus, typeId, isAllOrder1001094 } = item;
 
-    if (typeId && typeId !== '0') {
+    if ((typeId && typeId !== '0') || isAllOrder1001094 === '1') {
       return false;
     }
 
@@ -921,8 +931,8 @@ export const useRegBtnShows = () => {
 
   /** 推迟预约日期 */
   const isShowRegDateDelay = (item) => {
-    const { canUpdateStatus, typeId } = item;
-    if (typeId === '3') {
+    const { canUpdateStatus, typeId, isAllOrder1001094 } = item;
+    if (typeId === '3' || isAllOrder1001094 === '1') {
       return false;
     }
     return canUpdateStatus === '0';
