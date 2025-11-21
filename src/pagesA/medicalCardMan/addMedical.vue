@@ -6,7 +6,6 @@
     class="page"
   >
     <view class="container" scroll-y>
-
       <view class="form-container">
         <g-form
           v-model:value="formData"
@@ -361,14 +360,11 @@
           if (chooseList.length === 1) {
             selWay = chooseList[0].value;
           } else {
-            const { tapIndex } = await apiAsync(
-              uni.showActionSheet,
-              {
-                title: '选择验证方式',
-                alertText: '选择验证方式',
-                itemList: chooseList.map((o) => o.label),
-              }
-            );
+            const { tapIndex } = await apiAsync(uni.showActionSheet, {
+              title: '选择验证方式',
+              alertText: '选择验证方式',
+              itemList: chooseList.map((o) => o.label),
+            });
 
             selWay = chooseList[tapIndex].value;
           }
@@ -492,7 +488,7 @@
 
           if (minAge && maxAge) {
             shouldProceed = age >= minAge && age <= maxAge;
-          } 
+          }
         }
 
         if (shouldProceed) {
@@ -589,19 +585,19 @@
                 await apiAsync(uni.showModal, {
                   content: errMsg + ' 系统将为您注册账号，但不进行绑定就诊人！',
                   showCancel: false,
-                }); 
+                });
               }
             } else {
               throw new Error(err);
             }
-          }); 
+          });
 
         if (pageProps.value._directUrl) {
           //额外调用就诊人列表接口-查询下就诊人
           await patientUtils.getPatCardList();
-          routerJump(pageProps.value._directUrl as `/${string}`,'add');
+          routerJump(pageProps.value._directUrl as `/${string}`, 'add');
         } else {
-          routerJump('/pagesA/medicalCardMan/medicalCardMan','add');
+          routerJump('/pagesA/medicalCardMan/medicalCardMan', 'add');
         }
       } catch (error) {
         if ((error as any)?.errorType === 'add') {
@@ -760,7 +756,9 @@
               itemIdType.disabled = false;
               itemIdType.showSuffixArrowIcon = true;
             }
-
+            // #ifdef MP-HARMONY
+            await wait(60);
+            // #endif
             gform.value.setList(formList.value);
           }
         }
@@ -852,6 +850,9 @@
       formExtraKeysInAddPatPage = [],
       // isUpNamePhone,
     } = pageConfig.value;
+    // #ifdef MP-HARMONY
+    await wait(60);
+    // #endif
 
     const addressArr: any[] = [];
     const endArr: any[] = [];
@@ -956,7 +957,7 @@
           // 非身份证不需要民族
           isDropNation = '1';
 
-          if (['032','15'].includes(idType)) {
+          if (['032', '15'].includes(idType)) {
             _patientInfo.unshift('countries');
           }
         }
@@ -1075,8 +1076,8 @@
           o.disabled = true;
         }
       }
-        // 添加对 sortFormExtraKeys 中配置的处理
-      sortFormExtraKeys.forEach(extraConfig => {
+      // 添加对 sortFormExtraKeys 中配置的处理
+      sortFormExtraKeys.forEach((extraConfig) => {
         if (extraConfig.key === key) {
           // 处理 showSuffixArrowIcon 配置
           if (extraConfig.showSuffixArrowIcon !== undefined) {
@@ -1194,11 +1195,13 @@
         // 证件类型身份证 , 新生儿 时候必填,  其余可选
         o.required = cardType === '01' || value === '0' || false;
       }
- 
     });
 
     gform.value.setList([]);
     await wait(0);
+    // #ifdef MP-HARMONY
+    await wait(60);
+    // #endif
     gform.value.setList(formList.value);
   };
 
@@ -1300,6 +1303,9 @@
 
     formData.value.nation = '01';
     await wait(0);
+    // #ifdef MP-HARMONY
+    await wait(60);
+    // #endif
     medicalTypeChange(formData.value[formKey.patientType]);
 
     //是否医保建档

@@ -234,7 +234,9 @@
         isForShow: true,
       });
     }
-
+    // #ifdef MP-HARMONY
+    await wait(60);
+    // #endif
     gform.value.setList(fList);
     await wait(0);
   });
