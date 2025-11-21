@@ -52,6 +52,9 @@
 
 <script lang="ts" setup>
   import globalGl from '@/config/global';
+  import { GStores } from '@/utils';
+
+ const gStores = new GStores();
   const props = withDefaults(
     defineProps<{
       cols: any[];
@@ -61,6 +64,10 @@
   );
 
   const showAddress = (col) => {
+    if(gStores.globalStore.sysCode === '1001035' && ['12675','12713',].includes(props.lab.hosId) && ['itemAddress'].includes(col.key)){
+      //省中本部和紫东院区开启
+      return true
+    }
     return props.lab.performDeptCode && ['itemAddress'].includes(col.key);
   };
 

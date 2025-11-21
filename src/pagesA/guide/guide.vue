@@ -108,6 +108,7 @@ import { titleMap, TVisitInfo, TVisitRecord } from "./guide";
 import { deQueryForUrl, getLocalStorage, joinQueryForUrl, setLocalStorage } from "@/common";
 import { IRegistrationCardItem } from "../MyRegistration/utils/MyRegistration";
 import { getOrderStatusTitle, RegDetailUtil } from "../MyRegistration/utils/regDetail";
+import { HosNavData1001035 } from '../MyRegistration/utils/MyRegistration';
 
 import api from "@/service/api";
 import dayjs from "dayjs";
@@ -723,6 +724,11 @@ const handlerAddressMap = (item) => {
         thirdName: item.deptName,
       }
     );
+    return;
+  }
+  if (gStores.globalStore.sysCode === "1001035") {
+    item.hosDeptId = item.deptId
+    useTBanner(HosNavData1001035[item.hosId](item), 'navigateTo', item);
     return;
   }
 };
