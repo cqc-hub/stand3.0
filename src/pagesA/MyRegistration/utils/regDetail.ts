@@ -841,7 +841,7 @@ export const useRegBtnShows = () => {
   const isShowRegCancel = (item) => {
     const { orderStatus, typeId, isAllOrder1001094 } = item;
     const { isOrderPay } = orderConfig.value;
-    if ((typeId && typeId !== '0') || isAllOrder1001094 === '1') {
+    if ((typeId && !['0', '1'].includes(typeId)) || isAllOrder1001094 === '1') {
       return false;
     }
     if (['0', '10', '60', '101', '110', '111'].includes(orderStatus)) {
