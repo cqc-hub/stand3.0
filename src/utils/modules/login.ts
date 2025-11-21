@@ -68,6 +68,15 @@ export const getH5OpenidParam = function (data) {
   ];
   // #endif
 
+  // #ifdef MP-HARMONY
+  data.openIds = [
+    {
+      openId: globalStore.openId,
+      source: globalStore.browser.source,
+    },
+  ];
+  // #endif
+
   return data;
 };
 
