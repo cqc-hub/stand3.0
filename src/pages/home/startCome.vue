@@ -23,16 +23,21 @@
     baseUrl = 'https://tzwwz.eheren.com';
   }
 
-  if(global.SYS_CODE === '1001067') {
+  if (global.SYS_CODE === '1001067') {
     //温附二 第三方获取openId
-    src.value = 'https://wx.wzhealth.com/FeyMobileWeb/Common/Redirect?redirectUrl=common/GetOpenIdRedirect/xcxxxts'
-  }else{
-  isStartComeTest &&
-    (global.env as string) !== 'prod' &&
-    (appId = 'wxac2942d44e7c2bd9');
+    src.value =
+      'https://wx.wzhealth.com/FeyMobileWeb/Common/Redirect?redirectUrl=common/GetOpenIdRedirect/xcxxxts';
+  } else if (global.SYS_CODE === '1001083') {
+    src.value = `https://chagine.wzsrmyy.com/weixin-code/get-weixin-code.html?appid=${appId}&scope=snsapi_base&state=123&redirect_uri=${encodeURIComponent(
+      baseUrl + '/h5/index.html'
+    )}`;
+  } else {
+    isStartComeTest &&
+      (global.env as string) !== 'prod' &&
+      (appId = 'wxac2942d44e7c2bd9');
 
-  src.value = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=${encodeURIComponent(
-    baseUrl + '/h5/index.html'
-  )}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`;
+    src.value = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=${encodeURIComponent(
+      baseUrl + '/h5/index.html'
+    )}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`;
   }
 </script>
