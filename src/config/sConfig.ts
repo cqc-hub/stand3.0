@@ -37,6 +37,8 @@ export interface ISConfig {
   homeNavTitleLogo?: string;
   /** 首页顶部背景(图片) */
   homeTopBg?: string;
+  // 隐藏首页底部和仁logo
+  isHideHomeLogo?: '1';
   //底部是否放开互联网医院?
   isOpenHomeTabBarNetWorkBtn?: '1';
   //底部是否放开消息通知
@@ -486,7 +488,10 @@ const scJson: Record<string, ISConfig> = {
    */
   1001055: {
     isOpenAlipayZndz: true,
+    isHideHomeLogo: '1',
   },
+
+  1001099: {},
 
   /**
    * 大医二院普湾院区
@@ -607,6 +612,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001074: {
     // isOpenHomeTabBarNetWorkBtn: '1',
+    isHideHomeLogo: '1',
     isOpenWechatSI: true,
     login: {
       // isAliAuthBase: '1',

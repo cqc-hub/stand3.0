@@ -8,7 +8,7 @@
         class="m-icon-heren mr32"
       />
       <image
-        v-if="!globalGl.systemInfo.isHideHomeLogo"
+        v-if="globalGl.sConfig.isHideHomeLogo !== '1'"
         :src="$global.BASE_IMG + 'img_logo@3x.png'"
         mode="heightFix"
         class="m-icon-heren"

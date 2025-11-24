@@ -28,7 +28,6 @@ declare const __wxConfig: {
  *
  * @alipayPid-支付宝云监控的pid
  * @isOpenOcr-支付宝是否注册ocr插件 需要和就诊人配置接口同时设置
- * @isHideHomeLogo-是否隐藏首页的底部herenLogo
  */
 interface ISystemGlobalItem {
   wxAppid: string;
@@ -53,7 +52,6 @@ interface ISystemGlobalItem {
   alipayPid: string;
   // https://open.alipay.com/plugin/order-page?serviceCode=MP2020122300100215
   isOpenOcr: boolean;
-  isHideHomeLogo: boolean;
 
   //首页banner置顶
   homeTopBanner?: {
