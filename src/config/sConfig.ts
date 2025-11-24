@@ -936,6 +936,7 @@ const scJson: Record<string, ISConfig> = {
     isOpenHelpOld: '1',
     // isLangUygur: '1',
     isOpenPopularSci: '1',
+    isOpenWechatSI: true,
     homeTopBanner: {
       topShow: true,
       bannerHeight: 200,
