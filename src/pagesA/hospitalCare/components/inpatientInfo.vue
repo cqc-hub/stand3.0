@@ -490,6 +490,7 @@
     hosCardInfoLists.value = [];
     let args: any = {
       patientId: gStores.userStore.patChoose.patientId,
+      cardNumber: gStores.userStore.patChoose.cardNumber,
     };
     if (_pageProps.value.visitNo) {
       const { visitNo, patientName, patientPhone, cardNumber } =
