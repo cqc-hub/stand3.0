@@ -636,7 +636,7 @@ export const getDefaultFormData = async (
       }
     }
   }
-  if (pageConfig?.formNotDisableKeysInQuickAddPatPage) {
+  if (pageType === 'perfectReal' && pageConfig?.formNotDisableKeysInQuickAddPatPage) {
     pageConfig?.formNotDisableKeysInQuickAddPatPage.forEach((item) => {
       delete data[item.key];
     });
