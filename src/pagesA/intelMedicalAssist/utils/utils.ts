@@ -199,7 +199,7 @@ export const init = async (props) => {
       result?.content && (distinctiveImage.value = result?.content);
       result?.content && globalStore.setIntAssistantImg(result?.content);
     }
-  } 
+  }
 
   props?.isMess && props?.isMess == '1' && initWithMess();
   props?.isMess && props?.isMess === '2' && initWithTheMess(props?.openid);
@@ -1662,6 +1662,7 @@ export const regConfirm = async (pageArg) => {
     promptMessage,
     thRegisterId: thRegisterId || getLocalStorage('thRegisterId'),
     quickAppoint: '',
+    openId: gStores.globalStore.openId
   };
   let alipayAuthCode = '';
   // #ifdef MP-ALIPAY

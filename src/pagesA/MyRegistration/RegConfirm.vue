@@ -533,6 +533,7 @@
 
     const requestArg: any = {
       freeSignData: '',
+      openId: gStores.globalStore.openId,
       firstDeptName: firstDept?.deptName,
       firstHosDeptId: firstDept?.deptId,
       secondDeptName: secondDept?.deptName,
