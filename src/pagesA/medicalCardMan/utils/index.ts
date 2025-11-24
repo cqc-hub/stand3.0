@@ -604,7 +604,6 @@ export const getDefaultFormData = async (
       const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
       data[formKey.patientPhone] = wxPhone;
     }
- 
   } else if (ev === 'alipay') {
     const patList = gStores.userStore.patList;
 
@@ -1510,13 +1509,35 @@ export const insertSortFormExtraKey = (
   insertList: string[]
 ) => {
   let formListKeyLen = 0;
-  while (formListKeyLen < insertList.length) {
-    const idxsNow = list.filter((o) => o.sort === formListKeyLen);
-    if (idxsNow.length) {
-      insertList.splice(formListKeyLen, 0, ...idxsNow.map((o) => o.key as any));
-    }
+  list.sort((a, b) => a.sort - b.sort);
 
-    formListKeyLen++;
+  const listInArr: typeof list = [];
+  const listOutOfArr: typeof list = [];
+  list.map((o) => {
+    const { sort } = o;
+
+    if (sort <= insertList.length - 1) {
+      listInArr.push(o);
+    } else {
+      listOutOfArr.push(o);
+    }
+  });
+
+  if (listInArr.length) {
+    while (formListKeyLen < insertList.length) {
+      const idxsNow = list.filter((o) => o.sort === formListKeyLen);
+      if (idxsNow.length) {
+        insertList.splice(
+          formListKeyLen,
+          0,
+          ...idxsNow.map((o) => o.key as any)
+        );
+      }
+
+      formListKeyLen++;
+    }
+  } else if (listOutOfArr.length) {
+    insertList.push(...listOutOfArr.map((o) => o.key));
   }
 
   return insertList;

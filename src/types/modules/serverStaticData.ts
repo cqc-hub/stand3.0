@@ -6,7 +6,6 @@ export type TPersonExtraKey =
   | {
       key: string;
       sort: number; // 排序
-      showSuffixArrowIcon?: boolean; //展示箭头
     };
 
 /**
