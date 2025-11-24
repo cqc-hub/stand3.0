@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx64d48b1de1c41cb8",
+    "appid": "wx2e06292a91e9f162",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -76,6 +76,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
+    "appid": "",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -115,7 +116,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "郑州市中医院",
+  "name": "浙江省肿瘤医院",
   "h5": {
     "optimization": {
       "treeShaking": {

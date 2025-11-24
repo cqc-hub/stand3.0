@@ -369,7 +369,7 @@ export interface ISystemConfig_ {
   //住院服务 PATIENT_SERVICE_CONFIG
   hospitalCare: {
     //顶部tab
-    tab: IConfigTab[];
+    tab: IOptions[];
     //配置的预缴金额 [500,1000,2000,3000,5000,10000]
     inPatientPrePay: string[];
     /** 共3种模式：默认 1 不限制金额，2 仅支持整数金额，3 仅支持百倍金额输入  */
@@ -833,10 +833,6 @@ export interface IRegSearchHistoryItem {
   hot?: '1'; // 标记 🔥
 }
 
-export interface IConfigTab {
-  label: string;
-  value: string;
-}
 
 export interface IReportConfigTab {
   headerType: string;
