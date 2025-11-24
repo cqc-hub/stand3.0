@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001093",
+  "sysCode": "1001099",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -10,6 +10,13 @@
       "isStartComeTest": false,
       "isSearchInHos": true,
       "isOpenOcr": true
+    },
+    "1001099": {
+      "wxAppid": "wx64d48b1de1c41cb8",
+      "name": "郑州市中医院",
+      "isStartComeTest": false,
+      "isSearchInHos": true,
+      "isOpenOcr": false
     },
     "1001035": {
       "wxAppid": "wxacb96ee66c3dee84",
