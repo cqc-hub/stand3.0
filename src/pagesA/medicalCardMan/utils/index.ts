@@ -165,6 +165,22 @@ export const tempList: TInstance[] = [
     placeholder: '请输入',
     key: formKey.idCard,
     labelWidth: '220rpx',
+    async validator(v, item, data) {
+      if (v) {
+        const { idType } = data;
+
+        if (idType === '01' && !idValidator.checkIdCardNo(v)) {
+          return Promise.resolve({
+            success: false,
+            message: '请确认证件号码是否有误',
+          });
+        }
+      }
+
+      return {
+        success: true,
+      };
+    },
   },
 
   {
