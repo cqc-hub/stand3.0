@@ -567,13 +567,15 @@
     pageConfig.value?.isOrderBlur === '1' && (requestArg.disNo = disNo);
 
     if (quickPat.value.patientName) {
-      const { patientId: _patientId } =
-        await patientUtils.quickAppointmentAddPat(quickPat.value);
+      if (!quickPat.value.patientId) {
+        const { patientId: _patientId } =
+          await patientUtils.quickAppointmentAddPat(quickPat.value);
+        quickPat.value.patientId = _patientId;
+      }
 
-      patientId = _patientId;
+      patientId = quickPat.value.patientId;
       requestArg.patientId = patientId;
       requestArg.quickAppoint = 'quickAppoint';
-    } else {
     }
 
     let alipayAuthCode = '';
