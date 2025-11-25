@@ -33,7 +33,6 @@
     <view class="footer">
       <button @click="gform.submit" class="btn btn-primary">提交</button>
     </view>
-
   </view>
 </template>
 
@@ -41,7 +40,7 @@
   import { onMounted, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores } from '@/utils';
+  import { GStores, verifyEmoji } from '@/utils';
   import { IPageProps } from './utils/regConfirm';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { TInstance } from '@/components/g-form';
@@ -54,19 +53,23 @@
     imgHeight: 0,
   });
 
-
-
   const gform = ref<any>('');
   const gformList = ref([] as TInstance[]);
   const formData = ref({} as any);
   const formSubmit = async ({ data }) => {
-    const { ceshiData = [], ceshiData1 = [] } = data;
+    const { ceshiData = [], ceshiData1 = [], illDescribe = '' } = data;
     const photoList = [...ceshiData1, ...ceshiData];
     const {
       result: { diseaseId },
     } = await api.addDiseaseInformation({
       ...data,
-      illDescribe: data.illDescribe.replaceAll(`"`, `'`).replaceAll(' ', ''),
+      illDescribe: illDescribe
+        .replace(
+          /[^0-9A-Za-z\u4e00-\u9fa5\u3000-\u303F\uFF00-\uFFEF\.,"&*!?#;:%@\^\\'\s~`·\<\>]/g,
+          ''
+        )
+        .replaceAll(`"`, `'`)
+        .replaceAll(' ', ''),
       illPic: photoList.map((o) => o.url),
     });
 
@@ -105,10 +108,7 @@
         showRequireIcon: true,
         emptyMessage: '请填写病情描述',
         async validator(v) {
-          const emojiRegex =
-            /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{2B55}]|[\u{200D}]|[\u{FE0F}]/gu;
-
-          if (v && emojiRegex.test(v)) {
+          if (v && verifyEmoji(v)) {
             return {
               success: false,
               message: '请不要输入表情包等特殊符号',

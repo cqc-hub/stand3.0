@@ -1,5 +1,6 @@
 import { idValidator } from './idCard';
 
+
 export const rulePhone = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
 /**
  * 校验手机号
@@ -41,7 +42,6 @@ export const verifyEmoji = (str: string) => {
   return false;
 };
 
-
 // 整数金额校验规则：正整数，不包含小数点和逗号
 export const ruleIntegerAmount = /^[1-9]\d*$/;
 
@@ -73,7 +73,6 @@ export const verifyAmountStrict = (amount: string) => {
   return false;
 };
 
-
 // 金额校验规则：支持整数或最多两位小数
 export const ruleAmount = /^(?:0|[1-9]\d*)(?:\.\d{1,2})?$/;
 
@@ -84,7 +83,7 @@ export const ruleAmount = /^(?:0|[1-9]\d*)(?:\.\d{1,2})?$/;
  */
 export const verifyAmount = (amount: string) => {
   if (amount) {
-    return  /^(?:0|[1-9]\d*)(?:\.\d{1,2})?$/.test(amount);
+    return /^(?:0|[1-9]\d*)(?:\.\d{1,2})?$/.test(amount);
   }
   return false;
 };
