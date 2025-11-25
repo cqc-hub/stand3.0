@@ -48,7 +48,6 @@
   //   });
   // };
 
-
   const getAuthCodeWx1001035 = async ({ userName, idCard }) => {
     // const clinicUtils = await getClinicUtils();
 
@@ -62,9 +61,8 @@
         return;
       }
 
-      uni.showLoading({ title: '加载中'});;
+      uni.showLoading({ title: '加载中' });
 
-      // @ts-expect-error
       require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
         uni.hideLoading();
         await utils.getMedicalArgWithFamily();
@@ -97,7 +95,7 @@
         return;
       }
 
-      uni.showLoading({ title: '加载中'});;
+      uni.showLoading({ title: '加载中' });
       gStores.globalStore.assignCacheData({
         uploadRes: {
           ...uploadRes,
@@ -118,7 +116,6 @@
         },
       });
 
-      // @ts-expect-error
       require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
         uni.hideLoading();
         await utils.handlerMedicalPay1001035({
@@ -419,7 +416,7 @@
   });
 
   onShow(() => {
-    console.log('')
+    console.log('');
     const medicalWx = getLocalStorage('get-wx-medical-auth-code');
     // 微信医保小程序跳回来后中断了链路 重新走下
     if (medicalWx === '1') {
