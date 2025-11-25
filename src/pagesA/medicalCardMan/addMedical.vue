@@ -857,6 +857,8 @@
     const addressArr: any[] = [];
     const endArr: any[] = [];
 
+    let { formExtraKeysInQuickAddPatPage = [] } = pageConfig.value;
+
     let formExtraKeys = _formExtraKeys.filter((o) => typeof o === 'string');
     const sortFormExtraKeys = _formExtraKeys.filter(
       (o) => typeof o !== 'string'
@@ -1155,6 +1157,14 @@
         // #endif
       }
 
+      //从快捷绑定页面带入的额外数据不可修改
+      if (
+        formExtraKeysInQuickAddPatPage.map((item) => item.key).includes(key) &&
+        iValue
+      ) {
+        o.disabled = true;
+      }
+
       if (value === '0' && key === formKey.birthday) {
         o.validator = async (v) => {
           const { ageChildren } = pageConfig.value;
@@ -1338,6 +1348,7 @@
   onMounted(async () => {
     routeStore.receiveQuery(pageProps.value);
     await init();
+    console.log('formData.value', formData.value);
     // #ifdef MP-ALIPAY
     if (
       globalGl.sConfig.login?.isAliAuthBase === '1' &&

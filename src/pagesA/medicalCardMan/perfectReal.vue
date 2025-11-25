@@ -190,6 +190,8 @@
     ISystemConfig,
     wait,
     phoneConvert,
+    idValidator,
+    idCardConvert,
   } from '@/utils';
 
   import {
@@ -384,6 +386,14 @@
     // const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
 
     // formData 值和页面渲染列表key 对应
+    if (
+      formData.value[`idType`] === '01' &&
+      formData.value['idCard'] &&
+      !idValidator.checkIdCardNo(formData.value['idCard'])
+    ) {
+      gStores.messageStore.showMessage('请输入正确的身份证号码', 3000);
+      return
+    }
     const {
       browser: { source },
     } = gStores.globalStore;
@@ -714,7 +724,7 @@
   const maskInfo = (
     formList: TInstance[],
     opt: {
-      keys: ('patientPhone' | 'patientName')[];
+      keys: ('patientPhone' | 'patientName' | 'idCard')[];
       disabled?: boolean;
     } = {} as any
   ) => {
@@ -733,6 +743,13 @@
         o.disabled = disabled;
 
         o.inputMask = phoneConvert;
+      }
+      if (keys.includes('idCard') && key === formKey.idCard) {
+        o.disabled = disabled;
+
+        o.inputMask = (v, item) => {
+          return idCardConvert(v);
+        };
       }
     });
   };
@@ -853,6 +870,15 @@
               maskKeys.push('patientPhone');
             }
 
+            if (
+              certNo &&
+              formExtraKeysInQuickAddPatPage.find((f) => f.key === 'idCard') &&
+              formData.value['idCard'] &&
+              idValidator.checkIdCardNo(formData.value['idCard'])
+            ) {
+              maskKeys.push('idCard');
+            }
+
             maskInfo(formList, {
               keys: maskKeys,
               // disabled: true,
@@ -872,6 +898,15 @@
       if (formData.value[key] && key !== formKey.defaultFalg) {
         o.disabled = true;
       }
+
+      // 额外信息存在证件类型与证件号时，默认值未存在身份证或者未通过身份证校验时，可编辑
+      if (
+        formExtraKeysInQuickAddPatPage.find((f) => f.key === 'idType') &&
+        (!formData.value['idCard'] ||
+          !idValidator.checkIdCardNo(formData.value['idCard']))
+      ) {
+        o.disabled = false;
+      }
     });
     _formList.value = formList;
     gform.value.setList(formList);
@@ -884,6 +919,7 @@
     // #ifdef MP-ALIPAY
     isMedicalFiling.value = medicalMHelp?.alipay?.medicalFiling === '1';
     // #endif
+    console.log('formData.value', formData.value);
   };
 
   onReady(() => {

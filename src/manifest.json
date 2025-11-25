@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxc3ee6623e27269a7",
+    "appid": "wx41ed9678ac802d7e",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -76,7 +76,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021005178602372",
+    "appid": "2021002125637380",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -116,7 +116,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "温州市人民医院",
+  "name": "义乌市中心医院",
   "h5": {
     "optimization": {
       "treeShaking": {

@@ -87,6 +87,15 @@ export const HosNavData = {
       extraData,
     };
   },
+
+  13001: (item: IRegistrationCardItem) => {
+    return {
+      appId: 'wx0fb39a1dc27c5e6d',
+      path: `pages/index?id=QFadbKUMCl&appKey=g8E7Yc23Tm&poi=${item.visitingArea.replace(/\s*[\(（][^)）]*[\)）]\s*$/, '')}`,
+      text: '院内导航',
+      type: 'otherProgram',
+    };
+  },
   // #endif
   // #ifdef  MP-ALIPAY
   // 13178: (item: IRegistrationCardItem, type?: string) => {

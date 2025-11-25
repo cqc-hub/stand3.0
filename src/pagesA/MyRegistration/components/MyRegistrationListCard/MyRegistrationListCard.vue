@@ -270,7 +270,7 @@
     return ['70', '82'].includes(item.orderStatus) && props.showReOrderBtn;
   };
 
-  //显示多院区院内导航(仅绍兴)
+  //显示多院区院内导航
   const isNav = (item: IRegistrationCardItem) => {
     if (props.isWaitReg) {
       return false;
@@ -283,6 +283,13 @@
         const { hosId } = item;
 
         if (['12675', '12713'].includes(hosId)) {
+          return true;
+        }
+      }
+      if (gStores.globalStore.sysCode === '1001052') {
+        const { hosId } = item;
+
+        if (['13001'].includes(hosId)) {
           return true;
         }
       }

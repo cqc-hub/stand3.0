@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001093",
+  "sysCode": "1001095",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -403,7 +403,8 @@
       "isvAlipayAppid": "",
       "name": "温州市中西医结合医院",
       "isStartComeTest": false,
-      "isOpenOcr": false
+      "isOpenOcr": false,
+      "isSearchInHos": true
     },
     "1001086": {
       "wxAppid": "wxa4a2728d9d7598f1",
@@ -472,7 +473,7 @@
     },
     "1001095": {
       "wxAppid": "wx41ed9678ac802d7e",
-      "alipayAppid": "",
+      "alipayAppid": "2021002125637380",
       "isvAlipayAppid": "",
       "h5Appid": "",
       "name": "义乌市中心医院",

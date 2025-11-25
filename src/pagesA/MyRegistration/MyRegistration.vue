@@ -524,6 +524,9 @@
     if (gStores.globalStore.sysCode === '1001046') {
       useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
     }
+    if (gStores.globalStore.sysCode === '1001052') {
+      useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
+    }
   };
 
   const _patChange = (item) => {

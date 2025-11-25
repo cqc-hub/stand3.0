@@ -776,6 +776,11 @@ const scJson: Record<string, ISConfig> = {
       },
     },
   },
+  1001085: {
+    login: {
+      isSkipPerfect: '1',
+    },
+  },
   /**
    * 江苏省中医院
    */
