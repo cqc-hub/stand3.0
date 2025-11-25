@@ -117,6 +117,9 @@
   };
 
   const change = (item: IChooseDays) => {
+    if (props.value === item.fullDay) {
+      return;
+    }
     emits('change', item);
   };
 
