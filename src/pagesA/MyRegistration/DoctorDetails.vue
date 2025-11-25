@@ -569,6 +569,7 @@
     useTBanner,
     throughCharacterLineFeed,
     apiAsync,
+    wait,
   } from '@/utils';
 
   import globalGl from '@/config/global';
@@ -772,10 +773,36 @@
       });
     }
     checkedDay.value = item.fullDay;
+    getJointClinicList();
   };
 
   /** 联合门诊 */
   const mdtDocList = ref<any[]>([]);
+  const getJointClinicList = async () => {
+    mdtDocList.value = [];
+    const schListToday = docSchList.value.find(
+      (o) => o.schDate === checkedDay.value
+    );
+
+    if (schListToday) {
+      const { schByHos = [] } = schListToday;
+
+      const totalSchList = Object.keys(schByHos).reduce((acc, curr) => {
+        return acc.concat(...schByHos[curr]);
+      }, [] as TSchInfo[]);
+
+      const mdtItem = totalSchList.find((o) => o.specialIndicator === '1');
+      if (mdtItem) {
+        const { clinicForRegistId } = mdtItem;
+
+        const { result = [] } = await api.findByDocSchId({
+          clinicForRegistId,
+        });
+
+        mdtDocList.value = result;
+      }
+    }
+  };
   const mdtDocClick = (item) => {
     const { docName, hosDocId, hosId } = item;
 
@@ -787,13 +814,6 @@
         // hosDeptId,
       }),
     });
-  };
-  const getJointClinicList = async (clinicForRegistId) => {
-    const { result = [] } = await api.findByDocSchId({
-      clinicForRegistId,
-    });
-
-    mdtDocList.value = result;
   };
 
   const getSchData = async () => {
@@ -809,15 +829,6 @@
       const { schDate } = schList[0];
       checkedDay.value = schDate;
       docSchList.value = schList;
-
-      if (schList[0].schDateList && schList[0].schDateList.length) {
-        const { specialIndicator, clinicForRegistId } =
-          schList[0].schDateList[0];
-
-        if (specialIndicator === '1') {
-          getJointClinicList(clinicForRegistId);
-        }
-      }
 
       //判断是否多院区
       let schListByhosId = groupedByHosId(schList);
@@ -849,14 +860,13 @@
           },
         ];
         docHosSchList.value.push(...schListByhosId);
-        nextTick(() => {
-          if (props.value.hosId && docHosSchList.value.length > 1) {
-            tabCurrent.value = docHosSchList.value.findIndex(
-              (o) => o.hosId === props.value.hosId
-            );
-          }
-          // tabCurrent.value=
-        });
+        await wait(0);
+        if (props.value.hosId && docHosSchList.value.length > 1) {
+          tabCurrent.value = docHosSchList.value.findIndex(
+            (o) => o.hosId === props.value.hosId
+          );
+        }
+        // tabCurrent.value=
       }
     }
 
@@ -1089,7 +1099,7 @@
     await getPageConfig();
     await OrderInit();
     await getDocDetail();
-    getSchData();
+    await getSchData();
 
     const {
       isOpenComment,
@@ -1116,6 +1126,8 @@
     if (isOpenOutHosSch === '1') {
       docSchOutHosList.value = await useDoctorDetail.getOutHosSchData();
     }
+
+    getJointClinicList();
   };
 
   onShareAppMessage((res) => {
