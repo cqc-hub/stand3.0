@@ -1078,15 +1078,6 @@
           o.disabled = true;
         }
       }
-      // 添加对 sortFormExtraKeys 中配置的处理
-      sortFormExtraKeys.forEach((extraConfig) => {
-        if (extraConfig.key === key) {
-          // 处理 showSuffixArrowIcon 配置
-          if (extraConfig.showSuffixArrowIcon !== undefined) {
-            o.showSuffixArrowIcon = extraConfig.showSuffixArrowIcon;
-          }
-        }
-      });
 
       if (pageProps.value.pageType === 'perfectReal') {
         // #ifdef MP-ALIPAY

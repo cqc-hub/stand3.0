@@ -958,7 +958,7 @@
     }
 
     if (validator) {
-      const { success, message } = await validator(v, item);
+      const { success, message } = await validator(v, item, props.value);
 
       if (!success) {
         messageStore.showMessage(message, 3000, messageOptions.value);

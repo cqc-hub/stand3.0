@@ -165,6 +165,22 @@ export const tempList: TInstance[] = [
     placeholder: '请输入',
     key: formKey.idCard,
     labelWidth: '220rpx',
+    async validator(v, item, data) {
+      if (v) {
+        const { idType } = data;
+
+        if (idType === '01' && !idValidator.checkIdCardNo(v)) {
+          return Promise.resolve({
+            success: false,
+            message: '请确认证件号码是否有误',
+          });
+        }
+      }
+
+      return {
+        success: true,
+      };
+    },
   },
 
   {
@@ -604,7 +620,6 @@ export const getDefaultFormData = async (
       const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
       data[formKey.patientPhone] = wxPhone;
     }
- 
   } else if (ev === 'alipay') {
     const patList = gStores.userStore.patList;
 
@@ -621,7 +636,7 @@ export const getDefaultFormData = async (
       }
     }
   }
-  if (pageConfig?.formNotDisableKeysInQuickAddPatPage) {
+  if (pageType === 'perfectReal' && pageConfig?.formNotDisableKeysInQuickAddPatPage) {
     pageConfig?.formNotDisableKeysInQuickAddPatPage.forEach((item) => {
       delete data[item.key];
     });
@@ -1510,13 +1525,35 @@ export const insertSortFormExtraKey = (
   insertList: string[]
 ) => {
   let formListKeyLen = 0;
-  while (formListKeyLen < insertList.length) {
-    const idxsNow = list.filter((o) => o.sort === formListKeyLen);
-    if (idxsNow.length) {
-      insertList.splice(formListKeyLen, 0, ...idxsNow.map((o) => o.key as any));
-    }
+  list.sort((a, b) => a.sort - b.sort);
 
-    formListKeyLen++;
+  const listInArr: typeof list = [];
+  const listOutOfArr: typeof list = [];
+  list.map((o) => {
+    const { sort } = o;
+
+    if (sort <= insertList.length - 1) {
+      listInArr.push(o);
+    } else {
+      listOutOfArr.push(o);
+    }
+  });
+
+  if (listInArr.length) {
+    while (formListKeyLen < insertList.length) {
+      const idxsNow = list.filter((o) => o.sort === formListKeyLen);
+      if (idxsNow.length) {
+        insertList.splice(
+          formListKeyLen,
+          0,
+          ...idxsNow.map((o) => o.key as any)
+        );
+      }
+
+      formListKeyLen++;
+    }
+  } else if (listOutOfArr.length) {
+    insertList.push(...listOutOfArr.map((o) => o.key));
   }
 
   return insertList;

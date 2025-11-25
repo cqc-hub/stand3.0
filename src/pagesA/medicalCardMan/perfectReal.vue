@@ -779,9 +779,6 @@
       'defaultFalg',
     ] as any;
 
-    console.log('-------');
-    console.log(formListKeys);
-
     let { isSmsVerify, isHidePatientTypeInPerfect, isUserInfoShareAgree } =
       pageConfig.value;
 
@@ -819,6 +816,7 @@
 
     insertSortFormExtraKey(sortFormExtraKeys, formListKeys);
     insertSortFormExtraKey(formExtraKeysInQuickAddPatPage, formListKeys);
+    console.log(formListKeys, formExtraKeysInQuickAddPatPage);
 
     formList = pickTempItem(formListKeys);
     const defaultValue = await getDefaultFormData(

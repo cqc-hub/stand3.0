@@ -90,7 +90,7 @@
   import api from '@/service/api';
   import { dailyResult } from '../utils/inpatientInfo';
   import dailyExpenseListDetial from './dailyExpenseListDetial.vue';
-  import { joinQueryForUrl } from '@/common';
+  import { joinQuery, joinQueryForUrl } from '@/common';
   const gStores = new GStores();
   const props = defineProps<{
     isHosTotallist?: string;
@@ -138,7 +138,11 @@
   };
   const gotoListExpenses = (data) => {
     uni.navigateTo({
-      url: `listExpenses?isHosTotallist=2&hospitalId=${data.inpatientNo}`,
+      url: joinQuery(`listExpenses`, {
+        isHosTotallist: '2',
+        hospitalId: data.inpatientNo,
+        costDay: data.costDate,
+      }),
     });
   };
 

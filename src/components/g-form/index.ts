@@ -54,7 +54,8 @@ interface IBaseInstance {
   direction?: 'vertical' | 'horizontal';
   validator?: (
     v: any,
-    item: TInstance
+    item: TInstance,
+    formData: BaseObject
   ) => Promise<
     | {
         success: false;

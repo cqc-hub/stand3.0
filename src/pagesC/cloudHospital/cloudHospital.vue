@@ -7,7 +7,10 @@
         :src="BASE_IMG + 'img_h5bg@3x.png'"
       />
     </view>
-    <view v-if="!$global.systemInfo.isHideHomeLogo" class="cache-fixbottom">
+    <view
+      v-if="$global.sConfig.isHideHomeLogo !== '1'"
+      class="cache-fixbottom"
+    >
       浙江和仁科技股份有限公司@技术支持
     </view>
     <g-message />
