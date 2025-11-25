@@ -72,7 +72,11 @@
 
               <button
                 v-if="isShowRegPay(getBtnData(item))"
-                @click="goDetail(item)"
+                @click="
+                  goDetail(item, {
+                    _autoPay: '1',
+                  })
+                "
                 class="btn btn-round btn-primary btn-size-small btn-border cancel-btn"
               >
                 去支付
@@ -463,7 +467,10 @@
     }
   };
 
-  const goDetail = async (item: IRegistrationCardItem) => {
+  const goDetail = async (
+    item: IRegistrationCardItem,
+    payload: BaseObject = {}
+  ) => {
     const { patList } = gStores.userStore;
     const { patientId, orderId, orderStatus } = item;
     const typeId = tabCurrentDetail.value?.typeId;
@@ -498,6 +505,7 @@
       });
     }
     const query = {
+      ...payload,
       ...props.value,
       ...item,
       searchType: tabCurrentDetail.value.searchType,

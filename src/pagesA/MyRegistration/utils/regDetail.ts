@@ -27,6 +27,7 @@ export interface IPageProps {
   hisResult?: string;
   cardNumber?: string;
   preWz?: '1'; // 第一次挂号进来
+  _autoPay?: '1'; // 拉支付
   thRegisterId?: string;
   needOrderStatus?: string; // 医保回来要不停调用接口（1次/3s/共2次）直到状态和这个一样
   orderStatus: string; // 挂号状态

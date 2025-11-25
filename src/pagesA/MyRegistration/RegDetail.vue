@@ -1539,7 +1539,9 @@
       ) {
         showConsultationDialog1001048();
       }
+    }
 
+    if (pageProps.value._autoPay === '1') {
       if (
         orderConfig.value.isConfirmOrderWithPay === '1' &&
         isShowRegPay(_d.value)

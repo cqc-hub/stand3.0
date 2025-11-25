@@ -727,8 +727,9 @@
     if (orderId) {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
-          orderId,
           preWz: '1',
+          _autoPay: '1',
+          orderId,
           thRegisterId,
           patientId,
         }),
