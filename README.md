@@ -1,95 +1,144 @@
 # vue3-vite-ts-uniapp
 
-## icon font
+## Icon Font 配置
 
-阿里云图标库下载本地
+### 安装工具
 
+```bash
 npm i -g iconfont-tools
-
-解压下载的文件 进入
-
-cmd: iconfont-tools
-
-    设置输出文件夹名称: xxx(随意)
-    设置输出css文件名称: xxx
-    设置css文件的prefix: icon-font(就是后面要用的时候 class 的前缀)
-    是否生产小程序原生组件: true
-
-然后解压的文件夹里面就会出现一个 xxx 的文件，打开文件复制 xxx.css 文件添加到 uniapp 项目中的 static 里面
-
-切换到 app.vue 里面的 style 下面引入
-
-@import url('~@/static/iconfont-demo-icon.css');
-
-然后就可以在页面通过`<text class="xxx1 xxxx"></text>`引入啦
-
 ```
+
+### 使用步骤
+
+1. 从阿里云图标库下载图标文件并解压
+2. 进入解压后的文件夹，执行命令：
+
+```bash
+iconfont-tools
+```
+
+3. 按提示配置：
+   - 设置输出文件夹名称：`xxx`（随意）
+   - 设置输出 CSS 文件名称：`xxx`
+   - 设置 CSS 文件的 prefix：`icon-font`（class 的前缀）
+   - 是否生成小程序原生组件：`true`
+
+4. 将生成的 `xxx.css` 文件复制到 uniapp 项目的 `static` 目录
+
+5. 在 `App.vue` 的 `<style>` 中引入：
+
+```css
+@import url('~@/static/iconfont-demo-icon.css');
+```
+
+6. 在页面中使用：
+
+```html
+<text class="icon-font xxx1"></text>
+```
+
+### 样式示例
+
+```css
 .icon-font {
- display: inline-block;
- width: 30rpx;
- height: 30rpx;
- background-repeat: no-repeat !important;
- background-position: center;
- background-size: 100% 100%;
+  display: inline-block;
+  width: 30rpx;
+  height: 30rpx;
+  background-repeat: no-repeat !important;
+  background-position: center;
+  background-size: 100% 100%;
 }
 ```
 
-## h5 功能页汇总 默认携带 sysCode herenId patientId 下列参数作为记录 第三方跳转时
+---
 
-| 功能         |                  页面                   | 参数                  |
-| :----------- | :-------------------------------------: | :-------------------- |
-| 健康咨询     |  pagesA/healthAdvisory/healthAdvisory   | sysCode               |
-| 用药提醒     | pagesC/medicationManager/medicationList | sysCode token herenId |
-| 服务电话     |        pages/helplines/helplines        | sysCode               |
-| 预问诊       |        pages/inquiries/inquiries        | sysCode token         |
-| 医院指南     |    pages/hospitalGuide/hospitalGuide    | sysCode hosId         |
-| 用药提醒     | pagesC/medicationManager/medicationList | sysCode token herenId |
-| 我的医生     |        pagesC/myDoctor/myDoctor         | sysCode token herenId |
-| 核酸结果查询 |     pagesC/mixCheckResult/hsResult      | sysCode token herenId |
-| 电子发票 |     pagesA/eletronicInvoice/eletronicInvoice      | sysCode token herenId |
-| 渭南健康打卡 |     pagesC/choosePat/choosePat      | sysCode token herenId _type=weinandk |
+## H5 功能页汇总
 
-## 单独 2.0 迁移 3.0 的
+> 默认携带 `sysCode`、`herenId`、`patientId` 参数，用于第三方跳转记录
 
-测试环境 <https://health.eheren.com/V3_h5/#/>
-正式环境 <https://h5.eheren.com/V3_h5/>#
-
-| 功能     |                    页面                     | 参数          |
-| :------- | :-----------------------------------------: | :------------ |
-| 健康自测 |    pagesA/healthSelfTest/healthSelfTest     |               |
-| 药品百科 | pages/drugsEncyclopedias/drugsEncyclopedias |               |
-| 疾病百科 |       pagesA/diseaseCyclopedia/index        | sysCode       |
-| otc 商城 |                    暂无                     | sysCode token |
+| 功能         | 页面路径                                     | 参数                              |
+| :----------- | :------------------------------------------- | :-------------------------------- |
+| 健康咨询     | `pagesA/healthAdvisory/healthAdvisory`       | `sysCode`                         |
+| 用药提醒     | `pagesC/medicationManager/medicationList`    | `sysCode` `token` `herenId`       |
+| 服务电话     | `pages/helplines/helplines`                  | `sysCode`                         |
+| 预问诊       | `pages/inquiries/inquiries`                  | `sysCode` `token`                 |
+| 医院指南     | `pages/hospitalGuide/hospitalGuide`          | `sysCode` `hosId`                 |
+| 我的医生     | `pagesC/myDoctor/myDoctor`                   | `sysCode` `token` `herenId`       |
+| 核酸结果查询 | `pagesC/mixCheckResult/hsResult`             | `sysCode` `token` `herenId`       |
+| 电子发票     | `pagesA/eletronicInvoice/eletronicInvoice`   | `sysCode` `token` `herenId`       |
+| 渭南健康打卡 | `pagesC/choosePat/choosePat`                 | `sysCode` `token` `herenId` `_type=weinandk` |
 
 ---
 
-## warn
+## 2.0 迁移到 3.0 的功能
 
-### 如需安装新依赖
-node版本  V16.15.0
-npm  8.5.5
-npm查看当前源 npm config get registry
-npm 源设置为 https://registry.npmmirror.com/ （npm set registry https://registry.npmmirror.com/）
+### 环境地址
+
+- **测试环境**：https://health.eheren.com/V3_h5/#/
+- **正式环境**：https://h5.eheren.com/V3_h5/#/
+
+### 功能列表
+
+| 功能     | 页面路径                                 | 参数              |
+| :------- | :--------------------------------------- | :---------------- |
+| 健康自测 | `pagesA/healthSelfTest/healthSelfTest`   | -                 |
+| 药品百科 | `pages/drugsEncyclopedias/drugsEncyclopedias` | -            |
+| 疾病百科 | `pagesA/diseaseCyclopedia/index`         | `sysCode`         |
+| OTC 商城 | 暂无                                     | `sysCode` `token` |
+
+---
+
+## 开发环境要求
+
+### Node 版本
+
+- **Node**：v16.15.0
+- **npm**：8.5.5
+
+### npm 源配置
+
+```bash
+# 查看当前源
+npm config get registry
+
+# 设置为淘宝镜像源
+npm set registry https://registry.npmmirror.com/
+```
+
+---
 
 ## 公共页面
 
-- 跳转小程序
+### 跳转小程序
 
-    pagesC/openMiniProgram
-    > 无法在小程序外部的环境下控制程序直接跳转, 此时跳到此页面由小程序来调用 navigateToMiniProgram api 进行跳转
+**路径**：`pagesC/openMiniProgram`
 
-- 互联网医院
+> 无法在小程序外部的环境下直接跳转，需跳转到此页面，由小程序调用 `navigateToMiniProgram` API 进行跳转
 
-    pagesC/commonHosNet
-    > 需要去互联网医院的某页面使用
+### 互联网医院
 
-- webview
+**路径**：`pagesC/commonHosNet`
 
-    pagesA/webView/webView
+> 需要跳转到互联网医院的某个页面时使用
 
-## 智能助医H5版本 
-https://h5.eheren.com/v3_mini/#/pagesA/intelMedicalAssist/intelMedicalAssist?sysCode=1001039
-pages.json 里面只保留 intelMedicalAssist/intelMedicalAssist该路径  打包把顶部医院名称置空再打包
+### WebView
 
-## 新医院上线需确认
-是否完善 授权模式  报告是否支持下载 修改手机号的ocr识别（禁止后端接口模式）
+**路径**：`pagesA/webView/webView`
+
+---
+
+## 智能助医 H5 版本
+
+**访问地址**：https://h5.eheren.com/v3_mini/#/pagesA/intelMedicalAssist/intelMedicalAssist?sysCode=1001039
+
+**打包注意事项**：
+- `pages.json` 中只保留 `intelMedicalAssist/intelMedicalAssist` 路径
+- 打包时需将顶部医院名称置空
+
+---
+
+## 新医院上线检查清单
+
+- [ ] 是否完善授权模式
+- [ ] 报告是否支持下载
+- [ ] 修改手机号的 OCR 识别（禁止后端接口模式）
