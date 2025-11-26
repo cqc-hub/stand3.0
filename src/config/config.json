@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001095",
+  "sysCode": "1001098",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -496,6 +496,17 @@
       "h5AppidDisabledInTest": true,
       "isStartComeTest": false,
       "isSearchInHos": true,
+      "isOpenOcr": false
+    },
+   "1001098": {
+      "wxAppid": "wxe57689990fa308f8",
+      "h5Appid": "",
+      "alipayAppid": "",
+      "isvAlipayAppid": "",
+      "name": "桂中医赛院附属中医门诊部",
+      "h5AppidDisabledInTest": true,
+      "isStartComeTest": false,
+      "isSearchInHos": false,
       "isOpenOcr": false
     },
     "2001004": {
