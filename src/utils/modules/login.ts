@@ -154,26 +154,29 @@ export class GStores {
     }
 
     let isSuccess = true;
-    // const oldData = this.globalStore.flagCaches[typeFlag];
-    // if (oldData) {
-    //   return oldData;
-    // }
+    const oldData = this.globalStore.flagCaches[typeFlag];
+    if (oldData) {
+      return oldData;
+    }
 
     let { result } = await api
       .getSysAppMore({
         typeFlag,
       })
-      .catch(() => {
-        isSuccess = false;
-        return {} as any;
-      });
+      .catch((err = {}) => {
+        const { innerMessage = '' } = err;
 
-    if (!result) {
-      result = {
-        title: '',
-        content: '未获取到协议 ' + typeFlag,
-      };
-    }
+        if (!innerMessage.includes('查无此协议')) {
+          isSuccess = false;
+        }
+
+        return {
+          result: {
+            title: '',
+            content: '未获取到协议 ' + typeFlag,
+          },
+        };
+      });
 
     const title = result.title;
     const content = HTMLParser(result.content);
