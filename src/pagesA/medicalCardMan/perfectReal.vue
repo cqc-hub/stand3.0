@@ -385,15 +385,7 @@
 
     // const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
 
-    // formData 值和页面渲染列表key 对应
-    if (
-      formData.value[`idType`] === '01' &&
-      formData.value['idCard'] &&
-      !idValidator.checkIdCardNo(formData.value['idCard'])
-    ) {
-      gStores.messageStore.showMessage('请输入正确的身份证号码', 3000);
-      return
-    }
+   
     const {
       browser: { source },
     } = gStores.globalStore;

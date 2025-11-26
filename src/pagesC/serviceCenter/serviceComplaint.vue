@@ -1,7 +1,11 @@
 <template>
-  <g-flag isShowFg typeFg="1263" />
   <view class="g-page">
     <view class="g-container">
+      <g-flag
+        isShowFg
+        typeFg="1263"
+        v-if="gStores.globalStore.sysCode !== '1001058'"
+      />
       <g-choose-pat
         v-if="options.selectRecords === '2'"
         @choose-pat="patChange"
@@ -14,18 +18,24 @@
         bodyBold
         ref="gform"
       />
-
       <ImgUpload
         v-if="options?.selectRecords === '1' || options?.isAnonymous === '1'"
         v-model:uploadImgList="uploadImgList"
         :count="3"
       />
-
-      <button @click="gform.submit" class="btn btn-primary ml32 mr32 mt32">
+    </view>
+    <view class="g-footer flex">
+      <button
+        v-if="options?.entryType == '1'"
+        @click="gotoRecord"
+        class="btn btn-normal btn-border ml8 mt32 flex1"
+      >
+        反馈记录
+      </button>
+      <button @click="gform.submit" class="btn btn-primary mr8 mt32 flex2">
         提交
       </button>
     </view>
-
     <g-message />
   </view>
 </template>
@@ -33,7 +43,7 @@
 <script lang="ts" setup>
   import { shallowRef, ref, onMounted } from 'vue';
   import { onReady, onLoad } from '@dcloudio/uni-app';
-  import { generateUuid, GStores, rulePhone } from '@/utils';
+  import { generateUuid, GStores, rulePhone, useTBanner } from '@/utils';
 
   import { decryptDes } from '@/common/des';
   import type { TInstance } from '@/components/g-form/index';
@@ -57,6 +67,7 @@
     isAnonymous: '',
     compDept: '',
     selectType: 0, //1-选择就诊记录 0-不选择
+    entryType: '', // 入口类型
   });
   const uploadImgList = ref(<string[]>[]);
   const gStores = new GStores();
@@ -619,6 +630,14 @@
     formData.value.compDept = target.deptName;
   };
 
+  const gotoRecord = () => {
+    uni.reLaunch({
+      url: `/pagesC/serviceCenter/serviceCenter?selectRecords=${
+        options.value.selectRecords || (options.value.selectType ? '2' : '0')
+      }`,
+    });
+  };
+
   onMounted(() => {
     if (options.value.isAnonymous === '1') {
       gform.value.setList(tempList3);
@@ -657,6 +676,8 @@
       options.value = deQueryForUrl(deQueryForUrl(opt));
     } else if (opt?.isAnonymous) {
       options.value.isAnonymous = opt.isAnonymous;
+    }else if (opt?.entryType) {
+      options.value.entryType = opt.entryType;
     }
   });
   onReady(() => {
