@@ -615,8 +615,22 @@
     _type: 'useTBanner',
   } as TButtonConfig;
 
+  const 检查预约1001093 = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: ' ',
+    extraData: {
+      _type: 'jcyy1001093',
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+    _type: 'useTBanner',
+  } as TButtonConfig;
+
   const init = async () => {
-    useTBanner(住院点餐1001093);
+    useTBanner(检查预约1001093);
     // useTBanner(用药查询);
   };
 </script>
