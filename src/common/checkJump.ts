@@ -355,12 +355,19 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
 
       // 为了智能助医h5使用
       // #ifdef H5
-      wxH5.miniProgram.navigateTo({
-        url: item.path,
-      });
-      my.navigateTo({
-        url: item.path,
-      });
+      try {
+        wxH5.miniProgram.navigateTo({
+          url: item.path,
+        });
+        my.navigateTo({
+          url: item.path,
+        });
+      } catch (error) {
+        uni.navigateTo({
+          url: item.path,
+        });
+        console.log('报错了哈哈哈哈哈哈哈');
+      }
       // #endif
 
       break;

@@ -93,7 +93,7 @@ export const packageAuthParams = (
 
   const globalStore = useGlobalStore();
   const argsDefault = {
-    sysCode: getSysCode(),
+    sysCode: globalStore.sysCode,
     ...args,
   };
   const { isOutArgs } = payload;

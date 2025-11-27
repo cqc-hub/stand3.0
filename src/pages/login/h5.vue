@@ -60,7 +60,6 @@
     LoginUtils,
     routerJump,
   } from '@/utils';
-  import { joinQuery, getSysCode } from '@/common';
 
   import api from '@/service/api';
   import { rulePhone } from '@/utils/modules/verify';
@@ -119,7 +118,6 @@
         const reqArg = {
           cellPhoneNum,
           type: '6',
-          sysCode: getSysCode(),
         };
         isSendedVerify = true;
 
@@ -161,7 +159,6 @@
       const reqArg = {
         loginName: data.cellPhoneNum,
         password: data.password,
-        sysCode: getSysCode(),
       };
       const payload = {
         isOutArgs: true,
@@ -180,7 +177,6 @@
 
       const reqArg = {
         ...data,
-        sysCode: getSysCode(),
         accountType: '5',
       };
 

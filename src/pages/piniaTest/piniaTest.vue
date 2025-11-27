@@ -424,6 +424,15 @@
     text: '多住院记录',
   };
 
+  const aaa = {
+    path: 'pagesA/hospitalCare/choosePatient',
+    type: 'self',
+    extraData: {
+      type: '2',
+    },
+    text: '多住院记录',
+  } as TButtonConfig;
+
   const 绍兴导航: TButtonConfig = {
     type: 'otherProgram',
     path: 'pages/index/index',
@@ -630,7 +639,8 @@
   } as TButtonConfig;
 
   const init = async () => {
-    useTBanner(检查预约1001093);
+    useTBanner(medicineDetail);
+    // useTBanner(检查预约1001093);
     // useTBanner(用药查询);
   };
 </script>
