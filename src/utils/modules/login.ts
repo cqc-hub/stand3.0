@@ -1081,8 +1081,6 @@ class HarmonyHandler extends LoginUtils implements LoginHandler {
         // cellPhoneNum: mobile,
         // legalName: userName,
       } = result;
-      console.log('---登录结果');
-      console.log(result);
 
       // this.userStore.updateCacheUser({
       //   mobile,
