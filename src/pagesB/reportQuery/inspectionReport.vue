@@ -182,9 +182,7 @@
                   (pageProps.isDownloadRepor === '1' &&
                     pageProps.isGraphic == 1 &&
                     gStores.globalStore.sysCode !== '1001035') ||
-                  item?.pdfPath ||
-                  (gStores.globalStore.sysCode === '1001035' &&
-                    examineReportList.pdfPath)
+                  item?.pdfPath
                 "
               >
                 <view class="icon-font ico_sy_paper1"></view>
@@ -624,29 +622,28 @@
   };
 
   const goReportPdf = (item) => {
-    let { repId, repName, pdfPath } = item;
-    const { pdfPath: pdfPath1001035, pdfType } = examineReportList.value;
+    let { repId, repName, pdfPath, pdfType } = item;
 
-    if (['1001035'].includes(gStores.globalStore.sysCode) && pdfPath1001035) {
-      // pdf PDF JPG jpg
-      if (pdfType && ['JPG', 'jpg'].includes(pdfType)) {
-        uni.previewImage({
-          urls: [pdfPath1001035],
+    if (pdfPath) {
+      if (['1001035'].includes(gStores.globalStore.sysCode)) {
+        // pdf PDF JPG jpg
+        if (pdfType && ['JPG', 'jpg'].includes(pdfType)) {
+          uni.previewImage({
+            urls: [pdfPath],
+          });
+          return;
+        }
+        cacheStore.changeCacheData(pdfPath);
+
+        uni.navigateTo({
+          url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
+            name: '',
+            type: 'cache',
+          }),
         });
         return;
       }
-      cacheStore.changeCacheData(pdfPath1001035);
 
-      uni.navigateTo({
-        url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
-          name: '',
-          type: 'cache',
-        }),
-      });
-      return;
-    }
-
-    if (pdfPath) {
       if (['1001048'].includes(gStores.globalStore.sysCode)) {
         useTBanner({
           type: 'h5',
@@ -676,6 +673,7 @@
       });
       return;
     }
+
     const { reportType } = pageProps.value;
     repId = encodeURIComponent(encryptDes(repId + '', 'phsDesKey'));
     uni.navigateTo({

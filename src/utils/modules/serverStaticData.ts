@@ -646,7 +646,7 @@ export class ServerStaticData {
       if (gStores.globalStore.ev === 'alipay') {
         arg.source = 2;
       } else if (gStores.globalStore.ev === 'web') {
-        arg.source = 3;
+        arg.source = 5;
       } else if (gStores.globalStore.ev === 'wx') {
         arg.source = 1;
       }
