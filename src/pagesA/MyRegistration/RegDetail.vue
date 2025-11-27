@@ -325,7 +325,7 @@
 
       <button
         v-if="isShowRegCancel(_d)"
-        @click="refoundOrder"
+        @click="cancelOrder"
         class="btn g-border"
         :class="{
           [isShowRegPay(_d) ? 'btn-normal' : 'btn-plain btn-error']: 1,
