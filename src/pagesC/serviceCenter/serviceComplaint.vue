@@ -530,6 +530,7 @@
       args = {
         ...options.value,
         ...data,
+        source: gStores.globalStore.browser.source,
         openIds: [
           {
             source: gStores.globalStore.browser.source,
@@ -545,6 +546,7 @@
       args = {
         ...options.value,
         ...data,
+        source: gStores.globalStore.browser.source,
         openIds: [
           {
             source: gStores.globalStore.browser.source,
