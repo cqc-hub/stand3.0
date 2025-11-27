@@ -66,6 +66,11 @@ const baseApi = {
       showMessage: false,
       hideLoading: true,
     }),
+    getSysAppMores: (data) =>
+    service.post<any>('/phs-base/sysCode/getSysAppMores', parm(data), {
+      showMessage: false,
+      hideLoading: true,
+    }),
 
   complainsAndSuggestions: (data) =>
     service.post('/phs-base/complains/complainsAndSuggestions', parm(data)),

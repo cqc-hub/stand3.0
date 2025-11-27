@@ -189,6 +189,12 @@ const globalStore = defineStore('global', {
         title,
       };
     },
+    setFlagsCaches(flags) {
+      // this.flagCaches[key] = {
+      //   content,
+      //   title,
+      // };
+    },
 
     clearFlagCaches() {
       this.flagCaches = {};

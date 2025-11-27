@@ -53,7 +53,6 @@
       wx.env.USER_DATA_PATH +
       '/' +
       name +
-      '图文报告' +
       new Date().getTime() +
       '.pdf';
     uni.request({

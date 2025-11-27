@@ -705,8 +705,14 @@ export interface ISystemConfig_ {
     tabJumpConfig?: {
       title?: string; //页面标题，无则标题展示空
       showFlag?: number; //页面底部协议，无则不展示
-      entryType?: string;
+      entryType?: string; //多次使用需跟页面路由参数入口一致，无则取第一项
       tabs?: Array<TButtonConfig & { bgSrc?: string; subTitle?: string }>; //bgSrc背景图
+    }[];
+    //h5通用协议阅读页
+    flagReadConfig?: {
+      entryType?: string; //多次使用需跟页面路由参数入口一致，无则取第一项
+      flag?: string; //协议号
+      footerBtn?: Array<TButtonConfig & { btnType?: string; flex?: string }>; //底部按钮,btnType 按钮类型 flex: 按钮宽度比例
     }[];
   };
 }
@@ -832,7 +838,6 @@ export interface IRegSearchHistoryItem {
   label: string;
   hot?: '1'; // 标记 🔥
 }
-
 
 export interface IReportConfigTab {
   headerType: string;

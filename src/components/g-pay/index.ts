@@ -287,6 +287,9 @@ export const aliPayOldSystemPayType = () => {
       case '1001071':
         channel = 'CITIC_WX_JSAPI';
         break;
+      case '1001036':
+        channel = 'BCM_WX_MINI';
+        break;
 
       default:
         channel = 'WX_MINI';

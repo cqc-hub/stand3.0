@@ -524,6 +524,7 @@
     let args = {
       ...data,
       photo: uploadImgList.value.toString(),
+      source: gStores.globalStore.browser.source,
     };
     if (options.value.selectRecords === '1') {
       args = {
@@ -676,7 +677,7 @@
       options.value = deQueryForUrl(deQueryForUrl(opt));
     } else if (opt?.isAnonymous) {
       options.value.isAnonymous = opt.isAnonymous;
-    }else if (opt?.entryType) {
+    } else if (opt?.entryType) {
       options.value.entryType = opt.entryType;
     }
   });
