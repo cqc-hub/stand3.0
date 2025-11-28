@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001052",
+  "sysCode": "1001035",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -11,16 +11,9 @@
       "isSearchInHos": true,
       "isOpenOcr": true
     },
-    "1001099": {
-      "wxAppid": "wx64d48b1de1c41cb8",
-      "name": "郑州市中医院",
-      "isStartComeTest": false,
-      "isSearchInHos": true,
-      "isOpenOcr": false
-    },
     "1001035": {
       "wxAppid": "wxacb96ee66c3dee84",
-      "h5Appid": "wxa5cb8c1829e5603e",
+      "h5Appid1": "wxa5cb8c1829e5603e",
       "alipayAppid": "2021003104670597",
       "isvAlipayAppid": "2021003104670597",
       "harmonyBundleName": "com.atomicservice.6917564602329951506",
@@ -507,6 +500,13 @@
       "h5AppidDisabledInTest": true,
       "isStartComeTest": false,
       "isSearchInHos": false,
+      "isOpenOcr": false
+    },
+      "1001099": {
+      "wxAppid": "wx64d48b1de1c41cb8",
+      "name": "郑州市中医院",
+      "isStartComeTest": false,
+      "isSearchInHos": true,
       "isOpenOcr": false
     },
     "2001004": {

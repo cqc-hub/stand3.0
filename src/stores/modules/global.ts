@@ -190,10 +190,14 @@ const globalStore = defineStore('global', {
       };
     },
     setFlagsCaches(flags) {
-      // this.flagCaches[key] = {
-      //   content,
-      //   title,
-      // };
+      let needCacheFlags = {} as any;
+      flags.forEach((item) => {
+        needCacheFlags[item.typeFlag] = {
+          content: item.content,
+          title: item.title,
+        };
+      });
+      this.flagCaches = needCacheFlags;
     },
 
     clearFlagCaches() {

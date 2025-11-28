@@ -155,33 +155,52 @@ export class GStores {
 
     let isSuccess = true;
     const oldData = this.globalStore.flagCaches[typeFlag];
+
     if (oldData) {
       return oldData;
     }
+    let { result } = await api.getSysAppMores({ typeFlag }).catch(() => {
+      isSuccess = false;
+      return {} as any;
+    });
+    let flagData = result.find((item) => item.typeFlag === typeFlag);
 
-    let { result } = await api
-      .getSysAppMore({
-        typeFlag,
-      })
-      .catch((err = {}) => {
-        const { innerMessage = '' } = err;
+    if (!flagData) {
+      flagData = {
+        title: '',
+        content: '未获取到协议 ' + typeFlag,
+      };
+    }
+    const title = flagData.title;
+    const content = HTMLParser(flagData.content);
 
-        if (!innerMessage.includes('查无此协议')) {
-          isSuccess = false;
-        }
+    isSuccess && this.globalStore.setFlagsCaches(result);
 
-        return {
-          result: {
-            title: '',
-            content: '未获取到协议 ' + typeFlag,
-          },
-        };
-      });
+    // const oldData = this.globalStore.flagCaches[typeFlag];
+    // if (oldData) {
+    //   return oldData;
+    // }
 
-    const title = result.title;
-    const content = HTMLParser(result.content);
+    // let { result } = await api
+    //   .getSysAppMore({
+    //     typeFlag,
+    //   })
+    //   .catch(() => {
+    //     isSuccess = false;
+    //     return {} as any;
+    //   });
 
-    isSuccess && this.globalStore.setFlagCaches(typeFlag, { title, content });
+    // if (!result) {
+    //   result = {
+    //     title: '',
+    //     content: '未获取到协议 ' + typeFlag,
+    //   };
+    // }
+
+    // const title = result.title;
+    // const content = HTMLParser(result.content);
+
+    // isSuccess && this.globalStore.setFlagCaches(typeFlag, { title, content });
 
     return { title, content };
   }
@@ -215,8 +234,9 @@ export class LoginUtils extends GStores {
   //判断是否需要前往手机号登录
   async judgeLoginByPhoneVerify() {
     let flag = false;
-    const { isLoginByPhoneVerify } =
-      await ServerStaticData.getSystemConfig('RestOfConfig');
+    const { isLoginByPhoneVerify } = await ServerStaticData.getSystemConfig(
+      'RestOfConfig'
+    );
     if (isLoginByPhoneVerify === '1') {
       const { confirm } = await new Promise<any>((closeCallBack) => {
         this.messageStore.showMessage(
@@ -1120,8 +1140,9 @@ export class Login extends LoginUtils {
 export class PatientUtils extends LoginUtils {
   usePatDynamicCode = {
     async isOpen(path: string) {
-      const { GlobalConfig } =
-        await cacheUtil.getSystemConfig('GlobalConfig')();
+      const { GlobalConfig } = await cacheUtil.getSystemConfig(
+        'GlobalConfig'
+      )();
 
       return (GlobalConfig.refreshQrCode || []).includes(path);
     },
@@ -1434,8 +1455,9 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } =
-        await this.regHealthCardByPatInfo(data);
+      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
+        data
+      );
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;
@@ -1487,8 +1509,9 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } =
-        await this.regHealthCardByPatInfo(data);
+      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
+        data
+      );
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;

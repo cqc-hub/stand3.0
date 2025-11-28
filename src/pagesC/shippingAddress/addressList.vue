@@ -163,6 +163,9 @@
     if (verifyEmoji(detailInfo)) {
       return gStores.messageStore.showMessage('地址不支持输入表情符号', 1500);
     }
+    if (data.detailInfo.length < 7) {
+      return gStores.messageStore.showMessage('详细地址应不少于7个字', 1500);
+    }
 
     await api.addExpressAddress({
       herenId: gStores.globalStore.herenId,

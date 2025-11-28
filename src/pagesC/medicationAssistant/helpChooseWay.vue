@@ -42,9 +42,7 @@
         >
           <block>
             <block v-if="aimList.length > 1">
-              <view id="_express" class="g-bold f36">
-                选择快递方式
-              </view>
+              <view id="_express" class="g-bold f36">选择快递方式</view>
 
               <view class="mt24 pb32 g-border-bottom">
                 <Sel-Express
@@ -392,7 +390,7 @@
       hosId = '13014';
     }
     const expressCompany = aimValue.value[0];
-    console.log('aimValue.value',aimValue.value)
+    console.log('aimValue.value', aimValue.value);
 
     const detailsAddressData = addressList.value[0];
     let detailsAddress = '';
@@ -491,9 +489,19 @@
 
   const gotoExpressPay = async (args) => {
     if (!feeDetail.value.totalCost || feeDetail.value.totalCost === '0') {
-      gStores.messageStore.showMessage('请重新获取费用信息', 3000);
+      gStores.messageStore.showMessage('请重新获取费用信息', 2000);
+      setTimeout(async () => {
+        if (
+          aimValue?.value &&
+          addressList?.value &&
+          pageConfig.value.isPayOnline
+        ) {
+          await getExpressFee();
+        }
+      }, 3000);
       return;
     }
+
     const { title, content } = await gStores.getSysAppMore('504');
     const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
       gStores.messageStore.showMessage(content, 0, {

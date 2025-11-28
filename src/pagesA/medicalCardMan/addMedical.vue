@@ -1289,7 +1289,7 @@
     verifyCode = formData.value[formKey.verifyCode];
 
     const defaultValue = await getDefaultFormData(
-      pageProps.value.pageType || 'addPatient'
+      pageProps.value.pageType || 'addPatient',formData.value
     );
     Object.assign(formData.value, defaultValue);
 

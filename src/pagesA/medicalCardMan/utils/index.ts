@@ -323,8 +323,9 @@ export const tempList: TInstance[] = [
     key: formKey.upIdCard,
     validator: async (v: unknown, item: any) => {
       if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
-        const { ageGuardian } =
-          await ServerStaticData.getSystemConfig('person');
+        const { ageGuardian } = await ServerStaticData.getSystemConfig(
+          'person'
+        );
 
         const info = idValidator.getIdCardInfo(v);
 
@@ -592,7 +593,8 @@ export const patCardDetailTempList: TInstance[] = [
  * @returns
  */
 export const getDefaultFormData = async (
-  pageType: 'addPatient' | 'perfectReal'
+  pageType: 'addPatient' | 'perfectReal',
+  formData?: Record<string, any>
 ) => {
   const pageConfig = await ServerStaticData.getSystemConfig('person');
   const data: Record<string, any> = {};
@@ -600,12 +602,15 @@ export const getDefaultFormData = async (
   const { ev } = gStores.globalStore;
 
   // 默认身份证
-  if (!data[formKey.idType]) {
+  if (!data[formKey.idType] && (!formData || !formData[formKey.idType])) {
     data[formKey.idType] = '01';
   }
 
   // 默认成人,儿童 有证件
-  if (!data[formKey.patientType]) {
+  if (
+    !data[formKey.patientType] &&
+    (!formData || !formData[formKey.patientType])
+  ) {
     data[formKey.patientType] = '-1';
   }
 
@@ -636,7 +641,10 @@ export const getDefaultFormData = async (
       }
     }
   }
-  if (pageType === 'perfectReal' && pageConfig?.formNotDisableKeysInQuickAddPatPage) {
+  if (
+    pageType === 'perfectReal' &&
+    pageConfig?.formNotDisableKeysInQuickAddPatPage
+  ) {
     pageConfig?.formNotDisableKeysInQuickAddPatPage.forEach((item) => {
       delete data[item.key];
     });
@@ -922,8 +930,9 @@ export const useProgramPaySign = () => {
     regDialogConfirmSign,
     isSignExist,
     async initSign() {
-      const { isPayWithoutSecretAuth } =
-        await ServerStaticData.getSystemConfig('person');
+      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
+        'person'
+      );
 
       if (isPayWithoutSecretAuth === '1') {
         // regDialogConfirmSign.value.show();
@@ -934,8 +943,9 @@ export const useProgramPaySign = () => {
     async goPaySign(patientId, payload = {} as TSingnPayload) {
       const { type = 'addPat', cb } = payload;
 
-      const { isPayWithoutSecretAuth } =
-        await ServerStaticData.getSystemConfig('person');
+      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
+        'person'
+      );
       if (isPayWithoutSecretAuth !== '1') {
         return;
       }
