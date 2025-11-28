@@ -41,23 +41,6 @@
               {{ toggleQrLabel }}
             </view>
           </view>
-          <!-- <view
-            @click="chooseAction"
-            class="flex-normal g-border toggle-card color-blue f26"
-          >
-            <text
-              :class="{
-                'icon-reverse': showHealthCode,
-              }"
-              class="iconfont qr-toggle-icon color-blue"
-            >
-              &#xe6f9;
-            </text>
-
-            <view class="f26">
-              {{ '切换就诊人' }}
-            </view>
-          </view> -->
         </view>
 
         <view
@@ -77,64 +60,42 @@
               class="logo"
             />
           </view>
+
           <view class="pt32 mb12" v-if="isShowRefreshQrCode">
             <refreshQrcode :patientId="clickPat.patientId" />
           </view>
 
           <view v-else class="card-qrcode mt20 pb20">
-            <block>
-              <block v-if="!showHealthCode">
-                <view class="mb40 my-display-none">
-                  <w-barcode
-                    :options="barCodeOpt"
-                    @generate="barCodeGenerate"
-                    ref="refBarCode"
-                  />
-                </view>
-
-                <view class="w-full mb40">
-                  <view class="pr32 pl32">
-                    <img
-                      :src="barCodeImg"
-                      class="bar-code-img w-full"
-                      lazy-load
-                    />
-                  </view>
-                </view>
-              </block>
-
-              <!-- <w-qrcode :options="qrOptions" /> -->
-              <uv-qrcode
-                v-if="qrOptions.code"
-                :options="qrOptions2"
-                :value="qrOptions.code"
-                @change="qrComplete"
-                size="380rpx"
-              />
-            </block>
-          </view>
-
-          <!-- <view class="info-content">
-            <view class="g-flex-rc-cc info-name mb12">
-              <view class="f32">
-                {{
-                  isNameEncry ? clickPat.patientNameEncry : clickPat.patientName
-                }}
+            <template v-if="!showHealthCode">
+              <view class="mb40 my-display-none">
+                <w-barcode
+                  :options="barCodeOpt"
+                  @generate="barCodeGenerate"
+                  ref="refBarCode"
+                />
               </view>
 
-              <text @click="eyesClick" class="iconfont eyes-icon color-888">
-                {{ isNameEncry ? '&#xe6d4;' : ' &#xe6db;' }}
-              </text>
-            </view>
+              <view class="w-full mb40">
+                <view class="pr32 pl32">
+                  <img
+                    :src="barCodeImg"
+                    class="bar-code-img w-full"
+                    lazy-load
+                  />
+                </view>
+              </view>
+            </template>
 
-            <view class="g-flex-rc-cc color-888 f28 mb12">
-              {{ clickPat._showId }}
-            </view>
+            <!-- <w-qrcode :options="qrOptions" /> -->
+            <uv-qrcode
+              v-if="qrOptions.code"
+              :options="qrOptions2"
+              :value="qrOptions.code"
+              @change="qrComplete"
+              size="380rpx"
+            />
+          </view>
 
-            <view class="g-flex-rc-cc mt24">
-              <text @click="goDetail" class="color-blue f28">更多信息</text>
-            </view>
-          </view> -->
           <!-- #ifdef  MP-WEIXIN -->
           <view
             v-if="showHealthCode"
@@ -182,15 +143,6 @@
           </view>
         </view>
       </view>
-
-      <!-- <view v-if="pageProps.showNavBar === '1'">
-        <view class="safe-height" />
-        <view class="safe-height" />
-        <view class="safe-height" />
-        <view class="safe-height" />
-        <view class="safe-height" />
-        <view class="safe-height" />
-      </view> -->
     </scroll-view>
 
     <g-message />
@@ -212,7 +164,7 @@
 <script lang="ts" setup>
   import { onMounted, ref, computed } from 'vue';
   import { storeToRefs } from 'pinia';
-  import { onLoad, onReady } from '@dcloudio/uni-app';
+  import { onLoad } from '@dcloudio/uni-app';
 
   import { IPat, isAreaProgram } from '@/stores';
   import {
@@ -239,7 +191,7 @@
     {} as {
       showNavBar?: '1';
       dp?: '1'; // 更新 clickPat 为 patChoose
-      _showId?:'';
+      _showId?: '';
       patientName?: '';
     }
   );
@@ -492,11 +444,11 @@
     isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
       'pagesA/medicalCardMan/electronicMedicalCard'
     );
-    isPageRender.value = true;
     options.value.code = isAreaProgram()
       ? clickPat.value.idCardEncry
       : clickPat.value.healthQrCodeText || clickPat.value._showId;
     barCodeOpt.value.code = options.value.code;
+    isPageRender.value = true;
   };
 
   onMounted(async () => {

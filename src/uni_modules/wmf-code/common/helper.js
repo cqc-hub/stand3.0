@@ -48,10 +48,10 @@ function getUUid(len = 32, firstU = true, radix = null) {
 		return uuid.join('');
 	}
 }
-function platform () {
-	let val = null;
+function platform() {
+	let val = 'H5';
 	// #ifdef  VUE3
-	val = 'VUE3'
+	// val = 'VUE3'
 	// #endif
 	// #ifdef  APP-PLUS
 	val = 'APP-PLUS'
@@ -95,7 +95,7 @@ function platform () {
 	// #ifdef  QUICKAPP-WEBVIEW-HUAWEI
 	val = 'QUICKAPP-WEBVIEW-HUAWEI'
 	// #endif
-	
+
 	return val;
 
 }
