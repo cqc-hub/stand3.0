@@ -154,53 +154,51 @@ export class GStores {
     }
 
     let isSuccess = true;
-    const oldData = this.globalStore.flagCaches[typeFlag];
-
-    if (oldData) {
-      return oldData;
-    }
-    let { result } = await api.getSysAppMores({ typeFlag }).catch(() => {
-      isSuccess = false;
-      return {} as any;
-    });
-    let flagData = result.find((item) => item.typeFlag === typeFlag);
-
-    if (!flagData) {
-      flagData = {
-        title: '',
-        content: '未获取到协议 ' + typeFlag,
-      };
-    }
-    const title = flagData.title;
-    const content = HTMLParser(flagData.content);
-
-    isSuccess && this.globalStore.setFlagsCaches(result);
 
     // const oldData = this.globalStore.flagCaches[typeFlag];
     // if (oldData) {
     //   return oldData;
     // }
-
-    // let { result } = await api
-    //   .getSysAppMore({
-    //     typeFlag,
-    //   })
-    //   .catch(() => {
-    //     isSuccess = false;
-    //     return {} as any;
-    //   });
-
-    // if (!result) {
-    //   result = {
+    // let { result } = await api.getSysAppMores({ typeFlag }).catch(() => {
+    //   isSuccess = false;
+    //   return {} as any;
+    // });
+    // let flagData = result.find((item) => item.typeFlag === typeFlag);
+    // if (!flagData) {
+    //   flagData = {
     //     title: '',
     //     content: '未获取到协议 ' + typeFlag,
     //   };
     // }
+    // const title = flagData.title;
+    // const content = HTMLParser(flagData.content);
+    // isSuccess && this.globalStore.setFlagsCaches(result);
 
-    // const title = result.title;
-    // const content = HTMLParser(result.content);
+    const oldData = this.globalStore.flagCaches[typeFlag];
+    if (oldData) {
+      return oldData;
+    }
 
-    // isSuccess && this.globalStore.setFlagCaches(typeFlag, { title, content });
+    let { result } = await api
+      .getSysAppMore({
+        typeFlag,
+      })
+      .catch(() => {
+        isSuccess = false;
+        return {} as any;
+      });
+
+    if (!result) {
+      result = {
+        title: '',
+        content: '未获取到协议 ' + typeFlag,
+      };
+    }
+
+    const title = result.title;
+    const content = HTMLParser(result.content);
+
+    isSuccess && this.globalStore.setFlagCaches(typeFlag, { title, content });
 
     return { title, content };
   }
