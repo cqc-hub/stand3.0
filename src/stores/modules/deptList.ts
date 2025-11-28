@@ -137,7 +137,7 @@ const deptStore = defineStore('_dept', {
     changeActiveLv3(item: IDeptLv3) {
       this.activeLv3 = item;
     },
-    
+
   },
 });
 
