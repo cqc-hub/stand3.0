@@ -93,7 +93,7 @@ export const packageAuthParams = (
 
   const globalStore = useGlobalStore();
   const argsDefault = {
-    sysCode: getSysCode(),
+    sysCode: globalStore.sysCode,
     ...args,
   };
   const { isOutArgs } = payload;
@@ -1101,8 +1101,6 @@ class HarmonyHandler extends LoginUtils implements LoginHandler {
         // cellPhoneNum: mobile,
         // legalName: userName,
       } = result;
-      console.log('---登录结果');
-      console.log(result);
 
       // this.userStore.updateCacheUser({
       //   mobile,

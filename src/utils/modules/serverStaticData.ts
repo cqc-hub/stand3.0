@@ -304,20 +304,27 @@ export const useTBanner = async (
       // 新增判断 如果path里面包含plugin 就不用拼接了
       url = fullUrl;
     }
+    let a = true;
     // #ifdef H5
-    wxH5.miniProgram.navigateTo({
-      url: url,
-    });
-    my.navigateTo({
-      url: url,
-    });
+    a = false;
+    try {
+      wxH5.miniProgram.navigateTo({
+        url: url,
+      });
+      my.navigateTo({
+        url: url,
+      });
+    } catch (error) {
+      a = true;
+    }
     // #endif
-    // #ifndef H5
-    // @ts-expect-error
-    uni[routeType]({
-      url,
-    });
-    // #endif
+
+    if (a) {
+      // @ts-expect-error
+      uni[routeType]({
+        url,
+      });
+    }
   } else if (type === 'netHospital') {
     // @ts-expect-error
     uni[routeType]({
@@ -646,7 +653,7 @@ export class ServerStaticData {
       if (gStores.globalStore.ev === 'alipay') {
         arg.source = 2;
       } else if (gStores.globalStore.ev === 'web') {
-        arg.source = 3;
+        arg.source = 5;
       } else if (gStores.globalStore.ev === 'wx') {
         arg.source = 1;
       }

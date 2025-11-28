@@ -901,6 +901,20 @@ const scJson: Record<string, ISConfig> = {
 
     medicalMHelp: {
       wx: {
+        // 测试
+        // medicalNation: {
+        //   appId: 'wxe183cd55df4b4369',
+        //   path: 'auth/pages/bindcard/auth/index',
+        //   pathExtraData: {
+        //     openType: 'getAuthCode',
+        //     bizType: '04107',
+        //     cityCode: '610600', // ?
+        //     channel: 'AAFjWNlsD_YjoGPGECfQP-LW', // ?
+        //     orgChnlCrtfCodg:
+        //       'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtVok110ttUbcrc5BbIj9rW',
+        //     orgCodg: 'H61060200365',
+        //     orgAppId: '1J600B2FR08K4460C80A00004B274D74',
+        //   },
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
           path: 'auth/pages/bindcard/auth/index',
@@ -912,7 +926,7 @@ const scJson: Record<string, ISConfig> = {
             orgChnlCrtfCodg:
               'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtVok110ttUbcrc5BbIj9rW',
             orgCodg: 'H61060200365',
-            orgAppId: '1J600B2FR08K4460C80A00004B274D74',
+            orgAppId: '1JAQFM29V01U8C430B0A0000C1B4E028',
           },
         },
         isMedicalOrder: '1',

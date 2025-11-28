@@ -145,7 +145,7 @@
       key: 'detailedAddress',
       emptyMessage: '请输入街道、小区、门牌号等',
       rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
-      async validator(v, item) {
+      async validator(v: string, item) {
         if (verifyEmoji(v)) {
           return {
             success: false,
@@ -155,6 +155,13 @@
           return {
             success: false,
             message: '详细地址应不少于7个字',
+          };
+        }
+
+        if (v.length <= 7) {
+          return {
+            success: false,
+            message: '详细地址不少于8个字',
           };
         }
         return {
