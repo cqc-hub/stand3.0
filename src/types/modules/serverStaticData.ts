@@ -123,7 +123,7 @@ export interface ISystemConfig_ {
     /** 医生挂号展示医院名那儿多展示一下科室 */
     isShowHosNameWithDeptName?: '1';
     /** 挂号确认页面确认挂号前是否需要展示就诊提示 */
-    isConfirmOrderWithDeptTip?: '1';
+    isConfirmOrderWithDeptTip?: '1' | '2'; // 1 科室页面不弹 2 科室、挂号确认页面均弹
     /** 挂号确认页面点击我已阅读时候需要弹窗 */
     isConfirmOrderWithConfirmDialog?: '1';
     /** 挂号确认页面 去预约变成去支付&跳到详情后自动拉起支付 */

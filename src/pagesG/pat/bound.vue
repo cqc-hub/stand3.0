@@ -50,7 +50,7 @@
     const { herenId: otherHerenId, patientId } = item;
 
     const { confirm } = await apiAsync(uni.showModal, {
-      content: '确认解绑?',
+      content: '解绑后该账号将无法为您进行预约挂号等操作，是否立即解绑?',
     });
 
     if (!confirm) {
@@ -73,6 +73,7 @@
       otherHerenId,
       patientId,
       source: gStores.globalStore.browser.source,
+      type: '1',
     });
 
     if (otherHerenId === gStores.globalStore.herenId) {

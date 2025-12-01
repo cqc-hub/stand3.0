@@ -1054,7 +1054,10 @@
     });
 
     const { isConfirmOrderWithDeptTip } = pageConfig.value;
-    if (isConfirmOrderWithDeptTip === '1') {
+    if (
+      isConfirmOrderWithDeptTip &&
+      ['1', '2'].includes(isConfirmOrderWithDeptTip)
+    ) {
       const { result: { promptMessage = '' } = {} } = await api
         .getDeptDetail({
           hosDeptId: props.value.hosDeptId,
