@@ -286,13 +286,19 @@
           return true;
         }
       }
-      // if (gStores.globalStore.sysCode === '1001052') {
-      //   const { hosId } = item;
+      if (gStores.globalStore.sysCode === '1001052') {
+        const { hosId } = item;
 
-      //   if (['13001'].includes(hosId)) {
-      //     return true;
-      //   }
-      // }
+        if (['13001'].includes(hosId)) {
+          try {
+            if (JSON.parse(item?.extend || '').areaId) {
+              return true;
+            }
+          } catch (e) {
+            return false;
+          }
+        }
+      }
     }
 
     return false;

@@ -189,7 +189,7 @@ export class GStores {
         isSuccess = false;
         return {} as any;
       });
-    let initialText = result.content;
+    let initialText = result?.content||'';
     if (!result) {
       result = {
         title: '',

@@ -40,9 +40,10 @@ export type IRegistrationCardItem = {
   schQukCategor: string;
   _statusLabel: string;
   regWay?: string; // 挂号途径 小程序、自助机、诊间预约等
+  extend?: string;
 };
 
-//多院区院内导航（仅绍兴）
+//多院区院内导航 根据hosId
 export const HosNavData = {
   12930: () => {
     return {
@@ -89,12 +90,17 @@ export const HosNavData = {
   },
 
   13001: (item: IRegistrationCardItem) => {
-    return {
-      appId: 'wx0fb39a1dc27c5e6d',
-      path: `pages/index?id=QFadbKUMCl&appKey=g8E7Yc23Tm&poi=${item.visitingArea.replace(/\s*[\(（][^)）]*[\)）]\s*$/, '')}`,
-      text: '院内导航',
-      type: 'otherProgram',
-    };
+    try {
+      let { areaId } = JSON.parse(item?.extend || '');
+      return {
+        appId: 'wx0fb39a1dc27c5e6d',
+        path: `pages/index?id=QFadbKUMCl&appKey=g8E7Yc23Tm&poi=${areaId}`,
+        text: '院内导航',
+        type: 'otherProgram',
+      };
+    } catch (e) {
+      return null;
+    }
   },
   // #endif
   // #ifdef  MP-ALIPAY
