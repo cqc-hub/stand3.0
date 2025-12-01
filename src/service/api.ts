@@ -66,7 +66,7 @@ const baseApi = {
       showMessage: false,
       hideLoading: true,
     }),
-    getSysAppMores: (data) =>
+  getSysAppMores: (data) =>
     service.post<any>('/phs-base/sysCode/getSysAppMores', parm(data), {
       showMessage: false,
       hideLoading: true,
@@ -817,6 +817,12 @@ const regApi = {
       reportCmPV_YLName: '挂号记录查询',
     }),
 
+  getDeptLaterList: <T = any[]>(data: any) =>
+    service.post<T>('/phs-reg/reg/getDeptLaterList', parm(data), {
+      hideLoading: false,
+      reportCmPV_YLName: '挂号记录查询',
+    }),
+
   hosRegOrderList: <T>(data: any) =>
     service.post<T>('/phs-reg/reg/hosRegOrderList', parm(data), {
       hideLoading: false,
@@ -826,7 +832,13 @@ const regApi = {
   getDeptList: (data: any) =>
     service.post('/phs-reg/reg/getDeptList', parm(data), {
       hideLoading: false,
-      reportCmPV_YLName: '科室介绍',
+      reportCmPV_YLName: '科室列表',
+    }),
+
+  getDeptTree: (data: any) =>
+    service.post('/phs-reg/reg/getDeptTree', parm(data), {
+      hideLoading: false,
+      reportCmPV_YLName: '科室列表',
     }),
 
   // 科室排班-按医生挂号

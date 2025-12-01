@@ -401,7 +401,6 @@
     const { result } = await listApi
       .value<IRegistrationCardItem[]>({
         source: gStores.globalStore.browser.source,
-        herenId: gStores.globalStore.herenId,
         searchType: tabCurrentDetail.value.searchType,
         patientId,
         cardNumber,

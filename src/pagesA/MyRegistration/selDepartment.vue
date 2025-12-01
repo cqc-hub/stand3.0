@@ -23,13 +23,26 @@
       :unNeedPosition="unNeedPosition"
       :isHide="pageProps.hideSelHos === '1'"
       @get-list="getHosList"
-      @change="getDepList"
+      @change="hosChange"
       type="selDepartment"
     />
+
     <view class="search-input" @click.prevent="goSearch">
       <view class="my-disabled">
         <uni-search-input placeholder="请输入医生/科室/症状" />
       </view>
+    </view>
+
+    <view class="g-border-bottom">
+      <g-tabs
+        v-show="tabField.length > 1"
+        v-model:value="tabCurrent"
+        :tabs="tabField"
+        :scroll="false"
+        @change="tabChange"
+        field="label"
+        style="width: 100%"
+      />
     </view>
 
     <view class="g-container hidden-scrollbar" scroll-y>
@@ -123,12 +136,39 @@
     return normalizeBannerConfig(banner);
   });
 
+  const tabField = ref<IOptions[]>([]);
+  const tabCurrent = ref(0);
+  const tabChange = () => {
+    getDepList();
+  };
+
   const init = async () => {
+    const { sysCode, isLogin } = gStores.globalStore;
     const data = await ServerStaticData.getSystemConfig('order');
     let { deptDialogBtnCannel } = data;
 
-    if (globalGl.SYS_CODE === '1001052' && pageProps.value.hosId === '13118') {
+    if (sysCode === '1001052' && pageProps.value.hosId === '13118') {
       deptDialogBtnCannel = undefined;
+    }
+
+    if (sysCode === '1001093') {
+      tabField.value = [
+        {
+          label: '按科室',
+          value: '98',
+        },
+        {
+          label: '按症状',
+          value: '99',
+        },
+      ];
+
+      if (isLogin) {
+        tabField.value.push({
+          label: '最近就诊',
+          value: '-1',
+        });
+      }
     }
 
     orderConfig.value = data;
@@ -218,8 +258,19 @@
     });
   };
 
+  let _n = false;
+  const hosChange = () => {
+    if (!_n) {
+      _n = true;
+      return;
+    }
+
+    getDepList();
+  };
+
   const getDepList = async () => {
     depList.value = [];
+    const { sysCode } = gStores.globalStore;
     const source = gStores.globalStore.browser.source;
 
     const requestArg = {
@@ -227,22 +278,55 @@
       hosId: hosId.value === '全院区' ? '' : hosId.value,
       clinicalType: props.clinicalType,
       // resType   // 预约类型：1.预约挂号，2.当日挂号
+      type: '',
     };
 
     isComplete.value = false;
     let actionApi = api.getDeptList;
-
-    if (gStores.globalStore.sysCode === '1001035' && globalGl.env === 'prod') {
-      actionApi = api.getDeptList1001035;
+    if (tabField.value.length) {
+      requestArg.type = tabField.value[tabCurrent.value]!.value;
     }
 
-    const { result } = await actionApi(requestArg).finally(() => {
-      isComplete.value = true;
-    });
+    if (sysCode === '1001035' && globalGl.env === 'prod') {
+      actionApi = api.getDeptList1001035;
+    } else if (sysCode === '1001093') {
+      actionApi = api.getDeptTree;
+    }
+
+    let result: any = {};
+
+    // 最近就诊
+    if (requestArg.type === '-1') {
+      const { result: _r } = await api.getDeptLaterList({}).finally(() => {
+        isComplete.value = true;
+      });
+
+      result = {
+        deptListLevel: '1',
+        firstDeptList: _r.map((o) => {
+          const { hosDeptId, deptName } = o;
+
+          return {
+            ...o,
+            firstHosDeptId: hosDeptId,
+            firstDeptName: deptName,
+          };
+        }),
+      };
+    } else {
+      const { result: _r = [] } = await actionApi(requestArg).finally(() => {
+        isComplete.value = true;
+      });
+
+      result = _r;
+    }
 
     if (result) {
       let { firstDeptList, deptListLevel } = result;
-      // deptListLevel = '1'
+      if (!deptListLevel) {
+        deptListLevel = '3';
+      }
+
       if (firstDeptList && firstDeptList.length) {
         loopDeptList(firstDeptList, deptListLevel);
         _loopDeptList(firstDeptList);
