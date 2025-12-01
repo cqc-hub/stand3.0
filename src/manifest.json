@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxacb96ee66c3dee84",
+    "appid": "wx3a24f824ca86d6dc",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -66,12 +66,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -81,7 +76,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003104670597",
+    "appid": "",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -108,8 +103,7 @@
           "storeFile": "/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1763103743000.p12",
           "storePassword": "0000001BFC8B5B3C076B42F630A5A14F2F64D2C3E01545CA5B8EB12247500BC58C076E3B13A01357CDAF53"
         }
-      },
-      "bundleName": "com.atomicservice.6917564602329951506"
+      }
     }
   },
   "mp-baidu": {
@@ -122,7 +116,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "江苏省中医院",
+  "name": "温州市中西医结合医院",
   "h5": {
     "optimization": {
       "treeShaking": {

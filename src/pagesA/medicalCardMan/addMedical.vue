@@ -959,7 +959,7 @@
           // 非身份证不需要民族
           isDropNation = '1';
 
-          if (['032', '15'].includes(idType)) {
+          if (['032', '15', '03'].includes(idType)) {
             _patientInfo.unshift('countries');
           }
         }
@@ -1289,7 +1289,8 @@
     verifyCode = formData.value[formKey.verifyCode];
 
     const defaultValue = await getDefaultFormData(
-      pageProps.value.pageType || 'addPatient',formData.value
+      pageProps.value.pageType || 'addPatient',
+      formData.value
     );
     Object.assign(formData.value, defaultValue);
 
