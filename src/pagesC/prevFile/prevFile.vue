@@ -52,7 +52,7 @@
     let filePath =
       wx.env.USER_DATA_PATH +
       '/' +
-      name +
+      name||'图文' +
       new Date().getTime() +
       '.pdf';
     uni.request({
