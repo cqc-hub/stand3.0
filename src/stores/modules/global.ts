@@ -35,6 +35,7 @@ interface IStateGlobal {
     [key: string]: {
       title: string;
       content: string;
+      initialText?: string;
     };
   };
 
@@ -183,10 +184,11 @@ const globalStore = defineStore('global', {
     clearIntAssistantImg() {
       this.intAssistantImg = '';
     },
-    setFlagCaches(key, { content, title }) {
+    setFlagCaches(key, { content, title, initialText }) {
       this.flagCaches[key] = {
         content,
         title,
+        initialText,
       };
     },
     setFlagsCaches(flags) {

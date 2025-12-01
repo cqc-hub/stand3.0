@@ -145,11 +145,12 @@ export class GStores {
 
   async getSysAppMore(
     typeFlag: any
-  ): Promise<{ title: string; content: string }> {
+  ): Promise<{ title: string; content: string; initialText?: string }> {
     if (!typeFlag) {
       return {
         title: '',
         content: '',
+        initialText: '', //初始内容
       };
     }
 
@@ -168,9 +169,11 @@ export class GStores {
     //   flagData = {
     //     title: '',
     //     content: '未获取到协议 ' + typeFlag,
+    //     initialText: '',
     //   };
     // }
     // const title = flagData.title;
+    // const initialText = flagData.content;
     // const content = HTMLParser(flagData.content);
     // isSuccess && this.globalStore.setFlagsCaches(result);
 
@@ -178,7 +181,6 @@ export class GStores {
     if (oldData) {
       return oldData;
     }
-
     let { result } = await api
       .getSysAppMore({
         typeFlag,
@@ -187,20 +189,21 @@ export class GStores {
         isSuccess = false;
         return {} as any;
       });
-
+    let initialText = result.content;
     if (!result) {
       result = {
         title: '',
         content: '未获取到协议 ' + typeFlag,
+        initialText: '',
       };
+      initialText = '';
     }
-
     const title = result.title;
     const content = HTMLParser(result.content);
+    isSuccess &&
+      this.globalStore.setFlagCaches(typeFlag, { title, content, initialText });
 
-    isSuccess && this.globalStore.setFlagCaches(typeFlag, { title, content });
-
-    return { title, content };
+    return { title, content, initialText };
   }
 }
 

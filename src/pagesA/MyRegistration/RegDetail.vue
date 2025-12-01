@@ -1294,7 +1294,8 @@
   const cancelOrder = async () => {
     isCancelOrderDialogShow.value = true;
     dialogContent.value = '确认取消该订单?';
-
+    const { initialText } = await gStores.getSysAppMore(1282);
+    initialText && (dialogContent.value = initialText);
     await new Promise((confirm) => {
       cancelOrderDialogConfirm = confirm;
     });

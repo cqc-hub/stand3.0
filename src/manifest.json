@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx3a24f824ca86d6dc",
+    "appid": "wx41ed9678ac802d7e",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -76,7 +76,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "",
+    "appid": "2021002125637380",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -116,7 +116,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "温州市中西医结合医院",
+  "name": "义乌市中心医院",
   "h5": {
     "optimization": {
       "treeShaking": {
