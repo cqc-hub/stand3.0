@@ -1,7 +1,7 @@
 <template>
-  <view v-if="item.clinicTime" class="mb12 content">
+  <view v-if="item.clinicTime" class="mb12 flex items-center">
     <view class="sel-label g-flex-rc-cc text-no-wrap mr32">就诊提醒</view>
-    <view class="color-444 f24 text-ellipsis ellipsis-line-clamp2">
+    <view class="color-444 text-ellipsis ellipsis-line-clamp2">
       {{ item.clinicTime }}
     </view>
   </view>
@@ -19,11 +19,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .content {
-    display: flex;
-    // grid-template-columns: 1fr 3fr;
-  }
-
   .sel-label {
     justify-content: flex-start;
     align-items: flex-start;
