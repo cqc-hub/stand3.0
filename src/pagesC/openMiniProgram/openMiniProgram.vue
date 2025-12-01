@@ -31,6 +31,7 @@
         hosData: string;
         patientId: string;
         extraData?: Record<string, any>;
+        originPath?: string; // 给ai预问诊使用
         /** ////使用 useTBanner 函数 */
       }
     >{}
@@ -112,11 +113,11 @@
 
       // @ts-expect-error
       delete pageProps.value._type;
-
+     
       useTBanner({
         type: 'h5',
         isSelfH5: '1',
-        path: 'pages/inquiries/inquiries3',
+        path: pageProps.value.originPath ?  pageProps.value.originPath : 'pages/inquiries/inquiries3',
         extraData: {
           params: encodeURIComponent(
             encryptDes(
