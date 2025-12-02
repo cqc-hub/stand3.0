@@ -739,6 +739,7 @@ export const loginAuthAlipay = async (init: Function) => {
 export const useProgramPaySign = () => {
   const gStores = new GStores();
   const regDialogConfirmSign = ref(<any>'');
+  const flagTitle1226 = ref('');
   const flagTitle1203 = ref('温馨提示');
   const patientUtils = new PatientUtils();
   // 存在签约功能?
@@ -928,6 +929,7 @@ export const useProgramPaySign = () => {
     },
     flagTitle1203,
     regDialogConfirmSign,
+    flagTitle1226,
     isSignExist,
     async initSign() {
       const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
