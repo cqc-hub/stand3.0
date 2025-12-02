@@ -23,6 +23,7 @@ export interface IPageProps {
   promptMessage?: string; // 就诊提示
   thRegisterId?: string;
   addedNum?: number;
+  specialClinicDept?: number;
   /** 医生挂号验证方式 1:验证码 2:实名认证 */
   regVerificationMode?: '1' | '2';
   schState?: string;

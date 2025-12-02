@@ -1044,7 +1044,7 @@
     ) {
       const { result: { promptMessage = '' } = {} } = await api
         .getDeptDetail({
-          hosDeptId: props.value.hosDeptId,
+          hosDeptId: props.value.specialClinicDept || props.value.hosDeptId,
         })
         .catch(() => ({}) as any);
 

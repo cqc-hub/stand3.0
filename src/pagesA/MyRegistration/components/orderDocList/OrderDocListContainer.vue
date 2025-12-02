@@ -157,7 +157,7 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue';
-  import { GStores, throughCharacterLineFeed } from '@/utils';
+  import { GStores, ISystemConfig, throughCharacterLineFeed } from '@/utils';
   import globalGl from '@/config/global';
   import HTMLParser from '@/common/html-parser';
 
@@ -166,6 +166,7 @@
     item: any;
     isAllDate?: boolean;
     isShowHosNameWithDeptName?: boolean;
+    pageConfig: ISystemConfig['order'];
   }>();
   const gStores = new GStores();
 
@@ -189,8 +190,10 @@
   const splitSpecialDeptName = (name: string) => name.split(',');
 
   const getSuffixTitle = (): string[] => {
-    const { docJobName, docTitleName } = props.item;
-
+    let { docJobName, docTitleName } = props.item;
+    if (props.pageConfig.isHideDocJob === '1') {
+      docJobName = '';
+    }
     return [docJobName, docTitleName].filter((o) => o);
   };
 
@@ -231,7 +234,7 @@
         height: 45rpx;
         position: absolute;
         top: 78rpx;
-         transform: translate(-15rpx, 0px);
+        transform: translate(-15rpx, 0px);
       }
 
       .doc-info-introduce {
