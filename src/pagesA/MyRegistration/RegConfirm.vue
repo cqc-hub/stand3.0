@@ -941,7 +941,6 @@
           });
         }
       }
-      return;
       await api
         .addRegAlternate({
           ...props.value,
