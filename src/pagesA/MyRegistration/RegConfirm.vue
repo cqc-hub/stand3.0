@@ -111,11 +111,12 @@
     <xy-dialog
       :title="'请选择候补方式'"
       :show="waitChooseDialog"
-      @confirmButton="reject"
-      @cancelButton="resolve"
+      @confirmButton="cancelAsync"
+      @cancelButton="confirmAsync"
       :cancelColor="'var(--hr-brand-color-6)'"
       :confirmColor="'var(--hr-brand-color-6)'"
       :cancelFontWeight="'bold'"
+      :isMaskClick="false"
       confirmText="去填写病情"
       cancelText="仅候补登记"
     >
@@ -817,13 +818,14 @@
 
   const confirmAsync = () => {
     resolve();
+
   };
   const cancelAsync = () => {
     reject();
   };
   const waitRegShow = async (args) => {
-    await new Promise((r, j) => {
-      waitChooseDialog.value = true;
+    await wait(200)
+    await new Promise(async (r, j) => {
       resolve = async () => {
         waitChooseDialog.value = false;
         r('sueess');
@@ -846,8 +848,9 @@
             herenId: 'herenId',
           },
         });
-        r('sueess');
+        j('f');
       };
+      waitChooseDialog.value = true;
     });
   };
 
@@ -938,6 +941,7 @@
           });
         }
       }
+      return;
       await api
         .addRegAlternate({
           ...props.value,
