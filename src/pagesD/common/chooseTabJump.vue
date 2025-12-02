@@ -15,6 +15,7 @@
             item.bgSrc ||
             'https://phs-dev.oss-cn-hangzhou.aliyuncs.com/pcloud/jxfy/bg_zndz%402x.png'
           }')`,
+          height: `${item?.height || '245'}rpx`,
         }"
       >
         <view class="module-title">
@@ -32,7 +33,7 @@
         </view>
       </view>
 
-      <view class="triage-guide" v-if="tabJumpConfig?.showFlag">
+      <view class="triage-guide mt48" v-if="tabJumpConfig?.showFlag">
         <g-flag :typeFg="tabJumpConfig?.showFlag" isShowFgTip aaa />
       </view>
     </view>
@@ -63,6 +64,7 @@
         TButtonConfig & {
           bgSrc?: string;
           subTitle?: string;
+          height?: string;
         }
       >
     >[]
@@ -70,9 +72,9 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-     pageConfig.value = await ServerStaticData.getSystemConfig('RestOfConfig');
-    console.log('pageConfig',pageConfig);
-    
+    pageConfig.value = await ServerStaticData.getSystemConfig('RestOfConfig');
+    console.log('pageConfig', pageConfig);
+
     if (pageConfig.value?.tabJumpConfig?.length) {
       if (pageProps.value?.entryType) {
         tabJumpConfig.value = pageConfig.value?.tabJumpConfig.find(
@@ -91,7 +93,6 @@
         title: tabJumpConfig.value?.title,
       });
   });
-
 </script>
 
 <style lang="scss" scoped>
@@ -112,7 +113,7 @@
         // width: 100%;
         // height: 100%;
         background-image: url('https://phs-dev.oss-cn-hangzhou.aliyuncs.com/pcloud/jxfy/bg_zndz%402x.png');
-       background-size: 100%;
+        background-size: 100%;
         background-repeat: no-repeat;
         background-position: center;
       }
@@ -135,6 +136,7 @@
           height: auto; // 高度自适应
           top: 6rpx;
           left: 15rpx;
+          position: relative;
         }
       }
     }

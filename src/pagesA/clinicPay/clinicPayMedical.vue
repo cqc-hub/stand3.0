@@ -158,6 +158,7 @@
       });
 
       const requestArg = {
+                businessType: '',
         ...uploadRes.value,
         ...info.value,
         regAppTradeNo,
@@ -188,7 +189,12 @@
         userId: openId,
         // loginIdCard: extend?.loginIdCard,
         // userName: extend?.userName,
+
       };
+
+      if (globalGl.SYS_CODE === '1001069') {
+        requestArg.businessType = '99';
+      }
 
       if (globalGl.SYS_CODE === '1001056') {
         requestArg.totalFee = totalCost;

@@ -706,7 +706,7 @@ export interface ISystemConfig_ {
       title?: string; //页面标题，无则标题展示空
       showFlag?: number; //页面底部协议，无则不展示
       entryType?: string; //多次使用需跟页面路由参数入口一致，无则取第一项
-      tabs?: Array<TButtonConfig & { bgSrc?: string; subTitle?: string }>; //bgSrc背景图
+      tabs?: Array<TButtonConfig & { bgSrc?: string; subTitle?: string,height?:string }>; //bgSrc背景图 height//背景图高度
     }[];
     //h5通用协议阅读页
     flagReadConfig?: {
