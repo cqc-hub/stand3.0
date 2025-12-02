@@ -2,6 +2,7 @@
   <view>
     <Order-Doc-List-Container
       :item="item"
+      :pageConfig="pageConfig"
       :isShowHosNameWithDeptName="pageConfig.isShowHosNameWithDeptName === '1'"
       @avatar-click="emits('avatar-click', item)"
       @preregistration-click="emits('preregistration-click', $event)"

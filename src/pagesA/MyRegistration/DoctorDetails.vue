@@ -77,17 +77,17 @@
                       </text>
                     </view>
 
-                    <view
+                    <text
+                      v-for="(t, ti) in getSuffixTitle()"
+                      :key="t"
                       :class="{
-                        'g-split-line': docDetail.docJobName,
+                        'g-split-line1 mr12 pr12':
+                          ti !== getSuffixTitle().length - 1,
                       }"
-                      class="color-444 mr12 pr12 text-no-wrap"
+                      class="color-444 text-no-wrap"
                     >
-                      {{ docDetail.docJobName || '' }}
-                    </view>
-                    <view class="color-444 text-no-wrap">
-                      {{ props.docTitleName || docDetail.docTitleName || '' }}
-                    </view>
+                      {{ t }}
+                    </text>
                   </view>
 
                   <view class="mt12 color-444">
@@ -610,6 +610,14 @@
   const flagTitle9 = ref('');
   const docHosSchHeight = ref(100);
   const isMultHosDoc = ref(false);
+
+  const getSuffixTitle = (): string[] => {
+    let { docJobName, docTitleName } = docDetail.value;
+    if (pageConfig.value.isHideDocJob === '1') {
+      docJobName = '';
+    }
+    return [docJobName, docTitleName].filter((o) => o);
+  };
 
   const isPliticalDoc = computed(() => {
     return (

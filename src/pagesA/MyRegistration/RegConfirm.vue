@@ -121,7 +121,7 @@
     >
       <view class="reg-tip">
         <g-flag
-          v-model:title="flagTitle1203"
+          v-model:title="flagTitle1226"
           typeFg="1226"
           isShowFgTip
           isHideTitle
@@ -280,6 +280,7 @@
   const {
     regDialogConfirmSign,
     isAgreeSignChange,
+    flagTitle1226,
     flagTitle1203,
     disagreeSign,
     initSign,
@@ -825,25 +826,9 @@
       waitChooseDialog.value = true;
       resolve = async () => {
         waitChooseDialog.value = false;
-        await api.addRegAlternate(args).catch(async (e) => {
-          if (e) {
-            const { respCode, code, message } = e;
-            if (respCode === 884802) {
-              //接口拦截 去实名认证 —— 省中
-              await handlerConfirmPatReal();
-            } else if (respCode === 884803) {
-              //接口拦截 更新监护人信息 —— 省中
-              await handlerConfirmPatReal1();
-            } else if (code !== 4000) {
-              message && gStores.messageStore.showMessage(message, 3000);
-            }
-          }
-          throw new Error(e);
-        });
         r('sueess');
       };
       reject = () => {
-        console.log('预问诊');
         waitChooseDialog.value = false;
         useTBanner({
           type: 'h5',
@@ -943,7 +928,7 @@
             return;
           }
         } else if (isAddedNumSelf.value) {
-          waitRegShow({
+          await waitRegShow({
             ...props.value,
             ...selSchItem,
             alternateData,
@@ -951,7 +936,6 @@
             source: gStores.globalStore.browser.source,
             addFlag,
           });
-          return;
         }
       }
       await api
@@ -1060,7 +1044,7 @@
     ) {
       const { result: { promptMessage = '' } = {} } = await api
         .getDeptDetail({
-          hosDeptId: props.value.hosDeptId,
+          hosDeptId: props.value.specialClinicDept || props.value.hosDeptId,
         })
         .catch(() => ({}) as any);
 

@@ -345,7 +345,7 @@ export const getMedicalAuthCode = async (opt?: {
     sConfig: { medicalMHelp },
   } = globalGl;
   const { alipay, wx: _wx } = medicalMHelp!;
-  const { ev } = gStores.globalStore;
+  const { ev, sysCode } = gStores.globalStore;
 
   if (ev === 'wx') {
     const qrCode =
@@ -365,6 +365,9 @@ export const getMedicalAuthCode = async (opt?: {
 
       await new Promise((success, j) => {
         let envVersion: any = globalGl.env === 'prod' ? 'release' : 'trial';
+        if (sysCode === '1001092') {
+          envVersion = 'release';
+        }
         uni.navigateToMiniProgram({
           appId,
           // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
@@ -3019,7 +3022,6 @@ export const handlerMedicalPayDongRuan = async ({
     path: url,
   });
 };
-
 
 // #ifndef H5
 exports.getWxMedicalAuth1001035 = getWxMedicalAuth1001035;

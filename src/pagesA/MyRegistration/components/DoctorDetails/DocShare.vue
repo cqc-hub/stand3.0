@@ -387,6 +387,10 @@
     docName = docName || '';
     docTitleName = docTitleName || '';
 
+    if (props.pageConfig.isHideDocJob === '1') {
+      docJobName = '';
+    }
+
     uni.showLoading({
       mask: true,
     });

@@ -28,15 +28,10 @@
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue';
   import type { TInstance } from '@/components/g-form/index';
-  import {
-    GStores,
-    apiAsync,
-    getH5OpenidParam,
-    PatientUtils,
-    wait,
-  } from '@/utils';
+  import { GStores, apiAsync } from '@/utils';
 
   import api from '@/service/api';
+  import { beforeEach } from '@/router';
 
   const gStores = new GStores();
   const formData = ref(<BaseObject>{
@@ -128,7 +123,13 @@
     });
   };
 
-  onMounted(() => {
+  onMounted(async () => {
+    const { sysCode } = gStores.globalStore;
+    if (!['1001052'].includes(sysCode)) {
+      await beforeEach({
+        _isLogin: true,
+      });
+    }
     gform.value.setList(tempList.value);
   });
 </script>

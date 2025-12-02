@@ -70,6 +70,7 @@ interface IDocRow {
 export interface IDocListAll extends IDocRow {
   docNamePinYin: string;
   specialClinicName?: string;
+  specialClinicDept?: string;
   schDocSubResultList: TAllDayTScInfo[];
 }
 
@@ -102,6 +103,7 @@ export type TSchInfo = {
   /** 医生挂号验证方式 1:验证码 2:实名认证 */
   regVerificationMode?: '1' | '2';
   categorName: string;
+  specialClinicDept?: string;
   // 门诊类型：1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
   clinicalType?:
     | '1'
@@ -274,7 +276,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
 
     if (allList && allList.length) {
       allList.map((docInfo) => {
-        const { docPhoto, visitingArea } = docInfo;
+        const { docPhoto, visitingArea, specialClinicDept } = docInfo;
         docInfo.schDocSubResultList = docInfo.schDocSubResultList.filter(
           (o, i) => {
             const { schDate, schState } = o;
@@ -315,6 +317,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
                   orderList.amPmResults.map((amPmItem) => {
                     amPmItem.docPhoto = docPhoto;
                     amPmItem.visitingArea = visitingArea;
+                    amPmItem.specialClinicDept = specialClinicDept;
                   });
                 }
               }
@@ -619,6 +622,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       docTitleName,
       regVerificationMode,
       visitingArea,
+      specialClinicDept
     } = selectSchInfo;
     const { disNo, numId, timeDesc, enData } = item;
     const { promptMessage, thRegisterId, hosId: _pHosId } = props.value;
@@ -650,6 +654,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       thRegisterId,
       regVerificationMode,
       visitingArea,
+      specialClinicDept
     };
     selectOrderSourceNumId.value = numId;
 

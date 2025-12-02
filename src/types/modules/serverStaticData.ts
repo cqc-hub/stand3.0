@@ -130,6 +130,7 @@ export interface ISystemConfig_ {
     isConfirmOrderWithPay?: '1';
 
     /** 医生名片 */
+    isHideDocJob?: '1';
     isHideHosName?: '1';
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？(不用 固定的)
     netHosId?: string; // isOpenDocCardOnlineService === '1' 时候必给
