@@ -323,9 +323,8 @@ export const tempList: TInstance[] = [
     key: formKey.upIdCard,
     validator: async (v: unknown, item: any) => {
       if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
-        const { ageGuardian } = await ServerStaticData.getSystemConfig(
-          'person'
-        );
+        const { ageGuardian } =
+          await ServerStaticData.getSystemConfig('person');
 
         const info = idValidator.getIdCardInfo(v);
 
@@ -463,14 +462,38 @@ export const pickTempItem = function <T = TFormKeys>(
   keys: TFormKeys[]
 ): TInstance[] {
   const dKeys = keys.map((key) => formKey[key]);
+  const gStores = new GStores();
+  const { sysCode } = gStores.globalStore;
 
-  return cloneUtil<TInstance[]>(tempList)
+  const list = cloneUtil<TInstance[]>(tempList)
     .filter((item) => dKeys.includes(<any>item.key))
     .sort((a, b) => {
       const aIndex = dKeys.findIndex((key) => key === a.key);
       const bIndex = dKeys.findIndex((key) => key === b.key);
       return aIndex - bIndex;
     });
+
+  if (sysCode === '1001067') {
+    const referenceId = list.find((o) => o.key === 'referenceId');
+    if (referenceId && referenceId.field === 'input-text') {
+      referenceId.inputType = 'number';
+      referenceId.validator = async (v: string) => {
+        if (v) {
+          if (!/^\d+$/.test(v)) {
+            return Promise.resolve({
+              success: false,
+              message: '备注只能为数字',
+            });
+          }
+        }
+
+        return Promise.resolve({
+          success: true,
+        });
+      };
+    }
+  }
+  return list;
 };
 
 /**
@@ -932,9 +955,8 @@ export const useProgramPaySign = () => {
     flagTitle1226,
     isSignExist,
     async initSign() {
-      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
-        'person'
-      );
+      const { isPayWithoutSecretAuth } =
+        await ServerStaticData.getSystemConfig('person');
 
       if (isPayWithoutSecretAuth === '1') {
         // regDialogConfirmSign.value.show();
@@ -945,9 +967,8 @@ export const useProgramPaySign = () => {
     async goPaySign(patientId, payload = {} as TSingnPayload) {
       const { type = 'addPat', cb } = payload;
 
-      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
-        'person'
-      );
+      const { isPayWithoutSecretAuth } =
+        await ServerStaticData.getSystemConfig('person');
       if (isPayWithoutSecretAuth !== '1') {
         return;
       }
