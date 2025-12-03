@@ -491,7 +491,26 @@ const scJson: Record<string, ISConfig> = {
     isHideHomeLogo: '1',
   },
 
-  1001099: {},
+  1001099: {
+    medicalMHelp: {
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          path: 'auth/pages/bindcard/auth/index',
+          pathExtraData: {
+            openType: 'getAuthCode',
+            bizType: '04107',
+            cityCode: '410101',
+            channel: 'AAG05QdjP5yQIRc05wpvThnI',
+            orgChnlCrtfCodg:
+              'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtqg5V3ila4Zg8ONhjCsZO5',
+            orgCodg: 'H41010200019',
+            orgAppId: '1JBCC0LUB14U4460C80A0000C7255DC3',
+          },
+        },
+      },
+    },
+  },
 
   /**
    * 大医二院普湾院区
