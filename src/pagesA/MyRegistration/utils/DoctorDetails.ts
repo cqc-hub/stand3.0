@@ -204,7 +204,7 @@ export class UseDoctorDetail extends GStores {
     let schList: IDocSchListItem[] = [],
       enabledDays: Record<string, string> = {};
 
-    if (isSchNoDept === '1' && hosDocId) {
+    if (isSchNoDept === '1' && (hosDocId === 'wjs' || !hosDocId)) {
       hosDeptId = undefined as any;
     }
 
