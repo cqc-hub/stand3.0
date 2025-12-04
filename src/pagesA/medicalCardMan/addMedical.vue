@@ -52,7 +52,7 @@
     <Order-Reg-Confirm
       :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
       v-if="isMedicalFiling"
-      title="是否更新为医保用户？"
+      title="是否进行医保建档？"
       :maskClickClose="false"
       @confirm="medicalFiling"
       @cancel="medicalFillCancel"
@@ -61,7 +61,13 @@
       cannerText="取消"
       ref="regDialogMedicalFiling"
     >
-      仅账号本人可更新为医保用户，是否更新为医保用户？
+      {{
+        `${
+          allowFamilyMedFilling
+            ? '支持账号本人以及绑定医保亲情账户的患者'
+            : '仅账号本人可'
+        }进行医保建档,是否进行医保建档？`
+      }}
     </Order-Reg-Confirm>
 
     <g-pay
@@ -281,6 +287,7 @@
 
   const regDialogMedicalFiling: Ref<any> = ref('');
   const isMedicalFiling = ref(false);
+  const allowFamilyMedFilling = ref(false);
 
   const {
     regDialogConfirmSign,
@@ -1313,7 +1320,9 @@
     //是否医保建档
     const medicalMHelp = globalGl.sConfig.medicalMHelp!;
     // #ifdef  MP-WEIXIN
-    //先实现支付宝
+    const { medicalFiling, isGbFamilyPayment } = medicalMHelp?.wx || {};
+    isMedicalFiling.value = medicalFiling === '1';
+    allowFamilyMedFilling.value = isGbFamilyPayment === '1';
     // #endif
     // #ifdef MP-ALIPAY
     isMedicalFiling.value = medicalMHelp?.alipay?.medicalFiling === '1';

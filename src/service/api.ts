@@ -884,6 +884,49 @@ const regApi = {
   // 按科室和机构查询名医
   getDoctorByDeptAndHos: (data: any) =>
     service.post('/phs-reg/deptDoc/getDoctorByDeptAndHos', parm(data)),
+
+  getDeptCardList: (data: any) =>
+    service.post('/phs-reg/deptDoc/getDeptList', parm(data), {
+      hideLoading: false,
+    }),
+
+  getDeptCardListSearch: (data: any) =>
+    service.post('/phs-reg/deptDoc/searchDeptDocByWord', parm(data), {
+      hideLoading: false,
+    }),
+
+  getDeptCardDetail: (data: any) =>
+    service.post('/phs-reg/deptDoc/getDeptDetail', parm(data), {
+      hideLoading: false,
+      showMessage: false,
+    }),
+
+  queryRegNum: (data: any) =>
+    service.post('/phs-reg/deptDoc/queryRegNum', parm(data), {
+      hideLoading: false,
+    }),
+
+  preregistrationSave: (data: any) =>
+    service.post('/phs-reg/deptDoc/preregistrationSave', parm(data), {
+      hideLoading: false,
+    }),
+
+  //东总远期预约
+  cancelForwardReg: (data: any) =>
+    service.post('/phs-reg/forwardReg/cancelForwardReg', parm(data)),
+
+  updateRegDate: (data: any) =>
+    service.post('/phs-reg/forwardReg/updateRegDate', parm(data)),
+
+  getSchDateByDeptAndDoc: (data: any) =>
+    service.post('/phs-reg/forwardReg/getSchDateByDeptAndDoc', parm(data)),
+
+  getRegRecordInfo: (data: any) =>
+    service.post('/phs-reg/forwardReg/getRegRecordInfo', parm(data)),
+
+  getForwardRegList: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/forwardReg/getForwardRegList', parm(data)),
+
 };
 
 // 用户服务
@@ -1280,31 +1323,11 @@ const userApi = {
       }
     ),
 
-  getDeptCardList: (data: any) =>
-    service.post('/phs-reg/deptDoc/getDeptList', parm(data), {
+  updateRelationship: (data: any) =>
+    service.post('/phs-user/relevantPatient/updateRelationship', parm(data), {
       hideLoading: false,
     }),
 
-  getDeptCardListSearch: (data: any) =>
-    service.post('/phs-reg/deptDoc/searchDeptDocByWord', parm(data), {
-      hideLoading: false,
-    }),
-
-  getDeptCardDetail: (data: any) =>
-    service.post('/phs-reg/deptDoc/getDeptDetail', parm(data), {
-      hideLoading: false,
-      showMessage: false,
-    }),
-
-  queryRegNum: (data: any) =>
-    service.post('/phs-reg/deptDoc/queryRegNum', parm(data), {
-      hideLoading: false,
-    }),
-
-  preregistrationSave: (data: any) =>
-    service.post('/phs-reg/deptDoc/preregistrationSave', parm(data), {
-      hideLoading: false,
-    }),
   customerAsk: (data: any) =>
     service.post('/phs-extend/customer/ask', parm(data), {
       hideLoading: true,
@@ -1328,17 +1351,6 @@ const userApi = {
     service.post('/phs-extend/customer/picTrans', parm(data), {
       hideLoading: false,
     }),
-  //东总远期预约
-  cancelForwardReg: (data: any) =>
-    service.post('/phs-reg/forwardReg/cancelForwardReg', parm(data)),
-  updateRegDate: (data: any) =>
-    service.post('/phs-reg/forwardReg/updateRegDate', parm(data)),
-  getSchDateByDeptAndDoc: (data: any) =>
-    service.post('/phs-reg/forwardReg/getSchDateByDeptAndDoc', parm(data)),
-  getRegRecordInfo: (data: any) =>
-    service.post('/phs-reg/forwardReg/getRegRecordInfo', parm(data)),
-  getForwardRegList: <T = any>(data: any) =>
-    service.post<T>('/phs-reg/forwardReg/getForwardRegList', parm(data)),
 };
 //统一认证服务
 const authApi = {

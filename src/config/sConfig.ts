@@ -183,6 +183,9 @@ export interface ISConfig {
       /** 医保开启亲情付 */
       isGbFamilyPayment?: '1';
 
+      /** 医保建档 */
+      medicalFiling?: '1';
+
       /**
        * wx省中智捷付
        */

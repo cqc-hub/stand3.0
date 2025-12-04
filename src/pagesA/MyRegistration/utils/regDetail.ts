@@ -458,6 +458,8 @@ export interface IRegInfo {
   tradeType?: '1' | '2'; // 1 只能自费 2 宜兴存在, 表示要医保退号
   canUpdateStatus?: '0' | '1'; // 0 不可以 1 可以
   schId?: string;
+  extend?: string;
+  visitingArea?: string;
 }
 
 export const getStatusConfig = (status: string, isWaitReg: boolean) => {

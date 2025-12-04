@@ -130,14 +130,8 @@
                   补充档案信息
                 </view>
               </view>
-              <!-- #ifdef MP-ALIPAY -->
               <view
-                v-if="
-                  $global.sConfig.medicalMHelp &&
-                  $global.sConfig.medicalMHelp.alipay &&
-                  $global.sConfig.medicalMHelp.alipay.medicalFiling === '1' &&
-                  pat.healthCardUser !== '2'
-                "
+                v-if="showMedicalFiling(pat)"
                 class="pat-btns flex-normal mt16 ml12"
               >
                 <view
@@ -147,7 +141,6 @@
                   医保建档
                 </view>
               </view>
-              <!-- #endif -->
             </view>
             <!-- #ifdef MP-WEIXIN -->
             <block
@@ -208,7 +201,7 @@
   <Order-Reg-Confirm
     :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
     v-if="isMedicalFiling"
-    title="是否更新为医保用户？"
+    title="是否进行医保建档？"
     :maskClickClose="false"
     @confirm="medicalFiling"
     height="35vh"
@@ -216,7 +209,13 @@
     cannerText="取消"
     ref="regDialogMedicalFiling"
   >
-    仅账号本人可更新为医保用户，是否更新为医保用户？
+    {{
+      `${
+        allowFamilyMedFilling
+          ? '支持账号本人以及绑定医保亲情账户的患者'
+          : '仅账号本人可'
+      }进行医保建档,是否进行医保建档？`
+    }}
   </Order-Reg-Confirm>
   <Order-Reg-Confirm
     :headerIcon="`${$global.BASE_IMG}v3-order-reg-confirm${
@@ -304,6 +303,7 @@
   const faceDialog: Ref<any> = ref('');
   const medicalFilingPat: Ref<any> = ref('');
   const isMedicalFiling = ref(false);
+  const allowFamilyMedFilling = ref(false);
   const isNewHealthCard = ref(false);
 
   provide('pageConfig', () => readonly(pageConfig.value));
@@ -329,6 +329,18 @@
     await _realNameAuth(pat);
     await patientUtils.getPatCardList();
     routerJump();
+  };
+
+  const showMedicalFiling = (pat) => {
+    if (isMedicalFiling.value) {
+      // #ifdef MP-WEIXIN
+      return !pat.relationshipCode
+      // #endif
+      // #ifdef MP-ALIPAY
+      return pat.healthCardUser !== '2';
+      // #endif
+    }
+    return false;
   };
 
   const isCanAddGuardian = (pat: IPat) => {
@@ -521,14 +533,16 @@
 
     //是否医保建档
     const medicalMHelp = globalGl.sConfig.medicalMHelp!;
-    // #ifdef  MP-WEIXIN
-    //先实现支付宝
-    // #endif
     // #ifdef MP-ALIPAY
     isMedicalFiling.value = medicalMHelp?.alipay?.medicalFiling === '1';
     // #endif
-    //健康卡
+
     // #ifdef MP-WEIXIN
+    const { medicalFiling, isGbFamilyPayment } = medicalMHelp?.wx || {};
+    isMedicalFiling.value = medicalFiling === '1';
+    allowFamilyMedFilling.value = isGbFamilyPayment === '1';
+
+    //健康卡
     if (globalGl.systemInfo?.isOpenHealthCard) {
       globalGl.systemInfo.isOpenHealthCard?.isNewMode &&
         (isNewHealthCard.value = true);
