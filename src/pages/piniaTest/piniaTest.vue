@@ -283,7 +283,7 @@
     },
   };
 
-  const 用药查询: TButtonConfig = {
+  const 用药查询 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/medicationQuery/medicationQuery',
@@ -292,7 +292,8 @@
     addition: {
       patientId: '_patientId',
     },
-  };
+    _type: 'useTBanner',
+  } as TButtonConfig;
 
   const 分数问卷: TButtonConfig = {
     type: 'h5',
@@ -623,6 +624,19 @@
     },
     _type: 'useTBanner',
   } as TButtonConfig;
+  const 用药查询1001093 = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/question/questionAfterVisit',
+    text: '住院点餐',
+    extraData: {
+      type: 'yycx',
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+    _type: 'useTBanner',
+  } as TButtonConfig;
 
   const 检查预约1001093 = {
     type: 'h5',
@@ -639,8 +653,8 @@
   } as TButtonConfig;
 
   const init = async () => {
-    useTBanner(medicineDetail);
-    // useTBanner(检查预约1001093);
+    // useTBanner(用药查询);
+    useTBanner(用药查询1001093);
     // useTBanner(用药查询);
   };
 </script>

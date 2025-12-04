@@ -197,15 +197,14 @@ export class UseDoctorDetail extends GStores {
   }
 
   async getDocSch() {
-    const { isSchNoDept, isSchNoHos } = await ServerStaticData.getSystemConfig(
-      'order'
-    );
-    let { clinicalType, docName, hosDeptId, hosDocId, hosId } = this.props;
+    const { isSchNoDept, isSchNoHos } =
+      await ServerStaticData.getSystemConfig('order');
     const { source } = this.globalStore.browser;
+    let { clinicalType, docName, hosDeptId, hosDocId, hosId } = this.props;
     let schList: IDocSchListItem[] = [],
       enabledDays: Record<string, string> = {};
 
-    if (isSchNoDept === '1') {
+    if (isSchNoDept === '1' && hosDocId) {
       hosDeptId = undefined as any;
     }
 
