@@ -204,6 +204,7 @@ export class UseDoctorDetail extends GStores {
     let schList: IDocSchListItem[] = [],
       enabledDays: Record<string, string> = {};
 
+    // wjs 表示该医生为 科室
     if (isSchNoDept === '1' && (hosDocId === 'wjs' || !hosDocId)) {
       hosDeptId = undefined as any;
     }
