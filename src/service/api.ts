@@ -596,6 +596,9 @@ const regApi = {
   findByDocSchId: (data: any) =>
     service.post('/phs-reg/regDoc/findByDocSchId', parm(data)),
 
+  getVisited: (data: any) =>
+    service.post('/phs-reg/collect/getVisited', parm(data)),
+
   loginByThRegisterId: (data: any) =>
     service.post('/phs-reg/tencent/loginByThRegisterId', parm(data)),
 
@@ -926,7 +929,6 @@ const regApi = {
 
   getForwardRegList: <T = any>(data: any) =>
     service.post<T>('/phs-reg/forwardReg/getForwardRegList', parm(data)),
-
 };
 
 // 用户服务

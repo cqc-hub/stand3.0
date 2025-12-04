@@ -290,7 +290,7 @@
 
           <!-- 老年版本 -->
           <view v-else class="homePage">
-            <view class="card">
+            <view class="card safe-height">
               <!-- 登录之后 -->
               <block v-if="globalStore.isLogin">
                 <view

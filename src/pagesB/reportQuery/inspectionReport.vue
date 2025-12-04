@@ -990,6 +990,9 @@
         pageProps.value._extend = JSON.parse(pageProps.value.extend);
       } catch (error) {}
     }
+
+    console.log('获取到页面参数---');
+    console.log(pageProps.value);
     windowInfo.value = uni.getSystemInfoSync();
     getInspectionReportList();
     if (pageProps.value.isWatermark === '1') {

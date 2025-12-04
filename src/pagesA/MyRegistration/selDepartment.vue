@@ -297,7 +297,7 @@
 
     // 最近就诊
     if (requestArg.type === '-1') {
-      const { result: _r } = await api.getDeptLaterList({}).finally(() => {
+      const { result: _r } = await api.getVisited({}).finally(() => {
         isComplete.value = true;
       });
 

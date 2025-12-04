@@ -1025,6 +1025,7 @@
   onLoad(async (p) => {
     uni.showLoading({ title: '加载中' });
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+    console.log('页面参数-----');
     console.log(props.value);
     isOver.value = true;
     isWaitReg.value &&
