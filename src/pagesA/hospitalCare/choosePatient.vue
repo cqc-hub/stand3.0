@@ -203,18 +203,26 @@
         delete args[key];
       }
     });
-    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>(
-      args
-    );
+    const { result } =
+      await api.getInHospitalInfo<getInHospitalInfoResult>(args);
     hosInfoResObj.value = result;
+    const {
+      patientName,
+      patientPhone,
+      idCard,
+      idType = '',
+    } = hosInfoParam.value;
+
     uni.navigateTo({
-      url: `choosePatientInfo?patientName=${
-        hosInfoParam.value.patientName
-      }&patientPhone=${hosInfoParam.value.patientPhone}&idCard=${
-        hosInfoParam.value.idCard || ''
-      }&idType=${hosInfoParam.value.idType || ''}`,
+      url: joinQueryForUrl('choosePatientInfo', {
+        patientName,
+        patientPhone,
+        idCard,
+        idType,
+      }),
     });
   };
+
   const toSearch = async () => {
     const type = pageProps.value.type;
     if (type) {
