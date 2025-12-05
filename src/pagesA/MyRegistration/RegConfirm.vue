@@ -534,6 +534,7 @@
     const [firstDept, secondDept] = deptStore.deptClickStep;
 
     const requestArg: any = {
+      ...props.value,
       freeSignData: '',
       openId: gStores.globalStore.openId,
       firstDeptName: firstDept?.deptName,

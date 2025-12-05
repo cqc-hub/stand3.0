@@ -652,6 +652,16 @@
     _type: 'useTBanner',
   } as TButtonConfig;
 
+  const 停车发票1001093 = {
+    type: 'h5',
+    path: 'http://s.appykt.com/zld/invoice/parkInvoice/1308830006',
+    text: ' ',
+    addition: {
+      openId: 'openid',
+    },
+    _type: 'useTBanner',
+  } as TButtonConfig;
+
   const init = async () => {
     // useTBanner(用药查询);
     useTBanner(用药查询1001093);
