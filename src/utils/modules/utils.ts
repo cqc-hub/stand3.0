@@ -24,7 +24,7 @@ export const generateUuid = function (len = 36, binary = 16) {
 };
 
 //获取随机数字长度的id
-export const generateRandomUserId = (length: number = 14): string => {
+export const generateRandomUserId = (length: number = 17): string => {
   // 获取当前时间戳（毫秒级）
   const timestamp = Date.now().toString();
   
