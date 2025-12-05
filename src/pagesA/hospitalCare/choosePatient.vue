@@ -102,13 +102,8 @@
 
 <script setup lang="ts">
   import { computed, ref } from 'vue';
-  import { getAvatar, isAreaProgram, useUserStore, IPat } from '@/stores';
-  import {
-    GStores,
-    type TButtonConfig,
-    ServerStaticData,
-    useTBanner,
-  } from '@/utils';
+  import { useUserStore, IPat } from '@/stores';
+  import { GStores, ServerStaticData, useTBanner } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import api from '@/service/api';
   import {
@@ -119,6 +114,7 @@
   import { onLoad, onReady } from '@dcloudio/uni-app';
   import { decryptDes } from '@/common/des';
   import { idValidator } from '@/utils/modules/idCard';
+
   const pageProps = ref(
     <
       {
@@ -193,18 +189,36 @@
     hosInfoParam.value.cardNumber = item.cardNumber;
   };
   const init = async () => {
+    const { sysCode } = gStores.globalStore;
     const args = {
       ...hosInfoParam.value,
       patientName: hosInfoParam.value.patientName,
       patientPhone: hosInfoParam.value.patientPhone,
     };
+
     Object.keys(args).forEach((key) => {
       if (!args[key]) {
         delete args[key];
       }
     });
+
+    if (sysCode === '1001067') {
+      uni.navigateTo({
+        url: joinQueryForUrl('hospitalRecordList', {
+          ...hosInfoParam.value,
+        }),
+      });
+      return;
+    }
+
     const { result } =
       await api.getInHospitalInfo<getInHospitalInfoResult>(args);
+
+    if (!result) {
+      gStores.messageStore.showMessage('未查询到相关住院信息', 1500);
+      return;
+    }
+
     hosInfoResObj.value = result;
     const {
       patientName,

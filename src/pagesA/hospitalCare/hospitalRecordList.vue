@@ -44,7 +44,7 @@
 
 <script lang="ts" setup>
   // 支持展示多条住院记录
-  import { computed, defineComponent, ref } from 'vue';
+  import { computed, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
   import { decryptDes, deQueryForUrl, joinQueryForUrl } from '@/common';
@@ -169,7 +169,7 @@
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     const { patientId, patientName } = pageProps.value;
     if (patientId || !patientName) {
-      uni.showLoading({ title: '加载中'});;
+      uni.showLoading({ title: '加载中' });
       await wait(600);
 
       await beforeEach({

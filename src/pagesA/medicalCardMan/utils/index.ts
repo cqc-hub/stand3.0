@@ -1524,17 +1524,11 @@ export const isShowAddPatCardNo = (
   config: ISystemConfig['person']
 ) => {
   const { isCanAddPatCardNo, isGuardianWithIdCard } = config;
-  const {
-    idCardEncry,
-    // idType,
-    patientAge,
-    upIdCardEncry,
-  } = pat;
+  const { idCardEncry, idType, patientAge, upIdCardEncry } = pat;
 
   let r = false;
 
-  // && idType === '01'
-  if (isCanAddPatCardNo === '1') {
+  if (isCanAddPatCardNo === '1' && idType === '01') {
     let isChildren = false;
     if (isGuardianWithIdCard) {
       isChildren =
