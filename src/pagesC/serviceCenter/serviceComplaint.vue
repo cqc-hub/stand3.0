@@ -19,7 +19,7 @@
         ref="gform"
       />
       <ImgUpload
-        v-if="options?.selectRecords === '1' || options?.isAnonymous === '1'"
+        v-if="options?.selectRecords !== '0' || options?.isAnonymous === '1'"
         v-model:uploadImgList="uploadImgList"
         :count="3"
       />

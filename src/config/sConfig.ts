@@ -613,13 +613,14 @@ const scJson: Record<string, ISConfig> = {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
           //测试
-          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=520500&channel=AAEBc2RH-gUYFz7T2U2NVQhi&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxuumfluttL87+gDtSEtCYLx&orgCodg=H52050200015&orgAppId=1HN2UHLM80083F60C80A0000448F840F',
+          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=520500&channel=AAEBc2RH-gUYFz7T2U2NVQhi&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxuumfluttL87+gDtSEtCYLx&orgCodg=H52050200015&orgAppId=1JBJL87EA1684460C80A000078F00A4C',
           // 生产
           // path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610100&channel=AAFCflpRouGx9rzCduR7IDwV&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxveJKftoNCw+TCAqUwy6fwh&orgCodg=H61010300557&orgAppId=1H39F4EL9015E2470B0A000095823F28',
           // path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=551700&channel=&orgChnlCrtfCodg=&orgCodg=H5205020001&orgAppId=1HN2UHLM80083F60C80A0000448F840F',
         },
         isMedicalOrder: '1',
         // medicalPlugin: '1',
+        medicalFiling: '1'
       },
     },
   },

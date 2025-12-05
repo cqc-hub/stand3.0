@@ -55,7 +55,8 @@ export default defineConfig(({ command, mode }) => {
     base: './',
 
     define: {
-      h5UrlLocal: JSON.stringify(`http://${netIp}:8888/#/`),
+      // h5UrlLocal: JSON.stringify(`http://${netIp}:8888/#/`),
+       h5UrlLocal: JSON.stringify(`http://localhost:8889/#/`),
     },
 
     // build: {
