@@ -758,7 +758,6 @@
               formData.value[formKey.idType] = '01';
               selectChange({ item: itemIdType, value: '01' });
               itemIdType.disabled = true;
-              itemIdType.showSuffixArrowIcon = false;
             } else {
               itemIdType.disabled = false;
               itemIdType.showSuffixArrowIcon = true;
@@ -1136,20 +1135,14 @@
               if (v) {
                 const idReg = /(\d{3})\d*(\d{4})/;
                 return v.replace(idReg, '$1******$2');
-              } else {
-                return '';
               }
+
+              return '';
             };
           }
 
-          if (key === formKey.patientType) {
+          if ([formKey.patientType, formKey.idType].includes(key as any)) {
             o.disabled = true;
-            o.showSuffixArrowIcon = false;
-          }
-
-          if (key === formKey.idType) {
-            o.disabled = true;
-            o.showSuffixArrowIcon = false;
           }
         }
         // #endif
@@ -1193,7 +1186,6 @@
           pageProps.value.pageType === 'perfectReal'
         ) {
           o.disabled = true;
-          o.showSuffixArrowIcon = false;
         }
       }
 
@@ -1202,6 +1194,10 @@
 
         // 证件类型身份证 , 新生儿 时候必填,  其余可选
         o.required = cardType === '01' || value === '0' || false;
+      }
+
+      if (o.disabled) {
+        o.showSuffixArrowIcon = false;
       }
     });
 
