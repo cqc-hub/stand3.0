@@ -19,6 +19,7 @@ import {
   apiAsync,
   GStores,
   throttle,
+  generateRandomUserId
 } from '@/utils';
 import {
   cloneUtil,
@@ -205,7 +206,18 @@ export const init = async (props) => {
   props?.isMess && props?.isMess === '2' && initWithTheMess(props?.openid);
   props?.type?.includes('report') && ininWithReport(props?.reportId);
   reload(props?.isMess);
+    console.log('未登录',gStores.globalStore.herenId)
+
+  if(!gStores.globalStore.herenId){
+    getRadomId()
+  }
   // test()
+};
+ const getRadomId = () => {
+  //未登录时记录用户id
+  if(!uni.getStorageSync('v3_userRandomId')){
+    uni.setStorageSync('v3_userRandomId', generateRandomUserId())
+  }
 };
 export const ininWithReport = async (reportId?: string) => {
   console.log('ininWithReport', reportId);
@@ -1260,6 +1272,7 @@ const typeInAsk = async (value, answertype) => {
         chatId: msgState.value.lastChatId,
         requestId: msgState.value.requestId,
         type: answertype,
+        herenId: gStores.globalStore.herenId || Number(uni.getStorageSync('v3_userRandomId')),
       },
     }),
   };
@@ -1270,7 +1283,7 @@ const typeInAsk = async (value, answertype) => {
         ocrId: value,
         sysCode: gStores.globalStore.sysCode,
         source: gStores.globalStore.browser.source == 19 ? 1 : 2,
-        herenId: gStores.globalStore.herenId,
+        herenId: gStores.globalStore.herenId || Number(uni.getStorageSync('v3_userRandomId')),
       },
     });
   }
@@ -1278,6 +1291,7 @@ const typeInAsk = async (value, answertype) => {
     settings.url = `${baseApi}/phs-extend/customer/aiStreamReportAsk`;
     settings.data = JSON.stringify({
       args: value,
+      herenId: gStores.globalStore.herenId || Number(uni.getStorageSync('v3_userRandomId')),
     });
   }
   console.warn('手动调用接口', settings);
@@ -1357,6 +1371,7 @@ const typeInAskH5 = (value: any, answertype) => {
     settings.url = `${env.baseApi}/phs-extend/customer/aiStreamReportAsk`;
     settings.data = JSON.stringify({
       args: value,
+      herenId: propsPbj.value?.herenId,
     });
   }
 

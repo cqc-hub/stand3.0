@@ -23,6 +23,30 @@ export const generateUuid = function (len = 36, binary = 16) {
     .substring(0, len);
 };
 
+//获取随机数字长度的id
+export const generateRandomUserId = (length: number = 14): string => {
+  // 获取当前时间戳（毫秒级）
+  const timestamp = Date.now().toString();
+  
+  // 计算需要生成的随机数长度
+  const randomLength = Math.max(0, length - timestamp.length);
+  
+  // 生成指定长度的随机数字
+  let randomPart = '';
+  for (let i = 0; i < randomLength; i++) {
+    const randomDigit = Math.floor(Math.random() * 10);
+    randomPart += randomDigit;
+  }
+  
+  // 组合时间戳和随机数
+  let userId = timestamp + randomPart;
+  
+  // 确保不超过指定长度
+  userId = userId.substring(0, length);
+  
+  return userId;
+};
+
 export const compose =
   (...fns) =>
   (arg) =>
