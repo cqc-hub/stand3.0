@@ -37,10 +37,29 @@ const isDes = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
 // const isOpenSm4 = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenSm4;
 export const isOpenSm4 = false;
 
+//标志正在进行 openid 获取流程
+let isGettingOpenId = false; 
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
   const globalStore = useGlobalStore();
   const specialUrls1001035 = ['https://phs.jshtcm.com'];
+
+  // #ifdef MP-WEIXIN
+  // 检查是否存在h5Openid缓存
+  const h5Openid = globalStore.h5OpenId;
+  if (globalStore.isLogin && !h5Openid && globalStore.sysCode === "1001083" && request.url !== "/phs-user/authUser/allinoneAuthApi" && !isGettingOpenId) {
+    //温人民单独判断
+     isGettingOpenId = true; 
+     uni.reLaunch({
+        url: '/pages/home/startCome',
+    });
+    return Promise.reject('请先获取openId');
+  }
+  if (h5Openid && isGettingOpenId) {
+    isGettingOpenId = false;
+  }
+  // #endif
+
 
   if (
     globalStore.ev === 'web' &&
