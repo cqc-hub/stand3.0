@@ -24,7 +24,7 @@
             {{ item.subTitle }}
           </view>
         </view>
-        <view class="external-icon ml24">
+        <view class="external-icon ml24" v-if="item?.text||item?.subTitle">
           <image
             src="https://phs-dev.oss-cn-hangzhou.aliyuncs.com/pcloud/jxfy/ico_jt%402x.png"
             mode="widthFix"
