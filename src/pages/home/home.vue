@@ -670,7 +670,6 @@
   };
 
   const goToNotice1 = () => {
-    console.log('hhhh', uni.navigateTo);
     if (healthCounselConfig.value?.noticeReplaceParam) {
       const { noticeReplaceParam: query } = healthCounselConfig.value;
       if (query.path === 'showCareModel') {

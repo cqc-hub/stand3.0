@@ -234,6 +234,10 @@
     </xy-dialog>
     <g-message />
   </view>
+  <homeH5SharePopup
+    ref="homeH5SharePopupRef"
+    :configData="h5QrCodeData || undefined"
+  />
 </template>
 
 <script setup lang="ts">
@@ -251,9 +255,12 @@
     ServerStaticData,
     apiAsync,
   } from '@/utils';
+  import { isSubscribeWx } from '@/common/checkJump';
   import HTMLParser from '@/common/html-parser';
   import { joinQuery, deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { INucle } from './index';
+
+   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
 
   const pageProps = ref(
     {} as {
@@ -263,6 +270,7 @@
       isPay: string; //是否需要缴费 表示支付方式
       openId: string;
       type: string;
+      showCareModel?: string;
     }
   );
   const pageConfig = ref(<ISystemConfig['selfBilling']>{});
@@ -274,7 +282,8 @@
   const tabCurrent = ref(0);
   const isFgShow45 = ref(false);
   const fgTitle45 = ref('');
-
+  const homeH5SharePopupRef = ref('' as any);
+  const h5QrCodeData = ref();
   const list = ref<INucle[]>([]);
   const selList = ref<INucle[]>([]);
   const gStores = new GStores();
@@ -291,7 +300,7 @@
     //针对支付宝扫普通二维码跳转的处理 一开始没拿到参数不掉接口
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
 
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     pageConfig.value = await ServerStaticData.getSystemConfig('selfBilling');
     const { hosId } = pageProps.value;
 
@@ -303,6 +312,9 @@
 
       if (hosId) {
         gStores.globalStore.onAppLaunch({});
+      }
+      if (pageProps.value.showCareModel) {
+        judgeCodeShow();
       }
     }
     await wait(650);
@@ -316,6 +328,22 @@
 
     // await gStores.userStore.getPatList();
   });
+
+  const judgeCodeShow = async () => {
+    h5QrCodeData.value = {
+      attention: '1',
+      imageCode: pageProps.value.showCareModel,
+      theme: '公众号',
+      title: '欢迎关注',
+      subTitle: '长按识别二维码，关注公众号',
+      isShowInfo: true,
+    };
+    console.log('await isSubscribeWx()',await isSubscribeWx());
+    
+    if (!await isSubscribeWx()) {
+      homeH5SharePopupRef.value.show();
+    }
+  };
 
   const sideList = ref(<any[]>[]);
   const sideValue = ref('');
@@ -627,7 +655,7 @@
     }
   };
   const payAfter = async (patientId) => {
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     await wait(1000);
     uni.hideLoading();
     //去我的开单页面
