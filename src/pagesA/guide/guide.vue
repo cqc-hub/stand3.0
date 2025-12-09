@@ -546,7 +546,7 @@ const getHistory = async () => {
           t.itemList.push({
             ...info,
             title: "就诊完成",
-            sort: 9,
+            sort: 10,
             completionStatus: 1,
           });
         }
