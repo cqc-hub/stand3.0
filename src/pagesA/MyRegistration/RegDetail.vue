@@ -454,12 +454,10 @@
     debounce,
     PatientUtils,
     handlerWeChatThRegLogin,
-    apiAsync,
     cacheUtil,
     callBackAsync,
     setDefaultPatient,
   } from '@/utils';
-  import md5s from 'js-md5';
 
   import {
     encryptDes,

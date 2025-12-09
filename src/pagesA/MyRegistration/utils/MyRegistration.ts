@@ -1,4 +1,5 @@
 import { orderStatusMap, OrderStatus } from './regDetail';
+import { joinQuery } from '../../../common/utils';
 
 export type IRegistrationCardItem = {
   sysCode: string;
@@ -141,6 +142,38 @@ export const HosNavData1001035 = {
       addition: {
         hosDeptId: 'poi',
       },
+    };
+  },
+};
+
+export const HosNavData1001093 = {
+  13152: (item: IRegistrationCardItem) => {
+    const { deptName: name, hosDeptId } = item;
+
+    const arg = {
+      appCode: 'zjzlyy_all',
+      mode: 'hisid',
+      test: 'zjzlyy_all',
+      sIRObject: JSON.stringify([
+        {
+          name,
+          value: [hosDeptId],
+          type: 'code',
+        },
+      ]),
+    };
+
+    const j = encodeURIComponent(joinQuery('', arg).slice(1));
+    const path = `pages/index/index?sence=${j}`;
+
+    return {
+      appId: 'wx0a7c0e9d33f0b074',
+      path,
+      text: '院内导航',
+      type: 'otherProgram',
+      // addition: {
+      //   hosDeptId: 'poi',
+      // },
     };
   },
 };
