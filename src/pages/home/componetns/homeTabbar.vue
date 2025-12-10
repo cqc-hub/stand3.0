@@ -3,9 +3,6 @@
     :class="{
       'system-mode-old': systemModeOld,
     }"
-    :style="{
-      'padding-bottom': heightPb + 'rpx',
-    }"
     class="tabbar"
   >
     <view class="tabbar-container relative">
@@ -15,6 +12,9 @@
         :key="i"
         :class="{
           'n-item': !isCenterCode(item),
+        }"
+        :style="{
+          'padding-bottom': heightPb + 'rpx',
         }"
         class="tabbar-item"
       >
