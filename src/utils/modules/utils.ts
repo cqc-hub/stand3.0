@@ -11,6 +11,21 @@ import { deQueryForUrl, joinQueryForUrl } from '@/common';
 
 type NeverTurnsAny<T> = T extends never ? any : T;
 
+export const getSystemSafeBottom = async () => {
+  const e = await uni.getSystemInfo({});
+  const { safeAreaInsets, screenWidth } = e;
+  // 底部安全区域像素值（px）
+  const bottomInsetPx = safeAreaInsets?.bottom || 0;
+  // px转rpx（uniapp默认750rpx对应屏幕宽度）
+  const pxToRpx = 750 / screenWidth;
+  // 基础间距（非全面屏手机至少留20rpx，全面屏叠加安全区域）
+  const basePadding = 20;
+  // 最终底部间距（rpx）
+  const bottomPadding = basePadding + bottomInsetPx * pxToRpx;
+
+  return bottomPadding;
+};
+
 //获取随机id
 export const generateUuid = function (len = 36, binary = 16) {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
@@ -27,23 +42,23 @@ export const generateUuid = function (len = 36, binary = 16) {
 export const generateRandomUserId = (length: number = 17): string => {
   // 获取当前时间戳（毫秒级）
   const timestamp = Date.now().toString();
-  
+
   // 计算需要生成的随机数长度
   const randomLength = Math.max(0, length - timestamp.length);
-  
+
   // 生成指定长度的随机数字
   let randomPart = '';
   for (let i = 0; i < randomLength; i++) {
     const randomDigit = Math.floor(Math.random() * 10);
     randomPart += randomDigit;
   }
-  
+
   // 组合时间戳和随机数
   let userId = timestamp + randomPart;
-  
+
   // 确保不超过指定长度
   userId = userId.substring(0, length);
-  
+
   return userId;
 };
 

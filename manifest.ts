@@ -114,6 +114,8 @@ const manifestFileDataObj: any = {
   },
   'mp-harmony': {
     distribute: {
+      compileSdkVersion: 10,
+      targetSdkVersion: 10,
       signingConfigs: {
         default: {
           certpath:
@@ -129,7 +131,23 @@ const manifestFileDataObj: any = {
           storePassword:
             '0000001BFC8B5B3C076B42F630A5A14F2F64D2C3E01545CA5B8EB12247500BC58C076E3B13A01357CDAF53',
         },
+
+        release: {
+          certpath:
+            '/Users/chaoqincai/Documents/resource/项目资料/省中/harmony/sz_dev.cer',
+          keyAlias: 'dev',
+          keyPassword:
+            '0000001951F42454F47F50213ED5BBB157176836DDF14EE074D9E11A7018E5F542AA53A47827421D0C',
+          profile:
+            '/Users/chaoqincai/Documents/resource/项目资料/省中/harmony/dev-testRelease.p7b',
+          signAlg: 'SHA256withECDSA',
+          storeFile:
+            '/Users/chaoqincai/Documents/resource/项目资料/省中/harmony/dev.p12',
+          storePassword:
+            '00000019E4EA8EDFBA9D17FC4BF30C97A89A40DCDA1A7858E69A234307BEA262EB2E0A246986FE94F5',
+        },
       },
+      bundleName: 'com.atomicservice.6917564602329951506',
     },
     // domainList: [
     //   {
@@ -181,7 +199,6 @@ const {
   isOpenHealthCard,
   isOpenOcr,
   toutiaoAppid,
-  harmonyBundleName,
 } = sysConfig;
 
 const { medicalMHelp, isOpenAlipayZndz, isOpenWechatSI } = sConfig;
@@ -270,7 +287,6 @@ if (sysCode === '1001094') {
 wxConfig.appid = wxAppid;
 aliConfig.appid = alipayAppid;
 toutiaoConfig.appid = toutiaoAppid;
-harmonyConfig.distribute.bundleName = harmonyBundleName;
 
 wxConfig.plugins = wxPlugin;
 aliConfig.plugins = aliPlugin;

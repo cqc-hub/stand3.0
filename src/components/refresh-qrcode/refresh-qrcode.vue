@@ -40,7 +40,6 @@
   const gStores = new GStores();
   const code = ref('');
   const loading = ref(false);
-  const systemInfo: boolean = getLocalStorage('SYS_TAB_KEY') || false;
   const refBar = ref('' as any);
 
   const barOpt = computed(() => {
