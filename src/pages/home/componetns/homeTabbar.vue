@@ -4,7 +4,7 @@
       'system-mode-old': systemModeOld,
     }"
     :style="{
-      height: `${height}px`,
+      'padding-bottom': heightPb + 'rpx',
     }"
     class="tabbar"
   >
@@ -95,7 +95,7 @@
   const gStores = new GStores();
 
   const clickCount = ref(0);
-  const height = ref(0);
+  const heightPb = ref(0);
   const current = ref('');
   const tabBars = ref([
     {
@@ -231,7 +231,7 @@
         getNum();
       }
     }
-    height.value = await getSystemSafeBottom();
+    heightPb.value = await getSystemSafeBottom();
   });
 
   const hasCenterCode = ref(false);
@@ -423,7 +423,6 @@
     border-top: 1rpx solid var(--hr-neutral-color-2);
     box-shadow: 2rpx 0 6px rgba(0, 0, 0, 0.06);
     z-index: 2;
-    height: 120rpx;
 
     .tabbar-container {
       display: flex;
