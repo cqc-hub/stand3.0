@@ -36,6 +36,8 @@ export type ApiParamsConfig = {
     mzjfTip?: string;
     // 其他项目
     otherTip?: string;
+    // 复诊签到
+    fzqdTip?: string;
   };
 
   // 健康档案
