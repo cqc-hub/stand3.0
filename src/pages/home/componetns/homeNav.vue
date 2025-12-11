@@ -12,7 +12,7 @@
         <view v-if="homeNavTitleLogo" class="pl32">
           <image :src="homeNavTitleLogo" mode="widthFix" class="logo" />
         </view>
-        <view v-else class="nav-content g-bold">
+        <view v-else class="nav-content flex items-center g-bold pl32">
           {{ $global.systemInfo.name }}
         </view>
       </view>
@@ -149,9 +149,6 @@
 
   .nav-content {
     height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   .logo {
