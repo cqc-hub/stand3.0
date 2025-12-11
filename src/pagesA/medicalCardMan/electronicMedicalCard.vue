@@ -205,10 +205,6 @@
   const isShowRefreshQrCode = ref(false);
   const refBarCode = ref('' as any);
 
-  const SYS_TAB_KEY = 'SYS_TAB_KEY';
-
-  // isIos?
-  const systemInfo: boolean = getLocalStorage(SYS_TAB_KEY) || false;
   const toggleQrLabel = computed(() => {
     if (toggleList.value.length > 2) {
       return '切换卡类型';

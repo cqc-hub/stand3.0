@@ -38,7 +38,6 @@ interface ISystemGlobalItem {
   h5Appid: string;
   h5AppidDisabledInTest?: boolean;
   name: string;
-  harmonyBundleName?: string;
 
   // https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wxee969de81bba9a45&token=&lang=zh_CN
   isOpenHealthCard?: {

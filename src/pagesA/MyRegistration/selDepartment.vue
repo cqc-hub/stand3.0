@@ -155,7 +155,7 @@
       tabField.value = [
         {
           label: '按科室',
-          value: '98',
+          value: '1',
         },
         {
           label: '按症状',

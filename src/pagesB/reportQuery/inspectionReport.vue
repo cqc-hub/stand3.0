@@ -322,7 +322,7 @@
   <view class="z-999 relative">
     <g-copyurl-popup
       :copyDataUrl="copyDataUrl"
-      title="下载链接"
+      title="请复制链接，前往浏览器进行查看与下载"
       ref="popupCopy"
       class=""
     />
@@ -752,8 +752,9 @@
       if (pdfType === 'JPG') {
         uni.showLoading({ title: '加载中' });
         try {
-          const msg =
-            await ImageDownloader.downloadAndSaveImage(pdfPath1001035);
+          const msg = await ImageDownloader.downloadAndSaveImage(
+            pdfPath1001035
+          );
           gStores.messageStore.showMessage(msg, 1500);
         } catch (error) {
           const errorMessage =
@@ -832,6 +833,11 @@
 
   const gotoMedical = async (url: string) => {
     const { _extend = {} } = pageProps.value;
+    if (pageConfig.value?.isCheckGetYunUrlByH5 === '1') {
+      copyDataUrl.value = url!;
+      popupCopy.value.show();
+      return
+    }
 
     // 需要缴费
     if (_extend?.yunUrlNeedPay === '1') {

@@ -162,7 +162,7 @@ export class GStores {
     }
     let flagData: any = null;
     if (!this.globalStore.flagCaches?.length) {
-      let { result } = await api.getSysAppMores({ typeFlag }).catch(() => {
+      let { result = [] } = await api.getSysAppMores({ typeFlag }).catch(() => {
         isSuccess = false;
         return {} as any;
       });
