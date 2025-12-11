@@ -11,6 +11,9 @@
         :typeFg="pageProps.typeFg"
       />
     </view>
+
+    <view class="safe-height"></view>
+    <view class="safe-height"></view>
   </view>
 </template>
 

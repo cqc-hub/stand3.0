@@ -3,9 +3,6 @@
     :class="{
       'system-mode-old': systemModeOld,
     }"
-    :style="{
-      height: `${height}px`,
-    }"
     class="tabbar"
   >
     <view class="tabbar-container relative">
@@ -16,6 +13,9 @@
         :class="{
           'n-item': !isCenterCode(item),
         }"
+        :style="{
+          'padding-bottom': heightPb + 'rpx',
+        }"
         class="tabbar-item"
       >
         <g-login
@@ -23,49 +23,49 @@
           @handler-next="changeTab(item)"
           :disabled="item.loginInterception === '0'"
         >
-          <view class="w100p h100p" @click="changeTab(item)">
+        <view class="w100p h100p flex items-end" @click="changeTab(item)">
+          <view
+            :class="{
+              'center-code': isCenterCode(item),
+            }"
+            class="pt20 h-full flex-1 flex flex-col items-center justify-end"
+          >
             <view
-              :class="{
-                'center-code': isCenterCode(item),
-              }"
-              class="pt20 column"
+              v-if="isCenterCode(item)"
+              class="center-code-ico-box absolute flex"
             >
-              <view v-if="isCenterCode(item)" class="center-code-ico-box flex">
-                <view class="center-code-ico flex justify-center items-center">
-                  <view class="iconfont icon-size color-fff f48">&#xe6a7;</view>
-                </view>
-              </view>
-              <image
-                v-else
-                :src="
-                  currentPath === getPath(item.url)
-                    ? item.iconActive
-                    : item.icon
-                "
-                :class="{
-                  animate__rubberBand:
-                    animateItem(item) && clickCount % 2 === 0,
-                }"
-                mode="heightFix"
-                class="animate__animated animate__fast"
-                lazy-load
-              />
-              <text
-                :class="{
-                  'color-blue': isCenterCode(item),
-                }"
-                class="label text-no-wrap"
-              >
-                {{ getLangLabel(item.label) }}
-              </text>
-              <view
-                class="badge"
-                v-if="item.label === 'home-tabbar:消息中心' && unreadMes"
-              >
-                new
+              <view class="center-code-ico flex justify-center items-center">
+                <view class="iconfont icon-size color-fff f48">&#xe6a7;</view>
               </view>
             </view>
+            <image
+              v-else
+              :src="
+                currentPath === getPath(item.url) ? item.iconActive : item.icon
+              "
+              :class="{
+                animate__rubberBand: animateItem(item) && clickCount % 2 === 0,
+              }"
+              mode="heightFix"
+              class="animate__animated animate__fast"
+              lazy-load
+            />
+            <text
+              :class="{
+                'color-blue': isCenterCode(item),
+              }"
+              class="label text-no-wrap"
+            >
+              {{ getLangLabel(item.label) }}
+            </text>
+            <view
+              class="badge"
+              v-if="item.label === 'home-tabbar:消息中心' && unreadMes"
+            >
+              new
+            </view>
           </view>
+        </view>
         </g-login>
       </view>
     </view>
@@ -95,7 +95,7 @@
   const gStores = new GStores();
 
   const clickCount = ref(0);
-  const height = ref(0);
+  const heightPb = ref(0);
   const current = ref('');
   const tabBars = ref([
     {
@@ -231,7 +231,7 @@
         getNum();
       }
     }
-    height.value = await getSystemSafeBottom();
+    heightPb.value = await getSystemSafeBottom();
   });
 
   const hasCenterCode = ref(false);
@@ -423,7 +423,6 @@
     border-top: 1rpx solid var(--hr-neutral-color-2);
     box-shadow: 2rpx 0 6px rgba(0, 0, 0, 0.06);
     z-index: 2;
-    height: 120rpx;
 
     .tabbar-container {
       display: flex;
@@ -465,11 +464,6 @@
           }
         }
 
-        .column {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
         .badge {
           border: 1rpx solid red;
           border-radius: 17rpx;
@@ -494,8 +488,8 @@
   }
 
   .center-code {
-    position: relative;
-    bottom: 24px;
+    // position: relative;
+    // bottom: 24px;
     .tabbar-item {
       .label {
         color: var(--hr-brand-color-6);
@@ -506,8 +500,9 @@
       background: #fff;
       // box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
       border-radius: 50% 50% 0 0;
+      top: -32rpx;
 
-      padding: 12px;
+      padding: 18rpx;
       padding-bottom: 0;
     }
 

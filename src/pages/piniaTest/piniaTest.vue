@@ -7,7 +7,13 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
 
-  import { GStores, LoginUtils, type TButtonConfig, useTBanner } from '@/utils';
+  import {
+    GStores,
+    LoginUtils,
+    PatientUtils,
+    type TButtonConfig,
+    useTBanner,
+  } from '@/utils';
   import globalGl from '@/config/global';
   import { joinQuery } from '../../common/utils';
   import { encryptDes, encryptedAes } from '@/common';
@@ -661,10 +667,11 @@
     },
     _type: 'useTBanner',
   } as TButtonConfig;
+  const patientUtils = new PatientUtils();
 
   const init = async () => {
     // useTBanner(用药查询);
-    useTBanner(用药查询1001093);
+    // useTBanner(用药查询1001093);
     // useTBanner(用药查询);
   };
 </script>

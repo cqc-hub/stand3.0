@@ -14,12 +14,9 @@ type NeverTurnsAny<T> = T extends never ? any : T;
 export const getSystemSafeBottom = async () => {
   const e = await uni.getSystemInfo({});
   const { safeAreaInsets, screenWidth } = e;
-  // 底部安全区域像素值（px）
-  const bottomInsetPx = safeAreaInsets?.bottom || 0;
-  // px转rpx（uniapp默认750rpx对应屏幕宽度）
+  const bottomInsetPx = safeAreaInsets?.bottom || 20;
   const pxToRpx = 750 / screenWidth;
-  // 基础间距（非全面屏手机至少留20rpx，全面屏叠加安全区域）
-  const basePadding = 20;
+  const basePadding = 0;
   // 最终底部间距（rpx）
   const bottomPadding = basePadding + bottomInsetPx * pxToRpx;
 

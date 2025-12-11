@@ -177,7 +177,12 @@
   import { ref, onMounted, computed, type Ref } from 'vue';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
-  import { IPat, useMessageStore, useRouterStore } from '@/stores';
+  import {
+    IPat,
+    useCacheStore,
+    useMessageStore,
+    useRouterStore,
+  } from '@/stores';
   import type { TInstance } from '@/components/g-form/index';
 
   import {
@@ -192,6 +197,7 @@
     phoneConvert,
     idValidator,
     idCardConvert,
+    apiAsync,
   } from '@/utils';
 
   import {
@@ -246,11 +252,13 @@
 
   const routeStore = useRouterStore();
   const messageStore = useMessageStore();
+  const cacheStore = useCacheStore();
+
   const pageProps = ref(<TPageType>{
     pageType: 'addPatient',
   });
   const pageConfig = ref(<ISystemConfig['person']>{});
-  const patientUtil = new PatientUtils();
+  const patientUtils = new PatientUtils();
   const gStores = new GStores();
   const patList = gStores.userStore.patList;
   const gform = ref<any>('');
@@ -332,7 +340,7 @@
         faceDialog.value.show();
       });
       await _realNameAuth(pat);
-      await patientUtil.getPatCardList();
+      await patientUtils.getPatCardList();
     }
   };
 
@@ -385,7 +393,6 @@
 
     // const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
 
-   
     const {
       browser: { source },
     } = gStores.globalStore;
@@ -433,7 +440,7 @@
 
           if (jump === 0) {
             try {
-              await patientUtil.registerUser({
+              await patientUtils.registerUser({
                 ...data,
                 idCard,
                 idType,
@@ -511,8 +518,10 @@
           },
           pageProps.value.authCode,
           'quickRegisterHealthCard',
-          async (err) => {
-            if (err?.respCode === 999301) {
+          async (err = {} as any) => {
+            const { respCode } = err;
+
+            if (respCode === 999301) {
               messageStore.showMessage(err.message, 3000, {
                 closeCallBack() {
                   uni.navigateTo({
@@ -526,8 +535,8 @@
                   });
                 },
               });
-            } else if (err?.respCode === 999001) {
-              // await patientUtil.getPatCardList();
+            } else if (respCode === 999001) {
+              // await patientUtils.getPatCardList();
             }
           }
         );
@@ -563,10 +572,10 @@
       const requestArg = {
         ...data,
         defaultFalg: value[formKey.defaultFalg] ? '1' : '0',
-        herenId: patientUtil.globalStore.herenId,
+        herenId: patientUtils.globalStore.herenId,
         patientName: value[formKey.patientName],
         patientPhone: value[formKey.patientPhone],
-        source: patientUtil.globalStore.browser.source,
+        source: patientUtils.globalStore.browser.source,
         patientType: formData.value[formKey.patientType],
         verifyCode: formData.value[formKey.verifyCode],
       };
@@ -597,7 +606,7 @@
           });
         }
       } else {
-        const patientId = await patientUtil
+        const patientId = await patientUtils
           .addPatient(requestArg)
           .catch((err) => {
             dealNetError(err, data);
@@ -613,7 +622,7 @@
       if (value[formKey.defaultFalg]) {
         gStores.userStore.updatePatChoose({} as any);
       }
-      await patientUtil.getPatCardList();
+      await patientUtils.getPatCardList();
       newPat.value = gStores.userStore.patList.find(
         (pat) => pat.patientId === newPat.value.patientId
       );
@@ -638,8 +647,94 @@
     }
   };
 
-  const dealNetError = async (err, data) => {
-    if (err?.respCode === 999301) {
+  const editPhone = async (data = {} as any) => {
+    // 需要保障此页面存在这几个字段
+    const { idType, idCard, patientPhone, patientName } = data;
+    const {
+      isCanChangeHosPhone,
+      useFaceVerifyInChangePhone,
+      isChangeHosPhoneWay,
+    } = pageConfig.value;
+
+    if (idType === '01' && isCanChangeHosPhone === '1') {
+      if (!data.pData) {
+        let selWay = '';
+        if (isChangeHosPhoneWay) {
+          const chooseList = [
+            {
+              label: '使用人脸验证',
+              value: 'face',
+            },
+            {
+              label: '上传证件验证',
+              value: 'ocr',
+            },
+            // @ts-expect-error
+          ].filter((o) => isChangeHosPhoneWay.includes(o.value));
+
+          if (chooseList.length === 1) {
+            selWay = chooseList[0].value;
+          } else {
+            const { tapIndex } = await apiAsync(uni.showActionSheet, {
+              title: '选择验证方式',
+              alertText: '选择验证方式',
+              itemList: chooseList.map((o) => o.label),
+            });
+
+            selWay = chooseList[tapIndex].value;
+          }
+        }
+
+        let pdata = '';
+
+        if (
+          (!selWay && useFaceVerifyInChangePhone === '1') ||
+          selWay === 'face'
+        ) {
+          const { pData } = await patientUtils.faceVerifyAndPData({
+            idCardNumber: formData.value[formKey.idCard],
+            name: formData.value[formKey.patientName],
+          });
+
+          pdata = pData;
+        } else {
+          cacheStore.changeCacheData({
+            ...data,
+            source: gStores.globalStore.browser.source,
+          });
+
+          uni.navigateTo({
+            url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
+              idCard,
+              patientPhone,
+              patientName,
+              idType,
+              from: 'addMedical',
+              isUseFace: '0',
+            }),
+          });
+
+          throw new Error('去到ocr页面');
+        }
+        data.pData = pdata;
+      }
+
+      await api.mofHosPhone({
+        ...data,
+        pdata: data.pData,
+        source: gStores.globalStore.browser.source,
+      });
+
+      formSubmit({});
+    }
+  };
+
+  const dealNetError = async (err = {} as any, data) => {
+    const { isCanChangeHosPhone } = pageConfig.value;
+    const { idType } = formData.value;
+
+    const { respCode } = err;
+    if (respCode === 999301) {
       messageStore.showMessage(err.message, 3000, {
         closeCallBack() {
           uni.navigateTo({
@@ -651,8 +746,20 @@
           });
         },
       });
+    } else if (
+      respCode === 884801 &&
+      idType === '01' &&
+      isCanChangeHosPhone === '1'
+    ) {
+      const { confirm } = await apiAsync(uni.showModal, {
+        content: '患者存在建档记录但手机号不匹配，是否立即修改？',
+      });
+
+      if (confirm) {
+        await editPhone(data);
+      }
     } else if (err?.respCode === 999001) {
-      // await patientUtil.getPatCardList();
+      // await patientUtils.getPatCardList();
     }
   };
 
