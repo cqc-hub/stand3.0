@@ -553,11 +553,7 @@
           }
         }
       ],
-      "plugins":  
-    // #ifdef  MP-WEIXIN
-    {"healthCardPlugins":{"version":"3.11.0","provider":"wxee969de81bba9a45"}}
-    // #endif
-    
+      "plugins":  {}
     },
     {
       "root": "pagesB",
@@ -976,11 +972,7 @@
           }
         }
       ],
-      "plugins":  
-    // #ifdef  MP-WEIXIN
-    {"medicalLetterPlugins":{"version":"1.0.20","provider":"wx08b6b6e7153f00e3"}}
-    // #endif
-    
+      "plugins":  {}
     },
     {
       "root": "cacheUtil",
