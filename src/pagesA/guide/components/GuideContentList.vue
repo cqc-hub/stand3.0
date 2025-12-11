@@ -302,6 +302,10 @@
                 />
               </view>
 
+              <view v-else-if="item.title === '复诊签到'">
+               
+              </view>
+
               <view v-else-if="item.title === '就诊完成'">
                 <GuideContentListCol
                   :cols="mzqhCol"
@@ -315,7 +319,9 @@
                 />
               </view>
 
-              <view v-else>暂未实现</view>
+              <view v-else>
+                暂未实现
+              </view>
             </view>
           </g-collapse>
         </view>
@@ -556,6 +562,10 @@
     switch (item.title) {
       case '门诊取药':
         tip = config.tabDrugTip || '';
+        break;
+
+      case '复诊签到':
+        tip = config.fzqdTip || '如需复诊请去诊区自助机签到就诊！';
         break;
 
       case '检验项目':

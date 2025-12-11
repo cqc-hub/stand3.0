@@ -13,6 +13,7 @@ export const titleMap = {
   6: '检验项目',
   7: '其他项目',
   8: '门诊取药',
+  9: '复诊签到',
 } as const;
 
 type TTitleMap = typeof titleMap;

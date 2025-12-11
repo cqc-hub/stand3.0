@@ -296,7 +296,7 @@ const visitItemClick = async (item: TVisitRecord) => {
   let isBreak = false;
   isComplete.value = true;
   // 8个node必定存在
-  const rList: any[] = [node1Info, node2Info, node3Info, node4Info, node5Info, node6Info, node7Info, node8Info]
+  let rList: any[] = [node1Info, node2Info, node3Info, node4Info, node5Info, node6Info, node7Info, node8Info]
     .filter((o: any, i) => {
       if (o) {
         o.title = titleMap[i + 1];
@@ -328,19 +328,28 @@ const visitItemClick = async (item: TVisitRecord) => {
       }
 
       return true;
-    })
-    .reverse();
+    }) 
 
-  visitInfoList.value = rList;
-  // visitInfoList.value = visitInfoList.value.filter((o) => {
-  //   const { title, others = [] } = o;
-
-  //   if (title === '其他项目' && !others.length) {
-  //     return false;
-  //   }
-
-  //   return o;
-  // });
+    // 新增逻辑：处理复诊签到节点
+  const hasNode5To7 = !!(node5Info || node6Info || node7Info);
+  
+  if (hasNode5To7) {
+    // 如果存在5、6、7中任意一个节点，则添加"复诊签到"节点
+    const reviewSignNode = {
+      title: "复诊签到",
+      completionStatus: node8Info ? 1 : 0, // 如果有node8则表示已完成，否则未完成
+    };
+    
+    // 将复诊签到节点插入到节点8之前
+    const node8Index = rList.findIndex(node => node.title === "门诊取药"); // 节点8是"门诊取药"
+     if (node8Index !== -1) {
+      rList.splice(node8Index, 0, reviewSignNode);
+    } else {
+      // 如果找不到门诊缴费节点，则添加到末尾
+      rList.push(reviewSignNode);
+    }
+  }
+  visitInfoList.value = rList.reverse(); 
 };
 
 const isShowEmpty = computed(() => {
@@ -546,7 +555,7 @@ const getHistory = async () => {
           t.itemList.push({
             ...info,
             title: "就诊完成",
-            sort: 9,
+            sort: 10,
             completionStatus: 1,
           });
         }

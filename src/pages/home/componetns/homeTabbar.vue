@@ -1,8 +1,10 @@
 <template>
   <view
     :class="{
-      ios: isIos,
       'system-mode-old': systemModeOld,
+    }"
+    :style="{
+      height: `${height}px`,
     }"
     class="tabbar"
   >
@@ -75,7 +77,13 @@
 
   import { setLocalStorage, getLocalStorage } from '@/common';
 
-  import { useTBanner, throttle, GStores, cacheUtil } from '@/utils';
+  import {
+    useTBanner,
+    throttle,
+    GStores,
+    cacheUtil,
+    getSystemSafeBottom,
+  } from '@/utils';
   import { isAreaProgram } from '@/stores';
   import { getLangLabel } from '@/config/lang';
 
@@ -86,8 +94,8 @@
   defineProps<{ systemModeOld: boolean }>();
   const gStores = new GStores();
 
-  const SYS_TAB_KEY = 'SYS_TAB_KEY';
   const clickCount = ref(0);
+  const height = ref(0);
   const current = ref('');
   const tabBars = ref([
     {
@@ -197,9 +205,6 @@
 
   current.value = currentPath;
 
-  const systemInfo = getLocalStorage(SYS_TAB_KEY) || '';
-  isIos.value = !!systemInfo;
-
   const animateItem = (item) => {
     return currentPath === item.url && item.url === '/pages/home/my';
   };
@@ -218,15 +223,6 @@
 
   onMounted(async () => {
     getMenuBtn();
-    if (systemInfo === '') {
-      const e = await uni.getSystemInfo({});
-      const { system, osName } = e;
-      isIos.value = system.startsWith('iOS') || osName === 'ios';
-
-      setLocalStorage({
-        [SYS_TAB_KEY]: isIos.value,
-      });
-    }
     if (
       global.sConfig.isOpenHomeTabBarMessageBtn &&
       global.sConfig.isMessageBtnShowNew
@@ -235,6 +231,7 @@
         getNum();
       }
     }
+    height.value = await getSystemSafeBottom();
   });
 
   const hasCenterCode = ref(false);
@@ -287,7 +284,7 @@
         url: 'mDisease',
         loginInterception: '0',
         sort: 2,
-      }, 
+      },
       {
         label: 'home-tabbar:服务',
         icon: '/static/image/wlyy.png',
@@ -298,7 +295,7 @@
         loginInterception: '0',
         sort: 2,
       },
-       {
+      {
         label: 'home-tabbar:科普',
         icon: global.BASE_IMG + 'oral-mall-home-icon.png',
         iconActive: global.BASE_IMG + 'oral-mall-home-icon-active.png',
@@ -306,9 +303,9 @@
         loginInterception: '1',
         sort: 2,
       },
-       {
+      {
         label: 'home-tabbar:便民',
-        icon:  '/static/image/wlyy.png',
+        icon: '/static/image/wlyy.png',
         iconActive: global.BASE_IMG + 'oral-mall-home-icon-active.png',
         url: '/pagesD/common/homeGrid?showTab=5',
         loginInterception: '0',
@@ -361,7 +358,7 @@
       // tabList.push('home-tabbar:健康商城');
     }
 
-      if (global.SYS_CODE === '1001036') {
+    if (global.SYS_CODE === '1001036') {
       //东总煞笔需求
       tabList.push('home-tabbar:便民');
       tabList.push('home-tabbar:科普');
@@ -378,7 +375,11 @@
       .sort((a, b) => a.sort - b.sort);
 
     // 固定插入中间
-    if (!(tabBars.value.length % 2) && !isAreaProgram()&& global.SYS_CODE !== '1001036') {
+    if (
+      !(tabBars.value.length % 2) &&
+      !isAreaProgram() &&
+      global.SYS_CODE !== '1001036'
+    ) {
       const d = {
         label: 'home-tabbar:就诊码/医保码',
         icon: '/static/image/my.png',
@@ -423,10 +424,6 @@
     box-shadow: 2rpx 0 6px rgba(0, 0, 0, 0.06);
     z-index: 2;
     height: 120rpx;
-
-    &.ios {
-      height: 160rpx;
-    }
 
     .tabbar-container {
       display: flex;

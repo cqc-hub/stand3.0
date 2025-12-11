@@ -276,17 +276,25 @@
       return false;
     }
     if (gStores.globalStore.ev === 'wx') {
-      if (gStores.globalStore.sysCode === '1001046') {
+      const { sysCode } = gStores.globalStore;
+
+      if (sysCode === '1001093') {
         return true;
       }
-      if (gStores.globalStore.sysCode === '1001035') {
+
+      if (sysCode === '1001046') {
+        return true;
+      }
+
+      if (sysCode === '1001035') {
         const { hosId } = item;
 
         if (['12675', '12713'].includes(hosId)) {
           return true;
         }
       }
-      if (gStores.globalStore.sysCode === '1001052') {
+
+      if (sysCode === '1001052') {
         const { hosId } = item;
 
         if (['13001'].includes(hosId)) {

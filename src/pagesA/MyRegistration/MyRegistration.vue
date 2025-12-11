@@ -198,6 +198,7 @@
     IRegistrationCardItem,
     HosNavData,
     HosNavData1001035,
+    HosNavData1001093,
   } from './utils/MyRegistration';
   import { isAreaProgram, IPat } from '@/stores';
   import { deQueryForUrl, joinQueryForUrl, setLocalStorage } from '@/common';
@@ -525,14 +526,19 @@
 
   //多院区院内导航
   const goHosNavigate = (item: IRegistrationCardItem) => {
-    if (gStores.globalStore.sysCode === '1001035') {
+    const { sysCode } = gStores.globalStore;
+    if (sysCode === '1001035') {
       useTBanner(HosNavData1001035[item.hosId](item), 'navigateTo', item);
     }
-    if (gStores.globalStore.sysCode === '1001046') {
+    if (sysCode === '1001046') {
       useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
     }
-    if (gStores.globalStore.sysCode === '1001052') {
+    if (sysCode === '1001052') {
       useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
+    }
+
+    if (sysCode === '1001093') {
+      useTBanner(HosNavData1001093[item.hosId](item), 'navigateTo', item);
     }
   };
 
