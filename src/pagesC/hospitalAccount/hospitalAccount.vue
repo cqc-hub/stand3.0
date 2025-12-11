@@ -76,6 +76,16 @@
           </button>
 
           <button
+            v-if="
+              isCash == '2' && lists.accountBalance !== '0'
+            "
+             @click="confirmForm1('refound')"
+            class="btn btn-primary btn-border btn-plain f-base"
+          >
+            {{ '申请退款登记' }}
+          </button>
+
+          <button
             v-if="pageConfig.isHideAccountRefillBtn !== '1'"
             @click="confirmForm"
             class="btn btn-primary f-base"

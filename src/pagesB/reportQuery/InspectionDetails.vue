@@ -580,7 +580,7 @@
         checkoutReportList.value.pdfUrl || checkoutReportList.value?.pdfUrls[0]
       );
       let type ='cache'
-      if(['1001085'].includes(gStores.globalStore.sysCode)){
+      if(['1001083','1001095'].includes(gStores.globalStore.sysCode)){
         type ='base64'
       }
       uni.navigateTo({
