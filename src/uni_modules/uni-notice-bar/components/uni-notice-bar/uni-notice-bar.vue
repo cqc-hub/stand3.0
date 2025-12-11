@@ -309,8 +309,10 @@
 		/* #endif */
 		flex-direction: row;
 		align-items: center;
-		padding: 10px 12px;
+		// padding: 10px 12px;
+		/* #ifndef MP-TOUTIAO */
 		margin-bottom: 10px;
+		/* #endif */
 	}
 
 	.uni-cursor-point {

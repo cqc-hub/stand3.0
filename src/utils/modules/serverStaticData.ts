@@ -656,6 +656,8 @@ export class ServerStaticData {
         arg.source = 5;
       } else if (gStores.globalStore.ev === 'wx') {
         arg.source = 1;
+      }else if (gStores.globalStore.ev === 'tt') {
+        arg.source = 8;
       }
     }
 

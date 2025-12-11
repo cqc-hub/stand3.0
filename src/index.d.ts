@@ -4,6 +4,7 @@
 
 declare const wx: any;
 declare const my: any;
+declare const tt: any;
 declare const uni: Uni;
 declare const requirePlugin: any;
 declare const h5UrlLocal: string;
