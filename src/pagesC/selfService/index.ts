@@ -10,4 +10,5 @@ export interface INucle {
   tips: string;
   tipHide: boolean;
   showTipHideBtn: boolean;
+  extend?: string;
 }

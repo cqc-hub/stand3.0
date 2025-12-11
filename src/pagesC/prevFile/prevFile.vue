@@ -42,7 +42,7 @@
     });
     if (type === 'cache') {
       downWithStream(cacheStore.cacheData, name);
-    } else if (type == 'base64') {
+    } else if (type == 'base64') {      
       downWithBase64(url, name);
     } else {
       downWithStream(url, name);

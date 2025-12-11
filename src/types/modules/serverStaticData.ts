@@ -530,6 +530,8 @@ export interface ISystemConfig_ {
     isGraphic?: '1';
     /** 检查报告查询第三方 点击检查跳转第三方h5 */
     isCheckThirdParty?: '1';
+    /** 检查报告云影像复制链接前往h5查看*/
+    isCheckGetYunUrlByH5?: '1';
 
     /** 报告查询列表云影像链接 */
     listYun?: {

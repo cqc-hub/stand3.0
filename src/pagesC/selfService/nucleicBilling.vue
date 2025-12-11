@@ -259,8 +259,9 @@
   import HTMLParser from '@/common/html-parser';
   import { joinQuery, deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { INucle } from './index';
+  import { decryptDes } from '@/common/des';
 
-   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
+  import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
 
   const pageProps = ref(
     {} as {
@@ -338,9 +339,9 @@
       subTitle: '长按识别二维码，关注公众号',
       isShowInfo: true,
     };
-    console.log('await isSubscribeWx()',await isSubscribeWx());
-    
-    if (!await isSubscribeWx()) {
+    console.log('await isSubscribeWx()', await isSubscribeWx());
+
+    if (!(await isSubscribeWx())) {
       homeH5SharePopupRef.value.show();
     }
   };
@@ -484,13 +485,33 @@
   };
 
   const clickItem = async (item: INucle) => {
-    const { disabled, tips } = item;
+    const { disabled, tips, extend } = item;
     const { billingType } = pageProps.value;
 
     if (disabled === '1') {
       tips && gStores.messageStore.showMessage(tips, 3000);
 
       return;
+    }
+    if (tips && extend) {
+      try {
+        let extend = JSON.parse(item?.extend || '');
+        extend?.showCareModel == '1' &&
+          (await new Promise<{ confirm: boolean }>((r) => {
+            gStores.messageStore.showMessage(tips, 0, {
+              useDialog: true,
+              dialogOpt: {
+                title: '温馨提示',
+                isShowCancel: false,
+                isMaskClick: true,
+                confirmText: '确认',
+              },
+              closeCallBack: r,
+            });
+          }));
+      } catch (e) {
+        console.error('extend序列表失败', item.extend, e);
+      }
     }
 
     const listLen = selList.value.length;
@@ -573,6 +594,51 @@
       p += (c.fee as unknown as number) * 1;
       return p;
     }, 0);
+    if (selList.value?.length === 1 && selList.value[0].extend) {
+      try {
+        const extend = JSON.parse(selList.value[0].extend);
+        if (extend?.quesNeed) {
+          console.log('gStores.userStore.patChoose', gStores.userStore);
+          const wxPhone = decryptDes(
+            gStores.userStore.phoneNum,
+            'N1@ae^T:phone'
+          );
+          console.log('wxPhone', wxPhone);
+
+          const { birthday, patientSex, patientAge, patientName } =
+            gStores.userStore.patChoose;
+          const extraData = {
+            birthday,
+            patientSex,
+            patientAge,
+            patientName,
+            phone: wxPhone,
+            hosId,
+            isPay,
+            patientId,
+            items: selList.value,
+            totalCost,
+            source: source,
+            hosName,
+            reBillingUrl: reBillingUrl, //再次开单路径
+          };
+
+          useTBanner({
+            type: 'h5',
+            isSelfH5: '1',
+            path: 'pagesC/question/yqQuestion3',
+            addition: {
+              herenId: 'herenId',
+              token: 'token',
+            },
+            extraData,
+          });
+          return;
+        }
+      } catch (e) {
+        console.error('extend序列表失败', selList.value[0].extend, e);
+      }
+    }
 
     const tips =
       `是否确认以下${selList.value.length}项开单: ` +
