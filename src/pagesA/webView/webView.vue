@@ -1,16 +1,21 @@
 <template>
   <view class="">
     <!-- @vue-expect-error -->
-    <web-view v-if="src" :src="src" @message="getMessage"></web-view>
+    <web-view
+      v-if="src"
+      :src="src"
+      @message="getMessage"
+      ref="refWebView"
+    ></web-view>
   </view>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { onLoad, onShareAppMessage } from '@dcloudio/uni-app';
+  import { onLoad, onShareAppMessage, onShow } from '@dcloudio/uni-app';
   import { useCommonTo } from '@/common/checkJump';
   import { handWebMessage, thirdWxPay, GStores, useTBanner } from '@/utils';
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, getLocalStorage, removeLocation } from '@/common';
   import { CanWrite } from '@/typeUtils';
   import { useCacheStore } from '@/stores';
 
@@ -26,6 +31,7 @@
   }>();
   const pageProps = ref({} as CanWrite<typeof props>);
   const src = ref('');
+  const refWebView = ref('' as any);
 
   const getMessage = (evt) => {
     console.warn('返回数据', evt);
@@ -46,6 +52,15 @@
       thirdWxPay(V3PageData);
     }
   };
+
+  onShow(() => {
+    console.log('我出来哈哈哈哈哈');
+    console.log(refWebView.value);
+
+    if (getLocalStorage('back-address')) {
+      removeLocation('back-address');
+    }
+  });
 
   const init = () => {
     const { https, cache } = pageProps.value;

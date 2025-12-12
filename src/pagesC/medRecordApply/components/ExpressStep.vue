@@ -65,12 +65,12 @@
   const gStores = new GStores();
   const props = withDefaults(
     defineProps<{
-      pointNow: {
+      pointNow?: {
         title: string;
         date: string;
         desc: string;
       };
-      pointEnd: {
+      pointEnd?: {
         title: string;
         desc: string;
       };

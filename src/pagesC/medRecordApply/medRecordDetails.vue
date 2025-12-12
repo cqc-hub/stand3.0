@@ -1269,7 +1269,6 @@
     if (isPayWithoutSecretAuth.value) {
       uni.showLoading({ title: '加载中'});;
       const u: any = await new Promise((r) => {
-        // @ts-expect-error
         require('../../pagesA/medicalCardMan/utils/index', r);
       });
 

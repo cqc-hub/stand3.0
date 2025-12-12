@@ -764,7 +764,6 @@
   };
 
   const formChange = async ({ item, value }) => {
-    console.log(item, value);
     const { key } = item;
 
     if (key === 'patientType') {

@@ -12,7 +12,13 @@
         <view v-if="homeNavTitleLogo" class="pl32">
           <image :src="homeNavTitleLogo" mode="widthFix" class="logo" />
         </view>
-        <view v-else class="nav-content flex items-center g-bold pl32">
+        <view
+          v-else
+          :class="{
+            'justify-center': gStores.globalStore.sysCode !== '1001057',
+          }"
+          class="nav-content flex items-center g-bold pl32"
+        >
           {{ $global.systemInfo.name }}
         </view>
       </view>
