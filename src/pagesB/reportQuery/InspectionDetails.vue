@@ -79,58 +79,178 @@
               >
                 <template v-if="_item.antiList">
                   <view class="seen">
-                    <view class="title">{{ _item.bioName }}</view>
-                    <view v-if="antiList.length" class="table">
+                    <view class="title">
+                      {{
+                        `${_item.bioName}${_item.bioNum ? _item.bioNum : ''}`
+                      }}
+                    </view>
+                    <view
+                      v-if="
+                        _item.antiList.length &&
+                        !(
+                          _item.antiList.length == 1 &&
+                          JSON.stringify(_item.antiList[0]) == '{}'
+                        )
+                      "
+                      class="table table-scroll"
+                    >
                       <view class="table-title">
-                        <view class="table-title1 table-title-first">
-                          抗菌药物
+                        <view
+                          class="table-title-auto table-title1 table-title-first"
+                          v-if="
+                            allNotHasData(
+                              checkoutReportList.antiItemResult[i].antiList,
+                              'antiName'
+                            )
+                          "
+                        >
+                          {{
+                            getSysCode() === '1001046' ? '抗生素' : '抗菌药物'
+                          }}
                         </view>
-                        <view class="table-title2 table-title-common">
+                        <view
+                          class="table-title-auto table-title-common"
+                          v-if="
+                            getSysCode() !== '1001046' &&
+                            allNotHasData(
+                              checkoutReportList.antiItemResult[i].antiList,
+                              'result'
+                            )
+                          "
+                        >
                           解释
                         </view>
-                        <view class="table-title3 table-title-common">
-                          结果
+                        <view
+                          class="table-title-auto table-title-common"
+                          v-if="
+                            allNotHasData(
+                              checkoutReportList.antiItemResult[i].antiList,
+                              'number'
+                            )
+                          "
+                        >
+                          数值
                         </view>
-                        <view class="table-title4 table-title-common">
+                        <view
+                          v-if="
+                            allNotHasData(
+                              checkoutReportList.antiItemResult[i].antiList,
+                              'antiResult'
+                            )
+                          "
+                          class="table-title-auto table-title-common"
+                        >
+                          {{ getSysCode() === '1001046' ? '药敏' : '结果' }}
+                        </view>
+                        <view
+                          class="table-title-auto table-title-common"
+                          v-if="
+                            allNotHasData(
+                              checkoutReportList.antiItemResult[i].antiList,
+                              'testRange'
+                            )
+                          "
+                        >
+                          折点
+                        </view>
+                        <view
+                          class="table-title-auto table-title1 table-title-common"
+                          v-if="
+                            allNotHasData(
+                              checkoutReportList.antiItemResult[i].antiList,
+                              'itemUnits'
+                            )
+                          "
+                        >
                           单位
                         </view>
-                        <view class="table-title5 table-title-common">
+                        <view
+                          class="table-title-auto table-title-common"
+                          v-if="
+                            allNotHasData(
+                              checkoutReportList.antiItemResult[i].antiList,
+                              'testMethod'
+                            )
+                          "
+                        >
                           方法
                         </view>
                       </view>
                       <template
                         v-for="(item, index) in checkoutReportList
-                          .antiItemResult[0].antiList"
+                          .antiItemResult[i].antiList"
                         :key="index"
                       >
                         <view class="table-content">
                           <view
-                            class="table-title1 table-content-first g-break-word"
+                            class="table-title-auto table-title1 table-content-first g-break-word"
                           >
                             {{ item.antiName }}
                           </view>
                           <view
-                            class="table-title2 table-title-common g-break-word"
+                            v-if="
+                              getSysCode() !== '1001046' &&
+                              allNotHasData(
+                                checkoutReportList.antiItemResult[i].antiList,
+                                'result'
+                              )
+                            "
+                            class="table-title-auto table-title-common g-break-word"
                           >
                             {{ item.result }}
                           </view>
                           <view
+                            v-if="
+                              allNotHasData(
+                                checkoutReportList.antiItemResult[i].antiList,
+                                'number'
+                              )
+                            "
+                            class="table-title-auto table-title-common g-break-word"
+                          >
+                            {{ item.number }}
+                          </view>
+                          <view
                             v-if="item.antiResult"
-                            class="table-title3 table-title-common g-break-word"
+                            class="table-title-auto table-title-common g-break-word"
                           >
                             {{ item.antiResult }}
                           </view>
                           <view
                             v-else
-                            class="table-title3 table-title-common g-break-word"
+                            class="table-title-auto table-title-common g-break-word"
                           ></view>
                           <view
-                            class="table-title4 table-title-common g-break-word"
+                            v-if="
+                              allNotHasData(
+                                checkoutReportList.antiItemResult[i].antiList,
+                                'testRange'
+                              )
+                            "
+                            class="table-title-auto table-title-common g-break-word"
+                          >
+                            {{ item.testRange }}
+                          </view>
+
+                          <view
+                            v-if="
+                              allNotHasData(
+                                checkoutReportList.antiItemResult[i].antiList,
+                                'itemUnits'
+                              )
+                            "
+                            class="table-title-auto table-title-common g-break-word"
                           >
                             {{ item.itemUnits }}
                           </view>
                           <view
-                            class="table-title5 table-title-common g-break-word"
+                            v-if="
+                              allNotHasData(
+                                checkoutReportList.antiItemResult[i].antiList,
+                                'testMethod'
+                              )
+                            "
+                            class="table-title-auto table-title-common g-break-word"
                           >
                             {{ item.testMethod }}
                           </view>
@@ -159,22 +279,24 @@
                 class="table keep-normal"
               >
                 <view class="table-title">
-                  <view class="table-title1">检验项目</view>
-                  <view class="table-title2 table-title-common">结果</view>
-                  <view class="table-title6 table-title-common">参考范围</view>
-                  <view class="table-title4 table-title-common">单位</view>
+                  <view class="table-title-auto">检验项目</view>
+                  <view class="table-title-auto table-title-common">结果</view>
+                  <view class="table-title-auto table-title-common">
+                    参考范围
+                  </view>
+                  <view class="table-title-auto table-title-common">单位</view>
                 </view>
                 <template
                   v-for="item in checkoutReportList.normalList"
-                  :key="item"
+                  :key="item + 'content'"
                 >
                   <view class="table-content">
-                    <view class="table-title1 g-break-word">
+                    <view class="table-title-auto g-break-word">
                       {{ item.itemName }}
                     </view>
                     <view
                       v-if="item.itemVal"
-                      class="table-title2 table-title-common g-break-word"
+                      class="table-title-auto table-title-common g-break-word"
                       :class="{
                         'color-red': item.flag == 'H' || item.flag === '阳',
                         'color-blue': item.flag === 'L',
@@ -194,11 +316,14 @@
                         ↑
                       </text>
                     </view>
-                    <view v-else class="table-title3 table-title-common"></view>
-                    <view class="table-title6 table-title-common">
+                    <view
+                      v-else
+                      class="table-title-auto table-title-common"
+                    ></view>
+                    <view class="table-title-auto table-title-common">
                       {{ item.normalVal }}
                     </view>
-                    <view class="table-title4 table-title-common">
+                    <view class="table-title-auto table-title-common">
                       {{ item.itemUnits }}
                     </view>
                   </view>
@@ -315,7 +440,7 @@
     ISystemConfig,
     getShareTotalUrl,
   } from '@/utils';
-  import { joinQuery, encryptDes, joinQueryForUrl } from '@/common';
+  import { joinQuery, encryptDes, joinQueryForUrl, getSysCode } from '@/common';
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
   import { getOpenId } from '@/components/g-pay/index';
@@ -467,7 +592,6 @@
 
     if (useCacheData) {
       result = gStores.globalStore.cacheData;
-      console.log(result, 'resultresultresult');
     } else {
       let params = {
         hosId: hosId,
@@ -575,20 +699,29 @@
       checkoutReportList.value.pdfUrl ||
       checkoutReportList.value?.pdfUrls?.length === 1
     ) {
-      //@ts-expect-error
       cacheStore.changeCacheData(
+        //@ts-expect-error
         checkoutReportList.value.pdfUrl || checkoutReportList.value?.pdfUrls[0]
       );
-      let type ='cache'
-      if(['1001083','1001095'].includes(gStores.globalStore.sysCode)){
-        type ='base64'
+      let params: any = {
+        type: 'cache',
+      };
+      if (['1001083', '1001095'].includes(gStores.globalStore.sysCode)) {
+        params = {
+          type: 'base64',
+          url: encodeURIComponent(
+            checkoutReportList.value.pdfUrl ||
+              //@ts-expect-error
+              checkoutReportList.value?.pdfUrls[0]
+          ),
+        };
       }
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
           // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
           // url: encodeURIComponent(checkoutReportList.value.pdfUrl as string),
           name: repName,
-          type,
+          ...params,
         }),
       });
     } else {
@@ -601,6 +734,22 @@
         }) || [];
       refPay.value.show();
     }
+  };
+
+  const allNotHasData = (list, key) => {
+    if (!Array.isArray(list) || list.length === 0) {
+      return false;
+    }
+    return list.every((item) => {
+      // 检查对象是否存在、是否包含key且值有效
+      return (
+        item &&
+        key in item &&
+        item[key] !== undefined &&
+        item[key] !== null &&
+        item[key] !== ''
+      );
+    });
   };
 
   const selVerifyWay = ({ item }) => {
@@ -633,6 +782,7 @@
     background-color: #f6f6f6;
     position: relative;
     .watermarkView {
+      pointer-events: none;
       position: absolute;
       z-index: 1;
       opacity: 0.9;
@@ -759,6 +909,9 @@
               margin-top: 16rpx;
               margin-left: 24rpx;
             }
+            .table-scroll {
+              overflow: scroll;
+            }
             .table {
               margin: 0 24rpx;
               box-sizing: border-box;
@@ -771,21 +924,41 @@
                 display: flex;
                 align-items: center;
                 padding: 0 16rpx;
+                .table-title-auto {
+                  display: flex;
+                  align-items: center;
+                  height: 72rpx;
+                  background-color: #f6f6f6;
+                  justify-content: center;
+                }
               }
               .table-content {
                 // width: calc(100% - 16rpx);
                 background-color: var(--hr-brand-color-3-light);
                 font-size: var(--hr-font-size-xs);
                 display: flex;
-                margin-top: 8rpx;
-                padding: 14rpx 16rpx;
-                align-items: flex-start;
+                align-items: center;
+                padding: 0 16rpx;
+                .table-title-auto {
+                  display: flex;
+                  align-items: center;
+                  min-height: 72rpx;
+                  padding: 10rpx 0;
+                  background-color: var(--hr-brand-color-3-light);
+                  justify-content: center;
+                }
+                // width: calc(100% - 16rpx);
               }
               .table-title-common {
                 text-align: center;
               }
+              .table-title-auto {
+                width: auto;
+                min-width: 20%;
+              }
+
               .table-title1 {
-                width: 33%;
+                min-width: 33%;
                 display: block;
                 text-overflow: ellipsis;
                 word-wrap: break-word;

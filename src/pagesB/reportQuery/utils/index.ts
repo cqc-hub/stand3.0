@@ -129,6 +129,7 @@ export interface antiItemResult {
 
   spectrum?: string;
   //耐药类型
+  bioNum?: string;
 }
 
 export interface antiList {
@@ -158,6 +159,12 @@ export interface antiList {
 
   testRange?: string;
   //范围
+
+  inflectionPoint?: string;
+  //折点
+
+  number?: string;
+  //数值
 }
 
 export interface normalList {
@@ -279,7 +286,7 @@ export interface examineReportDetails {
 
 //体检详细出参
 export interface medicalReportDetails {
- age?: string;
+  age?: string;
   applyDoc?: string;
   applyDocId?: string;
   applyTime?: string;

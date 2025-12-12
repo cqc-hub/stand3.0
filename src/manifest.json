@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx2e06292a91e9f162",
+    "appid": "wx8c42096613665ada",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -76,7 +76,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "",
+    "appid": "2021003120612222",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -128,7 +128,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "浙江省肿瘤医院",
+  "name": "东部战区总医院",
   "h5": {
     "optimization": {
       "treeShaking": {

@@ -658,6 +658,19 @@
     await api.addDrugDelivery(args);
     gStores.messageStore.showMessage('选择医院窗口取药成功', 3000, {
       closeCallBack() {
+        if (getSysCode() === '1001033') {
+          useTBanner({
+            type: 'h5',
+            isSelfH5: '1',
+            path: 'pagesC/medicalAssistant/medicalAssistant',
+            text: '查看电子导诊单',
+            addition: {
+              herenId: 'herenId',
+              cardNumber: '_hosPd',
+              token: 'token',
+            },
+          });
+        }
         tabCurrent.value = 1;
       },
     });
