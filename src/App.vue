@@ -45,6 +45,9 @@
       });
     }
     // #endif
+    // #ifdef MP-TOUTIAO
+    uni.login();
+    // #endif
   });
 
   onShow(async (opt: any) => {

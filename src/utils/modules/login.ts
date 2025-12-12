@@ -1001,7 +1001,7 @@ class WeChatThRegHandler extends LoginUtils implements LoginHandler {
 }
 
 /** 抖音登录 */
-class TouTiaoHandler extends LoginUtils implements LoginHandler {
+class TouTiaoHandler extends LoginUtils implements LoginHandler { 
   async handler({ detail }): Promise<void> {
     try {
       const { encryptedData, iv } = detail;
@@ -1017,11 +1017,11 @@ class TouTiaoHandler extends LoginUtils implements LoginHandler {
       });
 
       const accountType = this.globalStore.browser.accountType;
-      const { openId, sessionKeyEn } = await getOpenidTtResult();
+      const { openId, sessionKeyEn, anonymousCode, code } = await getOpenidTtResult();
 
       // https://developer.open-douyin.com/docs/resource/zh-CN/mini-app/open-capacity/basic-capacities/obtain-mobilenumber/
       // https://developer.open-douyin.com/docs/resource/zh-CN/codelabs/mini-app/microapp-login/silent-login
-      const { anonymousCode, code } = await apiAsync(uni.login, {});
+      // const { anonymousCode, code } = await apiAsync(uni.login, {});
 
       const { result } = await api.allinoneAuthApi(
         packageAuthParams(
