@@ -763,7 +763,22 @@
     }
   };
 
-  const formChange = ({ item, value }) => {};
+  const formChange = async ({ item, value }) => {
+    console.log(item, value);
+    const { key } = item;
+
+    if (key === 'patientType') {
+      // 新生儿无证件
+      if (value === '0') {
+        formData.value.idType = '';
+        formData.value.idCard = '';
+      }
+      await wait(200);
+      init({
+        assignValue: false,
+      });
+    }
+  };
 
   const btnDisabled = computed(() => {
     let isDisabled = false;
@@ -853,7 +868,12 @@
     });
   };
 
-  const init = async () => {
+  const init = async (
+    opt = {
+      assignValue: true,
+    }
+  ) => {
+    const { assignValue } = opt;
     const { mobile } = gStores.userStore.cacheUser;
     let { formExtraKeys = [], formExtraKeysInQuickAddPatPage = [] } =
       pageConfig.value;
@@ -917,11 +937,20 @@
     insertSortFormExtraKey(formExtraKeysInQuickAddPatPage, formListKeys);
     console.log(formListKeys, formExtraKeysInQuickAddPatPage);
 
+    if (formData.value.patientType === '0') {
+      formListKeys = formListKeys.filter(
+        (key) => !['idType', 'idCard'].includes(key)
+      );
+    }
+
     formList = pickTempItem(formListKeys);
-    const defaultValue = await getDefaultFormData(
-      pageProps.value.pageType || 'addPatient'
-    );
-    Object.assign(formData.value, defaultValue);
+
+    if (assignValue) {
+      const defaultValue = await getDefaultFormData(
+        pageProps.value.pageType || 'addPatient'
+      );
+      Object.assign(formData.value, defaultValue);
+    }
 
     if (pageProps.value.pageType === 'perfectReal') {
       const medicalTypeItem = formList.find(
@@ -1005,6 +1034,7 @@
         o.disabled = false;
       }
     });
+
     _formList.value = formList;
     gform.value.setList(formList);
 
