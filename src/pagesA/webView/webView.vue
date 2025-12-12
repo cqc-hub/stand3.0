@@ -2,19 +2,30 @@
   <view class="">
     <!-- @vue-expect-error -->
     <web-view
-      v-if="src"
       :src="src"
       @message="getMessage"
-      ref="refWebView"
+      ref="refweb"
+      id="webview"
     ></web-view>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { onLoad, onShareAppMessage, onShow } from '@dcloudio/uni-app';
+  import { getCurrentInstance, ref } from 'vue';
+  import {
+    onLoad,
+    onReady,
+    onShareAppMessage,
+    onShow,
+  } from '@dcloudio/uni-app';
   import { useCommonTo } from '@/common/checkJump';
-  import { handWebMessage, thirdWxPay, GStores, useTBanner } from '@/utils';
+  import {
+    handWebMessage,
+    thirdWxPay,
+    GStores,
+    useTBanner,
+    wait,
+  } from '@/utils';
   import { deQueryForUrl, getLocalStorage, removeLocation } from '@/common';
   import { CanWrite } from '@/typeUtils';
   import { useCacheStore } from '@/stores';
@@ -30,8 +41,10 @@
     cache?: '1';
   }>();
   const pageProps = ref({} as CanWrite<typeof props>);
+  const inst = getCurrentInstance();
+
   const src = ref('');
-  const refWebView = ref('' as any);
+  let webViewContext: any = null;
 
   const getMessage = (evt) => {
     console.warn('返回数据', evt);
@@ -53,13 +66,9 @@
     }
   };
 
-  onShow(() => {
-    console.log('我出来哈哈哈哈哈');
-    console.log(refWebView.value);
-
-    if (getLocalStorage('back-address')) {
-      removeLocation('back-address');
-    }
+  onReady(async () => {
+    await wait(1000);
+    console.log(inst);
   });
 
   const init = () => {

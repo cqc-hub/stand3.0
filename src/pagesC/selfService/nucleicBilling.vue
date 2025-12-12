@@ -254,6 +254,7 @@
     type ISystemConfig,
     ServerStaticData,
     apiAsync,
+    chooseImg,
   } from '@/utils';
   import { isSubscribeWx } from '@/common/checkJump';
   import HTMLParser from '@/common/html-parser';
@@ -577,8 +578,6 @@
         }
       }
     }
-
-    console.log(item);
   };
 
   //确定开单
