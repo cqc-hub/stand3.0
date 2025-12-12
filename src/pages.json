@@ -19,6 +19,9 @@
           "transparentTitle": "always",
           "titlePenetrate": "YES",
           "defaultTitle": ""
+        },
+        "mp-toutiao": { 
+          "navigationBarTitleText": "江苏省中医院"
         }
       }
     },

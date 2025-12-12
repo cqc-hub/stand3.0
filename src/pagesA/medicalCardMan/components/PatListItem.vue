@@ -4,11 +4,11 @@
       <view class="pat-label">
         <!-- <text class="pat-name bold">{{pat.healthQrCodeText ? pat.patientNameEncry : pat.patientName }}</text> -->
         <text class="pat-name bold">
-          {{ gStores.userStore.getPatName(pat) }}
+          {{ gStores && gStores.userStore && gStores.userStore.getPatName(pat) }}
         </text>
         <text class="pat-sex bold">{{ pat.patientSex }}</text>
         <g-tag
-          v-if="(pageConfig() as any).relationShip === '1' && pat.relationship"
+          v-if="getPageConfigValue('relationShip') === '1' && pat.relationship"
           type="blue"
           :text="pat.relationship"
           class="mr12"
@@ -63,7 +63,7 @@
         <view class="health-card-footer">
           <view class="health-card-info flex-normal-between">
             <view class="health-card-info-content">
-              <view>{{ gStores.userStore.getPatName(pat) }}</view>
+              <view>{{ gStores && gStores.userStore && gStores.userStore.getPatName(pat) }}</view>
               <view>{{ pat.idCard }}</view>
             </view>
 
@@ -89,7 +89,7 @@
         </view>
       </view>
 
-      <view v-if="pageConfig().isQrCodeDisabled !== '1'" class="card-container">
+      <view v-if="getPageConfigValue('isQrCodeDisabled') !== '1'" class="card-container">
         <image class="qr-code" :src="'/static/image/v-qrcode.png'" />
       </view>
     </view>
@@ -122,10 +122,21 @@
         'pageConfig',
         <any>{}
       );
+
       const gStores = new GStores();
 
+      const getPageConfigValue = (key: keyof ISystemConfig['person']) => {
+        try {
+          const config = typeof pageConfig === 'function' ? pageConfig() : pageConfig;
+          return config?.[key];
+        } catch (e) {
+          console.warn('pageConfig 获取失败:', e);
+          return undefined;
+        }
+      };
+
       const getRealNameAuth = computed(() => {
-        return pageConfig().realNameAuth || [];
+        return getPageConfigValue('realNameAuth') || [];
       });
 
       const profileClick = () => {
@@ -133,7 +144,7 @@
       };
 
       const cardClick = () => {
-        if (pageConfig().isQrCodeDisabled === '1') {
+        if (getPageConfigValue('isQrCodeDisabled') === '1') {
           profileClick();
         } else {
           emit('card-click', props.pat);
@@ -148,6 +159,7 @@
         nameConvert,
         pageConfig,
         getRealNameAuth,
+        getPageConfigValue,
         globalGl,
         gStores,
       };

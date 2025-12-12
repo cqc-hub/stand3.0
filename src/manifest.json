@@ -66,7 +66,12 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "SIPlugin": {
+        "version": "0.3.6",
+        "provider": "wx069ba97219f66d99"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -122,7 +127,8 @@
     "usingComponents": true
   },
   "mp-toutiao": {
-    "usingComponents": true
+    "usingComponents": true,
+    "appid": "tt00a7761a9facebee01"
   },
   "uniStatistics": {
     "enable": false
