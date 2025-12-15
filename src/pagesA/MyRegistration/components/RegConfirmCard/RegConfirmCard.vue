@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, toRaw, onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { GStores, ServerStaticData, wait } from '@/utils';
   import { IPageProps } from '../../utils/regConfirm';
 

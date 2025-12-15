@@ -147,7 +147,7 @@
 </template>
 
 <script setup lang="ts">
-  import { withDefaults, ref } from 'vue';
+  import { ref } from 'vue';
   import {
     useCommonTo,
     openServicesChat,

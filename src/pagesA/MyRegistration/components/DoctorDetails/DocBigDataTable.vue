@@ -31,8 +31,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
-
   withDefaults(
     defineProps<{
       columns: {
