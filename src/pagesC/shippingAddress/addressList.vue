@@ -76,16 +76,23 @@
 <script setup lang="ts">
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { ref } from 'vue';
-  import { GStores, verifyEmoji, verifyPhone } from '@/utils';
+  import { GStores, useTBanner, verifyEmoji, verifyPhone } from '@/utils';
   import { useMessageStore } from '@/stores';
   import { joinQuery } from '@/common';
-  import { getScopeAddress } from '@/common/utils';
+  import {
+    deQueryForUrl,
+    getScopeAddress,
+    joinQueryForUrl,
+  } from '@/common/utils';
 
   import api from '@/service/api';
 
-  const props = defineProps<{
-    redir?: string;
-  }>();
+  const pageProps = ref(
+    {} as {
+      redir?: string;
+      _type?: string;
+    } & BaseObject
+  );
   const pageLoading = ref(false);
   const gStores = new GStores();
   const messageStore = useMessageStore();
@@ -110,7 +117,11 @@
   };
 
   const itemClick = async (item) => {
-    if (props.redir) {
+    const { _type } = pageProps.value;
+
+    if (_type === 'wjkd1001067') {
+      hanlderKaidan1001067(item);
+    } else if (pageProps.value.redir) {
       const params = {
         herenId: gStores.globalStore.herenId,
         ...item,
@@ -128,6 +139,45 @@
     } else {
       gotoAdd('edit', item);
     }
+  };
+
+  const hanlderKaidan1001067 = (item) => {
+    const { hosId, source, totalCost, hosName, reBillingUrl, items, formData } =
+      pageProps.value;
+    const {
+      city: receiveCity,
+      county: receiveCounty,
+      province: receiveProvince,
+      detailedAddress: receiveAddress,
+      senderName: receiveName,
+      senderPhone: receivePhone,
+    } = item;
+
+    useTBanner(
+      {
+        path: joinQueryForUrl('pagesC/question/question1001067', {
+          hosId,
+          source,
+          totalCost,
+          hosName,
+          reBillingUrl,
+          items,
+          formData,
+          receiveCity,
+          receiveCounty,
+          receiveProvince,
+          receiveAddress,
+          receiveName,
+          receivePhone,
+        }),
+        addition: {
+          patientId: 'patientId',
+        },
+        type: 'h5',
+        isSelfH5: '1',
+      },
+      'reLaunch'
+    );
   };
 
   const gotoAdd = (type, item?) => {
@@ -190,7 +240,9 @@
     getAddress(data);
   };
 
-  onLoad(() => {
+  onLoad((opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+
     uni.removeStorage({
       key: 'back-address',
     });
