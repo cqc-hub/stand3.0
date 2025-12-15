@@ -402,17 +402,13 @@
         // transition-delay: 0.2s;
         z-index: 9;
         &-first {
-          clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 0 100%);
-          border-top-right-radius: 90rpx 200rpx !important;
+ 
         }
         &-last {
-          clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0 100%);
-          border-top-left-radius: 90rpx 200rpx !important;
+   
         }
         &-center {
-          clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0 100%);
-          border-top-left-radius: 90rpx 200rpx !important;
-          border-top-right-radius: 90rpx 200rpx !important;
+   
         }
       }
     }

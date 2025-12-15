@@ -58,7 +58,7 @@
         },
         {
           gridLabel: '0',
-          path: 'https://h5.eheren.com/V3_h5/#/pagesA/diseaseCyclopedia/index?type=showDrug',
+          path: 'https://h5.eheren.com/V3_h5/#/pagesA/diseaseCyclopedia/index',
           iconfont: 'ico_sy_file',
           appId: '',
           query: '',

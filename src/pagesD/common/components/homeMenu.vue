@@ -12,7 +12,7 @@
         bgColor="#fff0"
         color="#24314D"
         activeColor="var(--hr-brand-color-6)"
-        pillsBorderRadius="42rpx 42rpx 0 0"
+        pillsBorderRadius="0 "
         paddingItem="0"
         height="80"
         scroll
