@@ -280,14 +280,11 @@
 
   const {
     regDialogConfirmSign,
-    isAgreeSignChange,
     flagTitle1226,
     flagTitle1203,
-    disagreeSign,
     initSign,
     goPaySign,
     signAfterOnPageShow,
-    isAgreeSign,
     isSignExist,
     getFreeSignData,
   } = useProgramPaySign();
@@ -819,13 +816,12 @@
 
   const confirmAsync = () => {
     resolve();
-
   };
   const cancelAsync = () => {
     reject();
   };
   const waitRegShow = async (args) => {
-    await wait(200)
+    await wait(200);
     await new Promise(async (r, j) => {
       resolve = async () => {
         waitChooseDialog.value = false;

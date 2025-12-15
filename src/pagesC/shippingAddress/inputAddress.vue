@@ -46,7 +46,7 @@
   import { useCacheStore } from '@/stores';
   import api from '@/service/api';
   import { deQueryForUrl } from '@/common';
-import { rulePhone } from '@/utils/modules/verify';
+  import { rulePhone } from '@/utils/modules/verify';
   const cacheStore = useCacheStore();
 
   // const props = withDefaults(

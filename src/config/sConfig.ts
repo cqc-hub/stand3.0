@@ -712,7 +712,7 @@ const scJson: Record<string, ISConfig> = {
             orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
           },
           dongRuanMedicalInfo: {
-            h5BaseUrl: 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui',
+            h5BaseUrl: 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui/#/pay-loading',
           },
         },
         isMedicalOrder: '1',
