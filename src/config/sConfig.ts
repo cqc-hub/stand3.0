@@ -497,6 +497,7 @@ const scJson: Record<string, ISConfig> = {
   1001099: {
     medicalMHelp: {
       wx: {
+        isMedicalOrder: '1',
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
           path: 'auth/pages/bindcard/auth/index',
@@ -620,7 +621,7 @@ const scJson: Record<string, ISConfig> = {
         },
         isMedicalOrder: '1',
         // medicalPlugin: '1',
-        medicalFiling: '1'
+        medicalFiling: '1',
       },
     },
   },
