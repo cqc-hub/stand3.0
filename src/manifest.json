@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx8c42096613665ada",
+    "appid": "wx08440928b105c3bf",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -79,9 +79,14 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "auth-pay-plugin": {
+        "version": "*",
+        "provider": "2021003147699046"
+      }
+    },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003120612222",
+    "appid": "2021002129645591",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -127,14 +132,13 @@
     "usingComponents": true
   },
   "mp-toutiao": {
-    "usingComponents": true,
-    "appid": "tt00a7761a9facebee01"
+    "usingComponents": true
   },
   "uniStatistics": {
     "enable": false
   },
   "vueVersion": "3",
-  "name": "东部战区总医院",
+  "name": "温医附二院就医助手",
   "h5": {
     "optimization": {
       "treeShaking": {

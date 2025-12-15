@@ -167,7 +167,12 @@ export class GStores {
         return {} as any;
       });
       flagData = result.find((item) => item.typeFlag === typeFlag);
-      isSuccess && this.globalStore.setFlagsCaches(result);
+      isSuccess &&
+        this.globalStore.setFlagsCaches(
+          result.map((item) => {
+            return { ...item, initialText: item.content };
+          })
+        );
     }
     if (!flagData) {
       flagData = {
@@ -238,9 +243,8 @@ export class LoginUtils extends GStores {
   //判断是否需要前往手机号登录
   async judgeLoginByPhoneVerify() {
     let flag = false;
-    const { isLoginByPhoneVerify } = await ServerStaticData.getSystemConfig(
-      'RestOfConfig'
-    );
+    const { isLoginByPhoneVerify } =
+      await ServerStaticData.getSystemConfig('RestOfConfig');
     if (isLoginByPhoneVerify === '1') {
       const { confirm } = await new Promise<any>((closeCallBack) => {
         this.messageStore.showMessage(
@@ -1001,7 +1005,7 @@ class WeChatThRegHandler extends LoginUtils implements LoginHandler {
 }
 
 /** 抖音登录 */
-class TouTiaoHandler extends LoginUtils implements LoginHandler {
+class TouTiaoHandler extends LoginUtils implements LoginHandler { 
   async handler({ detail }): Promise<void> {
     try {
       const { encryptedData, iv } = detail;
@@ -1017,11 +1021,11 @@ class TouTiaoHandler extends LoginUtils implements LoginHandler {
       });
 
       const accountType = this.globalStore.browser.accountType;
-      const { openId, sessionKeyEn } = await getOpenidTtResult();
+      const { openId, sessionKeyEn, anonymousCode, code } = await getOpenidTtResult();
 
       // https://developer.open-douyin.com/docs/resource/zh-CN/mini-app/open-capacity/basic-capacities/obtain-mobilenumber/
       // https://developer.open-douyin.com/docs/resource/zh-CN/codelabs/mini-app/microapp-login/silent-login
-      const { anonymousCode, code } = await apiAsync(uni.login, {});
+      // const { anonymousCode, code } = await apiAsync(uni.login, {});
 
       const { result } = await api.allinoneAuthApi(
         packageAuthParams(
@@ -1142,9 +1146,8 @@ export class Login extends LoginUtils {
 export class PatientUtils extends LoginUtils {
   usePatDynamicCode = {
     async isOpen(path: string) {
-      const { GlobalConfig } = await cacheUtil.getSystemConfig(
-        'GlobalConfig'
-      )();
+      const { GlobalConfig } =
+        await cacheUtil.getSystemConfig('GlobalConfig')();
 
       return (GlobalConfig.refreshQrCode || []).includes(path);
     },
@@ -1457,9 +1460,8 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
-        data
-      );
+      const { healthCardId, qrCodeText } =
+        await this.regHealthCardByPatInfo(data);
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;
@@ -1511,9 +1513,8 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
-        data
-      );
+      const { healthCardId, qrCodeText } =
+        await this.regHealthCardByPatInfo(data);
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;

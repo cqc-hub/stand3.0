@@ -248,6 +248,8 @@ const alipayTrack = (isSuccess: boolean, type?: ITrackType) => {
 export const getOpenidTtResult = async (): Promise<{
   openId: string;
   sessionKeyEn: string;
+  anonymousCode: string;
+  code: string;
 }> => {
   const gStores = new GStores();
   const accountType = gStores.globalStore.browser.accountType;
@@ -265,7 +267,11 @@ export const getOpenidTtResult = async (): Promise<{
     )
   );
 
-  return result;
+  return {
+    ...result,
+    code,
+    anonymousCode,
+  };
 };
 
 //判断该项目是否为2024年12月以前的项目，如是则payType使用ALI_MINI，否则使用ALI_JSAPI
