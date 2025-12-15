@@ -226,6 +226,7 @@
     PatientUtils,
     throttle,
     useTBanner,
+    getLocation,
   } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { getMyPowerQx } from '@/components/greenPower';
@@ -259,7 +260,7 @@
       verifyCode: string;
     }
   );
-
+  const localInfo = ref<any>(null);
   const priorityReg = ref(false);
   const isCheck = ref(false);
   const isPreventOrder = ref(false);
@@ -819,13 +820,12 @@
 
   const confirmAsync = () => {
     resolve();
-
   };
   const cancelAsync = () => {
     reject();
   };
   const waitRegShow = async (args) => {
-    await wait(200)
+    await wait(200);
     await new Promise(async (r, j) => {
       resolve = async () => {
         waitChooseDialog.value = false;
@@ -836,10 +836,11 @@
         useTBanner({
           type: 'h5',
           isSelfH5: '1',
-          path: 'pagesC/question/alternatePreQues',
+          path: 'pagesC/question/alternatePreQues1',
           extraData: {
             data: JSON.stringify({
               ...args,
+              ...localInfo.value,
               priorityReg: true,
             }),
           },
@@ -921,8 +922,8 @@
 
       selWaitRegSch.value = '';
       let { addedNum } = props.value;
-      // addedNum = 1;
-      if (props.value.hasOwnProperty('addedNum') && addFlag !== '1') {
+      addedNum = 1;
+      if (addedNum && addFlag !== '1') {
         if (!(addedNum! * 1)) {
           const { confirm } = await apiAsync(uni.showModal, {
             content: '当前号别加号号源已满，系统将仅为您进行候补登记!',
@@ -938,6 +939,7 @@
             alternateData,
             patientId: gStores.userStore.patChoose.patientId,
             source: gStores.globalStore.browser.source,
+            idCard:gStores.userStore.patChoose.idCard,
             addFlag,
           });
         }
@@ -1067,7 +1069,8 @@
       }
     }
     if (isAddedNumSelf.value) {
-      // const locationInfo = await getLocation(true);
+      const locationInfo = await getLocation();
+      localInfo.value = locationInfo;
       priorityReg.value = pageConfig.value.isAddedNumSelf !== '1';
     }
   });
