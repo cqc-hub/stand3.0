@@ -19,7 +19,7 @@ import {
   apiAsync,
   GStores,
   throttle,
-  generateRandomUserId
+  generateRandomUserId,
 } from '@/utils';
 import {
   cloneUtil,
@@ -185,8 +185,7 @@ export const init = async (props) => {
     isMessage: false, //通知效果
     simpleHeadInit: false, //初始服务居中
     historyMess: false,
-    headerLineMenu:
-      props?.type?.includes('homePage') ||  'back',
+    headerLineMenu: props?.type?.includes('homePage') || 'back',
   };
   const gStores = new GStores();
   const distinctiveImageList =
@@ -206,17 +205,17 @@ export const init = async (props) => {
   props?.isMess && props?.isMess === '2' && initWithTheMess(props?.openid);
   props?.type?.includes('report') && ininWithReport(props?.reportId);
   reload(props?.isMess);
-    console.log('未登录',gStores.globalStore.herenId)
+  console.log('未登录', gStores.globalStore.herenId);
 
-  if(!gStores.globalStore.herenId){
-    getRadomId()
+  if (!gStores.globalStore.herenId) {
+    getRadomId();
   }
   // test()
 };
- const getRadomId = () => {
+const getRadomId = () => {
   //未登录时记录用户id
-  if(!uni.getStorageSync('v3_userRandomId')){
-    uni.setStorageSync('v3_userRandomId', generateRandomUserId())
+  if (!uni.getStorageSync('v3_userRandomId')) {
+    uni.setStorageSync('v3_userRandomId', generateRandomUserId());
   }
 };
 export const ininWithReport = async (reportId?: string) => {
@@ -1251,9 +1250,9 @@ let taskQueue = new TaskQueue();
 
 const typeInAsk = async (value, answertype) => {
   const gStores = new GStores();
-  let baseApi =  `https://${
-          globalGl.env === 'prod' ? 'net' : 'test'
-        }phs.eheren.com/gateway`;
+  let baseApi = `https://${
+    globalGl.env === 'prod' ? 'net' : 'test'
+  }phs.eheren.com/gateway`;
   const settings = {
     url: `${baseApi}/phs-extend/customer/aiStreamAsk`,
     method: 'POST',
@@ -1272,7 +1271,9 @@ const typeInAsk = async (value, answertype) => {
         chatId: msgState.value.lastChatId,
         requestId: msgState.value.requestId,
         type: answertype,
-        herenId: gStores.globalStore.herenId || Number(uni.getStorageSync('v3_userRandomId')),
+        herenId:
+          gStores.globalStore.herenId ||
+          Number(uni.getStorageSync('v3_userRandomId')),
       },
     }),
   };
@@ -1283,7 +1284,9 @@ const typeInAsk = async (value, answertype) => {
         ocrId: value,
         sysCode: gStores.globalStore.sysCode,
         source: gStores.globalStore.browser.source == 19 ? 1 : 2,
-        herenId: gStores.globalStore.herenId || Number(uni.getStorageSync('v3_userRandomId')),
+        herenId:
+          gStores.globalStore.herenId ||
+          Number(uni.getStorageSync('v3_userRandomId')),
       },
     });
   }
@@ -1291,7 +1294,9 @@ const typeInAsk = async (value, answertype) => {
     settings.url = `${baseApi}/phs-extend/customer/aiStreamReportAsk`;
     settings.data = JSON.stringify({
       args: value,
-      herenId: gStores.globalStore.herenId || Number(uni.getStorageSync('v3_userRandomId')),
+      herenId:
+        gStores.globalStore.herenId ||
+        Number(uni.getStorageSync('v3_userRandomId')),
     });
   }
   console.warn('手动调用接口', settings);
@@ -1677,9 +1682,11 @@ export const regConfirm = async (pageArg) => {
     promptMessage,
     thRegisterId: thRegisterId || getLocalStorage('thRegisterId'),
     quickAppoint: '',
-    openId: gStores.globalStore.openId
+    openId: gStores.globalStore.openId,
   };
   let alipayAuthCode = '';
+  const { isOrderBlur } = await ServerStaticData.getSystemConfig('order');
+  (!isOrderBlur || isOrderBlur == '0') && delete requestArg[`disNo`];
   // #ifdef MP-ALIPAY
   const alipayPid = globalGl.systemInfo.alipayPid;
   if (alipayPid) {

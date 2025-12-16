@@ -730,8 +730,9 @@
   };
 
   const dealNetError = async (err = {} as any, data) => {
-    const { isCanChangeHosPhone } = pageConfig.value;
-    const { idType } = formData.value;
+    const { isCanChangeHosPhone, isGuardianWithIdCard } = pageConfig.value;
+
+    const { idType, idCard } = formData.value;
 
     const { respCode } = err;
     if (respCode === 999301) {
@@ -751,6 +752,23 @@
       idType === '01' &&
       isCanChangeHosPhone === '1'
     ) {
+      // let lessThenSix: boolean = false;
+      // if (idCard && idValidator.checkIdCardNo(idCard)) {
+      //   const cardInfo = idValidator.getIdCardInfo(idCard);
+      //   if (cardInfo.age <= (isGuardianWithIdCard || 6) * 1) {
+      //     lessThenSix = true;
+      //   }
+      // }
+      // if (lessThenSix) {
+      //   uni.navigateTo({
+      //     url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
+      //       ...data,
+      //       pageType: pageProps.value.pageType,
+      //       _directUrl: pageProps.value._directUrl,
+      //     }),
+      //   });
+      //   return;
+      // }
       const { confirm } = await apiAsync(uni.showModal, {
         content: '患者存在建档记录但手机号不匹配，是否立即修改？',
       });

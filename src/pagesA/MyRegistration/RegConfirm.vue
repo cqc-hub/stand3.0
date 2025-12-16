@@ -179,8 +179,8 @@
             isWaitReg
               ? '候补预约'
               : pageConfig.isConfirmOrderWithPay === '1'
-                ? '去支付'
-                : '确定预约'
+              ? '去支付'
+              : '确定预约'
           }}
         </button>
       </view>
@@ -620,6 +620,11 @@
     // true ? 免密代扣 :  正常挂号
     const actionApi = isOpenSignExist ? api.addOrder : api.addReg;
 
+    //模糊号源不传入disNo
+    const { isOrderBlur } = await ServerStaticData.getSystemConfig('order');
+    console.log('isOrderBlur', isOrderBlur);
+    (!isOrderBlur || isOrderBlur == '0') && delete requestArg[`disNo`];
+
     let {
       result: { orderId, hasCharge, hint, hosOrderId },
     } = await actionApi(requestArg).catch(async (e) => {
@@ -819,13 +824,12 @@
 
   const confirmAsync = () => {
     resolve();
-
   };
   const cancelAsync = () => {
     reject();
   };
   const waitRegShow = async (args) => {
-    await wait(200)
+    await wait(200);
     await new Promise(async (r, j) => {
       resolve = async () => {
         waitChooseDialog.value = false;
@@ -1051,7 +1055,7 @@
         .getDeptDetail({
           hosDeptId: props.value.specialClinicDept || props.value.hosDeptId,
         })
-        .catch(() => ({}) as any);
+        .catch(() => ({} as any));
 
       if (promptMessage) {
         await new Promise<{ confirm: boolean }>((r) => {

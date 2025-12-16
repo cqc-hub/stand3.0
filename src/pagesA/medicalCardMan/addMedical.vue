@@ -390,7 +390,14 @@
             };
             faceDialog.value.show();
           });
-          const { pData } = await patientUtils.faceVerifyAndPData({
+          // let { isUpFace } = pageConfig.value;
+          // const idCardNumber =
+          //   (isUpFace === '1' && formData.value[`upIdCard`]) ||
+          //   formData.value[formKey.idCard];
+          // const name =
+          //   (isUpFace === '1' && formData.value[`upName`]) ||
+          //   formData.value[formKey.patientName];
+           const { pData } = await patientUtils.faceVerifyAndPData({
             idCardNumber: formData.value[formKey.idCard],
             name: formData.value[formKey.patientName],
           });
@@ -444,7 +451,6 @@
     } = pageConfig.value;
     const { pageType } = pageProps.value;
     const { patientName, upName, idCard, upIdCard } = data;
-
     const name = (isUpFace === '1' && upName) || patientName;
     const cardNo = (isUpFace === '1' && upIdCard) || idCard;
     const isIDCard =
