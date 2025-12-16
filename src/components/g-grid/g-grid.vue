@@ -109,7 +109,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { withDefaults, computed, ref, onMounted } from 'vue';
+  import { computed, ref, onMounted } from 'vue';
   import { useRouterStore } from '@/stores';
   import { throttle, GStores } from '@/utils';
   import { getShowTitle, getSubtitle } from './utils';

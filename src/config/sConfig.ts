@@ -497,6 +497,7 @@ const scJson: Record<string, ISConfig> = {
   1001099: {
     medicalMHelp: {
       wx: {
+        isMedicalOrder: '1',
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
           path: 'auth/pages/bindcard/auth/index',
@@ -620,7 +621,7 @@ const scJson: Record<string, ISConfig> = {
         },
         isMedicalOrder: '1',
         // medicalPlugin: '1',
-        medicalFiling: '1'
+        medicalFiling: '1',
       },
     },
   },
@@ -711,7 +712,7 @@ const scJson: Record<string, ISConfig> = {
             orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
           },
           dongRuanMedicalInfo: {
-            h5BaseUrl: 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui',
+            h5BaseUrl: 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui/#/pay-loading',
           },
         },
         isMedicalOrder: '1',

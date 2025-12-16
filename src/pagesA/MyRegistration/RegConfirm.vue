@@ -280,14 +280,11 @@
 
   const {
     regDialogConfirmSign,
-    isAgreeSignChange,
     flagTitle1226,
     flagTitle1203,
-    disagreeSign,
     initSign,
     goPaySign,
     signAfterOnPageShow,
-    isAgreeSign,
     isSignExist,
     getFreeSignData,
   } = useProgramPaySign();

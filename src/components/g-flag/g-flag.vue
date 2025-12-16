@@ -25,9 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, withDefaults, watch } from 'vue';
-  import api from '@/service/api';
-  import HTMLParser from '@/common/html-parser';
+  import { ref, watch } from 'vue';
   import { GStores } from '@/utils';
 
   interface IProps {
@@ -99,12 +97,10 @@
     text-align: left;
     color: var(--hr-brand-color-6);
     line-height: 40rpx;
-
-   
   }
-   .real-top-bg {
-      background: var(--hr-brand-color-1);
-    }
+  .real-top-bg {
+    background: var(--hr-brand-color-1);
+  }
 
   .tip {
     line-height: 40rpx;

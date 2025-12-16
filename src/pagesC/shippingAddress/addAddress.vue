@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, computed, withDefaults } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import { GStores, rulePhone, verifyEmoji, wait } from '@/utils';
   import { onReady, onLoad } from '@dcloudio/uni-app';
   import { useMessageStore } from '@/stores';

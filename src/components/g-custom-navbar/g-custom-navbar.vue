@@ -27,7 +27,7 @@
   <!--  #endif -->
 </template>
 <script setup lang="ts">
-  import { ref, onBeforeMount, withDefaults } from 'vue';
+  import { ref, onBeforeMount } from 'vue';
   import globalGl from '@/config/global';
   import { GStores } from '@/utils';
   const props = withDefaults(

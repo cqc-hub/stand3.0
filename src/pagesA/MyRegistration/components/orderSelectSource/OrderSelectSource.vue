@@ -63,7 +63,9 @@
                       >
                         {{ _item.schQukCategor || _item.categorName || '' }}
                       </text>
-                      <text v-if="_item.fee">{{ _item.fee }}元</text>
+                      <text v-if="_item.fee" class="text-no-wrap">
+                        {{ _item.fee }}元
+                      </text>
                     </view>
                   </template>
 
@@ -127,7 +129,7 @@
                   }}
                 </text>
 
-                <text>{{ selectSchInfo.fee }}元</text>
+                <text class="text-no-wrap">{{ selectSchInfo.fee }}元</text>
               </view>
             </view>
 
@@ -309,7 +311,6 @@
         ) {
           actionApi = api.getNumberSource1001035;
         }
-
 
         const { result } = await actionApi<IOrderSource[]>(args);
         dealNumberSourceList(result || []);

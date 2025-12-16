@@ -40,14 +40,7 @@
 </template>
 
 <script setup lang="ts">
-  import {
-    withDefaults,
-    ref,
-    onMounted,
-    watch,
-    getCurrentInstance,
-    nextTick,
-  } from 'vue';
+  import { ref, onMounted, watch, getCurrentInstance, nextTick } from 'vue';
   import homeGrid from './homeGrid.vue';
   import homeMenuTabs from './homeMenuTabs.vue';
   import { wait } from '@/utils';
