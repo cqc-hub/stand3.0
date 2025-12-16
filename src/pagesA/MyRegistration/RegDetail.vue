@@ -752,27 +752,26 @@
       return;
     }
 
-    const { patientSex, patientAge, patientName } = gStores.userStore.patChoose;
-    const { orderId } = pageProps.value;
+    const { patientSex, patientAge, patientName, patientId } = gStores.userStore.patChoose;
+    const { orderId, hosOrderId } = pageProps.value;
 
     const pageArg = {
       patientSex,
       patientAge,
       patientName,
+      patientId,
+      deptName: orderRegInfo.value.deptName,
       orderId,
+      hosOrderId,
       hosDeptId: orderRegInfo.value.hosDeptId,
-    };
+    }; 
 
     const preConsultation: TButtonConfig = {
       type: 'h5',
       isSelfH5: '1',
-      path: 'pages/inquiries/inquiries3',
+      path: 'pagesC/inquiries/inquiriesRes1',
       text: '预问诊',
-      extraData: {
-        params: encodeURIComponent(
-          encryptDes(JSON.stringify(pageArg), 'phsDesKe')
-        ),
-      },
+      extraData: pageArg,
       addition: {
         token: 'token',
         herenId: 'herenId',
