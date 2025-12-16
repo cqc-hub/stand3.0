@@ -69,8 +69,7 @@
             <view class="button-line">
               <view
                 v-if="
-                  pageConfig.isSearchPatBound === '1' &&
-                  pat.realNameAuth === '1'
+                  pageConfig.isSearchPatBound === '1' 
                 "
                 class="pat-btns flex-normal mt16 ml12"
               >
