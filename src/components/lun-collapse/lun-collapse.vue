@@ -130,7 +130,10 @@
       // 查询内容高度
       queryRect() {
         this.$nextTick(() => {
-          const query = uni.createSelectorQuery().in(this);
+          let query = uni.createSelectorQuery(); 
+          // #ifndef MP-TOUTIAO
+          query = query.in(this);
+          // #endif
           query
             .select('#content')
             .boundingClientRect((res) => {

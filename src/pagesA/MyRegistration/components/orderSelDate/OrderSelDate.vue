@@ -148,7 +148,10 @@
     () => props.value,
     () => {
       nextTick(async () => {
-        const query = uni.createSelectorQuery().in(inst);
+        let query = uni.createSelectorQuery(); 
+        // #ifndef MP-TOUTIAO
+        query = query.in(inst);
+        // #endif
 
         if (!scrollWidth) {
           await new Promise((resolve) => {

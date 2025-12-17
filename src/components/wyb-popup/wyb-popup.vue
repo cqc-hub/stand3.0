@@ -357,7 +357,10 @@
             });
 
             if (this.height === 'auto') {
-              const query = uni.createSelectorQuery().in(this);
+              let query = uni.createSelectorQuery(); 
+              // #ifndef MP-TOUTIAO
+              query = query.in(this);
+              // #endif
               query
                 .select('.wyb-popup-slot')
                 .boundingClientRect((res) => {

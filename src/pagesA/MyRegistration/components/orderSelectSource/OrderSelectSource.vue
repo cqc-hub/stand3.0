@@ -315,7 +315,9 @@
         const { result } = await actionApi<IOrderSource[]>(args);
         dealNumberSourceList(result || []);
         collapseOrderSourceList.value[listKey] = result || [];
-
+        // #ifdef MP-TOUTIAN
+        await wait(500)
+        // #endif
         refCollapseNow.init();
       }
     }
