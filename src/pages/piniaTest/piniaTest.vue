@@ -667,10 +667,23 @@
     },
     _type: 'useTBanner',
   } as TButtonConfig;
+
+  const viewImg = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/showImg/index',
+    text: ' ',
+    extraData: {
+      img: 'https%3A%2F%2Fphsdevoss.eheren.com%2Fpcloud%2Fphs3.0%2F1001093%2F%E5%81%A5%E5%BA%B7%E4%BD%93%E6%A3%80%E4%B8%AD%E5%BF%83.jpg',
+      title: '健康体检中心',
+    },
+    _type: 'useTBanner',
+  } as TButtonConfig;
+
   const patientUtils = new PatientUtils();
 
   const init = async () => {
-    // useTBanner(用药查询);
+    useTBanner(viewImg);
     // useTBanner(用药查询1001093);
     // useTBanner(用药查询);
   };
