@@ -6,9 +6,9 @@
     class="g-page"
   >
     <view class="absolute home-nav z-999">
-    <!-- #ifndef MP-TOUTIAO -->
+      <!-- #ifndef MP-TOUTIAO -->
       <home-Nav v-model:height="navHeight" :opacity="navOpacity" />
-    <!-- #endif -->
+      <!-- #endif -->
     </view>
 
     <scroll-view
@@ -439,6 +439,7 @@
     type ISystemConfig,
     isFeatureEnabled,
     wait,
+    createSingleCallInTime,
   } from '@/utils';
   import { goElectronicMedicalCard } from './utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
@@ -526,7 +527,14 @@
   });
 
   onShow(async () => {
-    viewerStore.init();
+    if (!gStores?.initViewStore) {
+      gStores.addNewMethod(
+        'initViewStore',
+        createSingleCallInTime(viewerStore.init(), 1000 * 60 * 5)
+      );
+    }
+    await gStores.initViewStore();
+
     // if (global.SYS_CODE === '1001067' && globalStore.openId) {
     //   const { ev } = gStores.globalStore;
     //   const userTag =
@@ -561,7 +569,7 @@
       globalGl.sConfig?.isOpenAssistMessage &&
       globalStore.isLogin &&
       getShowName
-    ) {      
+    ) {
       assistMessageRef.value.reLoad();
     }
   });
@@ -570,8 +578,9 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
-    healthCounselConfig.value =
-      await ServerStaticData.getSystemConfig('HEALTH_COUNSEL');
+    healthCounselConfig.value = await ServerStaticData.getSystemConfig(
+      'HEALTH_COUNSEL'
+    );
 
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');

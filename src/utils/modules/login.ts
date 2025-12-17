@@ -120,6 +120,7 @@ export class GStores {
   _messageStore = '' as unknown as ReturnType<typeof useMessageStore>;
   _userStore = '' as unknown as ReturnType<typeof useUserStore>;
   _globalStore = '' as unknown as ReturnType<typeof useGlobalStore>;
+  [key: string]: any;
 
   get messageStore() {
     if (!this._messageStore) {
@@ -175,7 +176,7 @@ export class GStores {
         );
     }
     const initialText = flagData?.content || '';
-    const title = flagData?.title|| '';
+    const title = flagData?.title || '';
     if (!flagData) {
       flagData = {
         title: '',
@@ -212,6 +213,12 @@ export class GStores {
     //   this.globalStore.setFlagCaches(typeFlag, { title, content, initialText });
 
     return { title, content, initialText };
+  }
+
+  addNewMethod(methodName, methodBody) {
+    // this.constructor 获取类本身
+    this.constructor.prototype[methodName] = methodBody;
+    return this;
   }
 }
 

@@ -111,7 +111,7 @@
 <script lang="ts" setup>
   import { computed, ref, onMounted } from 'vue';
   import { useRouterStore } from '@/stores';
-  import { throttle, GStores } from '@/utils';
+  import { throttle, GStores, createSingleCallInTime } from '@/utils';
   import { getShowTitle, getSubtitle } from './utils';
 
   import global from '@/config/global';
@@ -188,18 +188,19 @@
   });
 
   const unreadMes = ref(false);
-  let getNum = () => {
-    api
-      .getStatus({
-        str: `OPENID_${gStores.globalStore.h5OpenId}/${gStores.userStore.phoneNum}`,
-      })
-      .then(({ result }) => {
-        unreadMes.value = result as boolean;
-        // unreadMes.value = true;
-      });
+  const getStatus = async () => {    
+    const { result } = await api.getStatus({
+      str: `OPENID_${gStores.globalStore.h5OpenId}/${gStores.userStore.phoneNum}`,
+    });
+    return result;
   };
 
-  getNum = throttle(getNum, 1000);
+  let getNum = async () => {
+    if (!gStores?.getStatus) {
+      gStores.addNewMethod('getStatus',createSingleCallInTime(getStatus, 1000 * 60*5));      
+    }
+    unreadMes.value = await gStores.getStatus();
+  };
 
   const gridClick = (item) => {
     if (item.path?.includes('/pagesB/historicalMess/historicalMess')) {

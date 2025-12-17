@@ -83,7 +83,7 @@ export const apiAsync: <
       opt: { success(any): any; fail(any): any; [key: string]: any },
       ...restOpt: any[]
     ): any;
-  },
+  }
 >(
   api: T,
   opt: Omit<TFirstParams<Parameters<T>>, 'success' | 'fail'>,
@@ -673,4 +673,64 @@ export const setDefaultPatient = async (patientId: string) => {
   if (pat) {
     userStore.updatePatChoose(pat);
   }
+};
+
+/**
+ * 在指定时间内确保方法只被调用一次并返回相同结果
+ * @param {Function} fn - 需要调用的方法
+ * @param {number} time - 时间限制（毫秒）
+ * @returns {Function} 包装后的方法
+ */
+
+export const createSingleCallInTime = (fn, time) => {
+  let cachedResult = null;
+  let lastCallTime = 0;
+  let isCalling = false;
+  let callPromise: any = null;
+  let cachedArgs: any = null;
+  let cachedContext: any = null;
+
+  return async function A(this: any, ...args) {
+    const currentTime = Date.now();
+
+    // 如果在时间C内且已有缓存结果，直接返回缓存结果
+    if (cachedResult !== null && currentTime - lastCallTime < time) {
+      return cachedResult;
+    }
+
+    // 如果正在调用中，返回同一个Promise
+    if (isCalling) {
+      return callPromise;
+    }
+
+    // 缓存已过期，重置状态，开始新的调用
+    cachedResult = null; // 清除过期缓存
+    cachedArgs = args;
+    cachedContext = this;
+    isCalling = true;
+    lastCallTime = currentTime;
+
+    callPromise = (async () => {
+      try {
+        // 使用缓存的上下文和参数调用B
+        const result = await fn.apply(cachedContext, cachedArgs);
+        cachedResult = result;
+        return result;
+      } catch (error) {
+        // 如果调用失败，清除状态以便下次重试
+        cachedResult = null;
+        isCalling = false;
+        callPromise = null;
+        throw error;
+      } finally {
+        // 不再使用setTimeout，只在成功时设置标志
+        // 错误已在catch块处理
+        if (cachedResult !== null) {
+          isCalling = false;
+        }
+      }
+    })();
+
+    return callPromise;
+  };
 };

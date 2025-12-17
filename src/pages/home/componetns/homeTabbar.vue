@@ -23,49 +23,52 @@
           @handler-next="changeTab(item)"
           :disabled="item.loginInterception === '0'"
         >
-        <view class="w100p h100p flex items-end" @click="changeTab(item)">
-          <view
-            :class="{
-              'center-code': isCenterCode(item),
-            }"
-            class="pt20 h-full flex-1 flex flex-col items-center justify-end"
-          >
+          <view class="w100p h100p flex items-end" @click="changeTab(item)">
             <view
-              v-if="isCenterCode(item)"
-              class="center-code-ico-box absolute flex"
+              :class="{
+                'center-code': isCenterCode(item),
+              }"
+              class="pt20 h-full flex-1 flex flex-col items-center justify-end"
             >
-              <view class="center-code-ico flex justify-center items-center">
-                <view class="iconfont icon-size color-fff f48">&#xe6a7;</view>
+              <view
+                v-if="isCenterCode(item)"
+                class="center-code-ico-box absolute flex"
+              >
+                <view class="center-code-ico flex justify-center items-center">
+                  <view class="iconfont icon-size color-fff f48">&#xe6a7;</view>
+                </view>
+              </view>
+              <image
+                v-else
+                :src="
+                  currentPath === getPath(item.url)
+                    ? item.iconActive
+                    : item.icon
+                "
+                :class="{
+                  animate__rubberBand:
+                    animateItem(item) && clickCount % 2 === 0,
+                }"
+                mode="heightFix"
+                class="animate__animated animate__fast"
+                lazy-load
+              />
+              <text
+                :class="{
+                  'color-blue': isCenterCode(item),
+                }"
+                class="label text-no-wrap"
+              >
+                {{ getLangLabel(item.label) }}
+              </text>
+              <view
+                class="badge"
+                v-if="item.label === 'home-tabbar:消息中心' && unreadMes"
+              >
+                new
               </view>
             </view>
-            <image
-              v-else
-              :src="
-                currentPath === getPath(item.url) ? item.iconActive : item.icon
-              "
-              :class="{
-                animate__rubberBand: animateItem(item) && clickCount % 2 === 0,
-              }"
-              mode="heightFix"
-              class="animate__animated animate__fast"
-              lazy-load
-            />
-            <text
-              :class="{
-                'color-blue': isCenterCode(item),
-              }"
-              class="label text-no-wrap"
-            >
-              {{ getLangLabel(item.label) }}
-            </text>
-            <view
-              class="badge"
-              v-if="item.label === 'home-tabbar:消息中心' && unreadMes"
-            >
-              new
-            </view>
           </view>
-        </view>
         </g-login>
       </view>
     </view>
@@ -83,6 +86,7 @@
     GStores,
     cacheUtil,
     getSystemSafeBottom,
+    createSingleCallInTime,
   } from '@/utils';
   import { isAreaProgram } from '@/stores';
   import { getLangLabel } from '@/config/lang';
@@ -209,17 +213,19 @@
     return currentPath === item.url && item.url === '/pages/home/my';
   };
 
-  let getNum = () => {
-    api
-      .getStatus({
-        str: `OPENID_${gStores.globalStore.h5OpenId}/${gStores.userStore.phoneNum}`,
-      })
-      .then(({ result }) => {
-        unreadMes.value = result as boolean;
-        // unreadMes.value = true;
-      });
+  const getStatus = async () => {
+    const { result } = await api.getStatus({
+      str: `OPENID_${gStores.globalStore.h5OpenId}/${gStores.userStore.phoneNum}`,
+    });
+    return result;
   };
-  getNum = throttle(getNum, 1000);
+
+  let getNum = async () => {
+    if (!gStores?.getStatus) {
+      gStores.addNewMethod('getStatus',createSingleCallInTime(getStatus, 1000 * 60 * 5));
+    }
+    unreadMes.value = await gStores.getStatus();
+  };
 
   onMounted(async () => {
     getMenuBtn();

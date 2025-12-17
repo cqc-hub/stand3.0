@@ -611,7 +611,7 @@
             patientSex,
             patientAge,
             patientName,
-            phone: wxPhone,
+            phoneNumber: wxPhone,
             hosId,
             isPay,
             patientId,
