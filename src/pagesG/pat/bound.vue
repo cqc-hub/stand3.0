@@ -77,6 +77,9 @@
     });
 
     if (otherHerenId === gStores.globalStore.herenId) {
+      if (patientId === gStores.userStore.patChoose.patientId) {
+        gStores.userStore.deletePat(patientId);
+      }
       await patientUtils.getPatCardList();
     }
 

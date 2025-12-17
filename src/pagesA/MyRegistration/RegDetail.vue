@@ -752,7 +752,8 @@
       return;
     }
 
-    const { patientSex, patientAge, patientName, patientId } = gStores.userStore.patChoose;
+    const { patientSex, patientAge, patientName, patientId } =
+      gStores.userStore.patChoose;
     const { orderId, hosOrderId } = pageProps.value;
 
     const pageArg = {
@@ -764,7 +765,7 @@
       orderId,
       hosOrderId,
       hosDeptId: orderRegInfo.value.hosDeptId,
-    }; 
+    };
 
     const preConsultation: TButtonConfig = {
       type: 'h5',
@@ -861,7 +862,7 @@
 
     if (hos) {
       hosInfo.value = hos;
-      if (sysCode === '1001094' && deptName.startsWith('大十字')) {
+      if (sysCode === '1001094' && deptName.includes('大十字')) {
         Object.assign(hosInfo.value, {
           hosName: '新疆中医医院（大十字部)',
           address: '新疆维吾尔自治区乌鲁木齐市天山区解放北路303号',
