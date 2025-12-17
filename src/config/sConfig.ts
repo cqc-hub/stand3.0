@@ -64,6 +64,8 @@ export interface ISConfig {
   isOpenAlipayFollow?: string;
   //首页是否支持展示咨询文章
   isOpenHomeArticle?: string;
+  //首页是否智能消息提醒
+  isOpenAssistMessage?: string;
   //首页banner置顶
   homeTopBanner?: {
     topShow?: boolean;
@@ -712,7 +714,8 @@ const scJson: Record<string, ISConfig> = {
             orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
           },
           dongRuanMedicalInfo: {
-            h5BaseUrl: 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui/#/pay-loading',
+            h5BaseUrl:
+              'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui/#/pay-loading',
           },
         },
         isMedicalOrder: '1',
@@ -820,6 +823,7 @@ const scJson: Record<string, ISConfig> = {
       'https://phsdevoss.eheren.com/pcloud/phs3.0/jiangsushengzhonnavtitle.png',
     isOpenMessageAuth: '1',
     isMessageBtnShowNew: '1',
+    // isOpenAssistMessage: '1',
     isOpenPopularSci: {
       wx: '1',
     },
@@ -1007,6 +1011,11 @@ const scJson: Record<string, ISConfig> = {
           },
         },
       },
+    },
+  },
+  1001095: {
+    login: {
+      isSkipPerfect: '1',
     },
   },
   1001097: {

@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx08440928b105c3bf",
+    "appid": "wxacb96ee66c3dee84",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -79,14 +79,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002129645591",
+    "appid": "2021003104670597",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -132,13 +127,14 @@
     "usingComponents": true
   },
   "mp-toutiao": {
-    "usingComponents": true
+    "usingComponents": true,
+    "appid": "tt00a7761a9facebee01"
   },
   "uniStatistics": {
     "enable": false
   },
   "vueVersion": "3",
-  "name": "温医附二院就医助手",
+  "name": "江苏省中医院",
   "h5": {
     "optimization": {
       "treeShaking": {

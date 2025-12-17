@@ -1,7 +1,6 @@
 :root,
 component,
 page {
-
   --h-qrcode-1: var(--hr-brand-color-6);
   --h-qrcode-2: var(--hr-brand-color-6-light-3);
 
@@ -35,8 +34,14 @@ page {
   --hr-brand-color-7: #0050f5;
   --hr-brand-color-2: #ccddff;
   --hr-brand-color-3: #9ebeff;
+  --hr-brand-color-4: #edfffe;
+  --hr-brand-color-5: #d2f0ff;
   /* tab页面选中背景色 */
   --hr-brand-color-3-light: #ebf1ff;
+
+  /* tags背景色*/
+  --hr-brand-color-8: #00B39E;
+  --hr-brand-color-8-light: #E7FFF8;
 
   /* banner背景色 */
   --hr-banner-color-1: #eef3ff;

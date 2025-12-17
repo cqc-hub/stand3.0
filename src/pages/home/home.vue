@@ -265,6 +265,16 @@
               <official-account></official-account>
             </view>
             <!-- #endif -->
+            <view
+              v-if="
+                globalGl.sConfig?.isOpenAssistMessage &&
+                globalStore.isLogin &&
+                getShowName
+              "
+              class="card"
+            >
+              <assist-message ref="assistMessageRef" />
+            </view>
             <!-- #ifdef MP-ALIPAY -->
             <view v-if="globalGl.sConfig.isOpenAlipayFollow">
               <lifestyle :sceneId="globalGl.sConfig.isOpenAlipayFollow" />
@@ -451,6 +461,7 @@
   import homeDocCommend from './componetns/homeDocCommend.vue';
   import homeButtomProductionIcon from './componetns/homeButtomProductionIcon.vue';
   import chooseLang from './componetns/chooseLang.vue';
+  import assistMessage from './componetns/assistMessage.vue';
 
   const props = ref({
     code: '',
@@ -473,6 +484,7 @@
   const HomeArticleRef = ref('' as any);
   const clickShareItem = ref<any>({});
   const docRecommendList = ref([] as any[]);
+  const assistMessageRef = ref();
   const navOpacity = ref(0);
   const navHeight = ref(0);
 
@@ -544,6 +556,16 @@
       assistantImg.value =
         globalStore?.intAssistantImg ||
         intelMedicalAssistConfig?.distinctiveImage?.imageList[0];
+    }
+     console.log('globalGl.sConfig?.isOpenAssistMessage',globalGl.sConfig?.isOpenAssistMessage);
+    if (
+      globalGl.sConfig?.isOpenAssistMessage &&
+      globalStore.isLogin &&
+      getShowName
+    ) {
+      console.log(888888);
+      
+      assistMessageRef.value.reLoad();
     }
   });
 
