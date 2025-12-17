@@ -115,12 +115,14 @@
   };
 
   const queryHeight = () => {
-    const view = uni
-      .createSelectorQuery()
-      .in(inst)
+    let query = uni.createSelectorQuery(); 
+    // #ifndef MP-TOUTIAO
+    query = query.in(inst);
+    // #endif
+    const view = query
       .select(`#home-menu-${tabIndex1.value}`);
     view
-      .boundingClientRect((data) => {
+      .boundingClientRect((data) => { 
         if (data) {
           // @ts-expect-error
           const { height: _height } = data;

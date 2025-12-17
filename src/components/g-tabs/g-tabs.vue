@@ -268,7 +268,10 @@
       // 获取左移动位置
       async getTabItemWidth() {
         await wait(200);
-        let query = uni.createSelectorQuery().in(this);
+        let query = uni.createSelectorQuery(); 
+        // #ifndef MP-TOUTIAO
+        query = query.in(this);
+        // #endif
         // 获取容器的宽度
         query
           .select(`#scrollContainer`)

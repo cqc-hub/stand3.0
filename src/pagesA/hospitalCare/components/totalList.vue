@@ -15,7 +15,10 @@
       >
         <view class="right" v-for="(i, j) in item.costSecondaries" :key="j">
           <view v-for="(m, n) in i.costListResultList" :key="n">
-            <view class="dates">{{ m.inDay }}～{{ m.endDay }}</view>
+            <view class="dates">
+              {{ m.inDay }}
+              <text v-if="m.endDay">～{{ m.endDay }}</text>
+            </view>
             <view class="details" @click="gotoListExpenses(m)">
               <view class="flex-between">
                 <view class="flex-normal">

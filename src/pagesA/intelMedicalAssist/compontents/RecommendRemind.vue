@@ -55,7 +55,10 @@
   });
   const navIndex = ref(0);
   const inst = getCurrentInstance();
-  const query = uni.createSelectorQuery().in(inst);
+  let query = uni.createSelectorQuery();
+  // #ifndef MP-TOUTIAO
+  query = query.in(inst);
+  // #endif
   const formData = ref([
     {
       hosName: '朝晖院区',

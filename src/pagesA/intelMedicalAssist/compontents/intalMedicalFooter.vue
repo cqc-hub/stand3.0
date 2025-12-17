@@ -223,7 +223,10 @@
   const isRecording = ref(false);
 
   const inst = getCurrentInstance();
-  const query = uni.createSelectorQuery().in(inst);
+  let query = uni.createSelectorQuery(); 
+  // #ifndef MP-TOUTIAO
+  query = query.in(inst);
+  // #endif
   animationData.value = uni.createAnimation({});
 
   const props = defineProps<{

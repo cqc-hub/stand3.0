@@ -14,11 +14,11 @@ type NeverTurnsAny<T> = T extends never ? any : T;
 export const getSystemSafeBottom = async () => {
   const e = await uni.getSystemInfo({});
   const { safeAreaInsets, screenWidth } = e;
-  const bottomInsetPx = safeAreaInsets?.bottom || 20;
+  let bottomInsetPx = safeAreaInsets?.bottom || 20;
+  bottomInsetPx = bottomInsetPx > 44 ? 44 : bottomInsetPx;
   const pxToRpx = 750 / screenWidth;
-  const basePadding = 0;
-  // 最终底部间距（rpx）
-  const bottomPadding = basePadding + bottomInsetPx * pxToRpx;
+
+  const bottomPadding = bottomInsetPx * pxToRpx;
 
   return bottomPadding;
 };

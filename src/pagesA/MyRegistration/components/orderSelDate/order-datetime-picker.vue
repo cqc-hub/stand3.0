@@ -628,10 +628,11 @@
         this.popover = {
           top: '10px',
         };
-        const dateEditor = uni
-          .createSelectorQuery()
-          .in(this)
-          .select('.uni-date-editor');
+        let query = uni.createSelectorQuery();
+        // #ifndef MP-TOUTIAO
+        query = query.in(inst);
+        // #endif
+        const dateEditor = query.select('.uni-date-editor');
         dateEditor
           .boundingClientRect((rect) => {
             if (this.windowWidth - rect.left < this.datePopupWidth) {

@@ -55,7 +55,10 @@
   };
   const getDetailHeight = () => {
     //获取元素节点的位置信息
-    const query = uni.createSelectorQuery().in(root);
+    let query = uni.createSelectorQuery();
+    // #ifndef MP-TOUTIAO
+    query = query.in(root);
+    // #endif
     query
       .selectAll('.remark')
       .boundingClientRect((res: any) => {

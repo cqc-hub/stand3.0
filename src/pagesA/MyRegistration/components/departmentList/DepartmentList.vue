@@ -139,7 +139,10 @@
     if (!isLv2.value || activeLV1.value < 0) {
       return;
     }
-    const query = uni.createSelectorQuery().in(inst);
+    let query = uni.createSelectorQuery();
+    // #ifndef MP-TOUTIAO
+    query = query.in(inst);
+    // #endif
     query
       .selectAll(`.item-lv1`)
       .boundingClientRect((data: any) => {
@@ -210,7 +213,7 @@
       return;
     }
 
-    const query = uni.createSelectorQuery().in(inst);
+    const query = uni.createSelectorQuery();
     query
       .selectAll(`.item-lv1`)
       .boundingClientRect((data: any) => {

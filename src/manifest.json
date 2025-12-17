@@ -128,6 +128,15 @@
   },
   "mp-toutiao": {
     "usingComponents": true,
+<<<<<<< HEAD
+=======
+    "setting": {
+      "urlCheck": false,
+      "postcss": false,
+      "minified": true,
+      "es6": true
+    },
+>>>>>>> 4edb19290c4592fc318655ac2b69b7c11db1aba3
     "appid": "tt00a7761a9facebee01"
   },
   "uniStatistics": {

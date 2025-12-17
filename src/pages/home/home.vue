@@ -557,14 +557,11 @@
         globalStore?.intAssistantImg ||
         intelMedicalAssistConfig?.distinctiveImage?.imageList[0];
     }
-     console.log('globalGl.sConfig?.isOpenAssistMessage',globalGl.sConfig?.isOpenAssistMessage);
     if (
       globalGl.sConfig?.isOpenAssistMessage &&
       globalStore.isLogin &&
       getShowName
-    ) {
-      console.log(888888);
-      
+    ) {      
       assistMessageRef.value.reLoad();
     }
   });
