@@ -464,14 +464,11 @@
 
   const hosSearchChange = async ({ item }) => {
     hosAreaNow.value = item.label;
-    hosList.value = await ServerStaticData.getHosList(
-      {
-        areaId: item.value,
-        gisLng: longitudeCurrent.value,
-        gisLat: latitudeCurrent.value,
-      },
-      { noCache: true }
-    );
+    hosList.value = await ServerStaticData.getHosList({
+      areaId: item.value,
+      gisLng: longitudeCurrent.value,
+      gisLat: latitudeCurrent.value,
+    });
   };
 
   const imgClick = (item: IHosInfo) => {};
@@ -507,14 +504,11 @@
             const { longitude, latitude } = e;
             longitudeCurrent.value = longitude;
             latitudeCurrent.value = latitude;
-            let hList = await ServerStaticData.getHosList(
-              {
-                gisLng: longitude,
-                gisLat: latitude,
-                type,
-              },
-              { noCache: true }
-            );
+            let hList = await ServerStaticData.getHosList({
+              gisLng: longitude,
+              gisLat: latitude,
+              type,
+            });
 
             if (type === '1') {
               // hList = hList.filter((o) => o.ifClick !== '1');
@@ -532,14 +526,11 @@
         });
       });
     } else {
-      hosList.value = await ServerStaticData.getHosList(
-        {
-          type,
-          name: searchValue.value,
-          hosType: props.value._type === '3' ? '48' : '',
-        },
-        { noCache: true }
-      );
+      hosList.value = await ServerStaticData.getHosList({
+        type,
+        name: searchValue.value,
+        hosType: props.value._type === '3' ? '48' : '',
+      });
     }
 
     if (props.value._type === '5' && getTypeNow.value === '预约挂号') {
@@ -627,6 +618,7 @@
                 }, 500);
                 reject('未授权 Location');
               } else {
+                isAuth = true;
                 resolve(void 0);
               }
             },

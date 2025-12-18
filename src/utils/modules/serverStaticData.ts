@@ -18,6 +18,7 @@ import {
   getMiniProgramEnv,
   ApiParamsConfig,
   addHosIdForSelfH5Path,
+  calculateDistance,
 } from '@/utils';
 import {
   sysConfigEnv,
@@ -354,33 +355,56 @@ export class ServerStaticData {
    * 医院列表
    */
   static async getHosList(
-    data = {},
-    opt: { noCache: boolean } = { noCache: false }
+    data = {} as {
+      gisLng?: number;
+      gisLat?: number;
+      type?: string;
+    } & BaseObject,
+    opt = {}
   ): Promise<IHosInfo[]> {
+    const { gisLng: gisLng1, gisLat: gisLat1 } = data;
     let hosList = getLocalStorage('hosList') || _cacheMap.get(this.getHosList);
+    const isOldData = !!hosList;
 
-    if (!(hosList && hosList.length) || opt.noCache) {
+    if (!(hosList && hosList.length)) {
       const { result } = await api.getHospital<IHosInfo[]>(data);
+      hosList = result;
+    }
 
-      result.map((o) => {
-        const { distance, hosId, hosName, aliasName } = o;
+    if ((gisLng1 && gisLng1) || !isOldData) {
+      hosList.map((o) => {
+        const {
+          distance,
+          hosId,
+          hosName,
+          aliasName,
+          gisLat: gisLat2,
+          gisLng: gisLng2,
+        } = o;
 
         o.label = aliasName || hosName;
         o.value = hosId;
 
-        if (distance) {
-          o.distanceFormat = (distance / 1000).toFixed(1);
+        if (gisLng1 && gisLat1 && gisLat2 && gisLng2 && !distance) {
+          o.distance = calculateDistance(gisLat1, gisLng1, gisLat2, gisLng2);
+        }
+
+        if (o.distance) {
+          o.distanceFormat = (o.distance / 1000).toFixed(1);
         }
       });
 
-      hosList = result;
-      if (!opt.noCache) {
-        _cacheMap.set(this.getHosList, result);
-      }
+      hosList.sort(({ distance: distance1 }, { distance: distance2 }) => {
+        if (distance1 && distance2) {
+          return distance1 - distance2;
+        } else if (distance1) {
+          return -1;
+        }
 
-      // setLocalStorage({
-      //   hosList: result
-      // });
+        return 1;
+      });
+
+      _cacheMap.set(this.getHosList, hosList);
     }
 
     return hosList;
@@ -656,7 +680,7 @@ export class ServerStaticData {
         arg.source = 5;
       } else if (gStores.globalStore.ev === 'wx') {
         arg.source = 1;
-      }else if (gStores.globalStore.ev === 'tt') {
+      } else if (gStores.globalStore.ev === 'tt') {
         arg.source = 8;
       }
     }

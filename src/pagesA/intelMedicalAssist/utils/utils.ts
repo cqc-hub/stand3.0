@@ -297,7 +297,7 @@ export const initWithMess = async () => {
   if (result.length == 0) {
     return;
   }
-  const Hoslist = await ServerStaticData.getHosList({}, { noCache: true });
+  const Hoslist = await ServerStaticData.getHosList({});
   messFormData.value = result.map((item) => {
     let hosItem = Hoslist.find((hos) => {
       return hos.hosId === item.hosId;
@@ -1007,15 +1007,10 @@ const loadHosDataAsync = async () => {
       return { longitude: '', latitude: '' };
     });
 
-    const hosList = await ServerStaticData.getHosList(
-      {
-        gisLng: location?.longitude,
-        gisLat: location?.latitude,
-      },
-      {
-        noCache: true,
-      }
-    );
+    const hosList = await ServerStaticData.getHosList({
+      gisLng: location?.longitude,
+      gisLat: location?.latitude,
+    });
 
     hosData.value = hosList;
   } catch (error) {
