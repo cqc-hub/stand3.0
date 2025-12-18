@@ -119,9 +119,6 @@
       {
         gisLng: location?.longitude,
         gisLat: location?.latitude,
-      },
-      {
-        noCache: true,
       }
     );
 

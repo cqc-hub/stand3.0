@@ -83,7 +83,7 @@ export const apiAsync: <
       opt: { success(any): any; fail(any): any; [key: string]: any },
       ...restOpt: any[]
     ): any;
-  }
+  },
 >(
   api: T,
   opt: Omit<TFirstParams<Parameters<T>>, 'success' | 'fail'>,
@@ -733,4 +733,38 @@ export const createSingleCallInTime = (fn, time) => {
 
     return callPromise;
   };
+};
+
+/**
+ * 根据经纬度计算两点之间的距离（使用Haversine公式）
+ * @param lat1 第一个点的纬度
+ * @param lon1 第一个点的经度
+ * @param lat2 第二个点的纬度
+ * @param lon2 第二个点的经度
+ * @returns 距离（米）
+ */
+export const calculateDistance = (
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number => {
+  const R = 6371000; // 地球半径，单位：米
+
+  // 将角度转换为弧度
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const distance = R * c;
+
+  return distance;
 };
