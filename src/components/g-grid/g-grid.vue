@@ -188,7 +188,7 @@
   });
 
   const unreadMes = ref(false);
-  const getStatus = async () => {    
+  const getStatus = async () => {
     const { result } = await api.getStatus({
       str: `OPENID_${gStores.globalStore.h5OpenId}/${gStores.userStore.phoneNum}`,
     });
@@ -196,10 +196,11 @@
   };
 
   let getNum = async () => {
-    if (!gStores?.getStatus) {
-      gStores.addNewMethod('getStatus',createSingleCallInTime(getStatus, 1000 * 60*5));      
-    }
-    unreadMes.value = await gStores.getStatus();
+    unreadMes.value = await createSingleCallInTime(
+      getStatus,
+      1000 * 60 * 5,
+      'getMesStatus'
+    )();
   };
 
   const gridClick = (item) => {

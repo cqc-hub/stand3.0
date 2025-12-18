@@ -929,6 +929,9 @@ const regApi = {
 
   getForwardRegList: <T = any>(data: any) =>
     service.post<T>('/phs-reg/forwardReg/getForwardRegList', parm(data)),
+  
+  hpCalendar: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/reg/hpCalendar', parm(data)),
 };
 
 // 用户服务

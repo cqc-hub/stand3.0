@@ -675,62 +675,84 @@ export const setDefaultPatient = async (patientId: string) => {
   }
 };
 
+interface CacheData {
+  result: any;
+  timestamp: number;
+  argsHash?: string;
+}
+
 /**
  * 在指定时间内确保方法只被调用一次并返回相同结果
  * @param {Function} fn - 需要调用的方法
  * @param {number} time - 时间限制（毫秒）
  * @returns {Function} 包装后的方法
  */
+export const createSingleCallInTime = (
+  fn: Function,
+  time: number,
+  cacheKey: string
+) => {
+  const getCache = (): CacheData | null => {
+    try {
+      const cached = uni.getStorageSync(cacheKey);
+      return cached ? JSON.parse(cached) : null;
+    } catch (error) {
+      console.warn('Failed to read cache:', error);
+      return null;
+    }
+  };
 
-export const createSingleCallInTime = (fn, time) => {
-  let cachedResult = null;
-  let lastCallTime = 0;
-  let isCalling = false;
-  let callPromise: any = null;
-  let cachedArgs: any = null;
-  let cachedContext: any = null;
+  const setCache = (data: CacheData) => {
+    try {
+      uni.setStorage({ key: cacheKey, data: JSON.stringify(data) });
+    } catch (error) {
+      console.warn('Failed to save cache:', error);
+    }
+  };
 
-  return async function A(this: any, ...args) {
+  const clearCache = () => {
+    try {
+      uni.removeStorageSync(cacheKey);
+    } catch (error) {
+      console.warn('Failed to clear cache:', error);
+    }
+  };
+
+  const generateArgsHash = (args: any[]): string => {
+    // 简单的参数哈希生成，可以根据需要改进
+    try {
+      return JSON.stringify(args);
+    } catch {
+      return '';
+    }
+  };
+
+  return async function A(this: any, ...args: any[]) {
     const currentTime = Date.now();
+    const cached = getCache();
 
-    // 如果在时间C内且已有缓存结果，直接返回缓存结果
-    if (cachedResult !== null && currentTime - lastCallTime < time) {
-      return cachedResult;
-    }
-
-    // 如果正在调用中，返回同一个Promise
-    if (isCalling) {
-      return callPromise;
-    }
-
-    // 缓存已过期，重置状态，开始新的调用
-    cachedResult = null; // 清除过期缓存
-    cachedArgs = args;
-    cachedContext = this;
-    isCalling = true;
-    lastCallTime = currentTime;
-
-    callPromise = (async () => {
-      try {
-        // 使用缓存的上下文和参数调用B
-        const result = await fn.apply(cachedContext, cachedArgs);
-        cachedResult = result;
-        return result;
-      } catch (error) {
-        // 如果调用失败，清除状态以便下次重试
-        cachedResult = null;
-        isCalling = false;
-        callPromise = null;
-        throw error;
-      } finally {
-        // 不再使用setTimeout，只在成功时设置标志
-        // 错误已在catch块处理
-        if (cachedResult !== null) {
-          isCalling = false;
-        }
+    // 检查是否有有效缓存
+    if (cached && currentTime - cached.timestamp < time) {
+      // 如果提供了参数哈希，检查参数是否匹配
+      if (
+        cached.argsHash === undefined ||
+        cached.argsHash === generateArgsHash(args)
+      ) {
+        return cached.result;
       }
-    })();
+    }
 
-    return callPromise;
+    // 调用原始函数
+    const result = await fn.apply(this, args);
+
+    // 保存到缓存
+    setCache({
+      result,
+      timestamp: currentTime,
+      argsHash: generateArgsHash(args),
+    });
+
+    return result;
   };
 };
+

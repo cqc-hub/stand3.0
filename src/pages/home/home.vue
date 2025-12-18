@@ -527,13 +527,7 @@
   });
 
   onShow(async () => {
-    if (!gStores?.initViewStore) {
-      gStores.addNewMethod(
-        'initViewStore',
-        createSingleCallInTime(viewerStore.init(), 1000 * 60 * 5)
-      );
-    }
-    await gStores.initViewStore();
+    createSingleCallInTime(viewerStore.init, 1000 * 60 * 5, 'initViewStore')();
 
     // if (global.SYS_CODE === '1001067' && globalStore.openId) {
     //   const { ev } = gStores.globalStore;
