@@ -221,10 +221,11 @@
   };
 
   let getNum = async () => {
-    if (!gStores?.getStatus) {
-      gStores.addNewMethod('getStatus',createSingleCallInTime(getStatus, 1000 * 60 * 5));
-    }
-    unreadMes.value = await gStores.getStatus();
+    unreadMes.value = await createSingleCallInTime(
+      getStatus,
+      1000 * 60 * 5,
+      'getMesStatus'
+    )();
   };
 
   onMounted(async () => {

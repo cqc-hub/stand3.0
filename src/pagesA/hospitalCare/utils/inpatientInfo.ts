@@ -253,7 +253,16 @@ export const useHosPayPage = () => {
 
   const getRefPay = async (fee?) => {
     if (!fee) {
-      return
+      return;
+    }
+    if (isNaN(fee * 1)) {
+      gStores.messageStore.showMessage('请输入正确金额');
+      return;
+    }
+
+    if (!(fee * 1)) {
+      gStores.messageStore.showMessage('请输入金额');
+      return;
     }
     const isDigitalPay = getIsDigitalPay(pageConfig.value);
 
