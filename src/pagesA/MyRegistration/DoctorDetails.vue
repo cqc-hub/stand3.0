@@ -1120,10 +1120,12 @@
     if (isOpenComment === '1' && isHideCommentListInDocDetail !== '1') {
       getCommentList();
     }
-
-    if (isOpenDocCardOnlineService === '1') {
+    
+    // #ifndef MP-TOUTIAO
+     if (isOpenDocCardOnlineService === '1') {
       getDocService();
     }
+    // #endif
 
     // #ifdef MP-ALIPAY
     if (isOpenDocCardOnlineServiceAlipay === '1') {

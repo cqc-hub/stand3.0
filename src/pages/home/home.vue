@@ -34,7 +34,9 @@
 
       <view
         :style="{
+          /* #ifndef MP-TOUTIAO */
           'margin-top': `${navHeight + 24}px`,
+          /* #endif */
         }"
         class="relative z-1"
       >
