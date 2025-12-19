@@ -316,7 +316,7 @@
         dealNumberSourceList(result || []);
         collapseOrderSourceList.value[listKey] = result || [];
         // #ifdef MP-TOUTIAN
-        await wait(500)
+        await wait(700)
         // #endif
         refCollapseNow.init();
       }

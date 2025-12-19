@@ -64,6 +64,7 @@
         @profile-click="profileClick"
         @card-click="cardClick"
       >
+      <!-- #ifndef MP-TOUTIAO -->
         <template #footer="{ pat }: { pat: IPat }">
           <view>
             <view class="button-line">
@@ -181,6 +182,7 @@
             </view>
           </view>
         </template>
+      <!-- #endif -->
       </pat-List>
     </view>
 

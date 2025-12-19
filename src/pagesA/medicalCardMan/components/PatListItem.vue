@@ -176,6 +176,10 @@
     -webkit-animation-name: fadeInRight;
     animation-name: fadeInRight;
     animation-duration: 0.5s;
+    
+    /* #ifdef MP-TOUTIAO */
+    margin-bottom: 16rpx;
+    /* #endif */
 
     .pat-profile {
       color: var(--hr-neutral-color-10);
