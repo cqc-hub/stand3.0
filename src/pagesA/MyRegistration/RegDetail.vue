@@ -754,8 +754,7 @@
 
     const { patientSex, patientAge, patientName, patientId } =
       gStores.userStore.patChoose;
-    const { orderId, hosOrderId } = pageProps.value;
-
+    const { orderId } = pageProps.value;
     const pageArg = {
       patientSex,
       patientAge,
@@ -763,7 +762,7 @@
       patientId,
       deptName: orderRegInfo.value.deptName,
       orderId,
-      hosOrderId,
+      hosOrderId:orderRegInfo.value.hosOrderId,
       hosDeptId: orderRegInfo.value.hosDeptId,
     };
 

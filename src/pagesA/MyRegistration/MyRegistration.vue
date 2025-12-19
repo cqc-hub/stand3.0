@@ -436,6 +436,8 @@
       //指定的预问诊跳转
       useTBanner(pageConfig.value.preConsultationBtn, 'navigateTo', item);
     } else {
+      const { patientSex, patientAge, patientName } =
+      gStores.userStore.patChoose;
       const {
         orderId,
         hosDeptId,
@@ -456,6 +458,9 @@
           hosOrderId,
           hosData: encodeURIComponent(hosData as string),
           patientId,
+          patientName,
+          patientAge,
+          patientSex,
           deptName,
         },
         addition: {
