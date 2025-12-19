@@ -585,6 +585,12 @@ const queryApi = {
     service.post<any>('/phs-query/intAssistant/query', parm(data)),
   intAssistantSave: (data) =>
     service.post<any>('/phs-query/intAssistant/save', parm(data)),
+  addExamOrder: (data) =>
+    service.post<any>('/phs-query/exam/addExamOrder', parm(data)),
+  examPayInform: (data) =>
+    service.post<any>('/phs-query/exam/examPayInform', parm(data)),
+  getExamPayResult: (data) =>
+    service.post<any>('/phs-query/exam/getExamPayResult', parm(data)),
 };
 
 // 挂号服务
@@ -929,7 +935,7 @@ const regApi = {
 
   getForwardRegList: <T = any>(data: any) =>
     service.post<T>('/phs-reg/forwardReg/getForwardRegList', parm(data)),
-  
+
   hpCalendar: <T = any>(data: any) =>
     service.post<T>('/phs-reg/reg/hpCalendar', parm(data)),
 };
