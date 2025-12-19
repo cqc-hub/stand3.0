@@ -155,19 +155,17 @@
 <script setup lang="ts">
   import { onMounted, ref, inject, computed } from 'vue';
   import api from '@/service/api';
-  import { getQueryUrl } from '@/common/utils';
   import {
     inHospitalCostInfo,
     inHospitalCostInfoParam,
   } from '../utils/inpatientInfo';
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, ServerStaticData } from '@/utils';
-  import dayjs from 'dayjs';
+  import { GStores } from '@/utils';
   import { deQueryForUrl } from '@/common/utils';
 
-  const pageProps = ref<inHospitalCostInfoParam>({} as inHospitalCostInfoParam);
+  const pageProps = ref({} as inHospitalCostInfoParam);
   const Obj = ref();
-  const costInfoDetal = ref<inHospitalCostInfo>({} as inHospitalCostInfo);
+  const costInfoDetal = ref({} as inHospitalCostInfo);
   const param = ref<inHospitalCostInfoParam>({
     costDay: '',
     costType: '',
@@ -232,9 +230,8 @@
       hospitalId: props.hospitalId || providePageProp().hospitalId,
       visitNo: _pageProps.value.visitNo,
     };
-    const { result } = await api.getInHospitalCostInfo<inHospitalCostInfo>(
-      params
-    );
+    const { result } =
+      await api.getInHospitalCostInfo<inHospitalCostInfo>(params);
     costInfoDetal.value = result;
     Obj.value = JSON.stringify(costInfoDetal.value) == '{}';
   };

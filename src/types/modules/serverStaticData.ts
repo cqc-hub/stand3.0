@@ -79,7 +79,7 @@ export interface ISystemConfig_ {
     isHideOrderCategorName?: '1';
     // 选择号源时候显示几列
     selOrderColumn: number;
-    // 精确号源?
+    // 精确号源?  1 精确号源
     isOrderBlur: '0' | '1';
     // 展示号源数不为空的，超过当前时间的号源是否展示
     isHideOutTimeOrderSource?: '0' | '1';

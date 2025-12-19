@@ -141,7 +141,7 @@
   };
   const gotoListExpenses = (data) => {
     uni.navigateTo({
-      url: joinQuery(`listExpenses`, {
+      url: joinQuery(`/pagesA/hospitalCare/listExpenses`, {
         isHosTotallist: '2',
         hospitalId: data.inpatientNo,
         costDay: data.costDate,
