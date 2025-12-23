@@ -1027,6 +1027,11 @@ const userApi = {
     service.post('/phs-user/rePat/wzrmPatSync', parm(data), {
       hideLoading: false,
     }),
+  patSync: (data) =>
+    service.post('/phs-user/rePat/patSync', parm(data), {
+      hideLoading: false,
+    }),
+
   mdifPhone: (data) =>
     service.post('/phs-user/rePat/mdifPhone', parm(data), {
       hideLoading: false,
@@ -1049,6 +1054,11 @@ const userApi = {
 
   mofHosPhone: (data) =>
     service.post('/phs-user/rePat/mofHosPhone', parm(data), {
+      hideLoading: false,
+    }),
+
+  addPatAndMdPhoneById: (data) =>
+    service.post('/phs-user/relevantPatient/addPatAndMdPhoneById', parm(data), {
       hideLoading: false,
     }),
 
