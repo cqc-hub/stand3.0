@@ -321,20 +321,18 @@
       result = _r;
     }
 
-    if (result) {
-      let { firstDeptList, deptListLevel } = result;
-      if (!deptListLevel) {
-        deptListLevel = '3';
-      }
+    let { firstDeptList, deptListLevel } = result;
+    if (!deptListLevel) {
+      deptListLevel = '3';
+    }
 
-      if (firstDeptList && firstDeptList.length) {
-        loopDeptList(firstDeptList, deptListLevel);
-        _loopDeptList(firstDeptList);
-        depList.value = firstDeptList;
-        depLevel.value = deptListLevel;
-      } else {
-        depList.value = [];
-      }
+    if (firstDeptList && firstDeptList.length) {
+      loopDeptList(firstDeptList, deptListLevel);
+      _loopDeptList(firstDeptList);
+      depList.value = firstDeptList;
+      depLevel.value = deptListLevel;
+    } else {
+      depList.value = [];
     }
   };
 

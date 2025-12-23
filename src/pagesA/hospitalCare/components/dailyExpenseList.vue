@@ -159,7 +159,7 @@
 
   const gotoListExpenses = (data) => {
     uni.navigateTo({
-      url: `listExpenses?costDay=${data.costDate}&isHosDaylist='1'`,
+      url: `/pagesA/hospitalCare/listExpenses?costDay=${data.costDate}&isHosDaylist='1'`,
     });
   };
   //下拉刷新

@@ -52,7 +52,7 @@ export interface ISystemConfig_ {
     /** 针对 mdt 功能, 开放的院区 */
     mdtHosOpened?: string[];
 
-    /** 科室列表页面 */
+    /** 科室列表页面 pagesA/MyRegistration/selDepartment */
     // 选科室上面 banner
     bannerOrder?: TBannerConfig | TBannerConfig[];
     //选科室上面 banner-支付宝
@@ -79,7 +79,7 @@ export interface ISystemConfig_ {
     isHideOrderCategorName?: '1';
     // 选择号源时候显示几列
     selOrderColumn: number;
-    // 精确号源?
+    // 精确号源?  1 精确号源
     isOrderBlur: '0' | '1';
     // 展示号源数不为空的，超过当前时间的号源是否展示
     isHideOutTimeOrderSource?: '0' | '1';
@@ -126,6 +126,8 @@ export interface ISystemConfig_ {
     isConfirmOrderWithDeptTip?: '1' | '2'; // 1 科室页面不弹 2 科室、挂号确认页面均弹
     /** 挂号确认页面点击我已阅读时候需要弹窗 */
     isConfirmOrderWithConfirmDialog?: '1';
+    /** 重复选择科室页面的提示 */
+    isConfirmOrderOrderTipRepeat?: '1';
     /** 挂号确认页面 去预约变成去支付&跳到详情后自动拉起支付 */
     isConfirmOrderWithPay?: '1';
 
@@ -709,7 +711,9 @@ export interface ISystemConfig_ {
       title?: string; //页面标题，无则标题展示空
       showFlag?: number; //页面底部协议，无则不展示
       entryType?: string; //多次使用需跟页面路由参数入口一致，无则取第一项
-      tabs?: Array<TButtonConfig & { bgSrc?: string; subTitle?: string,height?:string }>; //bgSrc背景图 height//背景图高度
+      tabs?: Array<
+        TButtonConfig & { bgSrc?: string; subTitle?: string; height?: string }
+      >; //bgSrc背景图 height//背景图高度
     }[];
     //h5通用协议阅读页
     flagReadConfig?: {

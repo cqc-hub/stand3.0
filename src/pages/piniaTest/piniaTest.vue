@@ -683,7 +683,10 @@
   const patientUtils = new PatientUtils();
 
   const init = async () => {
-    useTBanner(viewImg);
+    useTBanner({
+      type: 'h5',
+      path: 'https://schoolhealth.cdc.zj.cn/sc/parent?wx=1',
+    });
     // useTBanner(用药查询1001093);
     // useTBanner(用药查询);
   };

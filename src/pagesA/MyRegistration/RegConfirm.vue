@@ -179,8 +179,8 @@
             isWaitReg
               ? '候补预约'
               : pageConfig.isConfirmOrderWithPay === '1'
-              ? '去支付'
-              : '确定预约'
+                ? '去支付'
+                : '确定预约'
           }}
         </button>
       </view>
@@ -1043,7 +1043,51 @@
       _isPatient: true,
     });
 
-    const { isConfirmOrderWithDeptTip } = pageConfig.value;
+    const {
+      isConfirmOrderWithDeptTip,
+      isConfirmOrderOrderTipRepeat,
+      deptDialogBtnCannel,
+    } = pageConfig.value;
+
+    if (isConfirmOrderOrderTipRepeat === '1') {
+      await new Promise(async (r) => {
+        const { title, content } = await gStores.getSysAppMore('8');
+
+        const cancelText = deptDialogBtnCannel?.label;
+        const confirmText = cancelText ? '继续预约' : '确定';
+        gStores.messageStore.showMessage(content, 0, {
+          useDialog: true,
+          dialogOpt: {
+            title,
+            isShowCancel: !!deptDialogBtnCannel,
+            cancelText,
+            confirmText,
+            cancelColor: 'var(--hr-brand-color-6)',
+            maxHeight: 900,
+          },
+          closeCallBack({ confirm, maskClose }) {
+            r(0);
+            if (!confirm && !maskClose) {
+              const { key } = deptDialogBtnCannel! as any;
+              if (key === '0') {
+                uni.navigateTo({
+                  url: joinQueryForUrl(
+                    '/pagesC/hospitalAccount/hospitalAccount',
+                    {
+                      hosId: props.value.hosId,
+                      type: 'fromSelDepartment',
+                    }
+                  ),
+                });
+              } else {
+                useTBanner(deptDialogBtnCannel as any);
+              }
+            }
+          },
+        });
+      });
+    }
+
     if (
       isConfirmOrderWithDeptTip &&
       ['1', '2'].includes(isConfirmOrderWithDeptTip)
@@ -1052,7 +1096,7 @@
         .getDeptDetail({
           hosDeptId: props.value.specialClinicDept || props.value.hosDeptId,
         })
-        .catch(() => ({} as any));
+        .catch(() => ({}) as any);
 
       if (promptMessage) {
         await new Promise<{ confirm: boolean }>((r) => {
