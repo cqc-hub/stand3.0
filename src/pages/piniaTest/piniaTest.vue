@@ -1,6 +1,8 @@
 <template>
   <view class="">
-    <button @click="init">智能客服</button>
+    <button @click="init">
+      <view class="aa">智慧医院</view>
+    </button>
   </view>
 </template>
 
@@ -17,6 +19,7 @@
   import globalGl from '@/config/global';
   import { joinQuery } from '../../common/utils';
   import { encryptDes, encryptedAes } from '@/common';
+  import { onLoad } from '@dcloudio/uni-app';
 
   const gStores = new GStores();
   const { source } = gStores.globalStore.browser;
@@ -574,11 +577,6 @@
   } as TButtonConfig;
 
   const testbuttonConfig = ref(智能客服);
-  onMounted(() => {
-    setTimeout(() => {
-      init();
-    }, 1000);
-  });
 
   const 住院点餐 = {
     type: 'h5',
@@ -685,12 +683,33 @@
   const 肿瘤浙里护理护士页面 = {
     type: 'otherProgram',
     appId: 'wxf1e8ea9f6a96c1db',
-    path: 'pages/index/tenant/enter?linkType=11&emNo=815'
+    path: 'pages/index/tenant/enter?linkType=11&emNo=815',
   } as TButtonConfig;
 
+  onMounted(() => {
+    setTimeout(() => {
+      init();
+    }, 1000);
+  });
   const init = async () => {
-    useTBanner(肿瘤浙里护理护士页面);
+    // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
     // useTBanner(用药查询);
   };
+
+  onLoad(() => {
+    // uni.loadFontFace({
+    //   family: 'custom-font',
+    //   source: `url("${globalGl.BASE_IMG}font/custom.ttf")`, // 你的字体网络地址
+    //   success: () => console.log('字体加载成功'),
+    //   fail: (err) => console.error('字体加载失败', err),
+    // });
+  });
 </script>
+
+<style lang="scss" scoped>
+  .aa {
+    color: red;
+    font-family: 'custom-font';
+  }
+</style>

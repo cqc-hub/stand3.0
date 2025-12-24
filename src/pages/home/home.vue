@@ -567,7 +567,7 @@
       globalStore.isLogin &&
       getShowName
     ) {
-      assistMessageRef.value.reLoad();
+      assistMessageRef.value?.reLoad();
     }
     // #endif
   });

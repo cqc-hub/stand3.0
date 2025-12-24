@@ -12,6 +12,7 @@
   import { useLunchInit1001035 } from '@/utils/1001035';
   import { reloadUni } from './utils/reloadUni';
   import { GStores } from './utils';
+  import globalGl from '@/config/global';
 
   const gStores = new GStores();
 
@@ -48,6 +49,13 @@
     // #ifdef MP-TOUTIAO
     uni.login();
     // #endif
+
+    uni.loadFontFace({
+      global: true,
+      family: 'custom-font',
+      source: `url("${globalGl.BASE_IMG}font/custom.ttf")`,
+      fail: (err) => console.error('字体加载失败', err),
+    });
   });
 
   onShow(async (opt: any) => {
