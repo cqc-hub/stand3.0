@@ -243,8 +243,13 @@ export class LoginUtils extends GStores {
       });
       await api.xjzyyPatSync(reqData);
     }
+
     if (['1001083'].includes(sysCode)) {
       await api.wzrmPatSync({ source: this.globalStore.browser.source });
+    }
+
+    if (['1001095'].includes(sysCode)) {
+      await api.patSync({ source: this.globalStore.browser.source });
     }
   }
   //判断是否需要前往手机号登录

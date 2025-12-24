@@ -43,7 +43,10 @@
     </view>
     <scroll-view class="scroll-container g-container" scroll-y>
       <g-tbanner
-        v-if="props._type !== '5'"
+        v-if="
+          props._url &&
+          props._url.includes('pagesA/MyRegistration/selDepartment')
+        "
         :config="orderConfig.bannerSelHosTop"
         @click="useTBanner(orderConfig.bannerSelHosTop!, 'navigateTo', props)"
         disabled

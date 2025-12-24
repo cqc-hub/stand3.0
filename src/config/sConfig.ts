@@ -777,6 +777,16 @@ const scJson: Record<string, ISConfig> = {
     login: {
       isSkipPerfect: '1',
     },
+    medicalMHelp: {
+      alipay: {
+        medicalPlugin: {
+          orgId: { 131401: 'H33030200021' },
+          cardType: '01',
+        },
+        medicalFiling: '1',
+        isFamilyPayment: '1',
+      },
+    },
   },
   1001084: {
     login: {

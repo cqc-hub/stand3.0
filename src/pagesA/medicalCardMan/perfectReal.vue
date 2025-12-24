@@ -585,7 +585,7 @@
         const {
           result: { cardList, data: resData, patientId },
         } = await api.getAllCardByName(requestArg).catch((err) => {
-          dealNetError(err, data);
+          dealNetError(err,  requestArg);
           throw new Error(err);
         });
         newPat.value = { patientId };
@@ -647,8 +647,9 @@
     }
   };
 
-  const editPhone = async (data = {} as any) => {
+  const editPhone = async (data = {} as any, type?: string) => {
     // 需要保障此页面存在这几个字段
+    console.log('changeWithAdd', type);
     const { idType, idCard, patientPhone, patientName } = data;
     const {
       isCanChangeHosPhone,
@@ -697,6 +698,7 @@
           });
 
           pdata = pData;
+          console.log('changeWithAdd2 pData', pData);
         } else {
           cacheStore.changeCacheData({
             ...data,
@@ -717,6 +719,22 @@
           throw new Error('去到ocr页面');
         }
         data.pData = pdata;
+      }
+      if (type === 'changeWithAdd') {
+        const {
+          result: { patientId },
+        } = await api.addPatAndMdPhoneById({
+          ...data,
+          pdata: data.pData,
+          source: gStores.globalStore.browser.source,
+          verifyCode: null,
+        });
+        if (pageProps.value._directUrl) {
+          routerJump(pageProps.value._directUrl as `/${string}`);
+        } else {
+          routerJump('/pagesA/medicalCardMan/medicalCardMan');
+        }
+        return;
       }
 
       await api.mofHosPhone({
@@ -774,7 +792,7 @@
       });
 
       if (confirm) {
-        await editPhone(data);
+        await editPhone(data, 'changeWithAdd');
       }
     } else if (err?.respCode === 999001) {
       // await patientUtils.getPatCardList();

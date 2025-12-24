@@ -20,7 +20,7 @@
           "titlePenetrate": "YES",
           "defaultTitle": ""
         },
-        "mp-toutiao": { 
+        "mp-toutiao": {
           "navigationBarTitleText": "江苏省中医院"
         }
       }
@@ -948,6 +948,12 @@
           "path": "donation/donation",
           "style": {
             "navigationBarTitleText": "慈善捐款"
+          }
+        },
+        {
+          "path": "examPayment/index",
+          "style": {
+            "navigationBarTitleText": "高考体检缴费"
           }
         }
       ],

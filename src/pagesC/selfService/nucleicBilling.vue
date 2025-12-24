@@ -597,21 +597,19 @@
       try {
         const extend = JSON.parse(selList.value[0].extend);
         if (extend?.quesNeed) {
-          console.log('gStores.userStore.patChoose', gStores.userStore);
-          const wxPhone = decryptDes(
-            gStores.userStore.phoneNum,
-            'N1@ae^T:phone'
-          );
-          console.log('wxPhone', wxPhone);
-
-          const { birthday, patientSex, patientAge, patientName } =
-            gStores.userStore.patChoose;
+          const {
+            birthday,
+            patientSex,
+            patientAge,
+            patientName,
+            patientPhone,
+          } = gStores.userStore.patChoose;
           const extraData = {
             birthday,
             patientSex,
             patientAge,
             patientName,
-            phoneNumber: wxPhone,
+            phoneNumber: patientPhone,
             hosId,
             isPay,
             patientId,

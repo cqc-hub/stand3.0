@@ -585,6 +585,12 @@ const queryApi = {
     service.post<any>('/phs-query/intAssistant/query', parm(data)),
   intAssistantSave: (data) =>
     service.post<any>('/phs-query/intAssistant/save', parm(data)),
+  addExamOrder: (data) =>
+    service.post<any>('/phs-query/exam/addExamOrder', parm(data)),
+  examPayInform: (data) =>
+    service.post<any>('/phs-query/exam/examPayInform', parm(data)),
+  getExamPayResult: (data) =>
+    service.post<any>('/phs-query/exam/getExamPayResult', parm(data)),
 };
 
 // 挂号服务
@@ -929,7 +935,7 @@ const regApi = {
 
   getForwardRegList: <T = any>(data: any) =>
     service.post<T>('/phs-reg/forwardReg/getForwardRegList', parm(data)),
-  
+
   hpCalendar: <T = any>(data: any) =>
     service.post<T>('/phs-reg/reg/hpCalendar', parm(data)),
 };
@@ -1021,6 +1027,11 @@ const userApi = {
     service.post('/phs-user/rePat/wzrmPatSync', parm(data), {
       hideLoading: false,
     }),
+  patSync: (data) =>
+    service.post('/phs-user/rePat/patSync', parm(data), {
+      hideLoading: false,
+    }),
+
   mdifPhone: (data) =>
     service.post('/phs-user/rePat/mdifPhone', parm(data), {
       hideLoading: false,
@@ -1043,6 +1054,11 @@ const userApi = {
 
   mofHosPhone: (data) =>
     service.post('/phs-user/rePat/mofHosPhone', parm(data), {
+      hideLoading: false,
+    }),
+
+  addPatAndMdPhoneById: (data) =>
+    service.post('/phs-user/relevantPatient/addPatAndMdPhoneById', parm(data), {
       hideLoading: false,
     }),
 

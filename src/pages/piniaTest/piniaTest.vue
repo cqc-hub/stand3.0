@@ -682,11 +682,14 @@
 
   const patientUtils = new PatientUtils();
 
+  const 肿瘤浙里护理护士页面 = {
+    type: 'otherProgram',
+    appId: 'wxf1e8ea9f6a96c1db',
+    path: 'pages/index/tenant/enter?linkType=11&emNo=815'
+  } as TButtonConfig;
+
   const init = async () => {
-    useTBanner({
-      type: 'h5',
-      path: 'https://schoolhealth.cdc.zj.cn/sc/parent?wx=1',
-    });
+    useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
     // useTBanner(用药查询);
   };
