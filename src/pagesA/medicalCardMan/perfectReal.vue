@@ -585,7 +585,7 @@
         const {
           result: { cardList, data: resData, patientId },
         } = await api.getAllCardByName(requestArg).catch((err) => {
-          dealNetError(err,  requestArg);
+          dealNetError(err, requestArg);
           throw new Error(err);
         });
         newPat.value = { patientId };
@@ -609,7 +609,7 @@
         const patientId = await patientUtils
           .addPatient(requestArg)
           .catch((err) => {
-            dealNetError(err, data);
+            dealNetError(err, requestArg);
             throw new Error(err);
           });
 
@@ -698,7 +698,6 @@
           });
 
           pdata = pData;
-          console.log('changeWithAdd2 pData', pData);
         } else {
           cacheStore.changeCacheData({
             ...data,
@@ -729,6 +728,7 @@
           source: gStores.globalStore.browser.source,
           verifyCode: null,
         });
+        await patientUtils.getPatCardList();
         if (pageProps.value._directUrl) {
           routerJump(pageProps.value._directUrl as `/${string}`);
         } else {
