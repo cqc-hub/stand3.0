@@ -59,6 +59,7 @@
     packageAuthParams,
     LoginUtils,
     routerJump,
+    wait,
   } from '@/utils';
 
   import api from '@/service/api';
@@ -76,7 +77,9 @@
   const hosLogo = ref('');
   const gStores = new GStores();
   const loginUtils = new LoginUtils();
-  const formData = ref<BaseObject>({});
+  const formData = ref<BaseObject>({
+    cellPhoneNum: '',
+  });
   const gform = ref<any>('');
   const envH5 = computed(() => gStores.globalStore.envH5);
   let isSendedVerify = false;
@@ -97,6 +100,7 @@
         },
       ],
     },
+
     {
       required: true,
       maxlength: 6,
@@ -204,12 +208,14 @@
     getHosLogo();
   });
 
-  onMounted(() => {
+  onMounted(async () => {
     if (props.isOpenPassword === '1') {
       formList.value.splice(1, 1);
     } else {
       formList.value.pop();
     }
+
+    await wait(120);
     gform.value.setList(formList.value);
   });
 

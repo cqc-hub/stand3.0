@@ -60,7 +60,7 @@
                 :type="item.inputType"
                 :maxlength="item.maxlength"
                 :disabled="item.disabled"
-                @input="(e) => changeInput(item, e)"
+                @input="changeInput(item, $event)"
                 @blur="inputBlur(item, $event)"
                 :class="{
                   'my-disabled': item.disabled,
@@ -871,7 +871,6 @@
 
   const setData = function (value: BaseObject, item?: TInstance) {
     const oldValue = item ? props.value[item.key] : undefined;
-
     emits('update:value', {
       ...props.value,
       ...value,
@@ -996,7 +995,12 @@
     });
   };
 
+  const changeInput1 = (e, v) => {
+    console.log(e, v);
+  };
+
   const changeInput = (item: TInstance, v: string) => {
+    console.log(v);
     // 微信有bug 需要判断下
     if (typeof v === 'string') {
       setData(
