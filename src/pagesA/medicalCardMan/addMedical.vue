@@ -397,7 +397,7 @@
           // const name =
           //   (isUpFace === '1' && formData.value[`upName`]) ||
           //   formData.value[formKey.patientName];
-           const { pData } = await patientUtils.faceVerifyAndPData({
+          const { pData } = await patientUtils.faceVerifyAndPData({
             idCardNumber: formData.value[formKey.idCard],
             name: formData.value[formKey.patientName],
           });

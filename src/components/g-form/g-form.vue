@@ -995,12 +995,7 @@
     });
   };
 
-  const changeInput1 = (e, v) => {
-    console.log(e, v);
-  };
-
   const changeInput = (item: TInstance, v: string) => {
-    console.log(v);
     // 微信有bug 需要判断下
     if (typeof v === 'string') {
       setData(
