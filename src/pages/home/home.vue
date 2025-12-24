@@ -561,6 +561,7 @@
         globalStore?.intAssistantImg ||
         intelMedicalAssistConfig?.distinctiveImage?.imageList[0];
     }
+    // #ifndef MP-TOUTIAO
     if (
       globalGl.sConfig?.isOpenAssistMessage &&
       globalStore.isLogin &&
@@ -568,6 +569,7 @@
     ) {
       assistMessageRef.value.reLoad();
     }
+    // #endif
   });
 
   onLoad(async (opt) => {

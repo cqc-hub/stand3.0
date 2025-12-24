@@ -139,7 +139,9 @@
   const messData = ref<any>({});
   const gStores = new GStores();
   onMounted(() => {
+    // #ifndef MP-TOUTIAO
     reLoad();
+    // #endif
   });
   const messList = ref([] as any[]);
   const list = ref([10, 36.4, 63.4, 90] as any[]);
