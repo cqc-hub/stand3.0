@@ -1,24 +1,24 @@
 <template>
   <view class="menu-list menu-style">
-    <homeMenuTabs
-      v-model:value="tabIndex1"
-      :tabs="props.list"
-      @change="activeMenu"
-      :itemWidth="100 / props.list.length + '%'"
-      :itemMinWidth="getSysCode() == '1001036' ? '20rpx' : '180rpx'"
-      field="typeName"
-      pillsColor="#fff"
-      bgColor="var(--hr-brand-color-3-light)"
-      color="#24314D"
-      activeColor="var(--hr-brand-color-6)"
-      pillsBorderRadius="42rpx 42rpx 0 0"
-      paddingItem="0"
-      height="80"
-      scroll
-      :allBlod="false"
-    />
-
-    <view class="pl32 pr32">
+    <view class="menu-pannel-style">
+      <homeMenuTabs
+        v-model:value="tabIndex1"
+        :tabs="props.list"
+        @change="activeMenu"
+        :itemWidth="100 / props.list.length + '%'"
+        :itemMinWidth="getSysCode() == '1001036' ? '20rpx' : '180rpx'"
+        field="typeName"
+        pillsColor="#fff"
+        bgColor="#fff0"
+        color="#24314D"
+        activeColor="var(--hr-brand-color-6)"
+        pillsBorderRadius="42rpx 42rpx 0 0"
+        paddingItem="0"
+        height="80"
+        scroll
+        pills
+        :allBlod="false"
+      />
       <swiper
         :style="{
           height: height + 'px',
@@ -119,7 +119,8 @@
     // #ifndef MP-TOUTIAO
     query = query.in(inst);
     // #endif
-    const view = query.select(`#home-menu-${tabIndex1.value}`);
+    const view = query
+      .select(`#home-menu-${tabIndex1.value}`);
     view
       .boundingClientRect((data) => {
         if (data) {
@@ -164,7 +165,15 @@
     width: 100vw;
     right: 32rpx;
     position: relative;
+    background: linear-gradient(
+      360deg,
+      rgba(238, 243, 255, 0) 50%,
+      var(--hr-brand-color-3-light) 99%
+    );
     border-radius: 24rpx 0rpx 0rpx 24rpx;
+    .menu-pannel-style {
+      padding: 32rpx 32rpx 0 32rpx;
+    }
     .menu-swiper-style {
       background: #fff;
       padding-top: 24rpx;
