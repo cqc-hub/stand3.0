@@ -51,7 +51,10 @@
           class="card-body relative"
         >
           <view
-            v-if="globalGl.sConfig.homeNavTitleLogo"
+            v-if="
+              gStores.globalStore.sysCode !== '1001093' &&
+              globalGl.sConfig.homeNavTitleLogo
+            "
             class="flex justify-center relative z-1"
           >
             <image
