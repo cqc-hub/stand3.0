@@ -23,8 +23,6 @@
           :key="i"
           :style="{
             color: current == i ? activeColor : color,
-            fontWeight:
-              (allBlod && 'blod') || (bold && current == i) ? 'bold' : '',
             justifyContent: !scroll ? 'center' : '',
             flex: scroll ? '' : 1,
             padding: paddingItem,
@@ -35,19 +33,25 @@
           @click="change(i)"
         >
           <view>
-            <text>{{ field ? v[field] : v }}</text>
+            <text
+              :class="{
+                'custom-font f44': current == i,
+              }"
+            >
+              {{ field ? v[field] : v }}
+            </text>
           </view>
           <!-- <view>{{  JSON.stringify(v)}}</view> -->
           <view
             v-if="v.detail"
-            class="v-tabs__subtitle  "
+            class="v-tabs__subtitle"
             :style="{
               color: current == i ? activeColor : '',
             }"
           >
-           <rich-text
-              class=" f22"
-              :nodes=" $HTMLParser(v.detail.replaceAll('  ','<br/>'))"
+            <rich-text
+              class="f22"
+              :nodes="$HTMLParser(v.detail.replaceAll('  ', '<br/>'))"
             ></rich-text>
           </view>
         </view>
@@ -65,7 +69,7 @@
         ></view>
         <view
           v-else
-          class="v-tabs__container-pills"
+          class="v-tabs__container-pills border-pills"
           :class="{
             'v-tabs__container-pills-first': current === 0,
             'v-tabs__container-pills-last': current === tabs.length - 1,
@@ -73,8 +77,6 @@
               current !== 0 && current !== tabs.length - 1,
           }"
           :style="{
-            background: pillsColor,
-            borderRadius: pillsBorderRadius,
             left: pillsLeft + 'px',
             width: currentWidth * 1.1 + 'px',
             height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
@@ -282,7 +284,7 @@
       // 获取左移动位置
       async getTabItemWidth() {
         await wait(200);
-        let query = uni.createSelectorQuery(); 
+        let query = uni.createSelectorQuery();
         // #ifndef MP-TOUTIAO
         query = query.in(this);
         // #endif
@@ -404,23 +406,36 @@
         transition: all 0.2s ease-out;
         // transition-delay: 0.2s;
         z-index: 9;
+        // &-first {
+        //   clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 0 100%);
+        //   border-top-right-radius: 90rpx 200rpx !important;
+        // }
+        // &-last {
+        //   clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0 100%);
+        //   border-top-left-radius: 90rpx 200rpx !important;
+        // }
+        // &-center {
+        //   clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0 100%);
+        //   border-top-left-radius: 90rpx 200rpx !important;
+        //   border-top-right-radius: 90rpx 200rpx !important;
+        // }
+        background-color: #fff;
+
         &-first {
-          clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 0 100%);
-          border-top-right-radius: 90rpx 200rpx !important;
-        }
-        &-last {
-          clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0 100%);
-          border-top-left-radius: 90rpx 200rpx !important;
-        }
-        &-center {
-          clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0 100%);
-          border-top-left-radius: 90rpx 200rpx !important;
-          border-top-right-radius: 90rpx 200rpx !important;
+          // background-color: red;
+          // clip-path: path('M261,69 C0,1 77.17446452916477,281.0701238883539 207,145');
+          // clip-path: path(
+          //   'M0,0 L0,11 C-7.43989126e-16,4.92486775 4.92486775,1.11598369e-15 11,0 L106.156913,-1.77635684e-15 C111.230498,-2.70835925e-15 115.755831,3.19079833 117.459851,7.96966627 L134.110787,54.6666667 L134.110787,54.6666667 L0,54.6666667 Z'
+          // );
+
+          /* 蓝色边框 + 顶部/底部圆角（匹配设计图的内圆角） */
+          border-right-color: transparent; /* 右侧边框由clip-path隐藏 */
+          box-sizing: border-box;
         }
       }
     }
   }
-  .f22{
+  .f22 {
     font-size: 22rpx;
   }
 </style>
