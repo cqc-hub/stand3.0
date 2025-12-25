@@ -1,25 +1,22 @@
 <template>
   <view class="menu-list menu-style">
-    <view class="tab-container">
-      <homeMenuTabs
-        v-model:value="tabIndex1"
-        :tabs="props.list"
-        @change="activeMenu"
-        :itemWidth="100 / props.list.length + '%'"
-        :itemMinWidth="getSysCode() == '1001036' ? '20rpx' : '180rpx'"
-        field="typeName"
-        pillsColor="#fff"
-        bgColor="#fff0"
-        color="#24314D"
-        activeColor="var(--hr-brand-color-6)"
-        pillsBorderRadius="42rpx 42rpx 0 0"
-        paddingItem="0"
-        height="80"
-        scroll
-        pills
-        :allBlod="false"
-      />
-    </view>
+    <homeMenuTabs
+      v-model:value="tabIndex1"
+      :tabs="props.list"
+      @change="activeMenu"
+      :itemWidth="100 / props.list.length + '%'"
+      :itemMinWidth="getSysCode() == '1001036' ? '20rpx' : '180rpx'"
+      field="typeName"
+      pillsColor="#fff"
+      bgColor="var(--hr-brand-color-3-light)"
+      color="#24314D"
+      activeColor="var(--hr-brand-color-6)"
+      pillsBorderRadius="42rpx 42rpx 0 0"
+      paddingItem="0"
+      height="80"
+      scroll
+      :allBlod="false"
+    />
 
     <view class="pl32 pr32">
       <swiper
@@ -173,9 +170,5 @@
       padding-top: 24rpx;
       //  border-radius: 16rpx;
     }
-  }
-
-  .tab-container {
-    background-color: var(--hr-brand-color-3-light);
   }
 </style>

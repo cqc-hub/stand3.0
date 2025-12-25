@@ -232,6 +232,24 @@
       insuranceParamsWx?.registerType || payBackParams?.registerType;
 
     if (insuranceParamsWx) {
+      if (insuranceParamsWx.authCode == 1) {
+        let payBackParams = JSON.stringify(fd.payBackParams);
+        setLocalStorage({
+          'get-wx-medical-netWork-path': encodeURIComponent(
+            JSON.stringify({
+              path: insuranceParamsWx.backUrl,
+              query: {
+                payBackParams: payBackParams,
+              },
+            })
+          ),
+        });
+        console.log('触发获取授权码');
+        let authCode = await getMedicalAuthCode(data);
+        console.warn('授权码', authCode);
+        return;
+      }
+
       if (
         ['1001048', '1001084'].includes(gStores.globalStore.sysCode) &&
         registerType
@@ -261,23 +279,6 @@
         return;
       }
 
-      if (insuranceParamsWx.authCode == 1) {
-        let payBackParams = JSON.stringify(fd.payBackParams);
-        setLocalStorage({
-          'get-wx-medical-netWork-path': encodeURIComponent(
-            JSON.stringify({
-              path: insuranceParamsWx.backUrl,
-              query: {
-                payBackParams: payBackParams,
-              },
-            })
-          ),
-        });
-        console.log('触发获取授权码');
-        let authCode = await getMedicalAuthCode(data);
-        console.warn('授权码', authCode);
-        return;
-      }
       if (insuranceParamsWx.payAppId) {
         uni.showModal({
           content: '即将打开医保支付小程序',

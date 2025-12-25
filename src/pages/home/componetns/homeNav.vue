@@ -1,6 +1,6 @@
 <template>
   <view class="relative z-1">
-    <!-- #ifdef MP-WEIXIN | MP-ALIPAY | MP-HARMONY   -->
+    <!-- #ifdef MP-WEIXIN | MP-ALIPAY | MP-HARMONY | H5   -->
     <view
       :style="{
         'background-color': `rgba(${colorRgb}, ${opacity})`,

@@ -69,14 +69,6 @@
       });
 
       if (authCode) {
-        if (['1001048', '1001084'].includes(gStores.globalStore.sysCode)) {
-          handlerMedicalPayDongRuan(cacheStore.cacheData3);
-          return;
-        }
-
-        if (gStores.globalStore.sysCode === '1001035') {
-          afterGetMedicalAuthCode1001035();
-        }
         // 获取授权码
         if (getLocalStorage('get-wx-medical-netWork-path')) {
           const resultConfig = JSON.parse(
@@ -100,6 +92,15 @@
             gStores.messageStore.showMessage('网络医院地址参数配置错误', 2000);
             console.error('网络医院地址参数配置错误', error);
           }
+        }
+
+        if (['1001048', '1001084'].includes(gStores.globalStore.sysCode)) {
+          handlerMedicalPayDongRuan(cacheStore.cacheData3);
+          return;
+        }
+
+        if (gStores.globalStore.sysCode === '1001035') {
+          afterGetMedicalAuthCode1001035();
         }
       } else {
         const registerId = cacheStore.cacheData?.registerId;
