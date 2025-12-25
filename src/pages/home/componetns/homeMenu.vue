@@ -1,6 +1,6 @@
 <template>
   <view class="menu-list menu-style">
-    <view class="menu-pannel-style">
+    <view class="tab-container">
       <homeMenuTabs
         v-model:value="tabIndex1"
         :tabs="props.list"
@@ -19,6 +19,9 @@
         pills
         :allBlod="false"
       />
+    </view>
+
+    <view class="pl32 pr32">
       <swiper
         :style="{
           height: height + 'px',
@@ -119,8 +122,7 @@
     // #ifndef MP-TOUTIAO
     query = query.in(inst);
     // #endif
-    const view = query
-      .select(`#home-menu-${tabIndex1.value}`);
+    const view = query.select(`#home-menu-${tabIndex1.value}`);
     view
       .boundingClientRect((data) => {
         if (data) {
@@ -165,19 +167,15 @@
     width: 100vw;
     right: 32rpx;
     position: relative;
-    background: linear-gradient(
-      360deg,
-      rgba(238, 243, 255, 0) 50%,
-      var(--hr-brand-color-3-light) 99%
-    );
     border-radius: 24rpx 0rpx 0rpx 24rpx;
-    .menu-pannel-style {
-      padding: 32rpx 32rpx 0 32rpx;
-    }
     .menu-swiper-style {
       background: #fff;
       padding-top: 24rpx;
       //  border-radius: 16rpx;
     }
+  }
+
+  .tab-container {
+    background-color: var(--hr-brand-color-3-light);
   }
 </style>
