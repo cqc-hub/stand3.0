@@ -117,7 +117,14 @@
     };
 
     nextTick(() => {
-      gform.value.setList(formList);
+      let formShowList: any = [];
+      Object.entries(formData.value).forEach(([key, value]) => {
+        const item = formList.find((i) => i.key === key);
+        if (value) {
+          formShowList.push(item);
+        }
+      });
+      gform.value.setList(formShowList);
     });
   });
 

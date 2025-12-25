@@ -92,3 +92,13 @@ export const decryptForPage = (str: string) => {
 
   return JSON.parse(jsonStr);
 };
+
+export const multiLayerObfuscate = (original) => {
+  const part1 = atob(original[0] + '==').substr(0, 2);
+  const part2 = atob('Tk' + original[1]).substr(1, 2);
+  const part3 = atob('VC' + original[2] + '==').substr(0, 2);
+  const part4 = atob(original[3] + 'Og==').substr(0, 1);
+  const part5 = atob('cGhvbmU=');
+
+  return part1 + part2 + part3 + part4 + part5;
+};

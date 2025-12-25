@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue';
 import type { TInstance } from '@/components/g-form/index';
 import { cloneUtil, joinQueryForUrl } from '@/common';
-import { decryptDes } from '@/common/des';
+import { decryptDes, multiLayerObfuscate } from '@/common/des';
 import {
   idValidator,
   ServerStaticData,
@@ -323,8 +323,9 @@ export const tempList: TInstance[] = [
     key: formKey.upIdCard,
     validator: async (v: unknown, item: any) => {
       if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
-        const { ageGuardian } =
-          await ServerStaticData.getSystemConfig('person');
+        const { ageGuardian } = await ServerStaticData.getSystemConfig(
+          'person'
+        );
 
         const info = idValidator.getIdCardInfo(v);
 
@@ -645,7 +646,10 @@ export const getDefaultFormData = async (
     }
 
     if (ev === 'wx') {
-      const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
+      const wxPhone = decryptDes(
+        gStores.userStore.phoneNum,
+        multiLayerObfuscate(['TjFA', 'Ve', 'Dpw', 'uZQ='])
+      );
       data[formKey.patientPhone] = wxPhone;
     }
   } else if (ev === 'alipay') {
@@ -955,8 +959,9 @@ export const useProgramPaySign = () => {
     flagTitle1226,
     isSignExist,
     async initSign() {
-      const { isPayWithoutSecretAuth } =
-        await ServerStaticData.getSystemConfig('person');
+      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
+        'person'
+      );
 
       if (isPayWithoutSecretAuth === '1') {
         // regDialogConfirmSign.value.show();
@@ -967,8 +972,9 @@ export const useProgramPaySign = () => {
     async goPaySign(patientId, payload = {} as TSingnPayload) {
       const { type = 'addPat', cb } = payload;
 
-      const { isPayWithoutSecretAuth } =
-        await ServerStaticData.getSystemConfig('person');
+      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
+        'person'
+      );
       if (isPayWithoutSecretAuth !== '1') {
         return;
       }
