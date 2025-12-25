@@ -982,6 +982,18 @@ const scJson: Record<string, ISConfig> = {
       topShow: true,
       bannerHeight: 230,
     },
+    medicalMHelp: {
+      wx: {
+        medicalPlugin: '1',
+      },
+
+      alipay: {
+        medicalPlugin: {
+          orgId: { 13152: 'H33060300001' },
+          cardType: '01',
+        },
+      },
+    },
     homeTopBg:
       'https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-1001094-home-topbg.png',
     homeNavTitleLogo:

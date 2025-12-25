@@ -342,7 +342,7 @@ export interface ISystemConfig_ {
     /** 可选择的复印材料数量 默认 3 */
     selMaterialLen?: number;
 
-    /** 收钱方式 0 预收 1 按项目、目的(tollMode)  */
+    /** 收钱方式 0 预收 1 按项目、目的(tollMode) 2    */
     isItemCount?: '0' | '1';
     tollMode?: '1'; // isItemCount(字段不统一)
     /** isItemCount | tollMode 为 1 时, 计算的金额不受选了多个目的影响 */
