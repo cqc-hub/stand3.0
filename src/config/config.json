@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001035",
+  "sysCode": "1001093",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -475,7 +475,7 @@
       "wxAppid": "wx41ed9678ac802d7e",
       "alipayAppid": "2021002125637380",
       "isvAlipayAppid": "",
-      "h5Appid": "",
+      "h5Appid": "wxe815b1a8cf9e5067",
       "name": "义乌市中心医院",
       "isStartComeTest": false,
       "isOpenOcr": false,

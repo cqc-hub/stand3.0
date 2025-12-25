@@ -348,9 +348,8 @@
   const goOrder1001052 = () => {
     useTBanner({
       type: 'otherProgram',
-      path: `pages/nhl_index/nhl_index?patId=${encryptDes(
-        hosInfoResObj.value.cardNumber || '',
-        'phsDesKey'
+      path: `pages/nhl_index/nhl_index?patId=${encodeURIComponent(
+        encryptDes(hosInfoResObj.value.cardNumber || '', 'phsDesKey')
       )}`,
       appId: 'wxfa1795cbb4f1500b',
       text: '订餐',
