@@ -1022,7 +1022,6 @@
     if (_isPageFirst.value && isUserInfoShareAgree === '1') {
       listArr.splice(listArr.length - 1, 0, 'isUserInfoShareAgree');
     }
-
     insertSortFormExtraKey(sortFormExtraKeys, listArr);
     insertSortFormExtraKey(formExtraKeysInAddPatPage, listArr);
 

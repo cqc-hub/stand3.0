@@ -954,7 +954,8 @@
               }
               .table-title-auto {
                 width: auto;
-                min-width: 20%;
+                min-width: 25%;
+                width: 25%;
               }
 
               .table-title1 {

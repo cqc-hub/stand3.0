@@ -347,10 +347,11 @@
   };
   const goOrder1001052 = () => {
     useTBanner({
-      type: 'h5',
-      path: joinQuery(' https://yingyang.yqrmyy.com', {
-        patId: encryptDes(hosInfoResObj.value.cardNumber || '', 'phsDesKey'),
-      }),
+      type: 'otherProgram',
+      path: `pages/nhl_index/nhl_index?patId=${encodeURIComponent(
+        encryptDes(hosInfoResObj.value.cardNumber || '', 'phsDesKey')
+      )}`,
+      appId: 'wxfa1795cbb4f1500b',
       text: '订餐',
     });
   };
@@ -502,8 +503,9 @@
         cardNumber,
       };
     }
-    const { result } =
-      await api.getInHospitalInfo<getInHospitalInfoResult>(args);
+    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>(
+      args
+    );
 
     hosInfoResObj.value = result;
 

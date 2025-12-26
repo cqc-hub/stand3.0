@@ -282,7 +282,7 @@
       // 获取左移动位置
       async getTabItemWidth() {
         await wait(200);
-        let query = uni.createSelectorQuery(); 
+        let query = uni.createSelectorQuery();
         // #ifndef MP-TOUTIAO
         query = query.in(this);
         // #endif

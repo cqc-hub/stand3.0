@@ -497,6 +497,12 @@
     if (tips && extend) {
       try {
         let extend = JSON.parse(item?.extend || '');
+        if (extend?.extendShowMaxAge) {
+          const patientAge = gStores.userStore.patChoose?.patientAge || 0;
+          if (patientAge > extend.extendShowMaxAge) {
+            throw new Error('超出年龄无需填写问卷');
+          }
+        }
         extend?.showCareModel == '1' &&
           (await new Promise<{ confirm: boolean }>((r) => {
             gStores.messageStore.showMessage(tips, 0, {
@@ -596,6 +602,12 @@
     if (selList.value?.length === 1 && selList.value[0].extend) {
       try {
         const extend = JSON.parse(selList.value[0].extend);
+        if (extend?.extendShowMaxAge) {
+          const patientAge = gStores.userStore.patChoose?.patientAge || 0;
+          if (patientAge > extend.extendShowMaxAge) {
+            throw new Error('超出年龄无需填写问卷');
+          }
+        }
         if (extend?.quesNeed) {
           const {
             birthday,

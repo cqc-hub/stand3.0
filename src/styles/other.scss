@@ -419,7 +419,7 @@
 .g-split-line,
 .g-split-line1 {
   &::after {
-    content: '|';
+    content: "|";
     position: relative;
     left: 12rpx;
     font-size: 24rpx;
@@ -451,7 +451,7 @@
 
 .safe-height {
   &::before {
-    content: '';
+    content: "";
     display: block;
     height: 40rpx;
     width: 1rpx;
