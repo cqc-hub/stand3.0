@@ -12,9 +12,8 @@
         :style="{
           display: scroll ? 'inline-flex' : 'flex',
           whiteSpace: scroll ? 'nowrap' : 'normal',
-          height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           background: bgColor,
-
+          height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           padding,
         }"
       >
@@ -24,6 +23,8 @@
           :key="i"
           :style="{
             color: current == i ? activeColor : color,
+            fontWeight:
+              (allBlod && 'blod') || (bold && current == i) ? 'bold' : '',
             justifyContent: !scroll ? 'center' : '',
             flex: scroll ? '' : 1,
             padding: paddingItem,
@@ -31,41 +32,27 @@
             width: itemWidth,
             flexDirection: v.detail ? 'column' : 'inherit',
           }"
-          :class="{
-            active: current === i,
-            first: current === 0,
-            last: current === tabs.length - 1,
-            enter: current !== 0 && current !== tabs.length - 1,
-            'active-net': current === i + 1,
-            'active-prev': current === i - 1,
-          }"
           @click="change(i)"
         >
-          <view class="pl15">
-            <text
-              :class="{
-                'custom-font f44': current == i,
-              }"
-            >
-              {{ field ? v[field] : v }}
-            </text>
+          <view>
+            <text>{{ field ? v[field] : v }}</text>
           </view>
           <!-- <view>{{  JSON.stringify(v)}}</view> -->
           <view
             v-if="v.detail"
-            class="v-tabs__subtitle pl15"
+            class="v-tabs__subtitle  "
             :style="{
               color: current == i ? activeColor : '',
             }"
           >
-            <rich-text
-              class="f22"
-              :nodes="$HTMLParser(v.detail.replaceAll('  ', '<br/>'))"
+           <rich-text
+              class=" f22"
+              :nodes=" $HTMLParser(v.detail.replaceAll('  ','<br/>'))"
             ></rich-text>
           </view>
         </view>
         <view
-          v-if="pills"
+          v-if="!pills"
           class="v-tabs__container-line"
           :style="{
             background: lineColor,
@@ -77,8 +64,8 @@
           }"
         ></view>
         <view
-          v-if="pills2"
-          class="v-tabs__container-pills border-pills"
+          v-else
+          class="v-tabs__container-pills"
           :class="{
             'v-tabs__container-pills-first': current === 0,
             'v-tabs__container-pills-last': current === tabs.length - 1,
@@ -86,6 +73,8 @@
               current !== 0 && current !== tabs.length - 1,
           }"
           :style="{
+            background: pillsColor,
+            borderRadius: pillsBorderRadius,
             left: pillsLeft + 'px',
             width: currentWidth * 1.1 + 'px',
             height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
@@ -208,10 +197,6 @@
         default: '0',
       },
       pills: {
-        type: Boolean,
-        deafult: false,
-      },
-      pills2: {
         type: Boolean,
         deafult: false,
       },
@@ -384,7 +369,7 @@
       display: none;
     }
 
-    .v-tabs__container {
+    &__container {
       min-width: 100%;
       position: relative;
       display: inline-flex;
@@ -392,7 +377,7 @@
       white-space: nowrap;
       overflow: hidden;
 
-      .v-tabs__container-item {
+      &-item {
         display: flex;
         align-items: center;
         height: 100%;
@@ -402,32 +387,19 @@
         transition: all 0.2s;
         white-space: nowrap;
         justify-content: center;
-
-        &.active {
-          background:
-            linear-gradient(146deg, #ffffff 1%, #ffffff 34%),
-            linear-gradient(180deg, #e8f4ff 1%, rgba(255, 255, 255, 0.5) 27%);
-
-          &.first {
-            clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 0 100%);
-            border-top-right-radius: 90rpx 200rpx;
-            border-top-left-radius: 44rpx 44rpx;
-            z-index: 1;
-
-          }
+        view {
+          width: max-content;
+          padding-left: 15rpx;
         }
       }
 
-      .v-tabs__container-line {
+      &-line {
         position: absolute;
         bottom: 0;
         transition: all 0.2s ease-out;
       }
 
-      .v-tabs__container-pills {
-        background:
-          linear-gradient(146deg, #ffffff 1%, #ffffff 34%),
-          linear-gradient(180deg, #e8f4ff 1%, rgba(255, 255, 255, 0.5) 27%);
+      &-pills {
         position: absolute;
         transition: all 0.2s ease-out;
         // transition-delay: 0.2s;
@@ -439,25 +411,16 @@
         &-last {
           clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0 100%);
           border-top-left-radius: 90rpx 200rpx !important;
-          border-top-right-radius: 44rpx 44rpx !important;
         }
         &-center {
           clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0 100%);
           border-top-left-radius: 90rpx 200rpx !important;
-        }
-
-        &-first {
-          // clip-path: path(
-          //   'M0,54.6666667 L0,11 C-7.43989126e-16,4.92486775 4.92486775,1.11598369e-15 11,0 L106.156913,-1.77635684e-15 C111.230498,-2.70835925e-15 115.755831,3.19079833 117.459851,7.96966627 L134.110787,54.6666667 L134.110787,54.6666667 L0,54.6666667 Z'
-          // );
-          // clip-path: path(
-          //   'm0 50 l 0,8 c6,0,6,2,14,0 l z'
-          // );
+          border-top-right-radius: 90rpx 200rpx !important;
         }
       }
     }
   }
-  .f22 {
+  .f22{
     font-size: 22rpx;
   }
 </style>
