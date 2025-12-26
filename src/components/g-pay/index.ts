@@ -70,8 +70,6 @@ export const payMoneyOnline = async (
   } else {
     requestArg.openId = gStores.globalStore.openId;
   }
-  requestArg.channel = aliPayOldSystemPayType();
-
   // #endif
 
   // #ifdef MP-ALIPAY
@@ -79,8 +77,9 @@ export const payMoneyOnline = async (
   if (!gStores.globalStore.openId) {
     requestArg.userId = await getOpenid2();
   }
-  requestArg.channel = aliPayOldSystemPayType();
   // #endif
+
+  requestArg.channel = aliPayOldSystemPayType();
 
   requestArg = {
     ...requestArg,
@@ -178,7 +177,7 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
       paySign,
     };
 
-    if (['wx', 'alipay'].includes(ev || '')) {
+    if (['wx', 'alipay', 'tt'].includes(ev || '')) {
       await new Promise((resolve) => {
         uni.getProvider({
           service: 'payment',
@@ -209,7 +208,7 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
           }
           // #endif
 
-          // #ifdef  MP-WEIXIN
+          // #ifdef  MP-WEIXIN ||
           resolve({
             payedRes: e,
             payRes: payData,
@@ -277,10 +276,10 @@ export const getOpenidTtResult = async (): Promise<{
 //判断该项目是否为2024年12月以前的项目，如是则payType使用ALI_MINI，否则使用ALI_JSAPI
 export const aliPayOldSystemPayType = () => {
   const gStores = new GStores();
-  const { sysCode } = gStores.globalStore;
+  const { sysCode, ev } = gStores.globalStore;
   let channel = '';
 
-  if (gStores.globalStore.ev === 'wx') {
+  if (ev === 'wx') {
     switch (sysCode) {
       case '1001063':
         channel = 'ICBC_JFT_H5';
@@ -301,7 +300,7 @@ export const aliPayOldSystemPayType = () => {
         channel = 'WX_MINI';
         break;
     }
-  } else if (gStores.globalStore.ev === 'alipay') {
+  } else if (ev === 'alipay') {
     const aliMiniSystemList = [
       '1001033',
       '1001044',
@@ -344,6 +343,9 @@ export const aliPayOldSystemPayType = () => {
         }
         break;
     }
+  } else if (ev === 'tt') {
+    // 1001035
+    channel === 'ALI_APP';
   }
 
   return channel;

@@ -286,6 +286,7 @@
               <homeMenu
                 :list="viewerStore.homeMenuList"
                 :tabIndex="props.tabIndex"
+                homeTabStyle="1"
                 @open-share="openShare"
               />
             </view>

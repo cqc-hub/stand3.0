@@ -457,7 +457,7 @@ const switchHandleResult = async (
   if (!(list && list.length)) {
     msgList.value.push({
       my: false,
-      msg: '未查询到您想要了解的问题，请拨打客服电话获取帮助！',
+      msg: '用户可向AI询问使用过程中的问题，并可转到人工客服（向患者提供客服电话）。',
       type: 1,
       requestId,
       firstCommendList: cloneUtil(recommendMenuList).filter((o) =>

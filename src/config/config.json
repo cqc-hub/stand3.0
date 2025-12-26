@@ -505,6 +505,7 @@
     },
     "1001099": {
       "wxAppid": "wx64d48b1de1c41cb8",
+      "alipayAppid": "2021002133687534",
       "name": "郑州市中医院",
       "isStartComeTest": false,
       "isSearchInHos": true,

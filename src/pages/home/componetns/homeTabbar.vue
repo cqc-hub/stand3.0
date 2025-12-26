@@ -387,8 +387,12 @@
       !isAreaProgram() &&
       global.SYS_CODE !== '1001036'
     ) {
+      let label = 'home-tabbar:就诊码/医保码';
+      // #ifdef MP-TOUTIAO || MP-HARMONY
+      label = 'home-tabbar:就诊码';
+      // #endif
       const d = {
-        label: 'home-tabbar:就诊码/医保码',
+        label,
         icon: '/static/image/my.png',
         iconActive: `/static/image/my_active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
@@ -403,7 +407,6 @@
   };
 
   const isCenterCode = (item) => item.label === 'home-tabbar:就诊码/医保码';
-
   // 提取路径部分的函数
   const getPath = (url: string) => {
     return url.split('?')[0];
