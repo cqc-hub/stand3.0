@@ -21,7 +21,7 @@
         }"
       >
         <view
-          class="v-tabs__container-item f32"
+          class="v-tabs__container-item flex justify-center items-center f32"
           v-for="(v, i) in tabs"
           :key="i"
           :style="{
@@ -90,7 +90,7 @@
             height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           }"
         />
-        <img
+        <image
           v-if="pills === '3'"
           :src="getImgPill3()"
           class="h-full absolute"
@@ -102,7 +102,7 @@
           }"
           :style="{
             left: pillsLeft + 'px',
-            width: currentWidth * 1.1 + 'px',
+            width: currentWidth  + 'px',
             height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           }"
         />
@@ -421,15 +421,12 @@
       white-space: nowrap;
 
       .v-tabs__container-item {
-        display: flex;
-        align-items: center;
         height: 100%;
         position: relative;
         z-index: 10;
         padding: 0 11px;
         transition: all 0.2s;
         white-space: nowrap;
-        justify-content: center;
         view {
           width: max-content;
         }
