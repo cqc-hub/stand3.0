@@ -93,12 +93,23 @@ export const decryptForPage = (str: string) => {
   return JSON.parse(jsonStr);
 };
 
-export const multiLayerObfuscate = (original) => {
-  const part1 = atob(original[0] + '==').substr(0, 2);
-  const part2 = atob('Tk' + original[1]).substr(1, 2);
-  const part3 = atob('VC' + original[2] + '==').substr(0, 2);
-  const part4 = atob(original[3] + 'Og==').substr(0, 1);
-  const part5 = atob('cGhvbmU=');
+const customAtob = (base64) => {
+  // Base64补全（Base64字符串长度必须是4的倍数）
+  while (base64.length % 4 !== 0) {
+    base64 += '=';
+  }
 
-  return part1 + part2 + part3 + part4 + part5;
+  // 解码Base64
+  const arrayBuffer = uni.base64ToArrayBuffer(base64);
+
+  // 将ArrayBuffer转为字符串
+  let result = '';
+  const uint8Array = new Uint8Array(arrayBuffer);
+  for (let i = 0; i < uint8Array.length; i++) {
+    result += String.fromCharCode(uint8Array[i]);
+  }
+
+  return result;
 };
+
+

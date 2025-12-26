@@ -179,6 +179,7 @@
     ISystemConfig,
     ServerStaticData,
     useTBanner,
+    wait,
   } from '@/utils';
   import { getSrc } from './utils';
   import { useCacheStore } from '@/stores';
@@ -634,6 +635,13 @@
           addressList.value = result;
         }
       }
+    }
+    if (getSysCode() == '1001035') {
+      uni.showLoading({
+        title: '加载中',
+      });
+      await wait(1000);
+      uni.hideLoading();
     }
   });
 
