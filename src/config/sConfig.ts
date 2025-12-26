@@ -987,6 +987,7 @@ const scJson: Record<string, ISConfig> = {
     medicalMHelp: {
       wx: {
         medicalPlugin: '1',
+        medicalDefault: '1', // TODO: 待确认
       },
 
       alipay: {

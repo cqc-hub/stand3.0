@@ -40,7 +40,7 @@
           <view class="">
             <text
               :class="{
-                'custom-font f44': fontStyle === '1' && current == i,
+                'custom-font f36': fontStyle === '1' && current == i,
               }"
             >
               {{ field ? v[field] : v }}
@@ -370,6 +370,10 @@
             this.lineLeft = lineLeft + currentWidth / 2;
             // 胶囊距离左侧的位置
             this.pillsLeft = lineLeft;
+            if (this.pills === '3' && this.current === this.tabs.length - 1) {
+              this.pillsLeft -= 10;
+              this.currentWidth += 8;
+            }
             // 计算滚动的距离左侧的位置
             if (this.scroll) {
               this.scrollLeft = this.lineLeft - this.containerWidth / 2 - 40;

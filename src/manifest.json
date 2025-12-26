@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxf64e84cf578fe0a7",
+    "appid": "wx2e06292a91e9f162",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -80,17 +80,13 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      },
       "auth-pay-plugin": {
         "version": "*",
         "provider": "2021003147699046"
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002182620396",
+    "appid": "",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -142,7 +138,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "嘉兴市第二医院",
+  "name": "浙江省肿瘤医院",
   "h5": {
     "optimization": {
       "treeShaking": {
