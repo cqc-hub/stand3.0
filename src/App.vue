@@ -49,13 +49,16 @@
     // #ifdef MP-TOUTIAO
     uni.login();
     // #endif
-
+    
+    // #ifndef MP-TOUTIAO
     uni.loadFontFace({
       global: true,
       family: 'custom-font',
       source: `url("${globalGl.BASE_IMG}font/custom.ttf")`,
       fail: (err) => console.error('字体加载失败', err),
     });
+    // #endif
+
   });
 
   onShow(async (opt: any) => {

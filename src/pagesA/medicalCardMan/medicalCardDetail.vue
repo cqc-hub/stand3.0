@@ -202,7 +202,8 @@
           ).includes(o.key)
       );
     }
-
+    
+    // #ifdef MP-WEIXIN || MP-ALIPAY
     const { isEditPatPhone } = pageConfig.value;
     if (isEditPatPhone === '1') {
       formList.map((o) => {
@@ -213,6 +214,8 @@
         }
       });
     }
+    // #endif
+
 
     Object.keys(formData.value).map((key) => {
       if (formData.value[key] === '') {

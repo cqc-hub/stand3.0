@@ -135,7 +135,7 @@
 
             <view class="container-source">
               <view
-                v-if="!orderSourceList.length && isComplete && refreshList"
+                v-if="!orderSourceList?.length && isComplete && refreshList"
                 class="empty-list1"
               >
                 <g-empty :current="1" text="暂无号源" />
@@ -209,7 +209,7 @@
   }>();
   const emits = defineEmits(['update:show', 'item-click', 'am-change']);
   const selectSchInfo = computed(() => {
-    if (props.selectSchInfos.length) {
+    if (props.selectSchInfos?.length) {
       return props.selectSchInfos[tabCurrent.value];
     } else {
       return {} as TSchInfoWhole;
@@ -316,7 +316,7 @@
         dealNumberSourceList(result || []);
         collapseOrderSourceList.value[listKey] = result || [];
         // #ifdef MP-TOUTIAN
-        await wait(1000)
+        await wait(1500)
         // #endif
         refCollapseNow.init();
       }

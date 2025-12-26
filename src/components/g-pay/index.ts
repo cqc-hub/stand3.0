@@ -82,6 +82,10 @@ export const payMoneyOnline = async (
   requestArg.channel = aliPayOldSystemPayType();
   // #endif
 
+  // #ifdef MP-TOUTIAO
+  requestArg.channel = "ALI_APP"
+  // #endif
+
   requestArg = {
     ...requestArg,
     ...data,
@@ -178,7 +182,7 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
       paySign,
     };
 
-    if (['wx', 'alipay'].includes(ev || '')) {
+    if (['wx', 'alipay', 'tt'].includes(ev || '')) {
       await new Promise((resolve) => {
         uni.getProvider({
           service: 'payment',
@@ -209,7 +213,7 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
           }
           // #endif
 
-          // #ifdef  MP-WEIXIN
+          // #ifdef  MP-WEIXIN || 
           resolve({
             payedRes: e,
             payRes: payData,

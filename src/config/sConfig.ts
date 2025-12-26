@@ -978,6 +978,7 @@ const scJson: Record<string, ISConfig> = {
       isAliAuthBase: '1',
       isSkipPerfect: '1',
     },
+    isOpenWechatSI: true,
     homeTopBanner: {
       topShow: true,
       bannerHeight: 230,

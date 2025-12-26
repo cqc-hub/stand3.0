@@ -108,6 +108,7 @@
         </view>
       </view>
 
+     <!-- #ifdef MP-WEIXIN || MP-ALIPAY -->
       <view class="pl32 pr32">
         <view
           :style="{
@@ -143,6 +144,8 @@
           </view>
         </view>
       </view>
+     <!-- #endif -->
+
     </scroll-view>
 
     <g-message />
