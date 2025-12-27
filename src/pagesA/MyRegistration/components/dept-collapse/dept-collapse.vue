@@ -22,7 +22,17 @@
       }"
       @click="headerClick"
     >
-      <view class="title-label">{{ item.deptName || '没有名字' }}</view>
+      <view class="title-label">
+        <text>
+          <text>{{ item.deptName || '没有名字' }}</text>
+          <text
+            v-if="item.freeClinicId === '1'"
+            class="g-tag tag-danger text-no-wrap f28 ml12"
+          >
+            义诊
+          </text>
+        </text>
+      </view>
       <view
         :class="{
           arrowBottom: isShow,
@@ -47,7 +57,18 @@
           }"
           class="my-row my-row-collapse"
         >
-          {{ _item.deptName }}
+          <text>
+            <text>
+              {{ _item.deptName }}
+            </text>
+
+            <text
+              v-if="_item.freeClinicId === '1'"
+              class="g-tag tag-danger text-no-wrap f28 ml12"
+            >
+              义诊
+            </text>
+          </text>
         </view>
       </view>
     </view>
@@ -78,7 +99,7 @@
       offsetContentHeight?: number;
     }>(),
     {
-      item: () => ({} as IDeptLv2),
+      item: () => ({}) as IDeptLv2,
       title: '标题',
       content: '内容',
       fontSize: '28',

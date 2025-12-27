@@ -43,12 +43,25 @@
             @click="itemClickLv1(item)"
             class="item-lv1 g-flex-rc-cc f32"
           >
-            <text
-              :class="{
-                pl24: level === '1',
-              }"
-            >
-              {{ item.deptName }}
+            <text>
+              <text
+                :class="{
+                  pl24: level === '1',
+                }"
+              >
+                <text>
+                  <text>
+                    {{ item.deptName }}
+                  </text>
+
+                  <text
+                    v-if="item.freeClinicId === '1'"
+                    class="g-tag tag-danger text-no-wrap f28 ml12"
+                  >
+                    义诊
+                  </text>
+                </text>
+              </text>
             </text>
           </view>
         </view>
