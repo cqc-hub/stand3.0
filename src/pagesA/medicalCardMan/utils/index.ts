@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue';
 import type { TInstance } from '@/components/g-form/index';
 import { cloneUtil, joinQueryForUrl } from '@/common';
-import { decryptDes, multiLayerObfuscate } from '@/common/des';
+import { decryptDes } from '@/common/des';
 import {
   idValidator,
   ServerStaticData,
@@ -648,7 +648,7 @@ export const getDefaultFormData = async (
     if (ev === 'wx') {
       const wxPhone = decryptDes(
         gStores.userStore.phoneNum,
-        multiLayerObfuscate(['TjFA', 'Ve', 'Dpw', 'uZQ='])
+        'N1@ae^T:phone'
       );
       data[formKey.patientPhone] = wxPhone;
     }

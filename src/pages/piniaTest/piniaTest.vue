@@ -694,7 +694,7 @@
   const init = async () => {
     // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
-    // useTBanner(用药查询);
+    useTBanner(电子导诊单);
   };
 
   onLoad(() => {

@@ -179,11 +179,12 @@
     ISystemConfig,
     ServerStaticData,
     useTBanner,
+    wait,
   } from '@/utils';
   import { getSrc } from './utils';
   import { useCacheStore } from '@/stores';
   import { getShowDrugName } from '@/pagesB/medicationAssistant/utils/medicalHelp';
-  import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
+  import { aliPayOldSystemPayType, payMoneyOnline, toPayPull } from '@/components/g-pay/index';
   import api from '@/service/api';
 
   import AddressBox from '../medRecordApply/components/MedRecordDetailsAddressBox.vue';
@@ -519,10 +520,6 @@
     if (confirm) {
       const { source } = gStores.globalStore.browser;
       const { patientName, cardNumber } = gStores.userStore.patChoose;
-      let payType = 'WX_MINI';
-      // #ifdef MP-ALIPAY
-      payType = 'ALI_MINI';
-      // #endif
       const params = {
         ...args,
         ...feeDetail.value,
@@ -531,7 +528,7 @@
         prescId: cacheStore.medicalHelpSelList.map((o) => o.prescId),
         prescNo: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
         openId: gStores.globalStore.openId,
-        payType,
+        payType: aliPayOldSystemPayType(),
         source,
       };
 
@@ -634,6 +631,13 @@
           addressList.value = result;
         }
       }
+    }
+    if (getSysCode() == '1001035') {
+      uni.showLoading({
+        title: '加载中',
+      });
+      await wait(1000);
+      uni.hideLoading();
     }
   });
 

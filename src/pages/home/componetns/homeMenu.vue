@@ -1,12 +1,19 @@
 <template>
   <view class="menu-list menu-style">
-    <view class="menu-pannel-style">
+    <view
+      :class="{
+        'pr0 pl0 pt0': isTabStyle1,
+      }"
+      class="menu-pannel-style"
+    >
       <homeMenuTabs
         v-model:value="tabIndex1"
         :tabs="props.list"
         @change="activeMenu"
         :itemWidth="100 / props.list.length + '%'"
         :itemMinWidth="getSysCode() == '1001036' ? '20rpx' : '180rpx'"
+        :homeTabStyle="isTabStyle1"
+        :fontStyle="homeTabStyle"
         field="typeName"
         pillsColor="#fff"
         bgColor="#fff0"
@@ -14,9 +21,9 @@
         activeColor="var(--hr-brand-color-6)"
         pillsBorderRadius="42rpx 42rpx 0 0"
         paddingItem="0"
-        height="80"
+        height="88"
         scroll
-        pills
+        :pills="isTabStyle1 ? '3' : '2'"
         :allBlod="false"
       />
       <swiper
@@ -40,10 +47,17 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted, watch, getCurrentInstance, nextTick } from 'vue';
+  import {
+    ref,
+    onMounted,
+    watch,
+    getCurrentInstance,
+    nextTick,
+    computed,
+  } from 'vue';
   import homeGrid from './homeGrid.vue';
   import homeMenuTabs from './homeMenuTabs.vue';
-  import { wait } from '@/utils';
+  import { GStores, wait } from '@/utils';
   import { getSysCode } from '@/common';
 
   const emits = defineEmits(['open-share']);
@@ -55,11 +69,13 @@
     typeName: string;
     functionList: IRoute[];
   }
+  const gStores = new GStores();
 
   const props = withDefaults(
     defineProps<{
       list: IhomeMenu[];
       tabIndex?: number;
+      homeTabStyle?: '1';
     }>(),
     {
       list: () => [
@@ -97,6 +113,8 @@
     }
   );
 
+  const isTabStyle1 = computed(() => props.homeTabStyle === '1');
+
   onMounted(() => {
     props.tabIndex && (tabIndex1.value = props.tabIndex);
   });
@@ -119,8 +137,7 @@
     // #ifndef MP-TOUTIAO
     query = query.in(inst);
     // #endif
-    const view = query
-      .select(`#home-menu-${tabIndex1.value}`);
+    const view = query.select(`#home-menu-${tabIndex1.value}`);
     view
       .boundingClientRect((data) => {
         if (data) {

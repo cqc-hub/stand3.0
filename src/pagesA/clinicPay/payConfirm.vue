@@ -94,7 +94,7 @@
     type IGPay,
     payMoneyOnline,
     toPayPull,
-    aliPayOldSystemPayType
+    aliPayOldSystemPayType,
   } from '@/components/g-pay/index';
 
   import api from '@/service/api';
@@ -270,7 +270,7 @@
   };
 
   const handlerYunPayAfter = async () => {
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     await wait(1500);
     uni.hideLoading();
     gStores.messageStore.showMessage('缴费成功', 0, {
@@ -330,14 +330,9 @@
       hosId,
       visitNo,
       recipeNo,
-      payType: 'WX_MINI',
+      payType: aliPayOldSystemPayType(),
       otherPayWay,
     };
-
-    // #ifdef MP-ALIPAY
-    // args.payType = 'ALI_MINI';
-    args.payType = aliPayOldSystemPayType()
-    // #endif
 
     await api.clinicSpecialPayInform(args);
     payAfter();
@@ -530,7 +525,7 @@
   };
 
   const payAfter = async () => {
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     await wait(1000);
     uni.hideLoading();
     const { mzParams, deParams } = pageProps.value;
@@ -571,7 +566,7 @@
   };
 
   onLoad(async (opt) => {
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     if (!(opt && Object.keys(opt).length)) {
       return;
     }

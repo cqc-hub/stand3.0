@@ -498,7 +498,7 @@
       try {
         let extend = JSON.parse(item?.extend || '');
         if (extend?.extendShowMaxAge) {
-          const patientAge = gStores.userStore.patChoose?.patientAge || 0;
+          const patientAge = (gStores.userStore.patChoose?.patientAge as any || 0)*1;
           if (patientAge > extend.extendShowMaxAge) {
             throw new Error('超出年龄无需填写问卷');
           }
@@ -603,7 +603,7 @@
       try {
         const extend = JSON.parse(selList.value[0].extend);
         if (extend?.extendShowMaxAge) {
-          const patientAge = gStores.userStore.patChoose?.patientAge || 0;
+          const patientAge =  (gStores.userStore.patChoose?.patientAge as any || 0)*1;;
           if (patientAge > extend.extendShowMaxAge) {
             throw new Error('超出年龄无需填写问卷');
           }

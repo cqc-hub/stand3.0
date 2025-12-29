@@ -45,7 +45,7 @@
   import { onReady, onLoad } from '@dcloudio/uni-app';
   import { generateUuid, GStores, rulePhone, useTBanner } from '@/utils';
 
-  import { decryptDes ,multiLayerObfuscate} from '@/common/des';
+  import { decryptDes} from '@/common/des';
   import type { TInstance } from '@/components/g-form/index';
   import { deQueryForUrl } from '@/common';
   import api from '@/service/api';
@@ -655,7 +655,7 @@
 
     // #ifdef MP-WEIXIN
     const { phoneNum, name } = gStores.userStore;
-    const wxPhone = decryptDes(phoneNum, multiLayerObfuscate(['TjFA', 'Ve', 'Dpw', 'uZQ=']));
+    const wxPhone = decryptDes(phoneNum, 'N1@ae^T:phone');
 
     formData.value.phone = wxPhone;
     formData.value.name = name;

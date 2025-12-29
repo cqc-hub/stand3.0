@@ -5,7 +5,10 @@
       :scroll-x="scroll"
       :scroll-left="scroll ? scrollLeft : 0"
       :scroll-with-animation="scroll"
-      :style="{ position: fixed ? 'fixed' : 'relative', zIndex: zIndex }"
+      :style="{
+        position: fixed ? 'fixed' : 'relative',
+        zIndex: zIndex,
+      }"
     >
       <view
         class="v-tabs__container"
@@ -18,7 +21,7 @@
         }"
       >
         <view
-          class="v-tabs__container-item f32"
+          class="v-tabs__container-item flex justify-center items-center f32"
           v-for="(v, i) in tabs"
           :key="i"
           :style="{
@@ -34,25 +37,31 @@
           }"
           @click="change(i)"
         >
-          <view>
-            <text>{{ field ? v[field] : v }}</text>
+          <view class="">
+            <text
+              :class="{
+                'custom-font f36': fontStyle === '1' && current == i,
+              }"
+            >
+              {{ field ? v[field] : v }}
+            </text>
           </view>
           <!-- <view>{{  JSON.stringify(v)}}</view> -->
           <view
             v-if="v.detail"
-            class="v-tabs__subtitle  "
+            class="v-tabs__subtitle"
             :style="{
               color: current == i ? activeColor : '',
             }"
           >
-           <rich-text
-              class=" f22"
-              :nodes=" $HTMLParser(v.detail.replaceAll('  ','<br/>'))"
+            <rich-text
+              class="f22"
+              :nodes="$HTMLParser(v.detail.replaceAll('  ', '<br/>'))"
             ></rich-text>
           </view>
         </view>
         <view
-          v-if="!pills"
+          v-if="pills === '1'"
           class="v-tabs__container-line"
           :style="{
             background: lineColor,
@@ -63,8 +72,9 @@
             transform: `translateX(-${lineWidth / 2}px)`,
           }"
         ></view>
+
         <view
-          v-else
+          v-if="pills === '2'"
           class="v-tabs__container-pills"
           :class="{
             'v-tabs__container-pills-first': current === 0,
@@ -79,7 +89,23 @@
             width: currentWidth * 1.1 + 'px',
             height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           }"
-        ></view>
+        />
+        <image
+          v-if="pills === '3'"
+          :src="getImgPill3()"
+          class="h-full absolute"
+          :class="{
+            'v-tabs__container-pills-first': current === 0,
+            'v-tabs__container-pills-last': current === tabs.length - 1,
+            'v-tabs__container-pills-center':
+              current !== 0 && current !== tabs.length - 1,
+          }"
+          :style="{
+            left: pillsLeft + 'px',
+            width: currentWidth  + 'px',
+            height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
+          }"
+        />
       </view>
     </scroll-view>
     <view
@@ -93,6 +119,7 @@
 </template>
 
 <script>
+  import globalGl from '@/config/global';
   import { wait } from '@/utils';
   import { onMounted } from 'vue';
   /**
@@ -138,11 +165,19 @@
         type: Boolean,
         default: true,
       },
+      homeTabStyle: {
+        type: Boolean,
+        default: false,
+      },
       tabs: {
         type: Array,
         default() {
           return [];
         },
+      },
+      // '1' 自定义字体1
+      fontStyle: {
+        type: String,
       },
       bgColor: {
         type: String,
@@ -197,8 +232,8 @@
         default: '0',
       },
       pills: {
-        type: Boolean,
-        deafult: false,
+        type: String, // 1 2 3
+        default: '1',
       },
       pillsColor: {
         type: String,
@@ -228,6 +263,7 @@
     },
     data() {
       return {
+        globalGl,
         elId: '',
         lineWidth: 30,
         currentWidth: 0, // 当前选项的宽度
@@ -257,6 +293,15 @@
       },
     },
     methods: {
+      getImgPill3() {
+        if (this.current === 0) {
+          return globalGl.BASE_IMG + 'stand3-homemenu-left-tab.png';
+        } else if (this.current === this.tabs.length - 1) {
+          return globalGl.BASE_IMG + 'stand3-homemenu-right-tab.png';
+        } else {
+          return globalGl.BASE_IMG + 'stand3-homemenu-center-tab.png';
+        }
+      },
       // 产生随机字符串
       randomString(len) {
         len = len || 32;
@@ -325,6 +370,10 @@
             this.lineLeft = lineLeft + currentWidth / 2;
             // 胶囊距离左侧的位置
             this.pillsLeft = lineLeft;
+            if (this.pills === '3' && this.current === this.tabs.length - 1) {
+              this.pillsLeft -= 10;
+              this.currentWidth += 8;
+            }
             // 计算滚动的距离左侧的位置
             if (this.scroll) {
               this.scrollLeft = this.lineLeft - this.containerWidth / 2 - 40;
@@ -363,64 +412,67 @@
   .v-tabs {
     width: 100%;
     box-sizing: border-box;
-    overflow: hidden;
 
     ::-webkit-scrollbar {
       display: none;
     }
 
-    &__container {
+    .v-tabs__container {
       min-width: 100%;
       position: relative;
       display: inline-flex;
       align-items: center;
       white-space: nowrap;
-      overflow: hidden;
 
-      &-item {
-        display: flex;
-        align-items: center;
+      .v-tabs__container-item {
         height: 100%;
         position: relative;
         z-index: 10;
         padding: 0 11px;
         transition: all 0.2s;
         white-space: nowrap;
-        justify-content: center;
         view {
           width: max-content;
-          padding-left: 15rpx;
         }
       }
 
-      &-line {
+      .v-tabs__container-line {
         position: absolute;
         bottom: 0;
         transition: all 0.2s ease-out;
       }
 
-      &-pills {
+      .v-tabs__container-pills {
         position: absolute;
         transition: all 0.2s ease-out;
         // transition-delay: 0.2s;
         z-index: 9;
-        &-first {
+        &.v-tabs__container-pills-first {
           clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 0 100%);
           border-top-right-radius: 90rpx 200rpx !important;
         }
-        &-last {
+        &.v-tabs__container-pills-last {
           clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0 100%);
           border-top-left-radius: 90rpx 200rpx !important;
         }
-        &-center {
+        &.v-tabs__container-pills-center {
           clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0 100%);
           border-top-left-radius: 90rpx 200rpx !important;
           border-top-right-radius: 90rpx 200rpx !important;
         }
       }
+
+      .v-tabs__container-pills3 {
+        &.v-tabs__container-pills-first {
+        }
+        &.v-tabs__container-pills-last {
+        }
+        &.v-tabs__container-pills-center {
+        }
+      }
     }
   }
-  .f22{
+  .f22 {
     font-size: 22rpx;
   }
 </style>

@@ -257,7 +257,7 @@
     verifyType?: '1';
     orderId?: string;
     redirectUrl?: string;
-    registerOrderId?: string; 
+    registerOrderId?: string;
   }
   const pageProps = ref(<IPageProps>{});
   // 在父组件中
@@ -576,7 +576,6 @@
       scene = '0101083';
     }
     //分包B引入分包A中的方法，且该方法中“使用在分包A中单独引入的插件”中的方法
-    // @ts-expect-error
     require('../../pagesA/medicalCardMan/utils/index', async (utils) => {
       const { success, res } = await utils.getHealthCardCode();
       if (success) {

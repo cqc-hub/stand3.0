@@ -283,6 +283,9 @@
             </view>
             <!-- #endif -->
             <view class="fun-list" v-if="viewerStore.homeMenuList.length">
+              <!--  :homeTabStyle="
+                  gStores.globalStore.sysCode === '1001093' ? '1' : undefined
+                " -->
               <homeMenu
                 :list="viewerStore.homeMenuList"
                 :tabIndex="props.tabIndex"
@@ -576,9 +579,8 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
-    healthCounselConfig.value = await ServerStaticData.getSystemConfig(
-      'HEALTH_COUNSEL'
-    );
+    healthCounselConfig.value =
+      await ServerStaticData.getSystemConfig('HEALTH_COUNSEL');
 
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');
