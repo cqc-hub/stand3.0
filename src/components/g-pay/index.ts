@@ -380,7 +380,7 @@ export const aliPayOldSystemPayType = () => {
     }
   } else if (ev === 'tt') {
     // 1001035
-    channel === 'ALI_APP';
+    channel = 'ALI_APP';
   }
 
   return channel;
