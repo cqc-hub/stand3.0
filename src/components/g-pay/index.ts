@@ -281,6 +281,10 @@ export const aliPayOldSystemPayType = () => {
 
   if (ev === 'wx') {
     switch (sysCode) {
+      case '1001093':
+        channel = 'LIANZHONG_WX_MINI';
+        break;
+
       case '1001063':
         channel = 'ICBC_JFT_H5';
         break;

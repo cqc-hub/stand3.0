@@ -90,7 +90,7 @@
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { useTBanner, wait, apiAsync } from '@/utils';
   import { deQueryForUrl } from '@/common';
-  import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
+  import { aliPayOldSystemPayType, payMoneyOnline, toPayPull } from '@/components/g-pay/index';
   import { GStores } from '@/utils';
   import { IPayListItem } from './utils/clinicPayDetail';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
@@ -122,7 +122,7 @@
   const choosePat = async () => {
     await fetchList();
   };
-  onLoad(async (opt) => {
+  onLoad(async (opt: any) => {
     const queryParams = gStores.globalStore.appLaunchData?.query
       ?.qrCode as string;
     uni.showLoading({ title: '加载中'});;
@@ -290,16 +290,12 @@
     if (confirm) {
       let { cardNumber, patientName, patientId } = gStores.userStore.patChoose;
       const { source } = gStores.globalStore.browser;
-      let payType = 'WX_MINI';
-      // #ifdef MP-ALIPAY
-      payType = 'ALI_MINI';
-      // #endif
       const { params: sign } = pageProps.value;
       const params = {
         sign,
         cardNumber,
         patientId,
-        payType,
+        payType: aliPayOldSystemPayType(),
         source,
         patientName,
         fee: totalCost.value,

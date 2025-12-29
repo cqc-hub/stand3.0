@@ -39,7 +39,11 @@
     ruleAmountStrict,
   } from '@/utils';
   import api from '@/service/api';
-  import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
+  import {
+    aliPayOldSystemPayType,
+    payMoneyOnline,
+    toPayPull,
+  } from '@/components/g-pay/index';
   import { deQueryForUrl } from '@/common';
 
   const gStores = new GStores();
@@ -148,15 +152,11 @@
   };
 
   const pay = async (data) => {
-    let payType = 'WX_MINI';
-    // #ifdef MP-ALIPAY
-    payType = 'ALI_MINI';
-    // #endif
     console.log('formSubmit', data);
     const { source } = gStores.globalStore.browser;
     const requestData = {
       ...data,
-      payType,
+      payType: aliPayOldSystemPayType(),
       source,
     };
 
