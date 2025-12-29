@@ -97,6 +97,7 @@
             "patient": true
           }
         },
+        // #ifndef MP-TOUTIAO
         {
           "path": "intelMedicalAssist/intelMedicalAssist",
           "style": {
@@ -109,6 +110,7 @@
             }
           }
         },
+        // #endif
 
         {
           "path": "MyRegistration/addDescribe",
