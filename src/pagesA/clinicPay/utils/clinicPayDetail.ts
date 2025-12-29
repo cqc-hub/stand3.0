@@ -378,8 +378,8 @@ export const getMedicalAuthCode = async (opt?: {
           envVersion,
           fail({ errMsg }) {
             if (errMsg.includes('fail cancel')) {
-              setLocalStorage({
-                'get-wx-medical-auth-code': '',
+              uni.removeStorage({
+                key: 'get-wx-medical-auth-code',
               });
 
               gStores.messageStore.showMessage(
