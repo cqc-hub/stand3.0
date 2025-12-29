@@ -79,6 +79,7 @@
           const { extraData } = pageProps.value;
           useTBanner({
             ...pageProps.value,
+            // @ts-expect-error
             type: 'mini',
             addition: { token: 'token', herenId: 'herenId' },
             extraData: {
@@ -103,8 +104,8 @@
           delta: 1,
           fail() {
             uni.reLaunch({
-            url: '/pages/home/home',
-          })
+              url: '/pages/home/home',
+            });
           },
         });
       }
@@ -113,11 +114,13 @@
 
       // @ts-expect-error
       delete pageProps.value._type;
-     
+
       useTBanner({
         type: 'h5',
         isSelfH5: '1',
-        path: pageProps.value.originPath ?  pageProps.value.originPath : 'pages/inquiries/inquiries3',
+        path: pageProps.value.originPath
+          ? pageProps.value.originPath
+          : 'pages/inquiries/inquiries3',
         extraData: {
           params: encodeURIComponent(
             encryptDes(

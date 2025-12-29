@@ -283,12 +283,12 @@
             </view>
             <!-- #endif -->
             <view class="fun-list" v-if="viewerStore.homeMenuList.length">
+              <!--  :homeTabStyle="
+                  gStores.globalStore.sysCode === '1001093' ? '1' : undefined
+                " -->
               <homeMenu
                 :list="viewerStore.homeMenuList"
                 :tabIndex="props.tabIndex"
-                :homeTabStyle="
-                  gStores.globalStore.sysCode === '1001093' ? '1' : undefined
-                "
                 @open-share="openShare"
               />
             </view>

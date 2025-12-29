@@ -1026,7 +1026,6 @@ export const usePayPage = () => {
     }
 
     unPayList.value = [];
-
     const { clinicalSettlementResultList, cardNumber, patientName } =
       result || {};
 
