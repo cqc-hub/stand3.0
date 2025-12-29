@@ -95,7 +95,8 @@
           </button>
 
           <button
-            v-if="isCancelOrder(item)"
+            v-if="isShowRegCancel(getBtnData(item))"
+            @click="goDetail(item)" 
             class="btn btn-round btn-size-small btn-border cancel-btn"
           >
             取消预约
@@ -109,7 +110,12 @@
           </button>
 
           <button
-            v-if="isPayOrder(item)"
+            v-if="isShowRegPay(getBtnData(item))"
+            @click="
+                  goDetail(item, {
+                    _autoPay: '1',
+                  })
+                "
             class="btn btn-round btn-size-small btn-warning"
           >
             去支付
@@ -128,6 +134,22 @@
             class="btn btn-round btn-size-small btn-border cancel-btn"
           >
             院内导航
+          </button>   
+
+          <button
+            v-if="isShowMedicalRefund(getBtnData(item))"
+            @click="goDetail(item)"
+            class="btn btn-round btn-primary btn-size-small btn-border cancel-btn"
+          >
+            去报销
+          </button>
+
+          <button
+            v-if="isShowRegRefound(getBtnData(item))"
+            @click="goDetail(item)"
+            class="btn btn-round btn-size-small btn-border cancel-btn color-111"
+          >
+            去退号
           </button>
 
           <slot name="footer" :item="item" />
@@ -158,6 +180,7 @@
     getStatusConfig,
     IRegInfo,
     goAskForDoc1001048,
+    useRegBtnShows
   } from '../../utils/regDetail';
   import { joinQueryForUrl, joinQuery } from '@/common';
   import { GStores, ISystemConfig, useTBanner } from '@/utils';
@@ -167,6 +190,8 @@
 
   const gStores = new GStores();
   const props = defineProps<{
+    typeId: number;
+    fatherProps:any;
     list: IRegistrationCardItem[];
     showYuanNeiDaoHanBtn: string[];
     showPaiDuiJiaoHaoBtn: string[];
@@ -180,6 +205,22 @@
     config: ISystemConfig['order'];
   }>();
   const emits = defineEmits(['ywz-click', 'go-detail', 'go-hos-navigate']);
+
+  const {
+    isShowMedicalRefund,
+    isShowRegPay, 
+    isShowRegRefound,
+    isShowRegCancel, 
+  } = useRegBtnShows();
+
+  const getBtnData = (item) => { 
+    return {
+      ...props.fatherProps.value,
+      typeId: props.typeId,
+      ...item,
+    };
+  };
+
   const getCustomBtns = computed(() => {
     const list = [...(props.config.regListItemCustomButtons || [])];
     if (gStores.globalStore.sysCode === '1001048') {
@@ -253,19 +294,6 @@
     return props.showFWBtn.includes(item.orderStatus) && item.orderId;
   };
 
-  // 显示取消预约
-  const isCancelOrder = (item: IRegistrationCardItem) => {
-    return false;
-
-    // return ['0'].includes(item.orderStatus);
-  };
-
-  // 显示支付
-  const isPayOrder = (item: IRegistrationCardItem) => {
-    // return ['10'].includes(item.orderStatus);
-    return false;
-  };
-
   const isShowReOrderBtn = (item: IRegistrationCardItem) => {
     return ['70', '82'].includes(item.orderStatus) && props.showReOrderBtn;
   };
@@ -330,11 +358,13 @@
       isShowDaohan(item) ||
       isShowPaiDui(item) ||
       isFW(item) ||
-      isCancelOrder(item) ||
-      isPayOrder(item) ||
+      isShowRegCancel(getBtnData(item)) ||
+      isShowRegPay(getBtnData(item)) ||
       isShowReOrderBtn(item) ||
       isShowYWZBtn(item) ||
       isNav(item) ||
+      isShowRegRefound(getBtnData(item)) || 
+      isShowMedicalRefund(getBtnData(item)) ||
       (!props.isWaitReg &&
         getCustomBtns.value.some((o) => isShowCustomBtn(item, o)))
     );
@@ -402,8 +432,8 @@
     emits('ywz-click', item);
   };
 
-  const goDetail = (item: IRegistrationCardItem) => {
-    emits('go-detail', item);
+  const goDetail = (item: IRegistrationCardItem,payload: BaseObject = {}) => {
+    emits('go-detail', item, payload);
   };
 
   const goHosNavigate = (item: IRegistrationCardItem) => {

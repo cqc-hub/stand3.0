@@ -45,6 +45,8 @@
     <view class="g-container">
       <block v-if="showList.length && isComplete">
         <My-Registration-List-Card
+          :typeId=tabCurrentDetail?.typeId
+          :fatherProps="props"
           :isWaitReg="isWaitReg || tabCurrentDetail?.typeId === 2"
           :list="showList"
           :showYuanNeiDaoHanBtn="showYuanNeiDaoHanBtn"
@@ -59,46 +61,7 @@
           @ywz-click="ywzClick"
           @go-detail="goDetail"
           @go-hos-navigate="goHosNavigate"
-        >
-          <template #footer="{ item }">
-            <view class="footer-btns flex">
-              <button
-                v-if="isShowRegCancel(getBtnData(item))"
-                @click="goDetail(item)"
-                class="btn btn-round btn-size-small btn-border cancel-btn color-111"
-              >
-                取消预约
-              </button>
-
-              <button
-                v-if="isShowRegPay(getBtnData(item))"
-                @click="
-                  goDetail(item, {
-                    _autoPay: '1',
-                  })
-                "
-                class="btn btn-round btn-primary btn-size-small btn-border cancel-btn"
-              >
-                去支付
-              </button>
-
-              <button
-                v-if="isShowMedicalRefund(getBtnData(item))"
-                @click="goDetail(item)"
-                class="btn btn-round btn-primary btn-size-small btn-border cancel-btn"
-              >
-                去报销
-              </button>
-
-              <button
-                v-if="isShowRegRefound(getBtnData(item))"
-                @click="goDetail(item)"
-                class="btn btn-round btn-size-small btn-border cancel-btn color-111"
-              >
-                去退号
-              </button>
-            </view>
-          </template>
+        > 
         </My-Registration-List-Card>
       </block>
 
@@ -216,7 +179,6 @@
     getOrderStatusTitle,
     getStatusConfig,
     goAskForDoc1001045,
-    useRegBtnShows,
   } from './utils/regDetail';
 
   import api from '@/service/api';
@@ -367,25 +329,6 @@
     await getList(patientId, cardNumber);
   };
 
-  const {
-    isShowMedicalRefund,
-    isShowRegPay,
-    isShowRegComment,
-    isShowRegCommentViews,
-    isShowRegReorder,
-    isShowRegRefound,
-    isShowRegCancel,
-    isShowCancelRegWait,
-    isShowRegDateDelay,
-  } = useRegBtnShows();
-
-  const getBtnData = (item) => {
-    return {
-      ...props.value,
-      typeId: `${tabCurrentDetail.value?.typeId}`,
-      ...item,
-    };
-  };
 
   const getList = async (patientId = '', cardNumber = '') => {
     isComplete.value = false;
