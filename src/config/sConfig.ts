@@ -164,6 +164,8 @@ export interface ISConfig {
           orgCodg: string;
           /** 定点医疗机构小程序/H5应用ID */
           orgAppId: string;
+          /** 医保建档代授权字段 */
+          relatedType?: string;
         } & BaseObject;
         // 走东软医保模式
         dongRuanMedicalInfo?: {
@@ -624,6 +626,7 @@ const scJson: Record<string, ISConfig> = {
         },
         isMedicalOrder: '1',
         // medicalPlugin: '1',
+        isGbFamilyPayment: '1',
         medicalFiling: '1',
       },
     },

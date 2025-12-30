@@ -49,6 +49,18 @@
           <text class="text-no-wrap">申领健康卡</text>
         </view> -->
       </view>
+      <!-- #ifdef  MP-WEIXIN -->
+      <view v-else-if="isMedicalFiling" class="health-card">
+        <view @click="goMedicalFiling" class="mr14">
+          <view class="iconfont icon-resize color-blue">&#xe6ef;</view>
+          <text class="text-no-wrap">医保建档</text>
+        </view>
+        <view @click="addPatPage" class="mr14">
+          <view class="iconfont icon-resize">&#xe6ab;</view>
+          <text class="text-no-wrap">添加就诊人</text>
+        </view>
+      </view>
+      <!-- #endif -->
 
       <view v-else class="add-pat-box" @click="addPatPage">
         <view class="add-pat g-flex-rc-cc">
@@ -64,14 +76,12 @@
         @profile-click="profileClick"
         @card-click="cardClick"
       >
-      <!-- #ifndef MP-TOUTIAO -->
+        <!-- #ifndef MP-TOUTIAO -->
         <template #footer="{ pat }: { pat: IPat }">
           <view>
             <view class="button-line">
               <view
-                v-if="
-                  pageConfig.isSearchPatBound === '1' 
-                "
+                v-if="pageConfig.isSearchPatBound === '1'"
                 class="pat-btns flex-normal mt16 ml12"
               >
                 <view
@@ -182,7 +192,7 @@
             </view>
           </view>
         </template>
-      <!-- #endif -->
+        <!-- #endif -->
       </pat-List>
     </view>
 
@@ -334,9 +344,9 @@
 
   const showMedicalFiling = (pat) => {
     if (isMedicalFiling.value) {
-      // #ifdef MP-WEIXIN
-      return !pat.relationshipCode
-      // #endif
+      // // #ifdef MP-WEIXIN
+      // return !pat.relationshipCode
+      // // #endif
       // #ifdef MP-ALIPAY
       return pat.healthCardUser !== '2';
       // #endif
@@ -473,12 +483,16 @@
     });
   };
   const goMedicalFiling = (pat) => {
-    medicalFilingPat.value = pat;
+    if (pat?.patientId) {
+      medicalFilingPat.value = pat;
+    } else {
+      medicalFilingPat.value = { patientId: '-1' };
+    }
     regDialogMedicalFiling.value.show();
   };
   //医保更新用户信息,医保建档
   const medicalFiling = async () => {
-    const flag = await dealMedicalFiling(medicalFilingPat.value.patientId);
+    const flag = await dealMedicalFiling(medicalFilingPat.value?.patientId);
     if (flag) {
       patientUtils.getPatCardList();
     }
@@ -523,7 +537,7 @@
   };
 
   onShow(async () => {
-    reDealMedicalFiling();
+    await reDealMedicalFiling();
     await patientUtils.getPatCardList();
   });
   onLoad(async (opt) => {

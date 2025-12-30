@@ -238,6 +238,7 @@
     defaultFalg: 'string';
     patientPhone: 'string';
     pageType: 'addPatient' | 'perfectReal';
+    scanWithNoSms?: '1';
 
     // 微信小程序必须显示写出来， 否则接收不到
     _p?: string;
@@ -685,10 +686,27 @@
       newPat.value = gStores.userStore.patList.find(
         (pat) => pat.patientId === newPat.value.patientId
       );
-      if (isMedicalFiling.value && newPat.value.healthCardUser !== '2') {
-        regDialogMedicalFiling.value.show();
-        return;
+      const { ev } = gStores.globalStore;
+      if (ev === 'wx') {
+        if (pageProps.value.payAuthNo || pageProps.value.familyPayAuthNo) {
+          const params: any = {
+            patientId: newPat.value.patientId,
+            patientName: newPat.value.patientName,
+          };
+          if (pageProps.value.familyPayAuthNo) {
+            params.relationship = '9';
+          } else if (pageProps.value.payAuthNo) {
+            params.relationship = '1';
+          }
+          await api.updateRelationship(params);
+        }
+      } else if (ev === 'alipay') {
+        if (isMedicalFiling.value && newPat.value.healthCardUser !== '2') {
+          regDialogMedicalFiling.value.show();
+          return;
+        }
       }
+
       if (pageProps.value._directUrl) {
         routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
@@ -865,6 +883,13 @@
     // #ifdef MP-HARMONY
     await wait(60);
     // #endif
+    console.log('medicalTypeChange', pageProps.value);
+    if (
+      gStores.globalStore.sysCode === '1001095' &&
+      pageProps.value.scanWithNoSms === '1'
+    ) {
+      isSmsVerify = undefined;
+    }
 
     const addressArr: any[] = [];
     const endArr: any[] = [];
@@ -1152,13 +1177,23 @@
         }
         // #endif
       }
-
+      //医保建档携带的数据不可修改
+      if (pageProps.value.payAuthNo || pageProps.value.familyPayAuthNo) {
+        formData.value[o.key] && (o.disabled = true);
+      }
       //从快捷绑定页面带入的额外数据不可修改
       if (
         formExtraKeysInQuickAddPatPage.map((item) => item.key).includes(key) &&
         iValue
       ) {
-        o.disabled = true;
+        if (
+          gStores.globalStore.sysCode === '1001095' &&
+          pageProps.value.scanWithNoSms === '1'
+        ) {
+          o.disabled = false;
+        } else {
+          o.disabled = true;
+        }
       }
 
       if (value === '0' && key === formKey.birthday) {

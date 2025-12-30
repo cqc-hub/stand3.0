@@ -15,6 +15,7 @@ import {
   useTBanner,
   PatientUtils,
   apiAsync,
+  idValidator,
 } from '@/utils';
 
 import {
@@ -335,6 +336,7 @@ export const getOnlineMedicalConfig = async () => {
 export const getMedicalAuthCode = async (opt?: {
   userName?: string;
   idCard?: string;
+  type?: 'pay' | 'medicalFiling';
 }): Promise<string> => {
   let fCode = '';
 
@@ -354,6 +356,17 @@ export const getMedicalAuthCode = async (opt?: {
       const w = _wx!;
       const { medicalNation } = w;
       let { appId, path, pathExtraData } = medicalNation!;
+      if (opt?.type === 'medicalFiling') {
+        const medicalFilingPath = 'auth/pages/bindcard/auth/index';
+        if (pathExtraData) {
+          path = medicalFilingPath;
+          pathExtraData.relatedType = 'family';
+        } else {
+          path =
+            path.replace('auth/pages/bindcard/auth/index', medicalFilingPath) +
+            '&relatedType=family';
+        }
+      }
       if (pathExtraData) {
         path = joinQuery(path, pathExtraData);
       }
@@ -2728,15 +2741,16 @@ export const compareDetailCostItem = (o: TConstListItem, k: TConstListItem) => {
 export const dealMedicalFiling = async (patientId, type = 'first') => {
   const gStores = new GStores();
   const { ev, sysCode } = gStores.globalStore;
+  let authCodeType: any = undefined;
   if (ev === 'wx') {
+    authCodeType = 'medicalFiling';
     if (type === 'first') {
       uni.setStorageSync('yibaoPatientId', patientId);
     } else {
       uni.removeStorageSync('yibaoPatientId');
     }
-    await getMedicalArgWithFamily();
   }
-  const authCode = await getMedicalAuthCode();
+  const authCode = await getMedicalAuthCode({ type: authCodeType });
 
   if (ev === 'alipay') {
     const {
@@ -2822,31 +2836,34 @@ export const reDealMedicalFiling = async () => {
   }
   if (ev === 'wx') {
     const result = (await _getQxMedicalNation()) as any;
-    const { userName, familyPayAuthNo, patientName } = result;
-    const pat = gStores.userStore.patList.find(
-      (item) => item.patientId === yibaoPatientId
-    );
-    const params: any = {
-      patientId: yibaoPatientId,
-      patientName: pat?.patientName,
+    uni.showLoading();
+    const args = {
+      idType: '01',
+      patientName: result.patientName,
+      idCard: result.patientIdCard,
+      pageType: 'addPatient',
+      upIdCard: '',
+      upName: '',
     };
-    if (pat?.patientName === userName) {
-      params.relationship = '1';
-    } else if (familyPayAuthNo && pat?.patientName === patientName) {
-      params.relationship = '9';
-    } else {
-      gStores.messageStore.showMessage(
-        '当前患者与医保授权用户信息不一致，更新患者信息失败',
-        3000
-      );
-      return;
+    if (!args.patientName && !result.familyPayAuthNo) {
+      args.patientName = result.userName;
+      args.idCard = result.idCard;
     }
-    await api.updateRelationship(params);
-    gStores.messageStore.showMessage('更新为医保用户成功', 3000, {
-      closeCallBack: () => {
-        uni.reLaunch({ url: `/pagesA/medicalCardMan/medicalCardMan` });
-      },
+    const cardInfo = idValidator.getIdCardInfo(args.idCard);
+    const { isGuardianWithIdCard } = await ServerStaticData.getSystemConfig(
+      'person'
+    );
+    if (isGuardianWithIdCard && cardInfo.age <= isGuardianWithIdCard * 1) {
+      args.upIdCard = result.idCard;
+      args.upName = result.userName;
+    }
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
+        ...result,
+        ...args,
+      }),
     });
+    return;
   }
 };
 
