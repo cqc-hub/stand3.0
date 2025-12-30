@@ -61,6 +61,45 @@ export const handlerMedicalPayDongRuan = async ({
 };
 
 export const getMedicalAuthCode = async (data): Promise<string> => {
+  return new Promise(async (r, j) => {
+    const { confirm } = await apiAsync(uni.showModal, {
+      content: '请点击确定跳转医保小程序?',
+    });
+
+    const cbPath = () => {
+      let registerId = data[0].registerId;
+      let payBackParams = encodeURIComponent(
+        JSON.stringify(data[0].payBackParams)
+      );
+      uni.navigateTo({
+        url: joinQuery('/pagesC/cloudHospital/cachePage', {
+          payment: 'back',
+          registerId: registerId,
+          payBackParams: payBackParams,
+        }),
+      });
+    };
+
+    if (!confirm) {
+      cbPath();
+      j('取消');
+
+      return;
+    }
+
+    const clinicUtils = await getClinicUtils();
+    await clinicUtils.getMedicalArgWithFamily();
+
+    const code = await clinicUtils.getMedicalAuthCode().catch(() => {
+      cbPath();
+      j();
+
+      throw new Error('取消');
+    });
+
+    r(code);
+  });
+
   let fCode = '';
 
   const gStores = new GStores();

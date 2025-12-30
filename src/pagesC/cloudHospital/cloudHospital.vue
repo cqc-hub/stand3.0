@@ -85,13 +85,15 @@
                 _url: resultConfig.path,
                 ...resultConfig.query,
                 ...authInfo,
-                authCode: authCode,
+                authCode,
               }),
             });
           } catch (error) {
             gStores.messageStore.showMessage('网络医院地址参数配置错误', 2000);
             console.error('网络医院地址参数配置错误', error);
           }
+
+          return;
         }
 
         if (['1001048', '1001084'].includes(gStores.globalStore.sysCode)) {
