@@ -755,8 +755,8 @@ export const sendImg = async () => {
       type: -1,
     });
   } finally {
-    msgState.value.msgLoad = false;
-    msgState.value.msgText = '';
+    // msgState.value.msgLoad = false;
+    // msgState.value.msgText = '';
   }
 };
 
@@ -1295,11 +1295,17 @@ const typeInAsk = async (value, answertype) => {
     });
   }
   console.warn('手动调用接口', settings);
+  
+  // 立即设置loading状态和提示文本
+  msgState.value.msgLoad = true;
+  msgState.value.msgText = '正在分析中，请稍候...'; // 设置等待提示
 
   const typeInIndex = msgList.value.length;
   requestTask = wx.request({
     ...settings,
-    success: (response) => {},
+    success: (response) => {
+      console.log('调用成功response', response);
+    },
     fail: (err) => {
       console.log('errror', err);
       msgState.value.msgLoad = false;
@@ -1316,19 +1322,32 @@ const typeInAsk = async (value, answertype) => {
       }
     },
     complete: () => {
-      msgState.value.msgLoad = false;
-      msgState.value.msgText = '';
-      requestTask?.offChunkReceived();
-      chunkStatus.value.chunkTemp = '';
-      chunkStatus.value.isTyping = false;
+       console.log('调用完成')
+ // 延迟一小段时间确保所有数据块都已处理完毕
+      setTimeout(() => {
+        msgState.value.msgLoad = false;
+        msgState.value.msgText = '';
+        requestTask?.offChunkReceived();
+        chunkStatus.value.chunkTemp = '';
+        chunkStatus.value.isTyping = false;
+        scrollToNewMsg();
+      }, 300);
     },
   });
-  requestTask?.onHeadersReceived((res) => {});
+  requestTask?.onHeadersReceived((res) => {
+ console.log('连接已建立，等待响应数据...');
+    // 连接已建立，继续保持loading状态
+    msgState.value.msgLoad = true;
+    msgState.value.msgText = '连接已建立，正在接收数据...';
+
+  });
+   // 监听数据块
   requestTask?.onChunkReceived((res) => {
     chunkStatus.value.isTyping = true;
     const buf16 = buf2hex(res.data);
     const resStr = hexToString(buf16);
-    chunkStatus.value.chunkTemp += resStr;
+    chunkStatus.value.chunkTemp += resStr; 
+    
     processChunks(chunkStatus.value.chunkTemp, typeInIndex);
   });
 };
@@ -1376,6 +1395,9 @@ const typeInAskH5 = (value: any, answertype) => {
   }
 
   const typeInIndex = msgList.value.length;
+    // 立即设置loading状态
+  msgState.value.msgLoad = true;
+  msgState.value.msgText = '正在分析中，请稍候...';
 
   const xhr = new XMLHttpRequest();
   xhr.open('POST', settings.url, true);
@@ -1393,14 +1415,17 @@ const typeInAskH5 = (value: any, answertype) => {
       if (newChunk) {
         chunkStatus.value.isTyping = true;
         chunkStatus.value.chunkTemp += newChunk;
+        msgState.value.msgText = '正在处理数据...';
         processChunks(chunkStatus.value.chunkTemp, typeInIndex);
       }
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
           // 处理成功响应
+        setTimeout(() => {
           chunkStatus.value.isTyping = false;
           msgState.value.msgLoad = false;
           msgState.value.msgText = '';
+          }, 300);
         } else {
           // 处理错误响应
           console.log('errror', xhr.statusText);
