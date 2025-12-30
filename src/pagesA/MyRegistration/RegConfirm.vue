@@ -316,34 +316,61 @@
     isFlagWarning.value = false;
   };
 
-  const handlerConfirmPatReal = async () => {
-    const pages = getCurrentPages();
-    const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
-    const { title, content } = await gStores.getSysAppMore('1204');
-    const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
-      gStores.messageStore.showMessage(content, 0, {
-        useDialog: true,
-        dialogOpt: {
-          title,
-          isShowCancel: true,
-          cancelText: '暂不预约',
-          confirmText: '去实名认证',
-          isMaskClick: false,
-        },
-        closeCallBack: r,
-      });
-    });
+const handlerConfirmPatReal = async () => {
+  const gStores = new GStores();
+  const pages = getCurrentPages();
+  const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
 
-    if (confirm) {
-      uni.navigateTo({
-        url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
-          _url: fullUrl,
-        }),
-      });
+  const platformConfig = {
+    // 抖音和鸿蒙平台配置
+    'toutiao-harmony': {
+      sysConfigId: '12041',
+      showConfirmButton: false,
+      confirmText: undefined,
+    },
+    // 微信和支付宝平台配置
+    'wechat-alipay': {
+      sysConfigId: '1204',
+      showConfirmButton: true,
+      confirmText: '去实名认证',
     }
-
-    throw new Error('实名?');
   };
+    // 确定当前平台配置
+  let currentConfig;
+  // #ifdef MP-TOUTIAO || MP-HARMONY
+  currentConfig = platformConfig['toutiao-harmony'];
+  // #endif
+  // #ifdef MP-WEIXIN || MP-ALIPAY
+  currentConfig = platformConfig['wechat-alipay'];
+  // #endif
+   
+  const { title, content } = await gStores.getSysAppMore(currentConfig.sysConfigId);
+  const dialogOptions = {
+    title,
+    isShowCancel: true,
+    cancelText: '暂不预约',
+    isMaskClick: false,
+    ...(currentConfig.showConfirmButton && { confirmText: currentConfig.confirmText }),
+  };
+  const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
+    gStores.messageStore.showMessage(content, 0, {
+      useDialog: true,
+      dialogOpt: dialogOptions,
+      closeCallBack: r,
+    });
+  });
+
+  const shouldNavigate = currentConfig.showConfirmButton;
+  if (shouldNavigate && confirm) {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
+        _url: fullUrl,
+      }),
+    });
+  }
+
+  throw new Error('实名?');
+};
 
   //  更新监护人信息 —— 省中
   const handlerConfirmPatReal1 = async () => {

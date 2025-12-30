@@ -238,20 +238,81 @@
 
   export default {
     name: 'UniDatetimePicker',
-    options: {
-      virtualHost: true,
-    },
+    // 为抖音平台兼容性移除 virtualHost
     components: {
       calendar,
       timePicker,
     },
-    inject: {
-      form: {
-        from: 'uniForm',
+    // 为抖音平台兼容性移除 inject，改为 props 或其他方式
+    props: {
+      // 原有 props 不变
+      hideFooter: {
+        type: Boolean,
+        default: false,
+      },
+      type: {
+        type: String,
+        default: 'datetime',
+      },
+      value: {
+        type: [String, Number, Array, Date],
+        default: '',
+      },
+      modelValue: {
+        type: [String, Number, Array, Date],
+        default: '',
+      },
+      start: {
+        type: [Number, String],
+        default: '',
+      },
+      end: {
+        type: [Number, String],
+        default: '',
+      },
+      returnType: {
+        type: String,
+        default: 'string',
+      },
+      placeholder: {
+        type: String,
+        default: '',
+      },
+      startPlaceholder: {
+        type: String,
+        default: '',
+      },
+      endPlaceholder: {
+        type: String,
+        default: '',
+      },
+      rangeSeparator: {
+        type: String,
+        default: '-',
+      },
+      border: {
+        type: [Boolean],
+        default: true,
+      },
+      disabled: {
+        type: [Boolean],
+        default: false,
+      },
+      clearIcon: {
+        type: [Boolean],
+        default: true,
+      },
+      hideSecond: {
+        type: [Boolean],
+        default: false,
+      },
+      // 添加 form 相关 props 以替代 inject
+      uniForm: {
+        type: Object,
         default: null,
       },
-      formItem: {
-        from: 'uniFormItem',
+      uniFormItem: {
+        type: Object,
         default: null,
       },
     },
@@ -519,11 +580,10 @@
       },
     },
     created() {
-      // if (this.form && this.formItem) {
-      // 	this.$watch('formItem.errMsg', (newVal) => {
-      // 		this.localMsg = newVal
-      // 	})
-      // }
+      // 使用 props 替代 inject
+      if (this.uniForm && this.uniFormItem) {
+        // 保留表单验证相关逻辑
+      }
     },
     mounted() {
       this.platform();
@@ -669,7 +729,6 @@
             }
           }
         }
-
         this.$emit('change', value);
         this.$emit('input', value);
         this.$emit('update:modelValue', value);
@@ -831,13 +890,13 @@
           }
           if (needEmit) {
             // 校验规则
-            // if(this.form  && this.formItem){
-            // 	const {
-            // 		validateTrigger
-            // 	} = this.form
-            // 	if (validateTrigger === 'blur') {
-            // 		this.formItem.onFieldChange()
-            // 	}
+            // if(this.uniForm  && this.uniFormItem){
+            //   const {
+            //     validateTrigger
+            //   } = this.uniForm
+            //   if (validateTrigger === 'blur') {
+            //     this.uniFormItem.onFieldChange()
+            //   }
             // }
             this.$emit('change', '');
             this.$emit('input', '');

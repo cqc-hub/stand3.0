@@ -571,7 +571,7 @@ export const throughCharacterLineFeed = (
 /**
  * 获取当前运行平台
  */
-export const getPlatform = (): 'wx' | 'alipay' | 'h5' => {
+export const getPlatform = (): 'wx' | 'alipay' | 'h5' | 'tt' => {
   // #ifdef MP-WEIXIN
   return 'wx';
   // #endif
@@ -584,6 +584,10 @@ export const getPlatform = (): 'wx' | 'alipay' | 'h5' => {
   return 'h5';
   // #endif
 
+  // #ifdef MP-TOUTIAO
+  return 'tt';
+  // #endif
+
   return 'wx'; // 默认值
 };
 
@@ -593,7 +597,7 @@ export const getPlatform = (): 'wx' | 'alipay' | 'h5' => {
  * @returns boolean 是否开启
  */
 export const isFeatureEnabled = (
-  config: '1' | { wx?: '1'; alipay?: '1' } | undefined
+  config: '1' | { wx?: '1'; alipay?: '1'  ; tt?: '1' } | undefined
 ): boolean => {
   // 未配置则不开启
   if (!config) return false;
@@ -603,10 +607,10 @@ export const isFeatureEnabled = (
 
   // 对象配置方式：按平台判断
   const platform = getPlatform();
-
   // 检查对应平台是否开启
   if (platform === 'wx' && config.wx === '1') return true;
   if (platform === 'alipay' && config.alipay === '1') return true;
+  if (platform === 'tt' && config.tt === '1') return true;
 
   return false;
 };
