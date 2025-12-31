@@ -575,88 +575,12 @@ export const inspectionAnalysis = async (reports) => {
       sysCode: globalGl.SYS_CODE,
       source: 1,
       repId: element.repId,
-      repType: 1,
+      repType: element.repType,
+      reportType: element.reportType,
       extend: element.extend,
-    });
-    // let promise = new Promise(async (resolve, reject) => {
-    //   const args = {
-
-    //   };
-
-    // let setting = {
-    //   url: `https://testphs.eheren.com/gateway/phs-extend/customer/aiStreamReportAsk`,
-    //   method: 'POST',
-    //   responseType: 'text',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     phsId: isOpenSm4 ? '81681766' : '81681688',
-    //   },
-    //   data: JSON.stringify({
-    //     args: {
-    //       sysCode: globalGl.SYS_CODE,
-    //       source: 1,
-    //       repId: element.repId,
-    //       repType: 1,
-    //       extend: element.extend,
-    //     },
-    //   }),
-    // };
-    // console.warn('setting', setting);
-
-    // scrollToNewMsg();
-
-    // const { result } = await wx.request({
-    //   ...setting,
-    //   success: (response) => {
-    //     const { showType, list, requestId, chatId } = response.data.result;
-    //     if (showType === 1) {
-    //       dealShowType1(list, requestId, chatId);
-    //     } else {
-    //       dealShowType12(list, requestId, chatId);
-    //     }
-    //   },
-    //   fail: (err) => {
-    //     console.log('errror', err);
-    //     msgState.value.msgLoad = false;
-    //     if (err.errMsg == 'request:fail abort') {
-    //       gStores.messageStore.showMessage('已暂停生成', 3000);
-    //     } else {
-    //       msgList.value.push({
-    //         my: false,
-    //         msg: err?.message || '啊哦～网络连接异常，请稍后尝试。',
-    //         type: -1,
-    //       });
-    //     }
-    //   },
-    //   complete: () => {
-    //     scrollToNewMsg();
-    //     msgState.value.msgLoad = false;
-    //     resolve(0);
-    //   },
-    // });
-
-    // const { result } = await api.inspectionAnalysis({
-    //   sysCode: globalGl.SYS_CODE,
-    //   source: 1,
-    //   repId: element.repId,
-    //   repType: 1,
-    //   extend: element.extend,
-    // });
-    // const { showType, list, requestId, chatId } = result;
-    // if (showType === 1) {
-    //   dealShowType1(list, requestId, chatId);
-    // } else {
-    //   dealShowType12(list, requestId, chatId);
-    // }
-    // scrollToNewMsg();
-    // resolve(0);
-    // });
-    // allPromise.push(promise);
-  });
-  // Promise.all(allPromise).then(() => {
-  //   scrollToNewMsg();
-  //   msgState.value.msgLoad = false;
-  // });
+      cardNumber: gStores.userStore.patChoose.cardNumber,
+    }); 
+   }); 
   // #ifndef  H5
   typeInAsk(args, 'report');
   // #endif
@@ -1343,6 +1267,7 @@ const typeInAsk = async (value, answertype) => {
   });
    // 监听数据块
   requestTask?.onChunkReceived((res) => {
+    // console.log('接收数据块...',res); 
     chunkStatus.value.isTyping = true;
     const buf16 = buf2hex(res.data);
     const resStr = hexToString(buf16);
