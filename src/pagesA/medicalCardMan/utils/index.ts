@@ -1113,7 +1113,6 @@ export const healthCardBind = async () => {
     const requestArg = {
       hospitalId,
       wechatCode,
-      herenId: gStores.globalStore.herenId,
       openId: gStores.globalStore.openId,
       source: gStores.globalStore.browser.source,
       ...healthCardQuery,
@@ -1147,7 +1146,6 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
     const requestArg = {
       healthCode,
       hospitalId,
-      herenId: globalStore.herenId,
       source: globalStore.browser.source,
     };
 
@@ -1227,7 +1225,6 @@ export const gotoChosseVerifyPage = async (
       ...requestData,
       ...idCardInfo,
       ...healthCardQuery,
-      herenId: gStores.globalStore.herenId,
       openId: gStores.globalStore.openId,
       source: gStores.globalStore.browser.source,
       nation: nationItem.label,
@@ -1252,7 +1249,6 @@ export const gotoChosseVerifyPage = async (
     const requestArg = {
       ...requestData,
       ...healthCardQuery,
-      herenId: gStores.globalStore.herenId,
       openId: gStores.globalStore.openId,
       source: gStores.globalStore.browser.source,
       authCode,
@@ -1289,7 +1285,6 @@ export const backWithFaceVerify = async (
   const globalStore = gStores.globalStore;
   const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
   const requestOrderArg = {
-    herenId: gStores.globalStore.herenId,
     openId: gStores.globalStore.openId,
     source: gStores.globalStore.browser.source,
     ...commonQuery,
