@@ -1061,5 +1061,5 @@
 </script>
 
 <style lang="scss" scoped>
-  @import './css';
+  @use './css';
 </style>

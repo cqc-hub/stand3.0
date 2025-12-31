@@ -1,6 +1,6 @@
 <template>
   <view class="pop">
-    <view @click="show">
+    <view @click="_show">
       <slot :label="getShowLabel" />
     </view>
 
@@ -119,7 +119,7 @@
     popup.value?.hide();
   };
 
-  const show = () => {
+  const _show = () => {
     uni.$emit('_CloseGlobalSelector', _id);
     popup.value?.show();
   };
@@ -128,7 +128,7 @@
     () => props.show,
     () => {
       if (props.show) {
-        show();
+        _show();
       } else {
         close();
       }
@@ -136,7 +136,7 @@
   );
 
   defineExpose({
-    show,
+    show: _show,
     close,
   });
 </script>
