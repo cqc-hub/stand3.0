@@ -218,16 +218,21 @@ const getRadomId = () => {
     uni.setStorageSync('v3_userRandomId', generateRandomUserId());
   }
 };
-export const ininWithReport = async (reportId?: string) => {
-  console.log('ininWithReport', reportId);
+export const ininWithReport = async (reportId) => {
+  console.log('ininWithReport', propsPbj.value);
+  setTimeout(()=>{
+    msgState.value.msgLoad = true;
+  },300)
+  const gStores = new GStores();
+  const { source } = gStores.globalStore.browser;
   if (reportId) {
     msgState.value.msgLoad = true;
     const args: any[] = [];
     args.push({
       sysCode: globalGl.SYS_CODE,
-      source: 1,
-      repId: reportId,
-      repType: 1,
+      source, 
+      cardNumber:gStores.userStore.patChoose.cardNumber,
+      ...JSON.parse(propsPbj.value.reportData)
     });
     // #ifndef  H5
     typeInAsk(args, 'report');
@@ -425,14 +430,14 @@ export const sendMsg = async (str: string, answertype?: 1 | 0) => {
     return;
   }
   // #endif
-
+  const { source } = gStores.globalStore.browser;
   const {
     result: { showType, list, requestId, chatId, tips },
   } = await api
     .customerAIask({
       content: value,
       sysCode: globalGl.SYS_CODE,
-      source: 1,
+      source,
       type: answertype || 0,
       chatId: msgState.value.lastChatId,
       requestId: msgState.value.requestId,
@@ -570,10 +575,11 @@ export const inspectionAnalysis = async (reports) => {
   // const allPromise: any[] = [];
   msgState.value.msgLoad = true;
   const args: any[] = [];
+  const { source } = gStores.globalStore.browser;
   await reports.forEach(async (element) => {
     args.push({
       sysCode: globalGl.SYS_CODE,
-      source: 1,
+      source,
       repId: element.repId,
       repType: element.repType,
       headerType: element.headerType,

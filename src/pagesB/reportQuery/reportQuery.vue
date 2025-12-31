@@ -124,7 +124,8 @@
           v-if="
             pageList[tab.typeId] &&
             pageList[tab.typeId].length &&
-            pageConfig.reportAnalysis === '1'
+            pageConfig.reportAnalysis === '1' &&
+            gStores.globalStore.sysCode === '1001038'
           "
           @click="reportAnalysis"
           class="report-aly"
@@ -722,12 +723,14 @@
       jcBottomNav,
       jyBottomNav,
     } = pageConfig.value;
+    const { headerType } = tabs.value[tabCurrent.value];
     const mq1 = {
       repId: data.repId || '',
       repType: data.repType || '',
       reportType: data.reportType || '',
       hosId: data.hosId || '',
       extend: data.extend || '',
+      headerType: headerType || '',
       isDoctorCard,
       isWatermark,
       isDownloadRepor: isDownloadRepor || '',
