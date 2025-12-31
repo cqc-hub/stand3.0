@@ -195,6 +195,7 @@ const mzqhBtns = computed<TButtonConfig[]>(() => {
         hosOrderId: "hosOrderId",
         deptName:'deptName',
         hosId: "hosId",
+        hosDocId: "hosDocId"
       },
     },
     {
@@ -603,7 +604,7 @@ const ywzClick = async (item: IRegistrationCardItem) => {
     //指定的预问诊跳转
     useTBanner(orderConfig.value.preConsultationBtn, "navigateTo", item);
   } else {
-    const { orderId, hosDeptId, hosOrderId, hosData, deptName, hosId } = item;
+    const { orderId, hosDeptId, hosOrderId, hosData, deptName, hosId, hosDocId } = item;
     const patientId = gStores.userStore.patChoose.patientId;
     const preConsultation: TButtonConfig = {
       type: "h5",
@@ -618,7 +619,8 @@ const ywzClick = async (item: IRegistrationCardItem) => {
         hosData: encodeURIComponent(hosData as string),
         patientId,
         deptName,
-        hosId
+        hosId,
+        hosDocId
       },
       addition: {
         token: "token",

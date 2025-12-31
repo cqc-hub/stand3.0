@@ -765,6 +765,7 @@
       hosOrderId:orderRegInfo.value.hosOrderId,
       hosDeptId: orderRegInfo.value.hosDeptId,
       hosId: orderRegInfo.value.hosId,
+      hosDocId: orderRegInfo.value.hosDocId,
     };
 
     const preConsultation: TButtonConfig = {
