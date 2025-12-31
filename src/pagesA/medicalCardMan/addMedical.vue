@@ -789,6 +789,7 @@
             // #ifdef MP-HARMONY
             await wait(60);
             // #endif
+
             gform.value.setList(formList.value);
           }
         }
@@ -1246,6 +1247,16 @@
     // #ifdef MP-HARMONY
     await wait(60);
     // #endif
+    if (
+      gStores.globalStore.sysCode === '1001095' &&
+      pageProps.value.scanWithNoSms === '1'
+    ) {
+      formList.value = formList.value.filter(
+        (o) => !['location', 'address', 'nation'].includes(o.key)
+      );
+    }
+    console.log('formList.value', formList.value);
+
     gform.value.setList(formList.value);
   };
 
