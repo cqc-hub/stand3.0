@@ -576,7 +576,7 @@ export const inspectionAnalysis = async (reports) => {
       source: 1,
       repId: element.repId,
       repType: element.repType,
-      reportType: element.reportType,
+      headerType: element.headerType,
       extend: element.extend,
       cardNumber: gStores.userStore.patChoose.cardNumber,
     }); 

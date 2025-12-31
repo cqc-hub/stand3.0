@@ -117,7 +117,7 @@
                 <template #empty>
                   <!-- v-if="!loading" -->
                   <view v-if="!loading" class="empty-box">
-                    <g-empty :current="1" text="未查询到您近一个月的检验报告~" />
+                    <g-empty :current="1" text="未查询到您近一个月的报告内容~" />
                   </view>
                 </template>
               </scroll-list>
@@ -324,7 +324,7 @@
 
                 if (reportList && reportList.length) {
                   reportList.map((item) => {
-                    item.checked = false;
+                    item.checked = false; 
                     const findItemSameDate = willChangeList.find((fItem) => {
                       return fItem.date === date;
                     });
@@ -388,6 +388,7 @@
 
   const changeCheck = (data) => {
     checkedList.value = [];
+    const { headerType } = tabs.value[tabCurrent.value];
     pageList.value[tabCurrent.value].map((o) => {
       const { date, reportHosNameResults } = o;
 
@@ -404,6 +405,7 @@
               if (item.checked) {
                 checkedList.value.push(item);
               }
+              item.headerType = headerType;
               return item;
             });
           }
