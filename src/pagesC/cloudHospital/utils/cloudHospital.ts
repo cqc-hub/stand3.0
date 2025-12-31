@@ -61,62 +61,44 @@ export const handlerMedicalPayDongRuan = async ({
 };
 
 export const getMedicalAuthCode = async (data): Promise<string> => {
-  let fCode = '';
-
-  const gStores = new GStores();
-  const {
-    sConfig: { medicalMHelp },
-  } = globalGl;
-  const { alipay, wx: _wx } = medicalMHelp!;
-
-  if (gStores.globalStore.ev === 'wx') {
-    // 授权码只能使用一次 每次必须重新授权
-    const { appId, path } = _wx!.medicalNation!;
-
-    setLocalStorage({
-      'get-wx-medical-auth-code': '1',
-    });
-    let registerId = data[0].registerId;
-    let payBackParams = encodeURIComponent(
-      JSON.stringify(data[0].payBackParams)
-    );
-
-    uni.navigateToMiniProgram({
-      appId,
-      path,
-      envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
-      fail({ errMsg }) {
-        if (errMsg.includes('fail cancel')) {
-          setLocalStorage({
-            'get-wx-medical-auth-code': '',
-          });
-
-          gStores.messageStore.showMessage(
-            '未完成电子医保凭证授权,无法继续医保结算'
-          );
-          setTimeout(() => {
-            uni.navigateTo({
-              url: joinQuery('/pagesC/cloudHospital/cachePage', {
-                payment: 'back',
-                registerId: registerId,
-                payBackParams: payBackParams,
-              }),
-            });
-          }, 1000);
-        }
-      },
+  return new Promise(async (r, j) => {
+    const { confirm } = await apiAsync(uni.showModal, {
+      content: '请点击确定跳转医保小程序?',
     });
 
-    return Promise.reject('请求授权...');
-  } else if (gStores.globalStore.ev === 'alipay') {
-    const { authCode } = await apiAsync(my.getAuthCode, {
-      scopes: ['nhsamp', 'auth_user'],
+    const cbPath = () => {
+      let registerId = data[0].registerId;
+      let payBackParams = encodeURIComponent(
+        JSON.stringify(data[0].payBackParams)
+      );
+      uni.navigateTo({
+        url: joinQuery('/pagesC/cloudHospital/cachePage', {
+          payment: 'back',
+          registerId: registerId,
+          payBackParams: payBackParams,
+        }),
+      });
+    };
+
+    if (!confirm) {
+      cbPath();
+      j('取消');
+
+      return;
+    }
+
+    const clinicUtils = await getClinicUtils();
+    await clinicUtils.getMedicalArgWithFamily();
+
+    const code = await clinicUtils.getMedicalAuthCode().catch(() => {
+      // cbPath();
+      j();
+
+      throw new Error('取消');
     });
 
-    fCode = authCode;
-  }
-
-  return fCode;
+    r(code);
+  });
 };
 
 /**微信自费支付 */

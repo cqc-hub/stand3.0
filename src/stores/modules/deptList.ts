@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 export interface IDeptLv1 extends IDeptLv3 {
   hosId?: string;
   firstDefaultShowDept?: '1'; // 默认展示科室
+  freeClinicId: string; // 义诊
   firstDeptName: string;
   firstHosDeptId: string;
   firstRecommendation: string; // 科室推介信息
@@ -17,6 +18,8 @@ export interface IDeptLv1 extends IDeptLv3 {
 export interface IDeptLv2 extends IDeptLv3 {
   hosId?: string;
   open?: boolean;
+  freeClinicId: string; // 义诊
+
   promptMessage: string; // 就诊提示
   remark: string;
   secondDeptName: string;
@@ -34,6 +37,8 @@ export interface IDeptLv2 extends IDeptLv3 {
 export interface IDeptLv3 {
   hosId?: string;
   deptName: string;
+  freeClinicId: string; // 义诊
+
   hosDeptId: string;
   promptMessage: string;
   recommendation: string;
@@ -137,7 +142,6 @@ const deptStore = defineStore('_dept', {
     changeActiveLv3(item: IDeptLv3) {
       this.activeLv3 = item;
     },
-
   },
 });
 

@@ -499,6 +499,10 @@ const scJson: Record<string, ISConfig> = {
   },
 
   1001099: {
+    isOpenHelpOld: '1',
+    login: {
+      isSkipPerfect: '1',
+    },
     medicalMHelp: {
       wx: {
         isMedicalOrder: '1',
@@ -958,6 +962,7 @@ const scJson: Record<string, ISConfig> = {
         //     orgCodg: 'H61060200365',
         //     orgAppId: '1J600B2FR08K4460C80A00004B274D74',
         //   },
+        // 正式配置· 已经成功录制视频
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
           path: 'auth/pages/bindcard/auth/index',
@@ -990,6 +995,7 @@ const scJson: Record<string, ISConfig> = {
     medicalMHelp: {
       wx: {
         medicalPlugin: '1',
+        medicalDefault: '1', // TODO: 待确认
       },
 
       alipay: {

@@ -21,7 +21,7 @@
         }"
       >
         <view
-          class="v-tabs__container-item f32"
+          class="v-tabs__container-item flex justify-center items-center f32"
           v-for="(v, i) in tabs"
           :key="i"
           :style="{
@@ -40,7 +40,7 @@
           <view class="">
             <text
               :class="{
-                'custom-font f44': fontStyle === '1' && current == i,
+                'custom-font f36': fontStyle === '1' && current == i,
               }"
             >
               {{ field ? v[field] : v }}
@@ -90,7 +90,7 @@
             height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           }"
         />
-        <img
+        <image
           v-if="pills === '3'"
           :src="getImgPill3()"
           class="h-full absolute"
@@ -102,7 +102,7 @@
           }"
           :style="{
             left: pillsLeft + 'px',
-            width: currentWidth * 1.1 + 'px',
+            width: currentWidth  + 'px',
             height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           }"
         />
@@ -370,6 +370,10 @@
             this.lineLeft = lineLeft + currentWidth / 2;
             // 胶囊距离左侧的位置
             this.pillsLeft = lineLeft;
+            if (this.pills === '3' && this.current === this.tabs.length - 1) {
+              this.pillsLeft -= 10;
+              this.currentWidth += 8;
+            }
             // 计算滚动的距离左侧的位置
             if (this.scroll) {
               this.scrollLeft = this.lineLeft - this.containerWidth / 2 - 40;
@@ -421,15 +425,12 @@
       white-space: nowrap;
 
       .v-tabs__container-item {
-        display: flex;
-        align-items: center;
         height: 100%;
         position: relative;
         z-index: 10;
         padding: 0 11px;
         transition: all 0.2s;
         white-space: nowrap;
-        justify-content: center;
         view {
           width: max-content;
         }

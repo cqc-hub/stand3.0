@@ -28,6 +28,7 @@ export interface IPayRes {
   channel: string;
   sign: string;
   invokeData: {
+    tkInfo?: any;
     timeStamp: string;
     packAge: string;
     paySign: string;
@@ -165,9 +166,10 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
 
     const { timeStamp, nonceStr, packAge, signType, paySign } =
       invokeData || {};
-    let provider: 'alipay' | 'wxpay' | 'baidu' | 'appleiap' = 'wxpay';
+    let provider: 'alipay' | 'wxpay' | 'baidu' | 'appleiap' | 'toutiao' =
+      'wxpay';
 
-    const payData = {
+    let payData: any = {
       provider,
       orderInfo: data.channelTradeNo,
       timeStamp,
@@ -177,12 +179,23 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
       paySign,
     };
 
+    // #ifdef MP-TOUTIAO
+    payData = {
+      service: '1',
+      provider,
+      orderInfo: invokeData?.tkInfo,
+      payChannel: {
+        default_pay_channel: 'alipay', // wx || alipay
+      },
+      _debug: 1,
+    };
+    // #endif
+
     if (['wx', 'alipay', 'tt'].includes(ev || '')) {
       await new Promise((resolve) => {
         uni.getProvider({
           service: 'payment',
           success(result) {
-            // @ts-expect-error
             payData.provider = result.provider[0];
             resolve(void 0);
           },
@@ -208,11 +221,30 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
           }
           // #endif
 
-          // #ifdef  MP-WEIXIN ||
+          // #ifdef  MP-WEIXIN
           resolve({
             payedRes: e,
             payRes: payData,
           });
+          // #endif
+
+          // #ifdef MP-TOUTIAO
+          // 目前抖音测试来看 支付宝支付成功是0 微信成功是9 取消是4
+          // if(e.code === 9 || e.code === 0){
+          //    resolve({
+          //     payedRes: e,
+          //     payRes: payData,
+          //   });
+          // }
+          console.log('抖音支付出参', e);
+          if (e.code === 4) {
+            gStores.messageStore.showMessage('取消支付', 1500);
+          } else {
+            resolve({
+              payedRes: e,
+              payRes: payData,
+            });
+          }
           // #endif
         },
 
@@ -281,6 +313,10 @@ export const aliPayOldSystemPayType = () => {
 
   if (ev === 'wx') {
     switch (sysCode) {
+      case '1001093':
+        channel = 'LIANZHONG_WX_MINI';
+        break;
+
       case '1001063':
         channel = 'ICBC_JFT_H5';
         break;
@@ -345,7 +381,7 @@ export const aliPayOldSystemPayType = () => {
     }
   } else if (ev === 'tt') {
     // 1001035
-    channel === 'ALI_APP';
+    channel = 'ALI_APP';
   }
 
   return channel;

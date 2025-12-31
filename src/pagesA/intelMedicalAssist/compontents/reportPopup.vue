@@ -46,82 +46,85 @@
           </view>
         </view>
       </view>
-      <!-- <view class="tab-box">
-        <g-tabs
-          v-model:value="tabCurrent"
-          :tabs="tabs"
-          :line-scale="0.8"
-          field="headerName"
-          all-blod
-          @change="(e) => tabChange(e, 'click')"
-        />
-      </view> -->
-      <swiper
-        v-else
-        :current="tabCurrent"
-        @change="(e) => tabChange(e.detail.current, '')"
-        class="container g-container pt32"
-      >
-        <swiper-item v-for="tab in tabs" :key="tab.typeId">
-          <scroll-list
-            :option="scrollOption"
-            @handleInit="loadScrollList"
-            @refresh="refresh"
-            @load="load"
-            ref="slist"
-            class="container-scroll"
-          >
-            <template #default>
-              <view
-                v-if="pageList[tab.typeId] && pageList[tab.typeId].length"
-                class="list-block"
+      
+      <template v-else>
+        <view class="container g-container pt12">
+            <g-tabs
+              v-model:value="tabCurrent"
+              :tabs="tabs"
+              :line-scale="0.8"
+              field="headerName"
+              :bgColor="'transparent'"
+              all-blod
+              @change="(e) => tabChange(e, 'click')"
+            />
+          <swiper
+            :current="tabCurrent"
+            @change="(e) => tabChange(e.detail.current, '')"
+            class="flex1"
+          > 
+            <swiper-item v-for="tab in tabs" :key="tab.typeId">
+              <scroll-list
+                :option="scrollOption"
+                @handleInit="loadScrollList"
+                @refresh="refresh"
+                @load="load"
+                ref="slist"
+                class="container-scroll"
               >
-                <template
-                  v-for="(item, index) in pageList[tab.typeId]"
-                  :key="index"
-                >
-                  <template
-                    v-for="(report, reportIndex) in item.reportHosNameResults"
-                    :key="`reportHosNameResults${reportIndex}`"
+                <template #default>
+                  <view
+                    v-if="pageList[tab.typeId] && pageList[tab.typeId].length"
+                    class="list-block"
                   >
-                    <view class="date" :class="{ dateFirst: index == 0 }">
-                      <view class="iconfont date-icon">&#xe6c6;</view>
-                      <view class="date-number">{{ item.date }}</view>
-                      <text style="color: #e6e6e6">|</text>
-                      <view class="address">
-                        {{ report.hosName }}
-                      </view>
-                    </view>
-                    <view
-                      class="advisoryItem pb40"
-                      :class="{ advisoryItemFirst: index == 0 }"
+                    <template
+                      v-for="(item, index) in pageList[tab.typeId]"
+                      :key="index"
                     >
-                      <template v-for="(data, i) in report.reportList" :key="i">
-                        <view @tap="changeCheck(data)">
-                          <advisoryItem
-                            :data="data"
-                            :type="tab.headerType"
-                            :checked="data.checked"
-                          />
+                      <template
+                        v-for="(report, reportIndex) in item.reportHosNameResults"
+                        :key="`reportHosNameResults${reportIndex}`"
+                      >
+                        <view class="date" :class="{ dateFirst: index == 0 }">
+                          <view class="iconfont date-icon">&#xe6c6;</view>
+                          <view class="date-number">{{ item.date }}</view>
+                          <text style="color: #e6e6e6">|</text>
+                          <view class="address">
+                            {{ report.hosName }}
+                          </view>
+                        </view>
+                        <view
+                          class="advisoryItem pb40"
+                          :class="{ advisoryItemFirst: index == 0 }"
+                        >
+                          <template v-for="(data, i) in report.reportList" :key="i">
+                            <view @tap="changeCheck(data)">
+                              <advisoryItem
+                                :data="data"
+                                :type="tab.headerType"
+                                :checked="data.checked"
+                              />
+                            </view>
+                          </template>
                         </view>
                       </template>
-                    </view>
-                  </template>
+                    </template>
+                    <view class="safe-height"></view>
+                    <!-- <view class="safe-height"></view> -->
+                  </view>
                 </template>
-                <view class="safe-height"></view>
-                <!-- <view class="safe-height"></view> -->
-              </view>
-            </template>
 
-            <template #empty>
-              <!-- v-if="!loading" -->
-              <view v-if="!loading" class="empty-box">
-                <g-empty :current="1" text="未查询到您近一个月的检验报告~" />
-              </view>
-            </template>
-          </scroll-list>
-        </swiper-item>
-      </swiper>
+                <template #empty>
+                  <!-- v-if="!loading" -->
+                  <view v-if="!loading" class="empty-box">
+                    <g-empty :current="1" text="未查询到您近一个月的检验报告~" />
+                  </view>
+                </template>
+              </scroll-list>
+            </swiper-item>
+          </swiper>
+        </view>
+      </template> 
 
       <view class="footer f32">
         <button class="btn btn-primary btn-border" @click="addPhoto">
@@ -163,6 +166,11 @@
       headerName: '检验',
       headerType: 'jy',
       typeId: 0,
+    },
+    {
+      headerName: '检查',
+      headerType: 'jc',
+      typeId: 1,
     },
   ]);
   const uploadImgList = ref<any[]>([]);
@@ -459,6 +467,8 @@
       margin: auto;
       border-radius: 40rpx;
       box-shadow: 0px 0px 20rpx 0px rgba(0, 0, 0, 0.06);
+      display: flex; 
+      flex-direction: column; 
       .container-scroll {
         height: 100%;
 

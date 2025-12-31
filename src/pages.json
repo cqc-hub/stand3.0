@@ -97,6 +97,7 @@
             "patient": true
           }
         },
+        // #ifndef MP-TOUTIAO
         {
           "path": "intelMedicalAssist/intelMedicalAssist",
           "style": {
@@ -109,6 +110,7 @@
             }
           }
         },
+        // #endif
 
         {
           "path": "MyRegistration/addDescribe",
@@ -899,6 +901,12 @@
     {
       "root": "pagesD",
       "pages": [
+        {
+          "path": "1001093/hosButlerOrder",
+          "style": {
+            "navigationBarTitleText": " "
+          }
+        },
         {
           "path": "common/useJump",
           "style": {

@@ -23,7 +23,7 @@
         paddingItem="0"
         height="88"
         scroll
-        pills="3"
+        :pills="isTabStyle1 ? '3' : '2'"
         :allBlod="false"
       />
       <swiper
@@ -57,7 +57,7 @@
   } from 'vue';
   import homeGrid from './homeGrid.vue';
   import homeMenuTabs from './homeMenuTabs.vue';
-  import { wait } from '@/utils';
+  import { GStores, wait } from '@/utils';
   import { getSysCode } from '@/common';
 
   const emits = defineEmits(['open-share']);
@@ -69,6 +69,7 @@
     typeName: string;
     functionList: IRoute[];
   }
+  const gStores = new GStores();
 
   const props = withDefaults(
     defineProps<{

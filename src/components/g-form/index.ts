@@ -118,6 +118,8 @@ export interface ISelectInstance extends IBaseInstance {
 
 interface IAddressInstance extends IBaseInstance {
   field: 'address';
+  /** 1 省 2市 3 区  默认3 */
+  mode?: '1' | '2' | '3';
   options?: ISelectOptions[];
 }
 
@@ -245,6 +247,9 @@ export const useAddress = () => {
 
     addressLoading.value = true;
     if (!payload) {
+      if (provinces.value.length) {
+        return;
+      }
       await getProvinces();
     } else {
       if (divisionType === '1') {
