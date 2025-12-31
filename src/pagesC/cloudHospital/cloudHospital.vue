@@ -71,6 +71,7 @@
       if (authCode) {
         // 获取授权码
         if (getLocalStorage('get-wx-medical-netWork-path')) {
+          gStores.globalStore.onAppShow({});
           const resultConfig = JSON.parse(
             decodeURIComponent(getLocalStorage('get-wx-medical-netWork-path'))
           );

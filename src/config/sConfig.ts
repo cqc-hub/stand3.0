@@ -497,6 +497,9 @@ const scJson: Record<string, ISConfig> = {
   },
 
   1001099: {
+    login: {
+      isSkipPerfect: '1',
+    },
     medicalMHelp: {
       wx: {
         isMedicalOrder: '1',

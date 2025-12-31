@@ -244,9 +244,22 @@
             })
           ),
         });
-        console.log('触发获取授权码');
         let authCode = await getMedicalAuthCode(data);
-        console.warn('授权码', authCode);
+
+        // if (authCode) {
+        //   console.warn('授权码', authCode);
+
+        //   const authInfo =
+        //     gStores.globalStore.appShowData.referrerInfo?.extraData || {};
+        //   uni.navigateTo({
+        //     url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
+        //       ...authInfo,
+        //       _url: insuranceParamsWx.backUrl,
+        //       payBackParams,
+        //       authCode,
+        //     }),
+        //   });
+        // }
         return;
       }
 

@@ -686,6 +686,15 @@
     path: 'pages/index/tenant/enter?linkType=11&emNo=815',
   } as TButtonConfig;
 
+  const 肿瘤住院管家 = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesA/1001093/hosButler',
+    addition: {
+      patientId: '_patientId',
+    },
+  } as TButtonConfig;
+
   onMounted(() => {
     setTimeout(() => {
       init();
@@ -694,7 +703,7 @@
   const init = async () => {
     // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
-    useTBanner(电子导诊单);
+    useTBanner(肿瘤住院管家);
   };
 
   onLoad(() => {
