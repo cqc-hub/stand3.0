@@ -9,15 +9,15 @@ export const useHosButlerOrder = () => {
   const stepStatus = ref('0');
   const selStepStatus = ref('0');
   const pageProps = ref({} as THosButlerInfo);
-  const formData1 = ref({
-    deptName: 'cqc',
-  });
 
   const gform = ref('' as any);
   const formData = ref({});
+
+  const formData1 = ref({});
+  const formData2 = ref({});
+  const formData3 = ref({});
   let isBackPoint = false;
   const formChange = (e) => {
-
     if (['wx', 'alipay'].includes(gStores.globalStore.ev) && !isBackPoint) {
       isBackPoint = true;
       const opt = {
@@ -48,7 +48,7 @@ export const useHosButlerOrder = () => {
       },
       {
         label: '入院途径',
-        key: 'deptName1',
+        key: 'admissionWay',
         field: 'input-text',
         disabled: true,
       },
@@ -288,7 +288,19 @@ export const useHosButlerOrder = () => {
       },
     ],
   });
-  const initForm = () => {
+  const initForm = async () => {
+    const key = selStepStatus.value;
+    if (key === '0') {
+      formData1.value = {};
+      formData.value = formData1.value;
+    } else if (key === '1') {
+      formData2.value = {};
+      formData.value = formData2.value;
+    } else if (key === '2') {
+      formData3.value = {};
+      formData.value = formData3.value;
+    }
+
     gform.value.setList(formTemps.value[selStepStatus.value] || []);
   };
 
@@ -335,6 +347,14 @@ export const useHosButlerOrder = () => {
     },
     pageLoad(opt: any) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+      const { admissionWay, deptName, groupName } = pageProps.value;
+
+      formData1.value = {
+        admissionWay,
+        deptName,
+        groupName,
+      };
+
       console.log(pageProps.value);
     },
   };
