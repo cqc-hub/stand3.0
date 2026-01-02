@@ -258,13 +258,7 @@
     });
   };
 
-  let _n = false;
   const hosChange = () => {
-    if (!_n) {
-      _n = true;
-      return;
-    }
-
     getDepList();
   };
 

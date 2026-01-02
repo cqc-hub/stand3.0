@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001099",
+  "sysCode": "1001033",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -505,7 +505,7 @@
     },
     "1001099": {
       "wxAppid": "wx64d48b1de1c41cb8",
-      // "h5Appid": "wx00cb6182a8c21b09",
+      "h5Appid": "wx00cb6182a8c21b09",
       "alipayAppid": "2021002133687534",
       "name": "郑州市中医院",
       "isStartComeTest": false,
