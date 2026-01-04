@@ -574,9 +574,12 @@
     if (pageProps.value.pageType === 'perfectReal') {
       try {
         await patientUtils
-          .registerUser(requestData, {
-            addPatInterface: 'relevantPatient',
-          })
+          .registerUser(
+            { ...requestData },
+            {
+              addPatInterface: 'relevantPatient',
+            }
+          )
           .catch(async (err) => {
             if (err?.errorType === 'add') {
               const respCode = err?.err?.respCode;
@@ -1255,7 +1258,6 @@
         (o) => !['location', 'address', 'nation'].includes(o.key)
       );
     }
-    console.log('formList.value', formList.value);
 
     gform.value.setList(formList.value);
   };

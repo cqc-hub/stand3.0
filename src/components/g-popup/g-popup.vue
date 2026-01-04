@@ -45,6 +45,8 @@
           scroll-y
         >
           <slot />
+          <view class="safe-height"></view>
+          <view class="safe-height"></view>
         </scroll-view>
       </view>
     </wyb-popup>
