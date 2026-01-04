@@ -62,7 +62,6 @@
       changePatient(_pd);
     }
     pageLoad(opt);
-    console.log(gStores.userStore.patChoose);
   });
   onMounted(() => {
     initForm();

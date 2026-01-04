@@ -44,10 +44,10 @@ interface IBaseInstance {
   disabled?: boolean;
   rule?: IRule | IRule[];
   showSuffixArrowIcon?: boolean;
-  rowStyle?: string;
+  rowStyle?: string | BaseObject;
   showBodyStyle?: string;
-  labelStyle?: string;
-  bodyStyle?: string;
+  labelStyle?: string | BaseObject;
+  bodyStyle?: string | BaseObject;
   isHideRowBorder?: boolean;
   labelWidth?: string;
   isForShow?: boolean;

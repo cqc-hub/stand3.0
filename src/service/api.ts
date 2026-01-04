@@ -199,6 +199,8 @@ const queryApi = {
       '/phs-query/preHospital/submitAdmissionApplication',
       parm(data)
     ),
+  getIdCardAddress: (data) =>
+    service.post('/phs-query/preHospital/getIdCardAddress', parm(data)),
 
   getProcessState: (data) =>
     service.post<any[]>('/phs-query/medical/getProcessState', parm(data)),

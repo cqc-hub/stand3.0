@@ -2,7 +2,7 @@ import { TInstance } from '@/components/g-form';
 import { apiAsync, GStores, rulePhone, useTBanner, wait } from '@/utils';
 import { computed, ref } from 'vue';
 import { THosButlerInfo } from './hosButlerType';
-import { deQueryForUrl } from '@/common';
+import { deQueryForUrl, joinQueryForUrl } from '@/common';
 import api from '@/service/api';
 
 /**
@@ -406,28 +406,21 @@ export const useHosButlerOrder = () => {
       ...formData3.value,
     };
 
-    await api.submitAdmissionApplication(reqArg);
+    // await api.submitAdmissionApplication(reqArg);
 
-    await apiAsync(uni.showModal, {
-      content: '提交成功',
-      showCancel: false,
+    // await apiAsync(uni.showModal, {
+    //   content: '提交成功',
+    //   showCancel: false,
+    // });
+
+    uni.redirectTo({
+      url: joinQueryForUrl('/pagesD/1001093/hosButlerOrderAfter', reqArg),
     });
-
-    useTBanner(
-      {
-        type: 'h5',
-        isSelfH5: '1',
-        path: 'pagesA/1001093/hosButler',
-        addition: {
-          patientId: '_patientId',
-        },
-      },
-      'reLaunch'
-    );
   };
 
   return {
     pageProps,
+    formTemps,
 
     gform,
     formData,
@@ -485,6 +478,8 @@ export const useHosButlerOrder = () => {
     },
     pageLoad(opt: any) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+      console.log(pageProps.value);
+
       const { admissionWay, deptName, groupName } = pageProps.value;
 
       formData1.value = {
@@ -492,8 +487,6 @@ export const useHosButlerOrder = () => {
         deptName,
         groupName,
       };
-
-      console.log(pageProps.value);
     },
   };
 };
