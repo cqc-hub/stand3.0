@@ -30,11 +30,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+  import { onMounted } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
   import { useHosButlerOrder } from './hosButler';
+  import { changePatient, GStores } from '@/utils';
   import hosStep from './components/hosStep.vue';
+
+  const gStores = new GStores();
 
   const {
     pageLoad,
@@ -53,8 +56,13 @@
 
   gform;
 
-  onLoad(async (opt) => {
+  onLoad(async (opt: any) => {
+    const { _pd } = opt;
+    if (_pd) {
+      changePatient(_pd);
+    }
     pageLoad(opt);
+    console.log(gStores.userStore.patChoose);
   });
   onMounted(() => {
     initForm();

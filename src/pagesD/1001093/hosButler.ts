@@ -1,14 +1,16 @@
 import { TInstance } from '@/components/g-form';
-import { GStores, rulePhone, wait } from '@/utils';
+import { apiAsync, GStores, rulePhone, useTBanner, wait } from '@/utils';
 import { computed, ref } from 'vue';
 import { THosButlerInfo } from './hosButlerType';
 import { deQueryForUrl } from '@/common';
+import api from '@/service/api';
 
 /**
  * 院前检查
  * 需要的配置信息
  * - 职业 yqjc_job
  * - 学历 yqjc_edu
+ * - 关系 yqjc_relationship
  * @returns
  */
 export const useHosButlerOrder = () => {
@@ -26,7 +28,6 @@ export const useHosButlerOrder = () => {
   let isBackPoint = false;
   const formChange = (e) => {
     const key = selStepStatus.value;
-    console.log(e);
 
     if (['wx', 'alipay'].includes(gStores.globalStore.ev) && !isBackPoint) {
       isBackPoint = true;
@@ -172,7 +173,7 @@ export const useHosButlerOrder = () => {
         showRequireIcon: true,
         label: '国籍',
         placeholder: '请选择',
-        key: 'citizenship',
+        key: 'citizenshipCode',
         field: 'select',
         options: [],
         autoOptions: 'countries',
@@ -208,17 +209,16 @@ export const useHosButlerOrder = () => {
         required: true,
         showSuffixArrowIcon: true,
         showRequireIcon: true,
-
         label: '出生地',
         placeholder: '请选择',
-        key: 'address',
+        key: '_address',
         field: 'address',
         labelWidth: '220rpx',
       },
       {
         label: '职业',
         showSuffixArrowIcon: true,
-        key: 'deptName',
+        key: 'occupationCode',
         field: 'select',
         options: [],
         autoOptions: 'yqjc_job',
@@ -226,7 +226,7 @@ export const useHosButlerOrder = () => {
       },
       {
         label: '婚姻',
-        key: 'deptName',
+        key: 'marital',
         showSuffixArrowIcon: true,
         options: [
           {
@@ -244,7 +244,7 @@ export const useHosButlerOrder = () => {
       {
         label: '学历',
         showSuffixArrowIcon: true,
-        key: 'deptName',
+        key: 'eduCode',
         field: 'select',
         options: [],
         autoOptions: 'yqjc_edu',
@@ -252,25 +252,25 @@ export const useHosButlerOrder = () => {
       },
       {
         label: '工作单位',
-        key: 'deptName',
+        key: 'serviceAgency',
         field: 'input-text',
         placeholder: '请输入',
       },
       {
         label: '现住址',
-        key: 'deptName',
+        key: 'presentAddress',
         field: 'input-text',
         placeholder: '请输入',
       },
       {
         label: '邮编',
-        key: 'deptName',
+        key: 'postCode',
         field: 'input-text',
         placeholder: '请输入',
       },
       {
         label: '家庭联系人',
-        key: 'deptName',
+        key: 'phone',
         field: 'input-text',
         placeholder: '请输入',
 
@@ -284,7 +284,7 @@ export const useHosButlerOrder = () => {
 
       {
         label: '户口地址',
-        key: 'deptName',
+        key: 'address',
         field: 'input-text',
         placeholder: '请输入',
       },
@@ -293,7 +293,7 @@ export const useHosButlerOrder = () => {
     2: [
       {
         label: '联系人',
-        key: 'deptName',
+        key: 'membersName',
         field: 'input-text',
         required: true,
         showRequireIcon: true,
@@ -304,19 +304,19 @@ export const useHosButlerOrder = () => {
         required: true,
         showSuffixArrowIcon: true,
         showRequireIcon: true,
-
         label: '关系',
         placeholder: '请选择',
-        key: 'address',
+        key: 'relationship',
         field: 'select',
         labelWidth: '220rpx',
+        autoOptions: 'yqjc_relationship',
         options: [],
       },
 
       {
         required: true,
         label: '联系人电话',
-        key: 'deptName',
+        key: 'membersPhone',
         field: 'input-text',
         showRequireIcon: true,
 
@@ -327,6 +327,13 @@ export const useHosButlerOrder = () => {
           },
         ],
       },
+
+      // {
+      //   label: '联系人地址',
+      //   key: 'membersAddress',
+      //   field: 'input-text',
+      //   placeholder: '请输入',
+      // },
     ],
   });
   const initForm = async () => {
@@ -350,6 +357,7 @@ export const useHosButlerOrder = () => {
       nativePlaceString,
       patientPhone,
       citizenship,
+      citizenshipCode,
       sex,
     } = pageProps.value;
 
@@ -377,6 +385,7 @@ export const useHosButlerOrder = () => {
         nativePlaceString,
         patientPhone,
         citizenship,
+        citizenshipCode,
         sex,
         ...formData2.value,
       };
@@ -390,7 +399,32 @@ export const useHosButlerOrder = () => {
     gform.value.setList(formTemps.value[selStepStatus.value] || []);
   };
 
-  const handlerSubmit = async () => {};
+  const handlerSubmit = async () => {
+    const reqArg = {
+      ...pageProps.value,
+      ...formData2.value,
+      ...formData3.value,
+    };
+
+    await api.submitAdmissionApplication(reqArg);
+
+    await apiAsync(uni.showModal, {
+      content: '提交成功',
+      showCancel: false,
+    });
+
+    useTBanner(
+      {
+        type: 'h5',
+        isSelfH5: '1',
+        path: 'pagesA/1001093/hosButler',
+        addition: {
+          patientId: '_patientId',
+        },
+      },
+      'reLaunch'
+    );
+  };
 
   return {
     pageProps,

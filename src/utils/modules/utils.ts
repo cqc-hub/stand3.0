@@ -11,6 +11,15 @@ import { deQueryForUrl, joinQueryForUrl } from '@/common';
 
 type NeverTurnsAny<T> = T extends never ? any : T;
 
+export const changePatient = (patientId: string) => {
+  const gStores = new GStores();
+  const _pd = patientId;
+  if (gStores.userStore.patChoose.patientId !== _pd) {
+    const pat = gStores.userStore.patList.find((o) => o.patientId === _pd);
+    gStores.userStore.updatePatChoose(pat!);
+  }
+};
+
 export const getSystemSafeBottom = async () => {
   const e = await uni.getSystemInfo({});
   const { safeAreaInsets, screenWidth } = e;
@@ -597,7 +606,7 @@ export const getPlatform = (): 'wx' | 'alipay' | 'h5' | 'tt' => {
  * @returns boolean 是否开启
  */
 export const isFeatureEnabled = (
-  config: '1' | { wx?: '1'; alipay?: '1'  ; tt?: '1' } | undefined
+  config: '1' | { wx?: '1'; alipay?: '1'; tt?: '1' } | undefined
 ): boolean => {
   // 未配置则不开启
   if (!config) return false;
