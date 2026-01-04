@@ -1,3 +1,12 @@
+/**
+ * login.ts文档
+ * 基础存储层	GStores	封装全局状态（用户 / 消息 / 路由）的懒加载，统一状态访问入口
+ * 登录核心层	LoginUtils	登录通用逻辑（获取用户信息 / 人脸核验 / OpenId 绑定），作为基类被继承
+ * 登录策略层	WeChatLoginHandler等	不同登录渠道的具体实现（策略模式），适配各平台差异
+ * 登录入口层	Login	统一登录入口，通过LoginType分发到对应策略类
+ * 就诊人管理层	PatientUtils	就诊人增删改查 / 医保升级 / 健康卡绑定等核心业务
+ * 工具函数层	packageAuthParams/getH5OpenidParam	接口参数封装 / OpenId 适配，解决多端参数规范不一致问题
+ */
 import {
   useGlobalStore,
   useUserStore,
@@ -215,6 +224,7 @@ export class GStores {
     return { title, content, initialText };
   }
 
+  // 作为全局基础存储层的核心Class（GStores），开放addNewMethod这种「无约束动态扩展方法」的能力，在工程化层面不符合严谨的设计逻辑
   addNewMethod(methodName, methodBody) {
     // this.constructor 获取类本身
     this.constructor.prototype[methodName] = methodBody;
@@ -259,6 +269,7 @@ export class LoginUtils extends GStores {
       'RestOfConfig'
     );
     if (isLoginByPhoneVerify === '1') {
+      // 把promise的resolve函数，赋值给messageStore的closeCallBack状态
       const { confirm } = await new Promise<any>((closeCallBack) => {
         this.messageStore.showMessage(
           '已取消一键授权登录，是否前往进行手机号登录？',
@@ -271,7 +282,7 @@ export class LoginUtils extends GStores {
               cancelText: '暂不登录',
               confirmText: '手机号登录',
             },
-            closeCallBack,
+            closeCallBack, // resolve的入参会被直接作为Promise的最终结果值
           }
         );
       });
