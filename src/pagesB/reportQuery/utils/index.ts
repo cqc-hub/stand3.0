@@ -1,7 +1,5 @@
 import { deQueryForUrl, getSysCode, joinQueryForUrl } from '@/common';
-import globalGl from '@/config/global';
 import { apiAsync } from '@/utils';
-import api from '@/service/api';
 
 export interface ITab {
   typeId: number;
@@ -374,6 +372,7 @@ export const getQueryUrl = function (url: string): BaseObject {
 
 export const reportAnalysisFun = async (pageProps) => {
   const { confirm } = await apiAsync(uni.showModal, {
+    title:'授权提醒',
     content: 'AI报告解读为您提供报告异常指标分析，健康生活及就诊科室建议，是否授权本条报告数据给大模型进行智能解读？',
     confirmText: '确认',
     cancelText: '取消',
