@@ -246,6 +246,7 @@ export const useAddress = () => {
     addressLoading.value = true;
     if (!payload) {
       if (provinces.value.length) {
+        addressLoading.value = false;
         return;
       }
       await getProvinces();

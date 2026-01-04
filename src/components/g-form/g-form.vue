@@ -702,6 +702,7 @@
   const isShowSelectSearch = ref(false);
   const searchOpt = ref('');
   const clickContainer = function (item: TInstance) {
+    clickItem.value = item;
     if (item.disabled) {
       emits('disabled-click', item);
       return;
@@ -728,7 +729,6 @@
 
       if (item.field === 'select') {
         searchOpt.value = '';
-        clickItem.value = item;
         if (props.selectInUniDataPicker) {
           _actionSheet.value.show();
         } else {
@@ -844,9 +844,12 @@
     clearItemWarning(key);
     if (field === 'address') {
       const selLabels = v.map((o) => o.text).join('');
-      setData({
-        [key]: selLabels,
-      });
+      setData(
+        {
+          [key]: selLabels,
+        },
+        cacheItem || undefined
+      );
 
       emits('address-change', {
         item: item,

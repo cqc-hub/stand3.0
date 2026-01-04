@@ -3,8 +3,9 @@
     <view class="pt48">
       <hosStep
         :list="stepList"
-        :status="selStepStatus"
+        :status="stepStatus"
         :selStatus="selStepStatus"
+        @address-change="addressChange"
         @item-click="stepClick"
       />
     </view>
@@ -43,9 +44,11 @@
     formSubmit,
     initForm,
     selStepStatus,
+    stepStatus,
     stepList,
     stepClick,
     handlerClick,
+    addressChange,
   } = useHosButlerOrder();
 
   gform;

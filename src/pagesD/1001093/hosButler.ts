@@ -1,9 +1,16 @@
 import { TInstance } from '@/components/g-form';
-import { GStores, rulePhone } from '@/utils';
+import { GStores, rulePhone, wait } from '@/utils';
 import { computed, ref } from 'vue';
 import { THosButlerInfo } from './hosButlerType';
 import { deQueryForUrl } from '@/common';
 
+/**
+ * 院前检查
+ * 需要的配置信息
+ * - 职业 yqjc_job
+ * - 学历 yqjc_edu
+ * @returns
+ */
 export const useHosButlerOrder = () => {
   const gStores = new GStores();
   const stepStatus = ref('0');
@@ -14,10 +21,13 @@ export const useHosButlerOrder = () => {
   const formData = ref({});
 
   const formData1 = ref({});
-  const formData2 = ref({});
+  const formData2 = ref({} as any);
   const formData3 = ref({});
   let isBackPoint = false;
   const formChange = (e) => {
+    const key = selStepStatus.value;
+    console.log(e);
+
     if (['wx', 'alipay'].includes(gStores.globalStore.ev) && !isBackPoint) {
       isBackPoint = true;
       const opt = {
@@ -32,10 +42,24 @@ export const useHosButlerOrder = () => {
       my.enableAlertBeforeUnload(opt);
       // #endif
     }
+
+    if (key === '1') {
+      formData2.value = {
+        ...formData.value,
+      };
+    } else if (key === '2') {
+      formData3.value = {
+        ...formData.value,
+      };
+    }
   };
+
+  let resolve: (...any) => any = () => {};
+  let reject: (...any) => any = () => {};
   const formSubmit = async (e) => {
-    console.log(e);
+    resolve(e);
   };
+
   const formTemps = ref<{
     [key: string]: TInstance[];
   }>({
@@ -54,19 +78,19 @@ export const useHosButlerOrder = () => {
       },
       {
         label: '医疗组',
-        key: 'deptName1',
+        key: 'groupName',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '门诊医生',
-        key: 'deptName1',
+        key: 'doctorName',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '病案号',
-        key: 'deptName1',
+        key: 'cardNumber',
         field: 'input-text',
         disabled: true,
       },
@@ -75,62 +99,62 @@ export const useHosButlerOrder = () => {
     1: [
       {
         label: '医保卡号',
-        key: 'deptName',
+        key: 'insuranceCardNo',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '姓名',
-        key: 'deptName',
+        key: 'patientName',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '证件',
-        key: 'deptName',
+        key: 'idType',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '证件号',
-        key: 'deptName',
+        key: 'idCard',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '出生日期',
-        key: 'deptName',
+        key: 'birthday',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '性别',
-        key: 'deptName',
+        key: 'sex',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '年龄',
-        key: 'deptName',
+        key: 'patientAge',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '民族',
-        key: 'deptName',
+        key: 'nation',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '籍贯',
-        key: 'deptName',
+        key: 'nativePlaceString',
         field: 'input-text',
         disabled: true,
       },
       {
         required: true,
         label: '本人电话',
-        key: 'deptName',
+        key: 'patientPhone',
         field: 'input-text',
         showRequireIcon: true,
 
@@ -148,7 +172,7 @@ export const useHosButlerOrder = () => {
         showRequireIcon: true,
         label: '国籍',
         placeholder: '请选择',
-        key: 'countries',
+        key: 'citizenship',
         field: 'select',
         options: [],
         autoOptions: 'countries',
@@ -193,20 +217,37 @@ export const useHosButlerOrder = () => {
       },
       {
         label: '职业',
+        showSuffixArrowIcon: true,
         key: 'deptName',
-        field: 'input-text',
+        field: 'select',
+        options: [],
+        autoOptions: 'yqjc_job',
         placeholder: '请选择',
       },
       {
         label: '婚姻',
         key: 'deptName',
-        field: 'input-text',
+        showSuffixArrowIcon: true,
+        options: [
+          {
+            label: '未婚',
+            value: '未婚',
+          },
+          {
+            label: '已婚',
+            value: '已婚',
+          },
+        ],
+        field: 'select',
         placeholder: '请选择',
       },
       {
         label: '学历',
+        showSuffixArrowIcon: true,
         key: 'deptName',
-        field: 'input-text',
+        field: 'select',
+        options: [],
+        autoOptions: 'yqjc_edu',
         placeholder: '请选择',
       },
       {
@@ -290,17 +331,62 @@ export const useHosButlerOrder = () => {
   });
   const initForm = async () => {
     const key = selStepStatus.value;
+    console.log(formData2.value);
+
+    const {
+      deptName,
+      cardNumber,
+      groupName,
+      doctorName,
+      visitNo,
+      admissionWay,
+      patientAge,
+      nation,
+      insuranceCardNo,
+      patientName,
+      idType,
+      idCard,
+      birthday,
+      nativePlaceString,
+      patientPhone,
+      citizenship,
+      sex,
+    } = pageProps.value;
+
+    gform.value.setList([]);
+
     if (key === '0') {
-      formData1.value = {};
+      formData1.value = {
+        deptName,
+        groupName,
+        doctorName,
+        visitNo,
+        admissionWay,
+        cardNumber,
+      };
       formData.value = formData1.value;
     } else if (key === '1') {
-      formData2.value = {};
+      formData2.value = {
+        patientAge,
+        nation,
+        insuranceCardNo,
+        patientName,
+        idType,
+        idCard,
+        birthday,
+        nativePlaceString,
+        patientPhone,
+        citizenship,
+        sex,
+        ...formData2.value,
+      };
       formData.value = formData2.value;
     } else if (key === '2') {
       formData3.value = {};
       formData.value = formData3.value;
     }
 
+    await wait(60);
     gform.value.setList(formTemps.value[selStepStatus.value] || []);
   };
 
@@ -335,14 +421,32 @@ export const useHosButlerOrder = () => {
       selStepStatus.value = value;
       initForm();
     },
-    handlerClick() {
+    async handlerClick() {
       const v = (selStepStatus.value as any) * 1;
+
+      await new Promise((r, j) => {
+        gform.value.submit();
+        resolve = r;
+      });
+
+      if ((stepStatus.value as any) * 1 <= v) {
+        stepStatus.value = `${v * 1 + 1}`;
+      }
 
       if (v === 2) {
         handlerSubmit();
       } else {
         selStepStatus.value = `${v * 1 + 1}`;
         initForm();
+      }
+    },
+    addressChange({ value = [] as any[] }) {
+      const [birthProvince, birthCity, birthDistrict] = value;
+
+      if (birthProvince && birthCity && birthDistrict) {
+        formData2.value.birthProvince = birthProvince.text;
+        formData2.value.birthCity = birthCity.text;
+        formData2.value.birthDistrict = birthDistrict.text;
       }
     },
     pageLoad(opt: any) {
