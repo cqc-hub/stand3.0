@@ -30,7 +30,6 @@
             }"
             :style="{
               maxHeight: maxHeight,
-              minHeight: minHeight,
             }"
             class="container bg-white"
             scroll-y
@@ -41,7 +40,12 @@
                 :list="options"
               />
             </block>
-            <view v-else>
+            <view
+              :style="{
+                minHeight: minHeight,
+              }"
+              v-else
+            >
               <view
                 v-for="(item, index) in options"
                 :key="index"
@@ -53,8 +57,8 @@
                       ? 'rgba(255, 255, 255, 0.9)'
                       : '#fff'
                     : type === 'ios'
-                    ? 'rgba(241, 241, 241, 0.9)'
-                    : '#f1f1f1',
+                      ? 'rgba(241, 241, 241, 0.9)'
+                      : '#f1f1f1',
                   color: autoItemColor(item),
                   fontSize: item.fontSize || 'var(--hr-font-size-base)',
                   borderTopLeftRadius:
@@ -73,6 +77,9 @@
               >
                 {{ autoItemLabel(item) }}
               </view>
+
+              <view class="safe-height"></view>
+              <view class="safe-height"></view>
             </view>
           </scroll-view>
         </view>

@@ -6,6 +6,29 @@
     class="page"
     scroll-y="true"
   >
+    <drag-button
+      v-if="
+        pageConfig.reportAnalysis === '1' &&
+        gStores.globalStore.sysCode != '1001038'
+      "
+      :right="1"
+      :edge="100"
+      :offsetHeight="0"
+      zid="33"
+      @btnClick="reportAnalysisFun(pageProps)"
+      isDock
+      scrollY
+    >
+      <view class="auto-person g-fade-in">
+        <text>
+          AI解读
+        </text>
+        <image
+          :src="global.BASE_IMG + pageConfig.reportAnalysisImg"
+          mode="heightFix"
+        ></image>
+      </view>
+    </drag-button> 
     <!--  #ifdef MP-WEIXIN -->
     <view class="placeholder" v-if="queryCompData.isShowHealthCardMode">
       <health-card-query-comp
@@ -333,7 +356,7 @@
   import { onLoad, onPageScroll } from '@dcloudio/uni-app';
   import { ref, onMounted, computed, nextTick, onUpdated } from 'vue';
 
-  import { examineReportDetails, addWatermark } from './utils';
+  import { examineReportDetails, addWatermark, reportAnalysisFun } from './utils';
   import {
     GStores,
     nameConvert,
@@ -353,7 +376,7 @@
   import global from '@/config/global';
   import api from '@/service/api';
   import dayjs from 'dayjs';
-  import env from '@/config/env';
+  import env from '@/config/env';  
 
   import GreenToast from '@/components/greenPower/greenToast.vue';
   import BottomNav from './components/BottomNav.vue';
@@ -1020,6 +1043,21 @@
     flex-direction: column;
     background-color: #f6f6f6;
     position: relative;
+    .auto-person {
+      position: relative;
+      z-index: 999;
+      text {
+        position: absolute;
+        bottom: 9px;
+        color: #fff;
+        font-size: 24rpx;
+        left: 23rpx;
+        z-index: 999;
+      }
+      image {
+        height: 148rpx;
+      }
+   }
     .watermarkView {
       position: absolute;
       z-index: 1;

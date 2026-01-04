@@ -574,9 +574,12 @@
     if (pageProps.value.pageType === 'perfectReal') {
       try {
         await patientUtils
-          .registerUser(requestData, {
-            addPatInterface: 'relevantPatient',
-          })
+          .registerUser(
+            { ...requestData },
+            {
+              addPatInterface: 'relevantPatient',
+            }
+          )
           .catch(async (err) => {
             if (err?.errorType === 'add') {
               const respCode = err?.err?.respCode;

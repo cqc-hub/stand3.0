@@ -90,6 +90,7 @@
     herenId?: string; //埋点
     type?: 'report'|'homePage';
     reportId?: string; //报告id
+    reportData?: any;
   }>();
 
   const gStores = new GStores();

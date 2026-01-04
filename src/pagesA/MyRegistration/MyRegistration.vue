@@ -388,6 +388,8 @@
         hosData = '',
         patientId,
         deptName,
+        hosId,
+        hosDocId
       } = item;
       const preConsultation: TButtonConfig = {
         type: 'h5',
@@ -405,6 +407,8 @@
           patientAge,
           patientSex,
           deptName,
+          hosId,
+          hosDocId,
         },
         addition: {
           token: 'token',

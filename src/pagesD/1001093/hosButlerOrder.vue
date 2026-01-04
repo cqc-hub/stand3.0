@@ -3,12 +3,13 @@
     <view class="pt48">
       <hosStep
         :list="stepList"
-        :status="stepStatus"
+        :status="selStepStatus"
         :selStatus="selStepStatus"
+        @item-click="stepClick"
       />
     </view>
 
-    <view class="safe-height">
+    <view class="safe-height g-container">
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
@@ -19,7 +20,9 @@
     </view>
 
     <view class="g-footer">
-      <view class="btn btn-primary w-full">下一步</view>
+      <view @click="handlerClick" class="btn btn-primary w-full">
+        {{ selStepStatus === '2' ? '提交' : '下一步' }}
+      </view>
     </view>
     <g-message />
   </view>
@@ -33,17 +36,23 @@
   import hosStep from './components/hosStep.vue';
 
   const {
+    pageLoad,
     gform,
     formData,
     formChange,
     formSubmit,
     initForm,
-    stepStatus,
     selStepStatus,
     stepList,
+    stepClick,
+    handlerClick,
   } = useHosButlerOrder();
 
-  onLoad(async () => {});
+  gform;
+
+  onLoad(async (opt) => {
+    pageLoad(opt);
+  });
   onMounted(() => {
     initForm();
   });

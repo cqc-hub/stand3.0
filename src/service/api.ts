@@ -17,10 +17,15 @@ let parm = (
 
   const body = {
     sysCode,
-    herenId: globalStore.herenId,
-    psnId: globalStore.herenId,
     ...data,
   };
+
+  if (!body.herenId) {
+    body.herenId = globalStore.herenId;
+  }
+  if (!body.psnId) {
+    body.psnId = globalStore.herenId;
+  }
 
   if (outArg) {
     return body;

@@ -1,10 +1,34 @@
 <template>
+  
   <view
     :class="{
       [gStores.globalStore.getPageClass]: true,
     }"
     class="page f32"
   >
+    <drag-button
+      v-if="
+        pageConfig.reportAnalysis === '1' &&
+        gStores.globalStore.sysCode != '1001038'
+      "
+      :right="1"
+      :edge="100"
+      :offsetHeight="0"
+      zid="33"
+      @btnClick="reportAnalysisFun(pageProps)"
+      isDock
+      scrollY
+    >
+      <view class="auto-person g-fade-in">
+        <text>
+          AI解读
+        </text>
+        <image
+          :src="global.BASE_IMG + pageConfig.reportAnalysisImg"
+          mode="heightFix"
+        ></image>
+      </view>
+    </drag-button> 
     <!--  #ifdef MP-WEIXIN -->
     <view class="placeholder" v-if="queryCompData.isShowHealthCardMode">
       <health-card-query-comp
@@ -429,9 +453,8 @@
 </template>
 <script lang="ts" setup>
   import { onLoad } from '@dcloudio/uni-app';
-  import { onMounted, ref, computed } from 'vue';
-
-  import { checkoutReportDetails, addWatermark } from './utils';
+  import { onMounted, ref, computed } from 'vue'; 
+  import { checkoutReportDetails, addWatermark, reportAnalysisFun } from './utils';
   import {
     GStores,
     nameConvert,
@@ -439,6 +462,7 @@
     ServerStaticData,
     ISystemConfig,
     getShareTotalUrl,
+    apiAsync
   } from '@/utils';
   import { joinQuery, encryptDes, joinQueryForUrl, getSysCode } from '@/common';
   import { deQueryForUrl } from '@/common';
@@ -764,6 +788,10 @@
     });
   };
 
+
+
+
+
   onMounted(async () => {
     await wait(600);
     getTips();
@@ -794,6 +822,21 @@
         bottom: 96rpx;
       }
     }
+    .auto-person {
+      position: relative;
+      z-index: 999;
+      text {
+        position: absolute;
+        bottom: 9px;
+        color: #fff;
+        font-size: 24rpx;
+        left: 23rpx;
+        z-index: 999;
+      }
+      image {
+        height: 148rpx;
+      }
+   }
     .container {
       margin: 0 auto;
       width: 686rpx;

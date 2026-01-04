@@ -512,8 +512,10 @@ export interface ISystemConfig_ {
 
   //报告查询 REPORT_QUERY_CONFIG
   reportQuery: {
-    // 开启报告解读
+    // 开启报告解读（目前嘉二是列表 其他默认都详情）
     reportAnalysis: '1';
+    // 报告解读悬浮框图片  标准版 中医版reportAnalysisImg_1001035.png
+    reportAnalysisImg:string;
     // 列表页开放选择时间
     isOpenFilterReportByTime?: '1';
     // 详情页开放收藏按钮

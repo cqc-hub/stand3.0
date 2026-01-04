@@ -1,18 +1,37 @@
 import { TInstance } from '@/components/g-form';
-import { rulePhone } from '@/utils';
+import { GStores, rulePhone } from '@/utils';
 import { computed, ref } from 'vue';
+import { THosButlerInfo } from './hosButlerType';
+import { deQueryForUrl } from '@/common';
 
 export const useHosButlerOrder = () => {
-  const stepStatus = ref('2');
-  const selStepStatus = ref('2');
-  const formData1 = ref({
-    deptName: 'cqc',
-  });
+  const gStores = new GStores();
+  const stepStatus = ref('0');
+  const selStepStatus = ref('0');
+  const pageProps = ref({} as THosButlerInfo);
 
   const gform = ref('' as any);
   const formData = ref({});
+
+  const formData1 = ref({});
+  const formData2 = ref({});
+  const formData3 = ref({});
+  let isBackPoint = false;
   const formChange = (e) => {
-    console.log(e);
+    if (['wx', 'alipay'].includes(gStores.globalStore.ev) && !isBackPoint) {
+      isBackPoint = true;
+      const opt = {
+        message: '当前填写的内容尚未保存，确定要离开吗？',
+      };
+
+      // #ifdef MP-WEIXIN
+      wx.enableAlertBeforeUnload(opt);
+      // #endif
+
+      // #ifdef MP-ALIPAY
+      my.enableAlertBeforeUnload(opt);
+      // #endif
+    }
   };
   const formSubmit = async (e) => {
     console.log(e);
@@ -20,7 +39,7 @@ export const useHosButlerOrder = () => {
   const formTemps = ref<{
     [key: string]: TInstance[];
   }>({
-    1: [
+    0: [
       {
         label: '入院科室',
         key: 'deptName',
@@ -29,7 +48,7 @@ export const useHosButlerOrder = () => {
       },
       {
         label: '入院途径',
-        key: 'deptName1',
+        key: 'admissionWay',
         field: 'input-text',
         disabled: true,
       },
@@ -53,7 +72,7 @@ export const useHosButlerOrder = () => {
       },
     ],
 
-    2: [
+    1: [
       {
         label: '医保卡号',
         key: 'deptName',
@@ -113,6 +132,8 @@ export const useHosButlerOrder = () => {
         label: '本人电话',
         key: 'deptName',
         field: 'input-text',
+        showRequireIcon: true,
+
         rule: [
           {
             message: '请确认手机号是否有误',
@@ -124,6 +145,7 @@ export const useHosButlerOrder = () => {
       {
         required: true,
         showSuffixArrowIcon: true,
+        showRequireIcon: true,
         label: '国籍',
         placeholder: '请选择',
         key: 'countries',
@@ -161,6 +183,8 @@ export const useHosButlerOrder = () => {
       {
         required: true,
         showSuffixArrowIcon: true,
+        showRequireIcon: true,
+
         label: '出生地',
         placeholder: '请选择',
         key: 'address',
@@ -168,23 +192,123 @@ export const useHosButlerOrder = () => {
         labelWidth: '220rpx',
       },
       {
-        label: '医保卡号',
+        label: '职业',
         key: 'deptName',
         field: 'input-text',
+        placeholder: '请选择',
       },
       {
-        label: '医保卡号',
+        label: '婚姻',
         key: 'deptName',
         field: 'input-text',
-        disabled: true,
+        placeholder: '请选择',
+      },
+      {
+        label: '学历',
+        key: 'deptName',
+        field: 'input-text',
+        placeholder: '请选择',
+      },
+      {
+        label: '工作单位',
+        key: 'deptName',
+        field: 'input-text',
+        placeholder: '请输入',
+      },
+      {
+        label: '现住址',
+        key: 'deptName',
+        field: 'input-text',
+        placeholder: '请输入',
+      },
+      {
+        label: '邮编',
+        key: 'deptName',
+        field: 'input-text',
+        placeholder: '请输入',
+      },
+      {
+        label: '家庭联系人',
+        key: 'deptName',
+        field: 'input-text',
+        placeholder: '请输入',
+
+        rule: [
+          {
+            message: '请确认手机号是否有误',
+            rule: rulePhone,
+          },
+        ],
+      },
+
+      {
+        label: '户口地址',
+        key: 'deptName',
+        field: 'input-text',
+        placeholder: '请输入',
+      },
+    ],
+
+    2: [
+      {
+        label: '联系人',
+        key: 'deptName',
+        field: 'input-text',
+        required: true,
+        showRequireIcon: true,
+        placeholder: '请输入',
+      },
+
+      {
+        required: true,
+        showSuffixArrowIcon: true,
+        showRequireIcon: true,
+
+        label: '关系',
+        placeholder: '请选择',
+        key: 'address',
+        field: 'select',
+        labelWidth: '220rpx',
+        options: [],
+      },
+
+      {
+        required: true,
+        label: '联系人电话',
+        key: 'deptName',
+        field: 'input-text',
+        showRequireIcon: true,
+
+        rule: [
+          {
+            message: '请确认手机号是否有误',
+            rule: rulePhone,
+          },
+        ],
       },
     ],
   });
-  const initForm = () => {
+  const initForm = async () => {
+    const key = selStepStatus.value;
+    if (key === '0') {
+      formData1.value = {};
+      formData.value = formData1.value;
+    } else if (key === '1') {
+      formData2.value = {};
+      formData.value = formData2.value;
+    } else if (key === '2') {
+      formData3.value = {};
+      formData.value = formData3.value;
+    }
+
     gform.value.setList(formTemps.value[selStepStatus.value] || []);
   };
 
+  const handlerSubmit = async () => {};
+
   return {
+    pageProps,
+
     gform,
     formData,
     formChange,
@@ -196,16 +320,42 @@ export const useHosButlerOrder = () => {
     stepList: ref<IOptions[]>([
       {
         label: '住院信息',
-        value: '1',
+        value: '0',
       },
       {
         label: '就诊人信息',
-        value: '2',
+        value: '1',
       },
       {
         label: '联系人信息',
-        value: '3',
+        value: '2',
       },
     ]),
+    stepClick({ value }) {
+      selStepStatus.value = value;
+      initForm();
+    },
+    handlerClick() {
+      const v = (selStepStatus.value as any) * 1;
+
+      if (v === 2) {
+        handlerSubmit();
+      } else {
+        selStepStatus.value = `${v * 1 + 1}`;
+        initForm();
+      }
+    },
+    pageLoad(opt: any) {
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+      const { admissionWay, deptName, groupName } = pageProps.value;
+
+      formData1.value = {
+        admissionWay,
+        deptName,
+        groupName,
+      };
+
+      console.log(pageProps.value);
+    },
   };
 };
