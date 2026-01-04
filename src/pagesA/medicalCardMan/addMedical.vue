@@ -1255,7 +1255,6 @@
         (o) => !['location', 'address', 'nation'].includes(o.key)
       );
     }
-    console.log('formList.value', formList.value);
 
     gform.value.setList(formList.value);
   };

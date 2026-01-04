@@ -788,7 +788,7 @@ const scJson: Record<string, ISConfig> = {
     medicalMHelp: {
       alipay: {
         medicalPlugin: {
-          orgId: { 131401: 'H33030200021' },
+          orgId: { 131401: 'H33030200021', 13140: 'H33030200021' },
           cardType: '01',
         },
         medicalFiling: '1',
