@@ -551,6 +551,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
   const getOrderSource = async (schInfo: TSchInfo) => {
     const {
       ampm,
+      ampmName,
       categor,
       deptName,
       hosDeptId,
@@ -564,6 +565,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
 
     const arg = {
       ampm,
+      ampmName,
       categor,
       deptName,
       hosDeptId,

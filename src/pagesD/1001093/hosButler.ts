@@ -1,5 +1,12 @@
 import { TInstance } from '@/components/g-form';
-import { apiAsync, GStores, rulePhone, useTBanner, wait } from '@/utils';
+import {
+  apiAsync,
+  GStores,
+  idValidator,
+  rulePhone,
+  useTBanner,
+  wait,
+} from '@/utils';
 import { computed, ref } from 'vue';
 import { THosButlerInfo } from './hosButlerType';
 import { deQueryForUrl, joinQueryForUrl } from '@/common';
@@ -406,12 +413,12 @@ export const useHosButlerOrder = () => {
       ...formData3.value,
     };
 
-    // await api.submitAdmissionApplication(reqArg);
+    await api.submitAdmissionApplication(reqArg);
 
-    // await apiAsync(uni.showModal, {
-    //   content: '提交成功',
-    //   showCancel: false,
-    // });
+    await apiAsync(uni.showModal, {
+      content: '提交成功',
+      showCancel: false,
+    });
 
     uni.redirectTo({
       url: joinQueryForUrl('/pagesD/1001093/hosButlerOrderAfter', reqArg),
@@ -476,17 +483,42 @@ export const useHosButlerOrder = () => {
         formData2.value.birthDistrict = birthDistrict.text;
       }
     },
-    pageLoad(opt: any) {
+    async pageLoad(opt: any) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
       console.log(pageProps.value);
 
-      const { admissionWay, deptName, groupName } = pageProps.value;
+      const {
+        admissionWay,
+        deptName,
+        groupName,
+        idType,
+        idCard,
+        birthDistrict,
+        birthCity,
+        birthProvince,
+      } = pageProps.value;
 
       formData1.value = {
         admissionWay,
         deptName,
         groupName,
       };
+
+      if (birthDistrict && birthCity && birthProvince) {
+        formData2.value._address = `${birthProvince}${birthCity}${birthDistrict}`;
+        formData2.value.birthProvince = birthProvince;
+        formData2.value.birthCity = birthCity;
+        formData2.value.birthDistrict = birthDistrict;
+      } else if (idType === '身份证' && idCard) {
+        const res = await idValidator.getIdCardAddress(idCard);
+        if (res) {
+          const { birthCity, birthDistrict, birthProvince } = res;
+          formData2.value._address = `${birthProvince}${birthCity}${birthDistrict}`;
+          formData2.value.birthProvince = birthProvince;
+          formData2.value.birthCity = birthCity;
+          formData2.value.birthDistrict = birthDistrict;
+        }
+      }
     },
   };
 };

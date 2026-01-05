@@ -275,6 +275,7 @@
 
       const {
         ampm,
+        ampmName,
         categor,
         deptName,
         hosDeptId,
@@ -292,6 +293,7 @@
         } = gStores.globalStore;
         const refCollapseNow = refCollapse.value[idx];
         const args = {
+          ampmName,
           ampm,
           categor,
           deptName,

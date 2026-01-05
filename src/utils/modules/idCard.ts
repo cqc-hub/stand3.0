@@ -216,9 +216,27 @@ class IdValidator {
   }
 
   // 获取籍贯  省市区
-  async getIdCardAddress(idCardNo) {
-    if (this.checkIdCardNo(idCardNo)) {
-      await api.getIdCardAddress({});
+  async getIdCardAddress(idCard): Promise<
+    | false
+    | {
+        birthCity: string;
+        birthCityCode: string;
+        birthDistrict: string;
+        birthDistrictCode: string;
+        birthProvince: string;
+        birthProvinceCode: string;
+      }
+  > {
+    if (this.checkIdCardNo(idCard)) {
+      const { result = {} } = await api
+        .getIdCardAddress({
+          idCard,
+        })
+        .catch(() => {
+          return { result: false };
+        });
+
+      return result;
     } else {
       return false;
     }

@@ -36,7 +36,13 @@
           <view class="flex flex-between p32">
             <view class="font-semibold f36">就诊人信息</view>
             <view
-              @click="editForm(gform2, formTemps['1'])"
+              v-if="!editForm2"
+              @click="
+                () => {
+                  editForm2 = true;
+                  editForm(gform2, formTemps['1']);
+                }
+              "
               class="item-title-right flex-normal color-blue f28"
             >
               <view class="iconfont f40">&#xe6b9;</view>
@@ -46,6 +52,8 @@
 
           <g-form
             v-model:value="formData"
+            @change="formChange"
+            @address-change="addressChange"
             bodyBold
             ref="gform2"
             hideRowBorder
@@ -58,7 +66,13 @@
           <view class="flex flex-between p32">
             <view class="font-semibold f36">联系人信息</view>
             <view
-              @click="editForm(gform3, formTemps['2'])"
+              v-if="!editForm3"
+              @click="
+                () => {
+                  editForm3 = true;
+                  editForm(gform3, formTemps['2']);
+                }
+              "
               class="item-title-right flex-normal color-blue f28"
             >
               <view class="iconfont f40">&#xe6b9;</view>
@@ -68,6 +82,7 @@
 
           <g-form
             v-model:value="formData"
+            @change="formChange"
             bodyBold
             ref="gform3"
             hideRowBorder
@@ -82,9 +97,13 @@
     <view class="safe-height"></view>
     <view class="safe-height"></view>
     <view class="footer relative z-2">
-      <!-- 取消、退号 是两个概念 退号要退钱， 取消是取消锁号-->
       <view class="g-footer g-border-top">
-        <button class="btn btn-primary g-border flex-1">下一步</button>
+        <button
+          @click="handlerNextClick"
+          class="btn btn-primary g-border flex-1"
+        >
+          {{ isEdit ? '保存' : '下一步' }}
+        </button>
       </view>
     </view>
 
@@ -93,19 +112,61 @@
 </template>
 
 <script lang="ts" setup>
-  import { GStores } from '@/utils';
-  import { onMounted, ref } from 'vue';
+  import { apiAsync, GStores, useTBanner } from '@/utils';
+  import { computed, onMounted, ref } from 'vue';
   import { useHosButlerOrder } from './hosButler';
   import { onLoad } from '@dcloudio/uni-app';
   import { TInstance } from '@/components/g-form';
+  import api from '@/service/api';
 
   const gStores = new GStores();
 
-  const formData = ref({});
+  const formData = ref({} as any);
   const { pageProps, pageLoad, formTemps } = useHosButlerOrder();
   const gform1 = ref('' as any);
   const gform2 = ref('' as any);
   const gform3 = ref('' as any);
+  const editForm2 = ref(false);
+  const editForm3 = ref(false);
+
+  const isEdit = computed(() => {
+    return editForm2.value || editForm3.value;
+  });
+  const handlerNextClick = async () => {
+    if (isEdit.value) {
+      const { confirm } = await apiAsync(uni.showModal, {
+        content: '确认保存?',
+      });
+
+      if (!confirm) {
+        return;
+      }
+
+      await api.submitAdmissionApplication(formData.value);
+
+      if (editForm2.value) {
+        editForm2.value = false;
+        formatterTemp(formTemps.value['1'], gStores.globalStore.modeOld);
+        gform2.value.setList(formTemps.value['1']);
+      }
+
+      if (editForm3.value) {
+        editForm3.value = false;
+        formatterTemp(formTemps.value['2'], gStores.globalStore.modeOld);
+        gform3.value.setList(formTemps.value['2']);
+      }
+      return;
+    }
+
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesA/1001093/hosButler',
+      addition: {
+        patientId: '_patientId',
+      },
+    });
+  };
 
   const formatterTemp = (list: TInstance[], modeOld = false) => {
     list.map((o, i) => {
@@ -163,7 +224,6 @@
       'relationship',
       'membersPhone',
     ];
-
     list.map((o) => {
       const { key, field, rowStyle } = o;
       o.isForShow = false;
@@ -184,6 +244,33 @@
     });
 
     formRef.setList(list);
+  };
+
+  let isBackPoint = false;
+  const formChange = (e) => {
+    if (['wx', 'alipay'].includes(gStores.globalStore.ev) && !isBackPoint) {
+      isBackPoint = true;
+      const opt = {
+        message: '当前填写的内容尚未保存，确定要离开吗？',
+      };
+
+      // #ifdef MP-WEIXIN
+      wx.enableAlertBeforeUnload(opt);
+      // #endif
+
+      // #ifdef MP-ALIPAY
+      my.enableAlertBeforeUnload(opt);
+      // #endif
+    }
+  };
+  const addressChange = ({ value = [] as any[] }) => {
+    const [birthProvince, birthCity, birthDistrict] = value;
+
+    if (birthProvince && birthCity && birthDistrict) {
+      formData.value.birthProvince = birthProvince.text;
+      formData.value.birthCity = birthCity.text;
+      formData.value.birthDistrict = birthDistrict.text;
+    }
   };
 
   onMounted(() => {
