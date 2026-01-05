@@ -151,11 +151,6 @@
             success: false,
             message: '地址不支持输入表情符号',
           };
-        } else if (v.length < 7) {
-          return {
-            success: false,
-            message: '详细地址应不少于7个字',
-          };
         }
 
         if (v.length <= 7) {

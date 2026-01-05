@@ -979,7 +979,6 @@
         pageProps.value?.redirectUrl &&
         pageProps.value?.verifyType
       ) {
-        // @ts-expect-error
         require('../../pagesA/medicalCardMan/utils/index', async (utils) => {
           await utils.backWithFaceVerify(
             pageProps.value?.orderId,

@@ -119,7 +119,7 @@
     gStores.globalStore.assignCacheData(result);
 
     uni.navigateTo({
-      url: '/pagesB/reportQuery/InspectionDetails?useCacheData=1',
+      url: '/pagesB/reportQuery/InspectionDetails?useCacheData=1&hideCollect=1',
     });
   };
 
