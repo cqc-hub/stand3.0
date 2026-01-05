@@ -538,6 +538,8 @@
         s?: '0';
         // 隐藏收藏
         hideCollect?: '1';
+
+        hidePatInfo?: '1';
         [key: string]: any;
       }
     >{}

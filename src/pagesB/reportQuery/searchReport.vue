@@ -32,6 +32,7 @@
 
   import api from '@/service/api';
   import { beforeEach } from '@/router';
+  import { joinQueryForUrl } from '@/common';
 
   const gStores = new GStores();
   const formData = ref(<BaseObject>{
@@ -119,7 +120,11 @@
     gStores.globalStore.assignCacheData(result);
 
     uni.navigateTo({
-      url: '/pagesB/reportQuery/InspectionDetails?useCacheData=1&hideCollect=1',
+      url: joinQueryForUrl('/pagesB/reportQuery/InspectionDetails', {
+        useCacheData: '1',
+        hideCollect: '1',
+        hidePatInfo: '1',
+      }),
     });
   };
 

@@ -9,18 +9,19 @@
         患者信息
         <view class="subhead-detail">
           <text class="mr12">
-            {{ isClose ? nameConvert(patName) : patName }}({{ patCardNumber }})
+            {{ isClose ? nameConvert(patName) : patName }}
+            <text v-if="patCardNumber">({{ patCardNumber }})</text>
           </text>
 
           <text :class="`iconfont icon-resize`" class="g-split-line mr12 pr12">
             {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
           </text>
 
-          <block v-if="!pageProps.patientName">
+          <block v-if="patSex">
             <text class="g-split-line mr12 pr12">
-              {{ reportInfo.sex || pat.patientSex }}
+              {{ patSex }}
             </text>
-            <text>{{ reportInfo.age || pat.patientAge }}岁</text>
+            <text v-if="patAge">{{ patAge }}岁</text>
           </block>
         </view>
       </view>
@@ -100,7 +101,10 @@
       </view>
       <view v-if="reportInfo.reminder" class="subhead">
         检验提示
-        <view style="color: var(--hr-brand-color-6); width: calc(60%)" class="subhead-detail">
+        <view
+          style="color: var(--hr-brand-color-6); width: calc(60%)"
+          class="subhead-detail"
+        >
           {{ reportInfo.reminder }}
         </view>
         <button @click="isShow = !isShow" class="more-button g-border">
@@ -128,6 +132,9 @@
 
   const isClose = ref(false);
   const props = defineProps<{
+    /**
+     *
+     */
     pageProps: any;
     reportInfo: any;
   }>();
@@ -136,20 +143,44 @@
   const { patChoose: pat } = storeToRefs(gStores.userStore);
   const isShow = ref(false);
 
+  const isHidePatInfo = computed(() => props.pageProps.hidePatInfo === '1');
+
   const patName = computed(() => {
-    return (
-      props.pageProps.patientName ||
-      props.reportInfo.patientName ||
-      pat.value.patientName
-    );
+    let patientName =
+      props.pageProps.patientName || props.reportInfo.patientName;
+
+    if (!patientName && !isHidePatInfo.value) {
+      patientName = pat.value.patientName;
+    }
+    return patientName;
   });
 
   const patCardNumber = computed(() => {
-    return (
-      props.pageProps.cardNumber ||
-      props.reportInfo.cardNumber ||
-      pat.value.cardNumber
-    );
+    let cardNumber =
+      props.pageProps.patientName || props.reportInfo.patientName;
+
+    if (!cardNumber && !isHidePatInfo.value) {
+      cardNumber = pat.value.cardNumber;
+    }
+    return cardNumber;
+  });
+
+  const patSex = computed(() => {
+    let sex = props.pageProps.sex || props.reportInfo.sex;
+
+    if (!sex && !isHidePatInfo.value) {
+      sex = pat.value.patientSex;
+    }
+    return sex;
+  });
+
+  const patAge = computed(() => {
+    let age = props.pageProps.age || props.reportInfo.age;
+
+    if (!age && !isHidePatInfo.value) {
+      age = pat.value.patientAge;
+    }
+    return age;
   });
 </script>
 
