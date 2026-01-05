@@ -157,7 +157,7 @@
 
   const patCardNumber = computed(() => {
     let cardNumber =
-      props.pageProps.patientName || props.reportInfo.patientName;
+      props.pageProps.cardNumber || props.reportInfo.cardNumber;
 
     if (!cardNumber && !isHidePatInfo.value) {
       cardNumber = pat.value.cardNumber;
