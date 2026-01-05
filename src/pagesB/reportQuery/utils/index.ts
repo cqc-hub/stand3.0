@@ -285,6 +285,7 @@ export interface examineReportDetails {
 //体检详细出参
 export interface medicalReportDetails {
   age?: string;
+  url?: string;
   applyDoc?: string;
   applyDocId?: string;
   applyTime?: string;
@@ -382,16 +383,16 @@ export const reportAnalysisFun = async (pageProps) => {
       let data = {
         repId,
         repType,
-        extend,  
+        extend,
         headerType,
       };
         uni.navigateTo({
       // 跳转到智能客服,报告列表?type=report，直接解读报告?type=report&reportId=xxx
       url: joinQueryForUrl('/pagesA/intelMedicalAssist/intelMedicalAssist', {
         type: 'report',
-        reportId: repId, 
+        reportId: repId,
         reportData:data
       }),
-      }); 
-  } 
+      });
+  }
 };

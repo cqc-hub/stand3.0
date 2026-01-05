@@ -13,7 +13,12 @@
             <text v-if="patCardNumber">({{ patCardNumber }})</text>
           </text>
 
-          <text :class="`iconfont icon-resize`" class="g-split-line mr12 pr12">
+          <text
+            :class="{
+              'g-split-line mr12 pr12': patSex,
+            }"
+            class="iconfont icon-resize"
+          >
             {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
           </text>
 
@@ -25,7 +30,7 @@
           </block>
         </view>
       </view>
-      <view class="subhead">
+      <view v-if="reportInfo.repId" class="subhead">
         报告单号
         <view
           class="subhead-detail"
@@ -34,7 +39,7 @@
           {{ reportInfo.repId }}
         </view>
       </view>
-      <view class="subhead">
+      <view v-if="reportInfo.repTime" class="subhead">
         报告时间
         <view class="subhead-detail">
           {{ reportInfo.repTime }}
@@ -156,8 +161,7 @@
   });
 
   const patCardNumber = computed(() => {
-    let cardNumber =
-      props.pageProps.cardNumber || props.reportInfo.cardNumber;
+    let cardNumber = props.pageProps.cardNumber || props.reportInfo.cardNumber;
 
     if (!cardNumber && !isHidePatInfo.value) {
       cardNumber = pat.value.cardNumber;
