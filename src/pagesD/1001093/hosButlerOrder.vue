@@ -5,7 +5,6 @@
         :list="stepList"
         :status="stepStatus"
         :selStatus="selStepStatus"
-        @address-change="addressChange"
         @item-click="stepClick"
       />
     </view>
@@ -15,6 +14,7 @@
         v-model:value="formData"
         @submit="formSubmit"
         @change="formChange"
+        @address-change="addressChange"
         bodyBold
         ref="gform"
       />

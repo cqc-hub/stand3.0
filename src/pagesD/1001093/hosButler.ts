@@ -345,7 +345,6 @@ export const useHosButlerOrder = () => {
   });
   const initForm = async () => {
     const key = selStepStatus.value;
-    console.log(formData2.value);
 
     const {
       deptName,
@@ -413,6 +412,7 @@ export const useHosButlerOrder = () => {
       ...formData3.value,
     };
 
+
     await api.submitAdmissionApplication(reqArg);
 
     await apiAsync(uni.showModal, {
@@ -463,13 +463,12 @@ export const useHosButlerOrder = () => {
         resolve = r;
       });
 
-      if ((stepStatus.value as any) * 1 <= v) {
-        stepStatus.value = `${v * 1 + 1}`;
-      }
-
       if (v === 2) {
         handlerSubmit();
       } else {
+        if ((stepStatus.value as any) * 1 <= v) {
+          stepStatus.value = `${v * 1 + 1}`;
+        }
         selStepStatus.value = `${v * 1 + 1}`;
         initForm();
       }
@@ -482,6 +481,7 @@ export const useHosButlerOrder = () => {
         formData2.value.birthCity = birthCity.text;
         formData2.value.birthDistrict = birthDistrict.text;
       }
+
     },
     async pageLoad(opt: any) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
