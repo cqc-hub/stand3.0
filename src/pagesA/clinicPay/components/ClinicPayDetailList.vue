@@ -26,7 +26,11 @@
         <view class="flex-between flex-start-r">
           <view @click.stop="selItem(item)" class="g-bold f36 flex1 mr40">
             <text
-              v-if="!isModeMedicalHelp && item.costTypeCode && !getIsMedicalTradeTypeDefault()"
+              v-if="
+                !isModeMedicalHelp &&
+                item.costTypeCode &&
+                !getIsMedicalTradeTypeDefault()
+              "
               :class="{
                 'pay-self': isPaySelfItem(item),
                 'pay-medical': !isPaySelfItem(item),
@@ -71,9 +75,9 @@
               <text
                 v-if="item.clinicTypeName || item.docName"
                 :class="{
-                  'g-split-line': item.hosName
+                  'g-split-line': item.hosName,
                 }"
-                class=" mr12 pr12"
+                class="mr12 pr12"
               >
                 {{ (item.clinicTypeName && `(${item.clinicTypeName})`) || '' }}
                 {{ item.docName }}
@@ -91,13 +95,36 @@
             </view>
           </view>
 
-          <view v-if="!isModeMedicalHelp && !isCheck && item.totalCost" class="row flex-normal">
+          <view
+            v-if="item.expressCompany && item.expressNo"
+            @click.stop="goExpress(item)"
+            class="row items-center flex-normal"
+          >
+            <view class="row-label color-888">
+              {{ getPressCompanyLabel(item.expressCompany) }}
+            </view>
+            <view class="row-value g-break-word flex items-center">
+              <text class="color-blue under-line mr12">{{ item.expressNo }}</text>
+
+              <text
+                @click.stop="copyExpressNo(item)"
+                class="iconfont f40 expressno-icon"
+              >
+                &#xe706;
+              </text>
+            </view>
+          </view>
+
+          <view
+            v-if="!isModeMedicalHelp && !isCheck && item.totalCost"
+            class="row flex-normal"
+          >
             <view class="row-label color-888">费用金额</view>
             <view class="row-value g-break-word color-444">
               {{ item.totalCost }}元
             </view>
           </view>
-         <view v-if="item?.tips" class="row flex-normal">
+          <view v-if="item?.tips" class="row flex-normal">
             <view class="row-label color-888">提示</view>
             <view class="row-value g-break-word color-444">
               {{ item.tips }}元
@@ -111,7 +138,7 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { GStores } from '@/utils';
+  import { getPressCompanyLabel, GStores } from '@/utils';
   import {
     type IPayListItem,
     tradeType,
@@ -135,7 +162,7 @@
       selUnPayList: () => [],
     }
   );
-  const emits = defineEmits(['sel-item', 'click-item']);
+  const emits = defineEmits(['sel-item', 'click-item', 'express-click']);
 
   const selIds = computed(() => props.selUnPayList.map((o) => o.childOrder));
 
@@ -153,6 +180,21 @@
     } else {
       itemClick(item);
     }
+  };
+
+  const copyExpressNo = (item) => {
+    uni.setClipboardData({
+      data: item.expressNo,
+      success() {
+        // #ifndef  MP-WEIXIN
+        gStores.messageStore.showMessage('复制单号成功', 3000);
+        // #endif
+      },
+    });
+  };
+
+  const goExpress = (item: IPayListItem) => {
+    emits('express-click', item);
   };
 
   const itemClick = (item) => {
@@ -239,6 +281,16 @@
         }
       }
     }
+  }
+
+
+  .under-line {
+    text-decoration: underline;
+  }
+
+  .expressno-icon {
+    // line-height: 18rpx;
+    // top: 10rpx;
   }
 
   .system-mode-old {
