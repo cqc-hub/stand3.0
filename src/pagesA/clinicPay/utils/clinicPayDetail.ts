@@ -156,6 +156,8 @@ export type TCostList = {
 }[];
 
 export type TPayDetailInfo = {
+  expressNo?: string;
+  expressCompany?: string; // 1 顺丰 2 邮政
   visitingMode?: string;
   medicineSpot: string;
   costList?: TCostList;

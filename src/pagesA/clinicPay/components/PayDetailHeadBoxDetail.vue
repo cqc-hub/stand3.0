@@ -16,7 +16,7 @@
         <view class="head-row-label text-no-wrap color-888">就诊医院</view>
         <view class="head-row-value color-444">
           {{
-            `${detailData.hosName || myprops.hosName||''}${
+            `${detailData.hosName || myprops.hosName || ''}${
               pageConfig.isListShowClinicType === '1'
                 ? (myprops.clinicTypeName && `(${myprops.clinicTypeName})`) ||
                   ''
@@ -157,6 +157,27 @@
           </view>
         </view>
       </block>
+
+      <view
+        v-if="detailData.expressCompany && detailData.expressNo"
+        @click.stop="goExpress"
+        class="head-row flex items-center"
+      >
+        <view class="head-row-label text-no-wrap color-888">快递单号</view>
+        <view class="head-row-value flex items-center">
+          <text class="color-blue under-line mr12">
+            {{ getPressCompanyLabel(detailData.expressCompany) }}
+            {{ detailData.expressNo }}
+          </text>
+
+          <text
+            @click.stop="copyExpressNo(detailData.expressNo)"
+            class="iconfont f40 expressno-icon"
+          >
+            &#xe706;
+          </text>
+        </view>
+      </view>
     </view>
   </view>
 </template>
@@ -168,7 +189,12 @@
     type TPayDetailInfo,
   } from '../utils/clinicPayDetail';
 
-  import { GStores, type ISystemConfig, nameConvert } from '@/utils';
+  import {
+    getPressCompanyLabel,
+    GStores,
+    type ISystemConfig,
+    nameConvert,
+  } from '@/utils';
 
   const props = defineProps<{
     myprops: TPayDetailProp;
@@ -176,6 +202,7 @@
     pageConfig: ISystemConfig['pay'];
     systemModeOld?: boolean;
   }>();
+  const emits = defineEmits(['express-click']);
 
   const gStores = new GStores();
 
@@ -194,6 +221,21 @@
 
     return gStores.userStore.patChoose._showId || '';
   });
+
+  const goExpress = () => {
+    emits('express-click');
+  };
+
+  const copyExpressNo = (expressNo) => {
+    uni.setClipboardData({
+      data: expressNo,
+      success() {
+        // #ifndef  MP-WEIXIN
+        gStores.messageStore.showMessage('复制单号成功', 3000);
+        // #endif
+      },
+    });
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -231,5 +273,9 @@
         }
       }
     }
+  }
+
+  .under-line {
+    text-decoration: underline;
   }
 </style>
