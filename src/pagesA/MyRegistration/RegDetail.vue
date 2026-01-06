@@ -1621,7 +1621,7 @@
       flex: 1;
       // height: 1px;
       overflow-y: scroll;
-      position: reactive;
+      position: relative;
       z-index: 2;
     }
 

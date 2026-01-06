@@ -1,9 +1,25 @@
 import { TInstance } from '@/components/g-form';
-import { GStores, rulePhone } from '@/utils';
+import {
+  apiAsync,
+  GStores,
+  idValidator,
+  rulePhone,
+  useTBanner,
+  wait,
+} from '@/utils';
 import { computed, ref } from 'vue';
 import { THosButlerInfo } from './hosButlerType';
-import { deQueryForUrl } from '@/common';
+import { deQueryForUrl, joinQueryForUrl } from '@/common';
+import api from '@/service/api';
 
+/**
+ * 院前检查
+ * 需要的配置信息
+ * - 职业 yqjc_job
+ * - 学历 yqjc_edu
+ * - 关系 yqjc_relationship
+ * @returns
+ */
 export const useHosButlerOrder = () => {
   const gStores = new GStores();
   const stepStatus = ref('0');
@@ -14,10 +30,12 @@ export const useHosButlerOrder = () => {
   const formData = ref({});
 
   const formData1 = ref({});
-  const formData2 = ref({});
+  const formData2 = ref({} as any);
   const formData3 = ref({});
   let isBackPoint = false;
   const formChange = (e) => {
+    const key = selStepStatus.value;
+
     if (['wx', 'alipay'].includes(gStores.globalStore.ev) && !isBackPoint) {
       isBackPoint = true;
       const opt = {
@@ -32,10 +50,24 @@ export const useHosButlerOrder = () => {
       my.enableAlertBeforeUnload(opt);
       // #endif
     }
+
+    if (key === '1') {
+      formData2.value = {
+        ...formData.value,
+      };
+    } else if (key === '2') {
+      formData3.value = {
+        ...formData.value,
+      };
+    }
   };
+
+  let resolve: (...any) => any = () => {};
+  let reject: (...any) => any = () => {};
   const formSubmit = async (e) => {
-    console.log(e);
+    resolve(e);
   };
+
   const formTemps = ref<{
     [key: string]: TInstance[];
   }>({
@@ -54,19 +86,19 @@ export const useHosButlerOrder = () => {
       },
       {
         label: '医疗组',
-        key: 'deptName1',
+        key: 'groupName',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '门诊医生',
-        key: 'deptName1',
+        key: 'doctorName',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '病案号',
-        key: 'deptName1',
+        key: 'cardNumber',
         field: 'input-text',
         disabled: true,
       },
@@ -75,62 +107,62 @@ export const useHosButlerOrder = () => {
     1: [
       {
         label: '医保卡号',
-        key: 'deptName',
+        key: 'insuranceCardNo',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '姓名',
-        key: 'deptName',
+        key: 'patientName',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '证件',
-        key: 'deptName',
+        key: 'idType',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '证件号',
-        key: 'deptName',
+        key: 'idCard',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '出生日期',
-        key: 'deptName',
+        key: 'birthday',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '性别',
-        key: 'deptName',
+        key: 'sex',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '年龄',
-        key: 'deptName',
+        key: 'patientAge',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '民族',
-        key: 'deptName',
+        key: 'nation',
         field: 'input-text',
         disabled: true,
       },
       {
         label: '籍贯',
-        key: 'deptName',
+        key: 'nativePlaceString',
         field: 'input-text',
         disabled: true,
       },
       {
         required: true,
         label: '本人电话',
-        key: 'deptName',
+        key: 'patientPhone',
         field: 'input-text',
         showRequireIcon: true,
 
@@ -148,7 +180,7 @@ export const useHosButlerOrder = () => {
         showRequireIcon: true,
         label: '国籍',
         placeholder: '请选择',
-        key: 'countries',
+        key: 'citizenshipCode',
         field: 'select',
         options: [],
         autoOptions: 'countries',
@@ -184,52 +216,68 @@ export const useHosButlerOrder = () => {
         required: true,
         showSuffixArrowIcon: true,
         showRequireIcon: true,
-
         label: '出生地',
         placeholder: '请选择',
-        key: 'address',
+        key: '_address',
         field: 'address',
         labelWidth: '220rpx',
       },
       {
         label: '职业',
-        key: 'deptName',
-        field: 'input-text',
+        showSuffixArrowIcon: true,
+        key: 'occupationCode',
+        field: 'select',
+        options: [],
+        autoOptions: 'yqjc_job',
         placeholder: '请选择',
       },
       {
         label: '婚姻',
-        key: 'deptName',
-        field: 'input-text',
+        key: 'marital',
+        showSuffixArrowIcon: true,
+        options: [
+          {
+            label: '未婚',
+            value: '未婚',
+          },
+          {
+            label: '已婚',
+            value: '已婚',
+          },
+        ],
+        field: 'select',
         placeholder: '请选择',
       },
       {
         label: '学历',
-        key: 'deptName',
-        field: 'input-text',
+        showSuffixArrowIcon: true,
+        key: 'eduCode',
+        field: 'select',
+        options: [],
+        autoOptions: 'yqjc_edu',
         placeholder: '请选择',
       },
       {
         label: '工作单位',
-        key: 'deptName',
+        key: 'serviceAgency',
         field: 'input-text',
         placeholder: '请输入',
       },
       {
         label: '现住址',
-        key: 'deptName',
+        key: 'presentAddress',
         field: 'input-text',
         placeholder: '请输入',
       },
       {
         label: '邮编',
-        key: 'deptName',
+        key: 'postCode',
         field: 'input-text',
         placeholder: '请输入',
       },
       {
         label: '家庭联系人',
-        key: 'deptName',
+        key: 'phone',
         field: 'input-text',
         placeholder: '请输入',
 
@@ -243,7 +291,7 @@ export const useHosButlerOrder = () => {
 
       {
         label: '户口地址',
-        key: 'deptName',
+        key: 'address',
         field: 'input-text',
         placeholder: '请输入',
       },
@@ -252,7 +300,7 @@ export const useHosButlerOrder = () => {
     2: [
       {
         label: '联系人',
-        key: 'deptName',
+        key: 'membersName',
         field: 'input-text',
         required: true,
         showRequireIcon: true,
@@ -263,19 +311,19 @@ export const useHosButlerOrder = () => {
         required: true,
         showSuffixArrowIcon: true,
         showRequireIcon: true,
-
         label: '关系',
         placeholder: '请选择',
-        key: 'address',
+        key: 'relationship',
         field: 'select',
         labelWidth: '220rpx',
+        autoOptions: 'yqjc_relationship',
         options: [],
       },
 
       {
         required: true,
         label: '联系人电话',
-        key: 'deptName',
+        key: 'membersPhone',
         field: 'input-text',
         showRequireIcon: true,
 
@@ -286,28 +334,100 @@ export const useHosButlerOrder = () => {
           },
         ],
       },
+
+      // {
+      //   label: '联系人地址',
+      //   key: 'membersAddress',
+      //   field: 'input-text',
+      //   placeholder: '请输入',
+      // },
     ],
   });
   const initForm = async () => {
     const key = selStepStatus.value;
+    console.log(formData2.value);
+
+    const {
+      deptName,
+      cardNumber,
+      groupName,
+      doctorName,
+      visitNo,
+      admissionWay,
+      patientAge,
+      nation,
+      insuranceCardNo,
+      patientName,
+      idType,
+      idCard,
+      birthday,
+      nativePlaceString,
+      patientPhone,
+      citizenship,
+      citizenshipCode,
+      sex,
+    } = pageProps.value;
+
+    gform.value.setList([]);
+
     if (key === '0') {
-      formData1.value = {};
+      formData1.value = {
+        deptName,
+        groupName,
+        doctorName,
+        visitNo,
+        admissionWay,
+        cardNumber,
+      };
       formData.value = formData1.value;
     } else if (key === '1') {
-      formData2.value = {};
+      formData2.value = {
+        patientAge,
+        nation,
+        insuranceCardNo,
+        patientName,
+        idType,
+        idCard,
+        birthday,
+        nativePlaceString,
+        patientPhone,
+        citizenship,
+        citizenshipCode,
+        sex,
+        ...formData2.value,
+      };
       formData.value = formData2.value;
     } else if (key === '2') {
       formData3.value = {};
       formData.value = formData3.value;
     }
 
+    await wait(60);
     gform.value.setList(formTemps.value[selStepStatus.value] || []);
   };
 
-  const handlerSubmit = async () => {};
+  const handlerSubmit = async () => {
+    const reqArg = {
+      ...pageProps.value,
+      ...formData2.value,
+      ...formData3.value,
+    };
+
+    await api.submitAdmissionApplication(reqArg);
+
+    await apiAsync(uni.showModal, {
+      content: '提交成功',
+      showCancel: false,
+    });
+
+    uni.redirectTo({
+      url: joinQueryForUrl('/pagesD/1001093/hosButlerOrderAfter', reqArg),
+    });
+  };
 
   return {
     pageProps,
+    formTemps,
 
     gform,
     formData,
@@ -335,8 +455,17 @@ export const useHosButlerOrder = () => {
       selStepStatus.value = value;
       initForm();
     },
-    handlerClick() {
+    async handlerClick() {
       const v = (selStepStatus.value as any) * 1;
+
+      await new Promise((r, j) => {
+        gform.value.submit();
+        resolve = r;
+      });
+
+      if ((stepStatus.value as any) * 1 <= v) {
+        stepStatus.value = `${v * 1 + 1}`;
+      }
 
       if (v === 2) {
         handlerSubmit();
@@ -345,9 +474,29 @@ export const useHosButlerOrder = () => {
         initForm();
       }
     },
-    pageLoad(opt: any) {
+    addressChange({ value = [] as any[] }) {
+      const [birthProvince, birthCity, birthDistrict] = value;
+
+      if (birthProvince && birthCity && birthDistrict) {
+        formData2.value.birthProvince = birthProvince.text;
+        formData2.value.birthCity = birthCity.text;
+        formData2.value.birthDistrict = birthDistrict.text;
+      }
+    },
+    async pageLoad(opt: any) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-      const { admissionWay, deptName, groupName } = pageProps.value;
+      console.log(pageProps.value);
+
+      const {
+        admissionWay,
+        deptName,
+        groupName,
+        idType,
+        idCard,
+        birthDistrict,
+        birthCity,
+        birthProvince,
+      } = pageProps.value;
 
       formData1.value = {
         admissionWay,
@@ -355,7 +504,21 @@ export const useHosButlerOrder = () => {
         groupName,
       };
 
-      console.log(pageProps.value);
+      if (birthDistrict && birthCity && birthProvince) {
+        formData2.value._address = `${birthProvince}${birthCity}${birthDistrict}`;
+        formData2.value.birthProvince = birthProvince;
+        formData2.value.birthCity = birthCity;
+        formData2.value.birthDistrict = birthDistrict;
+      } else if (idType === '身份证' && idCard) {
+        const res = await idValidator.getIdCardAddress(idCard);
+        if (res) {
+          const { birthCity, birthDistrict, birthProvince } = res;
+          formData2.value._address = `${birthProvince}${birthCity}${birthDistrict}`;
+          formData2.value.birthProvince = birthProvince;
+          formData2.value.birthCity = birthCity;
+          formData2.value.birthDistrict = birthDistrict;
+        }
+      }
     },
   };
 };

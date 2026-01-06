@@ -50,6 +50,7 @@
       <template v-else>
         <view class="container g-container pt12">
             <g-tabs
+              class="ml16"
               v-model:value="tabCurrent"
               :tabs="tabs"
               :line-scale="0.8"

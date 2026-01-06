@@ -194,6 +194,13 @@ const queryApi = {
     service.post('/phs-query/escort/getRiskCode', parm(data)),
 
   loginHw: (data) => service.post('/phs-query/hw/loginHw', parm(data)),
+  submitAdmissionApplication: (data) =>
+    service.post(
+      '/phs-query/preHospital/submitAdmissionApplication',
+      parm(data)
+    ),
+  getIdCardAddress: (data) =>
+    service.post('/phs-query/preHospital/getIdCardAddress', parm(data)),
 
   getProcessState: (data) =>
     service.post<any[]>('/phs-query/medical/getProcessState', parm(data)),

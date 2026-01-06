@@ -1,5 +1,5 @@
 <template>
-  
+
   <view
     :class="{
       [gStores.globalStore.getPageClass]: true,
@@ -28,7 +28,7 @@
           mode="heightFix"
         ></image>
       </view>
-    </drag-button> 
+    </drag-button>
     <!--  #ifdef MP-WEIXIN -->
     <view class="placeholder" v-if="queryCompData.isShowHealthCardMode">
       <health-card-query-comp
@@ -52,6 +52,7 @@
 
             <view
               v-if="
+                pageProps.hideCollect !== '1' &&
                 pageConfig.isOpenCollect === '1' &&
                 gStores.globalStore.isLogin &&
                 Object.keys(checkoutReportList).length
@@ -453,7 +454,7 @@
 </template>
 <script lang="ts" setup>
   import { onLoad } from '@dcloudio/uni-app';
-  import { onMounted, ref, computed } from 'vue'; 
+  import { onMounted, ref, computed } from 'vue';
   import { checkoutReportDetails, addWatermark, reportAnalysisFun } from './utils';
   import {
     GStores,
@@ -535,6 +536,10 @@
       {
         // 分享
         s?: '0';
+        // 隐藏收藏
+        hideCollect?: '1';
+
+        hidePatInfo?: '1';
         [key: string]: any;
       }
     >{}

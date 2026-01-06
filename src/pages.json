@@ -904,6 +904,12 @@
         {
           "path": "1001093/hosButlerOrder",
           "style": {
+            "navigationBarTitleText": "住院登记"
+          }
+        },
+        {
+          "path": "1001093/hosButlerOrderAfter",
+          "style": {
             "navigationBarTitleText": " "
           }
         },

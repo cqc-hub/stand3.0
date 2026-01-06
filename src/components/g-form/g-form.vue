@@ -15,9 +15,10 @@
           'form-item-error': warningKeys.includes(item.key),
           [`form-item-${item.field}`]: true,
         }"
-        :style="`--label-width: ${item.labelWidth || '190rpx'}; ${
-          item.rowStyle || ''
-        }`"
+        :style="{
+          '--label-width': item.labelWidth || '190rpx',
+          ...cssInfoToObject(item.rowStyle),
+        }"
         @tap.prevent.stop="clickContainer(item)"
         class="form-item"
       >
@@ -27,7 +28,7 @@
               item.required && (showRequireIcon || item.showRequireIcon),
           }"
           class="label text-no-wrap"
-          :style="item.labelStyle"
+          :style="cssInfoToObject(item.labelStyle)"
         >
           <view>{{ item.label }}</view>
           <view v-if="item.subLabel" class="sub-label f24 color-888 ml16">
@@ -35,9 +36,12 @@
           </view>
         </view>
 
-        <view :style="item.bodyStyle" class="container-body">
+        <view :style="cssInfoToObject(item.bodyStyle)" class="container-body">
           <block v-if="item.isForShow">
-            <view class="content-show" :style="item.showBodyStyle">
+            <view
+              class="content-show"
+              :style="cssInfoToObject(item.showBodyStyle)"
+            >
               <slot :item="item" :value="getShowLabel(item)" name="showbody">
                 {{ getShowLabel(item) }}
               </slot>
@@ -702,6 +706,7 @@
   const isShowSelectSearch = ref(false);
   const searchOpt = ref('');
   const clickContainer = function (item: TInstance) {
+    clickItem.value = item;
     if (item.disabled) {
       emits('disabled-click', item);
       return;
@@ -728,7 +733,6 @@
 
       if (item.field === 'select') {
         searchOpt.value = '';
-        clickItem.value = item;
         if (props.selectInUniDataPicker) {
           _actionSheet.value.show();
         } else {
@@ -844,9 +848,12 @@
     clearItemWarning(key);
     if (field === 'address') {
       const selLabels = v.map((o) => o.text).join('');
-      setData({
-        [key]: selLabels,
-      });
+      setData(
+        {
+          [key]: selLabels,
+        },
+        cacheItem || undefined
+      );
 
       emits('address-change', {
         item: item,
@@ -1049,6 +1056,44 @@
       },
       item
     );
+  };
+
+  const cssInfoToObject = (cssInfo) => {
+    if (!cssInfo) {
+      return {};
+    }
+
+    if (typeof cssInfo === 'object') {
+      return cssInfo;
+    }
+    const cssObj = {};
+
+    if (typeof cssInfo !== 'string' || cssInfo.trim() === '') {
+      return cssObj;
+    }
+
+    const cssSegments = cssInfo.trim().split(';');
+
+    cssSegments.forEach((segment) => {
+      const trimmedSegment = segment.trim();
+      if (!trimmedSegment) {
+        return;
+      }
+
+      const colonIndex = trimmedSegment.indexOf(':');
+      if (colonIndex === -1) {
+        return;
+      }
+
+      const propName = trimmedSegment.slice(0, colonIndex).trim();
+      const propValue = trimmedSegment.slice(colonIndex + 1).trim();
+
+      if (propName && propValue) {
+        cssObj[propName] = propValue;
+      }
+    });
+
+    return cssObj;
   };
 
   defineExpose({

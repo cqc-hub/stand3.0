@@ -30,8 +30,23 @@
               />
             </view>
           </view>
-          <reportDetailPatInfo :page-props="pageProps" :reportInfo="checkoutReportList"  />
-
+          <reportDetailPatInfo
+            :page-props="pageProps"
+            :reportInfo="checkoutReportList"
+          />
+          <view class="button-list mt32 flex relative flex-between pr32 pl32">
+            <button
+              v-if="
+                gStores.globalStore.sysCode === '1001093' &&
+                checkoutReportList.url
+              "
+              @click="reviewPdf"
+              class="button flex-1"
+            >
+              <view class="icon-font ico_sy_paper1"></view>
+              查看报告
+            </button>
+          </view>
           <!-- <view class="patient-information">
             <view
               v-if="pageProps._scan !== '1' && patName"
@@ -117,18 +132,17 @@
 
           </view> -->
         </view>
-         <view class="container-block-bottom">
+        <view class="container-block-bottom">
           <view class="seen" v-if="checkoutReportList.conclusion">
             <view class="title">总检结论</view>
             <view class="content">
               <text>{{ checkoutReportList.conclusion }}</text>
-              </view
-            >
+            </view>
           </view>
           <view class="seen" v-if="checkoutReportList.collect">
             <view class="title">检查汇总</view>
             <view class="content">
-             <text>{{ checkoutReportList.collect }}</text>
+              <text>{{ checkoutReportList.collect }}</text>
             </view>
           </view>
         </view>
@@ -203,10 +217,7 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { onMounted, ref, computed } from 'vue';
 
-  import {
-    medicalReportDetails,
-    addWatermark,
-  } from './utils';
+  import { medicalReportDetails, addWatermark } from './utils';
   import {
     GStores,
     nameConvert,
@@ -215,7 +226,7 @@
     ISystemConfig,
     getShareTotalUrl,
   } from '@/utils';
-  import { joinQuery, encryptDes } from '@/common';
+  import { joinQuery, encryptDes, joinQueryForUrl } from '@/common';
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
 
@@ -229,6 +240,7 @@
   import CollectBtn from './components/CollectBtn.vue';
   import reportDetailPatInfo from './components/reportDetailPatInfo.vue';
   import { storeToRefs } from 'pinia';
+  import { useCacheStore } from '@/stores';
 
   const alipayPid = global.systemInfo.alipayPid;
 
@@ -288,6 +300,26 @@
 
       default:
         break;
+    }
+  };
+  const cacheStore = useCacheStore();
+
+  const reviewPdf = () => {
+    console.log(checkoutReportList.value.url);
+    const url = checkoutReportList.value.url;
+    const sysCode = gStores.globalStore.sysCode;
+    if (url) {
+      if (sysCode === '1001093') {
+        cacheStore.changeCacheData(url);
+        uni.navigateTo({
+          url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
+            // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
+            // url: encodeURIComponent(checkoutReportList.value.pdfUrl as string),
+            type: 'base64',
+            _type: 'cache',
+          }),
+        });
+      }
     }
   };
 
@@ -496,42 +528,42 @@
             // }
           }
         }
-       .container-block-bottom {
-        // width: calc(100% - 32rpx);
-        border-radius: 0rpx 0rpx 16rpx 16rpx;
-        background-color: #fff;
-        border-left: 1rpx solid #e6e6e6;
-        border-right: 1rpx solid #e6e6e6;
-        border-bottom: 1rpx solid #e6e6e6;
-        padding-bottom: 16rpx;
-        .seen {
-          padding-top: 40rpx;
-          margin-left: 32rpx;
-          white-space: pre-wrap;
-          .title {
-            font-size: var(--hr-font-size-xl);
-            font-weight: 600;
-          }
-          .content {
-            margin-top: 16rpx;
-            width: calc(100% - 32rpx);
+        .container-block-bottom {
+          // width: calc(100% - 32rpx);
+          border-radius: 0rpx 0rpx 16rpx 16rpx;
+          background-color: #fff;
+          border-left: 1rpx solid #e6e6e6;
+          border-right: 1rpx solid #e6e6e6;
+          border-bottom: 1rpx solid #e6e6e6;
+          padding-bottom: 16rpx;
+          .seen {
+            padding-top: 40rpx;
+            margin-left: 32rpx;
             white-space: pre-wrap;
-            .item {
-              height: auto;
+            .title {
+              font-size: var(--hr-font-size-xl);
+              font-weight: 600;
+            }
+            .content {
+              margin-top: 16rpx;
               width: calc(100% - 32rpx);
-              margin-bottom: 32rpx;
-              .item-title {
-                font-size: var(--hr-font-size-base);
-                font-weight: 600;
-              }
-              .item-content {
-                margin-top: 8rpx;
-                white-space: pre-wrap;
+              white-space: pre-wrap;
+              .item {
+                height: auto;
+                width: calc(100% - 32rpx);
+                margin-bottom: 32rpx;
+                .item-title {
+                  font-size: var(--hr-font-size-base);
+                  font-weight: 600;
+                }
+                .item-content {
+                  margin-top: 8rpx;
+                  white-space: pre-wrap;
+                }
               }
             }
           }
         }
-      }
       }
     }
     .tips {
@@ -623,5 +655,28 @@
     display: none;
     width: 0px;
     height: 0px;
+  }
+
+  .button-list {
+    z-index: 99;
+    gap: 32rpx;
+    .button {
+      border-radius: 16rpx;
+      height: 80rpx;
+      border: 2rpx solid #cccccc;
+      background-color: #fff;
+      line-height: 80rpx;
+      font-size: var(--hr-font-size-xs);
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      margin: 0 !important;
+      .icon-font {
+        width: 32rpx;
+        height: 32rpx;
+        margin-top: 24rpx;
+        margin-right: 10rpx;
+      }
+    }
   }
 </style>

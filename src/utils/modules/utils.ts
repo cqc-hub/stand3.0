@@ -11,6 +11,15 @@ import { deQueryForUrl, joinQueryForUrl } from '@/common';
 
 type NeverTurnsAny<T> = T extends never ? any : T;
 
+export const changePatient = (patientId: string) => {
+  const gStores = new GStores();
+  const _pd = patientId;
+  if (gStores.userStore.patChoose.patientId !== _pd) {
+    const pat = gStores.userStore.patList.find((o) => o.patientId === _pd);
+    gStores.userStore.updatePatChoose(pat!);
+  }
+};
+
 export const getSystemSafeBottom = async () => {
   const e = await uni.getSystemInfo({});
   const { safeAreaInsets, screenWidth } = e;
@@ -597,7 +606,7 @@ export const getPlatform = (): 'wx' | 'alipay' | 'h5' | 'tt' => {
  * @returns boolean 是否开启
  */
 export const isFeatureEnabled = (
-  config: '1' | { wx?: '1'; alipay?: '1'  ; tt?: '1' } | undefined
+  config: '1' | { wx?: '1'; alipay?: '1'; tt?: '1' } | undefined
 ): boolean => {
   // 未配置则不开启
   if (!config) return false;
@@ -696,6 +705,7 @@ export const createSingleCallInTime = (
   time: number,
   cacheKey: string
 ) => {
+  // 1. 读取缓存：从本地存储（uni.getStorageSync）读取指定key的缓存，解析为对象
   const getCache = (): CacheData | null => {
     try {
       const cached = uni.getStorageSync(cacheKey);
@@ -706,6 +716,7 @@ export const createSingleCallInTime = (
     }
   };
 
+  // 2. 写入缓存：将数据序列化后存入本地存储（异步存储，避免阻塞）
   const setCache = (data: CacheData) => {
     try {
       uni.setStorage({ key: cacheKey, data: JSON.stringify(data) });
@@ -714,6 +725,7 @@ export const createSingleCallInTime = (
     }
   };
 
+  // 3. 清除缓存
   const clearCache = () => {
     try {
       uni.removeStorageSync(cacheKey);
@@ -722,6 +734,7 @@ export const createSingleCallInTime = (
     }
   };
 
+  // 4. 生成参数哈希：将函数入参序列化为字符串，用于判断“参数是否变化”
   const generateArgsHash = (args: any[]): string => {
     // 简单的参数哈希生成，可以根据需要改进
     try {

@@ -44,10 +44,10 @@ interface IBaseInstance {
   disabled?: boolean;
   rule?: IRule | IRule[];
   showSuffixArrowIcon?: boolean;
-  rowStyle?: string;
+  rowStyle?: string | BaseObject;
   showBodyStyle?: string;
-  labelStyle?: string;
-  bodyStyle?: string;
+  labelStyle?: string | BaseObject;
+  bodyStyle?: string | BaseObject;
   isHideRowBorder?: boolean;
   labelWidth?: string;
   isForShow?: boolean;
@@ -246,6 +246,7 @@ export const useAddress = () => {
     addressLoading.value = true;
     if (!payload) {
       if (provinces.value.length) {
+        addressLoading.value = false;
         return;
       }
       await getProvinces();

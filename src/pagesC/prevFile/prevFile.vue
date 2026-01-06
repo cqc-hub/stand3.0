@@ -25,7 +25,10 @@
   // @ts-expect-error
   let uPath = uni.env?.USER_DATA_PATH;
   onLoad(async (opt) => {
-    const { url, name, type } = deQueryForUrl(deQueryForUrl(opt));
+    let { url, name, type, _type } = deQueryForUrl(deQueryForUrl(opt));
+    if (_type === 'cache') {
+      url = cacheStore.cacheData;
+    }
     console.log('获取到url----');
     console.log(url);
 
@@ -42,55 +45,65 @@
     });
     if (type === 'cache') {
       downWithStream(cacheStore.cacheData, name);
-    } else if (type == 'base64') {      
+    } else if (type == 'base64') {
       downWithBase64(url, name);
     } else {
       downWithStream(url, name);
     }
   });
-  const downWithBase64 = (url, name) => {
+  const downWithBase64 = (url: string, name) => {
     let filePath =
-      wx.env.USER_DATA_PATH +
-      '/' +
-      name||'图文' +
-      new Date().getTime() +
-      '.pdf';
+      wx.env.USER_DATA_PATH + '/' + name ||
+      '图文' + new Date().getTime() + '.pdf';
+
+    const handleBase = (base64) => {
+      let base64buffer = uni.base64ToArrayBuffer(base64);
+      uni.getFileSystemManager().writeFile({
+        filePath: filePath,
+        data: base64buffer,
+        encoding: 'binary', // 指定二进制格式
+        success: (res) => {
+          console.log('writeFile成功', res);
+          // 打开文件
+          uni.hideLoading();
+          uni.openDocument({
+            filePath: filePath,
+            fileType: 'pdf', //指定为pdf文件
+            showMenu: true, //true 可以右上角转发和分享
+            fail: function (res) {
+              uni.hideLoading();
+              console.log('文件打开失败', res);
+              uni.showToast({
+                title: '文件打开失败',
+                icon: 'none',
+              });
+            },
+          });
+        },
+        fail: (res) => {
+          console.error('写入文件失败：', res);
+        },
+      });
+    };
+
+    if (!url.startsWith('http')) {
+      handleBase(url);
+      return;
+    }
+
     uni.request({
       url,
       success: (resp: any) => {
-        let base64buffer = uni.base64ToArrayBuffer(resp.data);
-        uni.getFileSystemManager().writeFile({
-          filePath: filePath,
-          data: base64buffer,
-          encoding: 'binary', // 指定二进制格式
-          success: (res) => {
-            console.log('writeFile成功', res);
-            // 打开文件
-            uni.hideLoading();
-            uni.openDocument({
-              filePath: filePath,
-              fileType: 'pdf', //指定为pdf文件
-              showMenu: true, //true 可以右上角转发和分享
-              fail: function (res) {
-                uni.hideLoading();
-                console.log('文件打开失败', res);
-                uni.showToast({
-                  title: '文件打开失败',
-                  icon: 'none',
-                });
-              },
-            });
-          },
-          fail: (res) => {
-            console.error('写入文件失败：', res);
-          },
-        });
+        handleBase(resp.data);
+      },
+      fail(e) {
+        console.log(e);
       },
     });
   };
   const downWithStream = (url, name) => {
     name = new Date().getTime() + '';
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
 
     console.log(url, '-----url');
     // name = new Date().getTime() + '';
