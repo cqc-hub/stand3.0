@@ -305,7 +305,6 @@
   const cacheStore = useCacheStore();
 
   const reviewPdf = () => {
-    console.log(checkoutReportList.value.url);
     const url = checkoutReportList.value.url;
     const sysCode = gStores.globalStore.sysCode;
     if (url) {
@@ -335,7 +334,6 @@
 
     if (useCacheData) {
       result = gStores.globalStore.cacheData;
-      console.log(result, 'resultresultresult');
     } else {
       let params = {
         hosId: hosId,
