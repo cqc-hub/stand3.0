@@ -121,7 +121,9 @@ export const wxPay = (data) => {
         }),
       });
     },
-    fail: () => {
+    fail: (e) => {
+      console.log('支付爆错了.....');
+      console.log(e);
       uni.showToast({
         title: '已取消',
         icon: 'none',
