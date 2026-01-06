@@ -289,6 +289,7 @@
                         '_hosAccountOffsetFee',
                         '_totalCost',
                         'visitingArea',
+                        'hisResult',
                       ].includes(item.key),
                     }"
                   >

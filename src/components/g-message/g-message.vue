@@ -51,6 +51,7 @@
       :isShowCancel="messageStore.dialogOpt.isShowCancel ?? false"
       :isMaskClick="messageStore.dialogOpt.isMaskClick ?? true"
       :maxHeight="(messageStore.dialogOpt.maxHeight??550)+50"
+      :titleBgSrc="messageStore.dialogOpt.titleBgSrc"
       @confirmButton="messageStore.toggleDialogConfirm(true)"
       @cancelButton="messageStore.toggleDialogConfirm(false)"
       @maskClose="messageStore.dialogMaskClose"

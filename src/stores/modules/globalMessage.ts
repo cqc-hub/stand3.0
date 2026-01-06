@@ -12,6 +12,7 @@ type TDialogOpt = {
   zIndex?: number;
   maxHeight?: number,
   cancelFontWeight?: string;
+  titleBgSrc?: string;
 };
 
 let timer: null | number = null;

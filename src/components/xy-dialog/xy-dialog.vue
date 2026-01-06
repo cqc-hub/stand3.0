@@ -8,9 +8,20 @@
     @touchmove.stop.prevent="bindTouchmove"
   >
     <view class="xy-dialog__mask" @click="maskClick"></view>
-    <view class="xy-dialog__container">
-      <view class="xy-dialog__header" v-if="title.length > 0">
-        {{ title }}
+    <view
+      class="xy-dialog__container"
+      :class="{ 'xy-dialog__showWithBg': titleBgSrc ? true : false }"
+    >
+      <view
+        class="xy-dialog__header"
+        v-if="title.length > 0 && !titleBgSrc"
+      ></view>
+      <view
+        class="xy-dialog__header xy-dialog__headerBg"
+        :style="{ background: `url(${titleBgSrc}) 50% no-repeat` }"
+        v-else-if="title.length > 0 && titleBgSrc"
+      >
+        <view>{{ title }}</view>
       </view>
       <scroll-view
         class="xy-dialog__content"
@@ -150,6 +161,10 @@
       isShowFooter: {
         type: Boolean,
         default: true,
+      },
+      titleBgSrc: {
+        type: String,
+        default: '',
       },
     },
     data() {
@@ -336,6 +351,18 @@
       .xy-dialog__mask {
         opacity: 1;
       }
+    }
+    .xy-dialog__showWithBg {
+      padding-top: 0rpx !important;
+    }
+    .xy-dialog__headerBg {
+      color: #fff !important;
+      background-size: 100%;
+      line-height: 56rpx;
+      height: 160rpx;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 </style>

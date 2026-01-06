@@ -191,6 +191,8 @@
           confirmText,
           cancelColor: 'var(--hr-brand-color-6)',
           maxHeight: 900,
+          titleBgSrc:
+            'https://phsdevoss.eheren.com/pcloud/phs3.0/message_notice_bg.png',
         },
         closeCallBack({ confirm, maskClose }) {
           if (!confirm && !maskClose) {

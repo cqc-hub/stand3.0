@@ -199,7 +199,6 @@
       await new Promise((rl, rj) => {
         resolve = rl;
         reject = () => {
-          console.log(888);
           gStores.messageStore.showMessage('取消人脸识别', 3000);
           rj();
         };
