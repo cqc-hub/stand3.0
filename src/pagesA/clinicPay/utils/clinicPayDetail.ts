@@ -16,6 +16,7 @@ import {
   PatientUtils,
   apiAsync,
   idValidator,
+  TButtonConfig,
 } from '@/utils';
 
 import {
@@ -59,6 +60,8 @@ export type TWxAuthorize = {
   userCardNo?: string;
 };
 export type IPayListItem = {
+  expressNo?: string;
+  expressCompany?: string; // 1 顺丰 2 邮政
   diseaseType?: string;
   medOrgOrd?: string;
   childOrder: string; // 唯一 !!
@@ -153,6 +156,8 @@ export type TCostList = {
 }[];
 
 export type TPayDetailInfo = {
+  expressNo?: string;
+  expressCompany?: string; // 1 顺丰 2 邮政
   visitingMode?: string;
   medicineSpot: string;
   costList?: TCostList;
@@ -1308,6 +1313,25 @@ export const usePayPage = () => {
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/clinicPay/payDetail', pageData),
     });
+  };
+
+  const expressClick = (item: IPayListItem) => {
+    const { expressNo, expressCompany } = item;
+    const args: TButtonConfig = {
+      type: 'h5',
+      path: 'pagesC/myExpress/expressDetail',
+      text: '',
+      isSelfH5: '1',
+      extraData: {
+        expressNo,
+        expressCompany,
+      },
+      addition: {
+        token: 'token',
+      },
+    };
+
+    useTBanner(args);
   };
 
   let isGetListDataFirst = true;
@@ -2521,6 +2545,7 @@ export const usePayPage = () => {
 
   return {
     hosId,
+    expressClick,
     payMoneyMedicalPlugin,
     patChange,
     changeRefPayList,
@@ -2849,9 +2874,8 @@ export const reDealMedicalFiling = async () => {
       args.idCard = result.idCard;
     }
     const cardInfo = idValidator.getIdCardInfo(args.idCard);
-    const { isGuardianWithIdCard } = await ServerStaticData.getSystemConfig(
-      'person'
-    );
+    const { isGuardianWithIdCard } =
+      await ServerStaticData.getSystemConfig('person');
     if (isGuardianWithIdCard && cardInfo.age <= isGuardianWithIdCard * 1) {
       args.upIdCard = result.idCard;
       args.upName = result.userName;

@@ -76,6 +76,7 @@
               :list="unPayList"
               @click-item="itemClick"
               @sel-item="selPayListItem"
+              @express-click="expressClick"
               :selUnPayList="selUnPayList"
               :isListShowClinicType="isListShowClinicType"
               :isHidePrice="isWaitPayListHidePrice"
@@ -93,6 +94,7 @@
               @click-item="itemClick"
               @sel-item="selPayListItem"
               @sel-deailt-item="selDeailtItem"
+              @express-click="expressClick"
               :isDisabledCostList="pageConfig.isDisabledShowCostList === '1'"
               :isCanSelServerFee="isCanSelServerFee"
               :selUnPayList="selUnPayList"
@@ -334,6 +336,7 @@
     isListCanPayedItem,
     isCanSelServerFee,
     selDeailtItem,
+    expressClick
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
@@ -479,7 +482,6 @@
       payAfter();
     }
 
-
     // 医保结算退回依然会携带旧的授权码
     if (
       sysCode === '1001038' &&
@@ -512,7 +514,7 @@
      */
     const queryParams = gStores.globalStore.appLaunchData?.query
       ?.qrCode as string;
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
 
     if ((queryParams && !Object.keys(opt).length) || opt?.q) {
       let url = deQueryForUrl(deQueryForUrl({ q: queryParams || opt?.q })).q;

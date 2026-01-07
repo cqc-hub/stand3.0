@@ -52,9 +52,7 @@
     }
   });
   const downWithBase64 = (url: string, name) => {
-    let filePath =
-      wx.env.USER_DATA_PATH + '/' + name ||
-      '图文' + new Date().getTime() + '.pdf';
+    let filePath = wx.env.USER_DATA_PATH + '/' + new Date().getTime() + '.pdf';
 
     const handleBase = (base64) => {
       let base64buffer = uni.base64ToArrayBuffer(base64);

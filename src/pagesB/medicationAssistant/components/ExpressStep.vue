@@ -47,7 +47,9 @@
       <view class="row-content">
         <view class="row-content flex-between">
           <view class="text-ellipsis color-blue">
-            <text class="mr16 title color-dark ellipsis-line-clamp2">{{ pointEnd.title }}</text>
+            <text class="mr16 title color-dark ellipsis-line-clamp2">
+              {{ pointEnd.title }}
+            </text>
           </view>
         </view>
         <view class="color-light-dark text-ellipsis">{{ pointEnd.desc }}</view>
@@ -58,7 +60,7 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { GStores } from '@/utils';
+  import { getPressCompanyLabel, GStores } from '@/utils';
 
   const gStores = new GStores();
   const props = withDefaults(
@@ -91,22 +93,6 @@
   );
 
   const emits = defineEmits(['go-detail']);
-
-  const getPressCompanyLabel = (expressCompany) => {
-    switch (expressCompany) {
-      case '1':
-        return '顺丰快递';
-        break;
-
-      case '2':
-        return '邮政快递';
-        break;
-
-      default:
-        return '未知的快递公司';
-        break;
-    }
-  };
 
   const copyExpressNo = () => {
     uni.setClipboardData({

@@ -78,6 +78,7 @@
               :detailData="detailData"
               :pageConfig="pageConfig"
               :systemModeOld="gStores.globalStore.modeOld"
+              @express-click="expressClick"
             />
           </view>
         </block>
@@ -94,6 +95,7 @@
             :detailData="detailData"
             :pageConfig="pageConfig"
             :systemModeOld="gStores.globalStore.modeOld"
+            @express-click="expressClick"
           />
         </view>
 
@@ -352,6 +354,7 @@
     cacheUtil,
     generateUuid,
     useTBanner,
+    TButtonConfig,
   } from '@/utils';
 
   import api from '@/service/api';
@@ -392,6 +395,25 @@
     selUnPayList,
     getChineseMedicineList,
   } = usePayPage();
+
+  const expressClick = () => {
+    const { expressNo, expressCompany } = detailData.value;
+    const args: TButtonConfig = {
+      type: 'h5',
+      path: 'pagesC/myExpress/expressDetail',
+      text: '',
+      isSelfH5: '1',
+      extraData: {
+        expressNo,
+        expressCompany,
+      },
+      addition: {
+        token: 'token',
+      },
+    };
+
+    useTBanner(args);
+  };
 
   const qrCode = computed(() => {
     return detailData.value.qrCode || '';
@@ -680,7 +702,7 @@
         if (serialNoStr.replaceAll(',', '') === '') {
           serialNoStr = serialNo || '';
         }
-        console.log('serialNoStr',serialNoStr);
+        console.log('serialNoStr', serialNoStr);
         goConfirmPage({
           hosId,
           serialNo: serialNoStr,

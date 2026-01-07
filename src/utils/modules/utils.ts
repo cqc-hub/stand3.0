@@ -11,6 +11,19 @@ import { deQueryForUrl, joinQueryForUrl } from '@/common';
 
 type NeverTurnsAny<T> = T extends never ? any : T;
 
+export const getPressCompanyLabel = (expressCompany) => {
+  switch (expressCompany) {
+    case '1':
+      return '顺丰快递';
+
+    case '2':
+      return '邮政快递';
+
+    default:
+      return '未知快递';
+  }
+};
+
 export const changePatient = (patientId: string) => {
   const gStores = new GStores();
   const _pd = patientId;
