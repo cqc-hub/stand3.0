@@ -65,7 +65,7 @@ export interface ISConfig {
   //首页是否支持展示咨询文章
   isOpenHomeArticle?: string;
   //首页是否智能消息提醒
-  isOpenAssistMessage?: string;
+  isOpenAssistMessage?: '1';
   //首页banner置顶
   homeTopBanner?: {
     topShow?: boolean;
@@ -154,9 +154,9 @@ export interface ISConfig {
           openType: 'getAuthCode';
           /** 固定值 04107 */
           bizType: '04107';
-          /** 城市编码 */
+          /** 城市编码(邮件) */
           cityCode: string;
-          /** 渠道号 */
+          /** 渠道号(邮件) */
           channel: string;
           /** 机构渠道认证编码 */
           orgChnlCrtfCodg: string;
@@ -310,7 +310,29 @@ const scJson: Record<string, ISConfig> = {
       wx: {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
-          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=410901&channel=AAESBm3dgscMbm3owOheQVk0&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtJRKQswprsB52V1kSQVkyD&orgCodg=H41090200004&orgAppId=1HPSM9AQ20183F60C80A000061EF761F',
+          path: 'auth/pages/bindcard/auth/index',
+          pathExtraData: {
+            openType: 'getAuthCode',
+            bizType: '04107',
+            cityCode: '410901',
+            channel: 'AAESBm3dgscMbm3owOheQVk0',
+            orgChnlCrtfCodg:
+              'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtJRKQswprsB52V1kSQVkyD',
+            orgCodg: 'H41090200004',
+            orgAppId: '1HPSM9AQ20183F60C80A000061EF761F',
+          },
+
+          // zs
+          // pathExtraData: {
+          //   openType: 'getAuthCode',
+          //   bizType: '04107',
+          //   cityCode: '410901',
+          //   channel: 'AAESBm3dgscMbm3owOheQVk0',
+          //   orgChnlCrtfCodg:
+          //     'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtJRKQswprsB52V1kSQVkyD',
+          //   orgCodg: 'H41090200004',
+          //   orgAppId: '1J9OSUVC502O8D430B0A000076517511',
+          // },
         },
         isMedicalOrder: '1',
       },
@@ -983,6 +1005,7 @@ const scJson: Record<string, ISConfig> = {
   },
   1001093: {
     isOpenHelpOld: '1',
+    // isOpenAssistMessage: '1',
     login: {
       isAliAuthBase: '1',
       isSkipPerfect: '1',
@@ -1006,9 +1029,11 @@ const scJson: Record<string, ISConfig> = {
       },
     },
     homeTopBg:
-      'https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-1001094-home-topbg.png',
+      // 'https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-1001094-home-topbg.png',
+      'https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-1001093-home-topbg.png',
     homeNavTitleLogo:
-      'https://phsdevoss.eheren.com/pcloud/phs3.0/zhejiangshenzhongliunavtitle-white.png',
+      // 'https://phsdevoss.eheren.com/pcloud/phs3.0/zhejiangshenzhongliunavtitle-white.png',
+      'https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-1001093-home-navtitle.png',
   },
   1001094: {
     homeNavTitleLogo:
@@ -1057,7 +1082,6 @@ const scJson: Record<string, ISConfig> = {
   1001098: {
     isOpenHelpOld: '1',
   },
- 
 };
 
 const getSConfig = (sysCode: string) => {

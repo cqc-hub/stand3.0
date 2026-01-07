@@ -8,7 +8,7 @@
         ref="gform"
       >
         <template #suffix="{ item }">
-          <view v-if="item.key === 'repId'">
+          <view v-if="isShowScan(item)">
             <text @click="toScan" class="ico_my_scon icon-font" />
           </view>
         </template>
@@ -89,6 +89,15 @@
       required: true,
     },
   ]);
+
+  const isShowScan = (item: TInstance) => {
+    const { sysCode } = gStores.globalStore;
+
+    if (sysCode === '1001067') {
+      return false;
+    }
+    return item.key === 'repId';
+  };
 
   const toScan = async () => {
     let isH5 = false;

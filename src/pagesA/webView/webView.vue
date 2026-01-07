@@ -68,7 +68,6 @@
 
   onReady(async () => {
     await wait(1000);
-    console.log(inst);
   });
 
   const init = () => {

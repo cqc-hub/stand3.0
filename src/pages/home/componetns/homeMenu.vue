@@ -11,7 +11,7 @@
         :tabs="props.list"
         @change="activeMenu"
         :itemWidth="100 / props.list.length + '%'"
-        :itemMinWidth="getSysCode() == '1001036' ? '20rpx' : '180rpx'"
+        :itemMinWidth="getItemMinWidth()"
         :homeTabStyle="isTabStyle1"
         :fontStyle="homeTabStyle"
         field="typeName"
@@ -148,6 +148,22 @@
         }
       })
       .exec();
+  };
+
+  const getItemMinWidth = () => {
+    const { sysCode } = gStores.globalStore;
+
+    if (isTabStyle1.value) {
+      return '220rpx';
+    }
+
+    switch (sysCode) {
+      case '1001036':
+        return '20rpx';
+
+      default:
+        return '180rpx';
+    }
   };
 
   watch(

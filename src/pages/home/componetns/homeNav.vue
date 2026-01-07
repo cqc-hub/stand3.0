@@ -48,7 +48,7 @@
 
     switch (gStores.globalStore.sysCode) {
       case '1001093':
-        return '76, 138, 242';
+        return '197, 230, 239';
 
       default:
         return '255,255,255';

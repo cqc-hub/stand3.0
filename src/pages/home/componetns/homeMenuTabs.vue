@@ -102,7 +102,7 @@
           }"
           :style="{
             left: pillsLeft + 'px',
-            width: currentWidth  + 'px',
+            width: currentWidth + 'px',
             height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           }"
         />
@@ -362,6 +362,11 @@
             }
             // 当前滑块的宽度
             this.currentWidth = currentWidth;
+            if (this.pills === '3') {
+              if (this.current === 0 || this.current === this.tabs.length - 1) {
+                this.currentWidth += 20;
+              }
+            }
             // 缩放后的滑块宽度
             // this.lineWidth = currentWidth * this.lineScale * 1;
 
@@ -370,13 +375,19 @@
             this.lineLeft = lineLeft + currentWidth / 2;
             // 胶囊距离左侧的位置
             this.pillsLeft = lineLeft;
-            if (this.pills === '3' && this.current === this.tabs.length - 1) {
-              this.pillsLeft -= 10;
-              this.currentWidth += 8;
+
+            if (this.pills === '3') {
+              if (this.current === this.tabs.length - 1) {
+                this.pillsLeft -= 20;
+              }
             }
             // 计算滚动的距离左侧的位置
             if (this.scroll) {
               this.scrollLeft = this.lineLeft - this.containerWidth / 2 - 40;
+
+              if (this.pills === '3' && this.current === 0) {
+                this.scrollLeft = 0;
+              }
             }
 
             if (this.currentWidth < 15) {
