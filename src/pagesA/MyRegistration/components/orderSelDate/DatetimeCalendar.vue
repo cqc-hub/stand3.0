@@ -1,6 +1,5 @@
 <template>
   <view class="uni-calendar" @mouseleave="leaveCale">
-    {{}}
     <view
       v-if="!insert && show"
       class="uni-calendar__mask"
@@ -44,7 +43,49 @@
           </view>
         </view>
 
-        <view
+        <template
+          v-for="(date, index) in allDates"
+          :key="`calendar_all_month${index}`"
+        >
+          <view
+            v-if="isRenderWeeks(date.month)"
+            class="g-flex-rc-cc color-dark g-bold mb12 f32"
+          >
+            {{ (date.year || '') + yearText + (date.month || '') + monthText }}
+          </view>
+          <view
+            v-if="isRenderWeeks(date.month)"
+            :class="{ 'g-border-bottom': isSplitMoth }"
+          >
+            <view
+              class="uni-calendar__weeks my-calendar-row"
+              v-for="(item, weekIndex) in allWeeks[index]"
+              :key="weekIndex"
+            >
+              <view
+                class="uni-calendar__weeks-item"
+                v-for="(weeks, weeksIndex) in item"
+                :key="weeksIndex"
+              >
+                <Datetime-Calendar-Item
+                  class="uni-Datetime-Calendar-Item--hook"
+                  :weeks="weeks"
+                  :calendar="calendar"
+                  :selected="selected"
+                  :lunar="lunar"
+                  :enable-days="enableDays"
+                  :checkHover="range"
+                  :value="value"
+                  :dateShow="dateShow"
+                  :systemModeOld="systemModeOld"
+                  @change="choiceDate"
+                  @handleMouse="handleMouse"
+                />
+              </view>
+            </view>
+          </view>
+        </template>
+        <!-- <view
           v-if="isRenderWeeks(nowDate.month)"
           class="g-flex-rc-cc color-dark g-bold mb12 f32"
         >
@@ -83,9 +124,9 @@
               />
             </view>
           </view>
-        </view>
+        </view> -->
         <!-- 第二个月  -->
-        <block v-if="isRenderWeeks(nextNowDate.month)">
+        <!-- <block v-if="isRenderWeeks(nextNowDate.month)">
           <view class="g-flex-rc-cc color-dark g-bold mt24 mb12 f32">
             {{
               (nextNowDate.year || '') +
@@ -120,7 +161,7 @@
               />
             </view>
           </view>
-        </block>
+        </block> -->
       </view>
 
       <view
@@ -325,6 +366,10 @@
     },
     data() {
       return {
+        allDates: [],
+        allCales: [],
+        allMoths: [],
+        allWeeks: [],
         show: false,
         weeks: [],
         nextWeeks: [],
@@ -507,11 +552,14 @@
         range: this.range,
         // multipleStatus: this.pleStatus
       });
+
       // 选中某一天
       // this.cale.setDate(this.date)
       this.init(this.date);
       // this.setDay
       this.getNextMonth();
+
+      this.initAllData();
     },
     methods: {
       isRenderWeeks(month) {
@@ -577,6 +625,32 @@
         this.cale.setDate(date);
         this.weeks = this.cale.weeks;
         this.nowDate = this.calendar = this.cale.getInfo(date);
+        console.log('init', date, this.weeks, this.nowDate);
+      },
+      initAllData() {
+        this.allMoths = [
+          ...new Set(Object.keys(this.enableDays).map((o) => o.slice(0, 7))),
+        ];
+        this.allCales = this.allMoths.map((moths, index) => {
+          let date = undefined;
+          if (index == 0) {
+            date = new Date();
+          }
+          return new Calendar({
+            date,
+            selected: this.selected,
+            startDate: this.startDate,
+            endDate: this.endDate,
+            range: this.range,
+          });
+        });
+        let newDate = new Date();
+        this.allCales.forEach((cale, index) => {
+          cale.setDate(newDate);
+          this.allWeeks[index] = cale.weeks;
+          this.allDates[index] = cale.getInfo(newDate);
+          newDate = dayjs(newDate).add(1, 'month').format('YYYY-MM-DD');
+        });
       },
       // choiceDate(weeks) {
       // 	if (weeks.disable) return
@@ -729,13 +803,9 @@
       },
 
       getNextMonth() {
-        // const nextDate = this.cale.getDate(
-        //   this.nowDate.fullDate,
-        //   +1,
-        //   'month'
-        // ).fullDate;
-
-        const nextDate = dayjs(this.nowDate.fullDate).add(1, 'month').format('YYYY-MM-DD')
+        const nextDate = dayjs(this.nowDate.fullDate)
+          .add(1, 'month')
+          .format('YYYY-MM-DD');
         this.setNextMonth(nextDate);
       },
 
@@ -746,7 +816,6 @@
           endDate: this.endDate,
           range: this.range,
         });
-
         _cale.setDate(nextDate);
 
         this.nextWeeks = _cale.weeks;
@@ -810,6 +879,8 @@
 
   .uni-calendar__content {
     background-color: #fff;
+    max-height: 100vh;
+    overflow: scroll;
   }
 
   .uni-calendar__content-mobile {

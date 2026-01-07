@@ -17,11 +17,11 @@
         v-if="title.length > 0 && !titleBgSrc"
       ></view>
       <view
-        class="xy-dialog__header xy-dialog__headerBg"
-        :style="{ background: `url(${titleBgSrc}) 50% no-repeat` }"
+        class="xy-dialog__header xy-dialog__headerBg "
+        :style="{ background: `url(${titleBgSrc}) 50% 0% no-repeat` ,backgroundSize: '100% 100%'}"
         v-else-if="title.length > 0 && titleBgSrc"
       >
-        <view>{{ title }}</view>
+        <view class="pb12">{{ title }}</view>
       </view>
       <scroll-view
         class="xy-dialog__content"
@@ -357,9 +357,9 @@
     }
     .xy-dialog__headerBg {
       color: #fff !important;
-      background-size: 100%;
+      background-size: 100% 75%;
       line-height: 56rpx;
-      height: 160rpx;
+      height: 120rpx;
       display: flex;
       justify-content: center;
       align-items: center;
