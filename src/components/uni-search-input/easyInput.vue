@@ -11,6 +11,7 @@
         'is-input-error-border': inputBorder && msg,
         'is-textarea': type === 'textarea',
         'is-disabled': disabled,
+        'is-rounded': rounded,
       }"
       :style="{
         'border-color': inputBorder && msg ? '#dd524d' : styles.borderColor,
@@ -220,6 +221,10 @@
       inputBorder: {
         type: Boolean,
         default: true,
+      },
+      rounded: {
+        type: Boolean,
+        default: false,
       },
       prefixIcon: {
         type: String,
@@ -550,5 +555,10 @@
       color: #d5d5d5;
       font-size: var(--hr-font-size-xxxs);
     }
+  }
+
+  .is-rounded {
+    border-radius: 100px !important;
+    backdrop-filter: blur(15px);
   }
 </style>

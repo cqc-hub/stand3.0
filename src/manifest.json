@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx08440928b105c3bf",
+    "appid": "wx2e06292a91e9f162",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -86,7 +86,7 @@
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002129645591",
+    "appid": "2021003104628364",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -138,7 +138,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "温医附二院就医助手",
+  "name": "浙江省肿瘤医院",
   "h5": {
     "optimization": {
       "treeShaking": {

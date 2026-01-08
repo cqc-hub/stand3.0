@@ -361,7 +361,7 @@
     } else if (props.modelValue || props.modelValue === 0) {
       val.value = props.modelValue;
     } else {
-      val.value = null;
+      val.value = '';
     }
   };
 

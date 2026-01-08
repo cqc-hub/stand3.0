@@ -165,7 +165,7 @@
       >
         <view class="head-row-label text-no-wrap color-888">快递单号</view>
         <view class="head-row-value flex items-center">
-          <text class="color-blue under-line mr12">
+          <text class="color-blue under-line mr12 g-break-word">
             {{ getPressCompanyLabel(detailData.expressCompany) }}
             {{ detailData.expressNo }}
           </text>

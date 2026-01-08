@@ -61,7 +61,7 @@
                 <view class="my-disabled">
                   <uni-search-input
                     :type="'2'"
-                    inputBorder
+                    rounded
                     :placeholder="viewerStore.homeSearchPlaceholder"
                   />
                 </view>
@@ -289,6 +289,7 @@
               <homeMenu
                 :list="viewerStore.homeMenuList"
                 :tabIndex="props.tabIndex"
+                :homeTabStyle="(isOpenHomeStyle1001093 && '1') || undefined"
                 @open-share="openShare"
               />
             </view>
@@ -493,6 +494,9 @@
   const assistMessageRef = ref();
   const navOpacity = ref(0);
   const navHeight = ref(0);
+  const isOpenHomeStyle1001093 = computed(() => {
+    return gStores.globalStore.sysCode === '1001093';
+  });
 
   //骨架屏配置
   const skeletonProps = ref({

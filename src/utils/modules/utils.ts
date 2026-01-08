@@ -14,9 +14,11 @@ type NeverTurnsAny<T> = T extends never ? any : T;
 export const getPressCompanyLabel = (expressCompany) => {
   switch (expressCompany) {
     case '1':
+    case 1:
       return '顺丰快递';
 
     case '2':
+    case 2:
       return '邮政快递';
 
     default:
