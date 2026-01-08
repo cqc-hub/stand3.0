@@ -863,7 +863,7 @@ const scJson: Record<string, ISConfig> = {
       'https://phsdevoss.eheren.com/pcloud/phs3.0/jiangsushengzhonnavtitle.png',
     isOpenMessageAuth: '1',
     isMessageBtnShowNew: '1',
-    isOpenAssistMessage: '1',
+    // isOpenAssistMessage: '1',
     isOpenPopularSci: {
       wx: '1',
     },

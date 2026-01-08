@@ -585,6 +585,7 @@ export const inspectionAnalysis = async (reports) => {
       headerType: element.headerType,
       extend: element.extend,
       cardNumber: gStores.userStore.patChoose.cardNumber,
+      herenId: gStores.globalStore.herenId,
     }); 
    }); 
   // #ifndef  H5
@@ -995,6 +996,7 @@ const dealShowType10 = (list, requestId, chatId) => {
     latitude,
     longitude,
     phones,
+    hosId
   } = list[0];
 
   msgList.value.push({
@@ -1010,6 +1012,7 @@ const dealShowType10 = (list, requestId, chatId) => {
       latitude,
       longitude,
       phones,
+      hosId
     },
   });
 };
@@ -1218,10 +1221,7 @@ const typeInAsk = async (value, answertype) => {
   if (answertype == 'report') {
     settings.url = `${baseApi}/phs-extend/customer/aiStreamReportAsk`;
     settings.data = JSON.stringify({
-      args: value,
-      herenId:
-        gStores.globalStore.herenId ||
-        Number(uni.getStorageSync('v3_userRandomId')),
+      args: value, 
     });
   }
   console.warn('手动调用接口', settings);
@@ -1320,8 +1320,7 @@ const typeInAskH5 = (value: any, answertype) => {
   if (answertype == 'report') {
     settings.url = `${env.baseApi}/phs-extend/customer/aiStreamReportAsk`;
     settings.data = JSON.stringify({
-      args: value,
-      herenId: propsPbj.value?.herenId,
+      args: value, 
     });
   }
 
