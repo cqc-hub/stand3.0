@@ -412,6 +412,11 @@ export const useHosButlerOrder = () => {
       ...pageProps.value,
       ...formData2.value,
       ...formData3.value,
+      birthProvince: '330000',
+      birthCity: '330100',
+      birthDistrict: '1',
+      citizenshipCode: '1',
+      relationship: '0',
     };
 
     await api.submitAdmissionApplication(reqArg);
@@ -492,7 +497,6 @@ export const useHosButlerOrder = () => {
         formData.value.birthCity = birthCity.text;
         formData.value.birthDistrict = birthDistrict.text;
       }
-      console.log(formData2.value);
     },
     async pageLoad(opt: any) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));

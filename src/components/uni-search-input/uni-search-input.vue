@@ -189,4 +189,12 @@
       font-size: 40rpx;
     }
   }
+
+  :deep(.uni-easyinput__content) {
+    .uni-input-placeholder {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
 </style>

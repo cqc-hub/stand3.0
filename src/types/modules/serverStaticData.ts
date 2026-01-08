@@ -343,7 +343,7 @@ export interface ISystemConfig_ {
     selMaterialLen?: number;
 
     /** 收钱方式 0 预收 1 按项目、目的(tollMode) 2    */
-    isItemCount?: '0' | '1';
+    isItemCount?: '0' | '1'; // 优先级更高
     tollMode?: '1'; // isItemCount(字段不统一)
     /** isItemCount | tollMode 为 1 时, 计算的金额不受选了多个目的影响 */
     itemCountExcludeAim?: '1';

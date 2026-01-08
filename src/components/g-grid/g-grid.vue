@@ -253,8 +253,8 @@
         position: relative;
       }
       .grid-resize1 {
-        width: 100upx;
-        height: 100upx;
+        width: 120upx;
+        height: 120upx;
         position: relative;
       }
 
@@ -405,8 +405,8 @@
       padding: 15px 0;
 
       .grid-resize {
-        width: 54upx;
-        height: 54upx;
+        width: 48upx;
+        height: 48upx;
         position: relative;
       }
 
