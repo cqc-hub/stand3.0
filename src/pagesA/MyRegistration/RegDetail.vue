@@ -763,7 +763,7 @@
       patientId,
       deptName: orderRegInfo.value.deptName,
       orderId,
-      hosOrderId:orderRegInfo.value.hosOrderId,
+      hosOrderId: orderRegInfo.value.hosOrderId,
       hosDeptId: orderRegInfo.value.hosDeptId,
       hosId: orderRegInfo.value.hosId,
       hosDocId: orderRegInfo.value.hosDocId,
@@ -863,7 +863,7 @@
     } = result;
 
     if (hos) {
-      hosInfo.value = hos;
+      hosInfo.value = { ...hos };
       if (sysCode === '1001094' && deptName.includes('大十字')) {
         Object.assign(hosInfo.value, {
           hosName: '新疆中医医院（大十字部)',

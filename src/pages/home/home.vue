@@ -62,7 +62,8 @@
                 <view class="my-disabled mr12">
                   <uni-search-input
                     :type="'2'"
-                    rounded
+                    :inputBorder="!isHomeStyle1"
+                    :rounded="isHomeStyle1"
                     :placeholder="viewerStore.homeSearchPlaceholder"
                   />
                 </view>
