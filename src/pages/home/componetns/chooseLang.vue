@@ -1,7 +1,7 @@
 <template>
   <view
     v-if="gStores.globalStore.selectLangs.length > 1"
-    class="flex bg-white f28 font-semibold color-444 pt8 pb8 pr16 pl16 item-container"
+    class="flex bg-white f28 font-semibold color-444 pt10 pb10 pr16 pl16 item-container"
   >
     <view
       v-for="item in gStores.globalStore.selectLangs"

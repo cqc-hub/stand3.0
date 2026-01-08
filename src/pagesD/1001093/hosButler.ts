@@ -27,7 +27,7 @@ export const useHosButlerOrder = () => {
   const pageProps = ref({} as THosButlerInfo);
 
   const gform = ref('' as any);
-  const formData = ref({});
+  const formData = ref({} as BaseObject);
 
   const formData1 = ref({});
   const formData2 = ref({} as any);
@@ -51,15 +51,15 @@ export const useHosButlerOrder = () => {
       // #endif
     }
 
-    if (key === '1') {
-      formData2.value = {
-        ...formData.value,
-      };
-    } else if (key === '2') {
-      formData3.value = {
-        ...formData.value,
-      };
-    }
+    // if (key === '1') {
+    //   formData2.value = {
+    //     ...formData.value,
+    //   };
+    // } else if (key === '2') {
+    //   formData3.value = {
+    //     ...formData.value,
+    //   };
+    // }
   };
 
   let resolve: (...any) => any = () => {};
@@ -397,7 +397,9 @@ export const useHosButlerOrder = () => {
       };
       formData.value = formData2.value;
     } else if (key === '2') {
-      formData3.value = {};
+      formData3.value = {
+        ...formData3.value,
+      };
       formData.value = formData3.value;
     }
 
@@ -411,7 +413,6 @@ export const useHosButlerOrder = () => {
       ...formData2.value,
       ...formData3.value,
     };
-
 
     await api.submitAdmissionApplication(reqArg);
 
@@ -463,6 +464,16 @@ export const useHosButlerOrder = () => {
         resolve = r;
       });
 
+      if (v === 1) {
+        formData2.value = {
+          ...formData.value,
+        };
+      } else if (v === 2) {
+        formData3.value = {
+          ...formData.value,
+        };
+      }
+
       if (v === 2) {
         handlerSubmit();
       } else {
@@ -477,11 +488,11 @@ export const useHosButlerOrder = () => {
       const [birthProvince, birthCity, birthDistrict] = value;
 
       if (birthProvince && birthCity && birthDistrict) {
-        formData2.value.birthProvince = birthProvince.text;
-        formData2.value.birthCity = birthCity.text;
-        formData2.value.birthDistrict = birthDistrict.text;
+        formData.value.birthProvince = birthProvince.text;
+        formData.value.birthCity = birthCity.text;
+        formData.value.birthDistrict = birthDistrict.text;
       }
-
+      console.log(formData2.value);
     },
     async pageLoad(opt: any) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));

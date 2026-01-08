@@ -139,7 +139,7 @@
   .bg-home {
     :deep(.uni-easyinput__content) {
       background-color: #fff;
-      height: 72rpx;
+      height: 66rpx;
       border-radius: 16rpx;
     }
   }
