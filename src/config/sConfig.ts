@@ -174,7 +174,9 @@ export interface ISConfig {
       };
       //微信跨端插件(微信吱口令跳支付宝) https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wx12cec70855c0cacf&token=&lang=zh_CN
       crossProgramBizType?: {
+        // 挂号吱口令（BizType）
         reg?: string;
+        // 门诊吱口令
         clinic?: string;
       };
 
