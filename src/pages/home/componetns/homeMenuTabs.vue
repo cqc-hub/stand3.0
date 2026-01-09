@@ -112,7 +112,7 @@
           :style="{
             left: pillsLeft + 'px',
             width: currentWidth + 'px',
-            height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
+            height: height * 1 + 2 + (hasDetail ? 20 : 0) + 'rpx',
           }"
           :class="{
             'my-hide': current !== 0,
@@ -125,7 +125,7 @@
           :style="{
             left: pillsLeft + 'px',
             width: currentWidth + 'px',
-            height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
+            height: height * 1 + 2 + (hasDetail ? 20 : 0) + 'rpx',
           }"
           :class="{
             'my-hide': !(current !== 0 && current !== tabs.length - 1),
@@ -138,7 +138,7 @@
           :style="{
             left: pillsLeft + 'px',
             width: currentWidth + 'px',
-            height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
+            height: height * 1 + 2 + (hasDetail ? 20 : 0) + 'rpx',
           }"
           :class="{
             'my-hide': current !== tabs.length - 1,
@@ -529,5 +529,6 @@
   .pill3 {
     z-index: -1;
     transition: all 0.2s linear;
+    // bottom: -4rpx;
   }
 </style>

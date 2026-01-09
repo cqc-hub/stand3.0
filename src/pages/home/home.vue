@@ -77,7 +77,7 @@
 
               <view
                 v-if="globalGl.sConfig.isOpenHelpOld === '1'"
-                class="bg-white flex items-center help-old pr12 pl8"
+                class="bg-white flex items-center help-old pr12 pl8 pt4 pb4"
               >
                 <image
                   :src="
@@ -1293,7 +1293,7 @@
     .img-help-old {
       width: 52rpx;
       height: 52rpx;
-      top: -2rpx;
+      // top: -2rpx;
     }
   }
 </style>

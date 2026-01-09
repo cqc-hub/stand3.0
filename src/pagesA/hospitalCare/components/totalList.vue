@@ -71,7 +71,7 @@
       <dailyExpenseListDetial
         ref="dailyExpenseListDetialRef"
         :isHosTotallist="props.isHosTotallist"
-        :pageProps="pageProps"
+        :pageProps1="pageProps"
       />
     </view>
 
@@ -140,11 +140,14 @@
     InHospitalCostInfo.value = Object.keys(val).length;
   };
   const gotoListExpenses = (data) => {
+    const { inDay = '', endDay = '' } = data;
     uni.navigateTo({
       url: joinQuery(`/pagesA/hospitalCare/listExpenses`, {
         isHosTotallist: '2',
         hospitalId: data.inpatientNo,
         costDay: data.costDate,
+        inDay,
+        endDay,
       }),
     });
   };
