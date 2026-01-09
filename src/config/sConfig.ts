@@ -522,6 +522,7 @@ const scJson: Record<string, ISConfig> = {
 
   1001099: {
     isOpenHelpOld: '1',
+    isOpenWechatSI: true,
     login: {
       isSkipPerfect: '1',
     },
