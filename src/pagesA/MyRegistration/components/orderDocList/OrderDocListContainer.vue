@@ -17,11 +17,18 @@
         mode="aspectFill"
         lazy-load
       />
+      <!-- 2种党员样式 -->
+       <image
+        v-if="isPliticalDoc && pageConfig.isPartyMemberStyle ==='1'"
+        class="CPC-icon1"
+        :src="globalGl.BASE_IMG + 'is_party_member.png'"
+      ></image>
       <image
-        v-if="isPliticalDoc"
+        v-if="isPliticalDoc && pageConfig.isPartyMemberStyle !=='1'"
         class="CPC-icon"
         :src="globalGl.BASE_IMG + 'CPC-icon2.png'"
       ></image>
+      
       <!-- </g-login> -->
 
       <view @click="avatarClick" class="doc-info-introduce">
@@ -228,6 +235,7 @@
         width: 96rpx;
         height: 96rpx;
         flex-shrink: 0;
+        position: relative;
       }
       .CPC-icon {
         width: 126rpx;
@@ -235,6 +243,12 @@
         position: absolute;
         top: 78rpx;
         transform: translate(-15rpx, 0px);
+      }
+      .CPC-icon1 {
+        position: absolute;
+        width: 60rpx;
+        height: 60rpx; 
+        transform: translate(100%, 80%);
       }
 
       .doc-info-introduce {
