@@ -686,6 +686,12 @@
     path: 'pages/index/tenant/enter?linkType=11&emNo=815',
   } as TButtonConfig;
 
+  const 肿瘤浙里护理护士页面支付宝 = {
+    type: 'otherProgram',
+    appId: '2021003155620159',
+    path: 'pages/index/tenant/enter?linkType=11&emNo=815',
+  } as TButtonConfig;
+
   const 肿瘤住院管家 = {
     type: 'h5',
     isSelfH5: '1',

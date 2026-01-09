@@ -33,6 +33,10 @@ export interface ISConfig {
   medicalCardDetailPackageDomain?: `http${string}`;
 
   // 首页 ----------------------------
+  /**
+   * - 1 不展示请登录模块
+   */
+  homeStyle?: '1';
   /** 替换首页标题(图片) */
   homeNavTitleLogo?: string;
   /** 首页顶部背景(图片) */
@@ -174,7 +178,9 @@ export interface ISConfig {
       };
       //微信跨端插件(微信吱口令跳支付宝) https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wx12cec70855c0cacf&token=&lang=zh_CN
       crossProgramBizType?: {
+        // 挂号吱口令（BizType）
         reg?: string;
+        // 门诊吱口令
         clinic?: string;
       };
 
@@ -1005,7 +1011,9 @@ const scJson: Record<string, ISConfig> = {
     },
   },
   1001093: {
+    homeStyle: '1',
     isOpenHelpOld: '1',
+    // isLangUygur: '1',
     // isOpenAssistMessage: '1',
     login: {
       isAliAuthBase: '1',

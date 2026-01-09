@@ -179,8 +179,8 @@
             isWaitReg
               ? '候补预约'
               : pageConfig.isConfirmOrderWithPay === '1'
-                ? '去支付'
-                : '确定预约'
+              ? '去支付'
+              : '确定预约'
           }}
         </button>
       </view>
@@ -229,7 +229,7 @@
   } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { getMyPowerQx } from '@/components/greenPower';
-  import { getLocalStorage } from '@/common';
+  import { getLocalStorage, getSysCode } from '@/common';
   import { IPat, useDeptStore } from '@/stores';
 
   import api from '@/service/api';
@@ -316,61 +316,65 @@
     isFlagWarning.value = false;
   };
 
-const handlerConfirmPatReal = async () => {
-  const gStores = new GStores();
-  const pages = getCurrentPages();
-  const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+  const handlerConfirmPatReal = async () => {
+    const gStores = new GStores();
+    const pages = getCurrentPages();
+    const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
 
-  const platformConfig = {
-    // 抖音和鸿蒙平台配置
-    'toutiao-harmony': {
-      sysConfigId: '12041',
-      showConfirmButton: false,
-      confirmText: undefined,
-    },
-    // 微信和支付宝平台配置
-    'wechat-alipay': {
-      sysConfigId: '1204',
-      showConfirmButton: true,
-      confirmText: '去实名认证',
-    }
-  };
+    const platformConfig = {
+      // 抖音和鸿蒙平台配置
+      'toutiao-harmony': {
+        sysConfigId: '12041',
+        showConfirmButton: false,
+        confirmText: undefined,
+      },
+      // 微信和支付宝平台配置
+      'wechat-alipay': {
+        sysConfigId: '1204',
+        showConfirmButton: true,
+        confirmText: '去实名认证',
+      },
+    };
     // 确定当前平台配置
-  let currentConfig;
-  // #ifdef MP-TOUTIAO || MP-HARMONY
-  currentConfig = platformConfig['toutiao-harmony'];
-  // #endif
-  // #ifdef MP-WEIXIN || MP-ALIPAY
-  currentConfig = platformConfig['wechat-alipay'];
-  // #endif
-   
-  const { title, content } = await gStores.getSysAppMore(currentConfig.sysConfigId);
-  const dialogOptions = {
-    title,
-    isShowCancel: true,
-    cancelText: '暂不预约',
-    isMaskClick: false,
-    ...(currentConfig.showConfirmButton && { confirmText: currentConfig.confirmText }),
-  };
-  const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
-    gStores.messageStore.showMessage(content, 0, {
-      useDialog: true,
-      dialogOpt: dialogOptions,
-      closeCallBack: r,
-    });
-  });
+    let currentConfig;
+    // #ifdef MP-TOUTIAO || MP-HARMONY
+    currentConfig = platformConfig['toutiao-harmony'];
+    // #endif
+    // #ifdef MP-WEIXIN || MP-ALIPAY
+    currentConfig = platformConfig['wechat-alipay'];
+    // #endif
 
-  const shouldNavigate = currentConfig.showConfirmButton;
-  if (shouldNavigate && confirm) {
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
-        _url: fullUrl,
+    const { title, content } = await gStores.getSysAppMore(
+      currentConfig.sysConfigId
+    );
+    const dialogOptions = {
+      title,
+      isShowCancel: true,
+      cancelText: '暂不预约',
+      isMaskClick: false,
+      ...(currentConfig.showConfirmButton && {
+        confirmText: currentConfig.confirmText,
       }),
+    };
+    const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
+      gStores.messageStore.showMessage(content, 0, {
+        useDialog: true,
+        dialogOpt: dialogOptions,
+        closeCallBack: r,
+      });
     });
-  }
 
-  throw new Error('实名?');
-};
+    const shouldNavigate = currentConfig.showConfirmButton;
+    if (shouldNavigate && confirm) {
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
+          _url: fullUrl,
+        }),
+      });
+    }
+
+    throw new Error('实名?');
+  };
 
   //  更新监护人信息 —— 省中
   const handlerConfirmPatReal1 = async () => {
@@ -950,6 +954,9 @@ const handlerConfirmPatReal = async () => {
       selWaitRegSch.value = '';
       let { addedNum } = props.value;
       // addedNum = 1;
+      if (!['1001033'].includes(getSysCode())) {
+        addedNum = 1;
+      }
       if (props.value.hasOwnProperty('addedNum') && addFlag !== '1') {
         if (!(addedNum! * 1)) {
           const { confirm } = await apiAsync(uni.showModal, {
@@ -1123,7 +1130,7 @@ const handlerConfirmPatReal = async () => {
         .getDeptDetail({
           hosDeptId: props.value.specialClinicDept || props.value.hosDeptId,
         })
-        .catch(() => ({}) as any);
+        .catch(() => ({} as any));
 
       if (promptMessage) {
         await new Promise<{ confirm: boolean }>((r) => {

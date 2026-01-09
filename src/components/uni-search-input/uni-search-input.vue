@@ -15,6 +15,7 @@
         :placeholder="placeholder"
         :inputBorder="inputBorder"
         :focus="focus"
+        :rounded="rounded"
         @input="changeInput"
         @confirm="confirm"
         suffixIcon="ico_search1"
@@ -71,6 +72,11 @@
       },
 
       focus: {
+        type: Boolean,
+        default: false,
+      },
+
+      rounded: {
         type: Boolean,
         default: false,
       },
@@ -133,7 +139,7 @@
   .bg-home {
     :deep(.uni-easyinput__content) {
       background-color: #fff;
-      height: 80rpx;
+      height: 66rpx;
       border-radius: 16rpx;
     }
   }
@@ -181,6 +187,14 @@
 
     .icon-search {
       font-size: 40rpx;
+    }
+  }
+
+  :deep(.uni-easyinput__content) {
+    .uni-input-placeholder {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 </style>
