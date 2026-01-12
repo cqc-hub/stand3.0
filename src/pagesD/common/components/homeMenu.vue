@@ -168,6 +168,7 @@
       rgba(238, 243, 255, 0) 50%,
       var(--hr-brand-color-3-light) 99%
     );
+
     border-radius: 24rpx 0rpx 0rpx 24rpx;
     .menu-pannel-style {
       padding: 32rpx 32rpx 0 32rpx;

@@ -154,7 +154,7 @@
     const { sysCode } = gStores.globalStore;
 
     if (isTabStyle1.value) {
-      return '220rpx';
+      return '180rpx';
     }
 
     switch (sysCode) {
@@ -201,7 +201,7 @@
     background: linear-gradient(
       360deg,
       rgba(238, 243, 255, 0) 50%,
-      var(--hr-brand-color-3-light) 99%
+      var(--hr-brand-color-3-light) 100%
     );
     border-radius: 24rpx 0rpx 0rpx 24rpx;
     .menu-pannel-style {
