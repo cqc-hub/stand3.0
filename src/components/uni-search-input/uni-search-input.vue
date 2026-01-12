@@ -139,7 +139,7 @@
   .bg-home {
     :deep(.uni-easyinput__content) {
       background-color: #fff;
-      height: 72rpx;
+      height: 66rpx;
       border-radius: 16rpx;
     }
   }
@@ -187,6 +187,14 @@
 
     .icon-search {
       font-size: 40rpx;
+    }
+  }
+
+  :deep(.uni-easyinput__content) {
+    .uni-input-placeholder {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 </style>

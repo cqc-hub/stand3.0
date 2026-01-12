@@ -58,26 +58,55 @@
             >
               <!-- 在有搜索框的前提下 是否开启助老版本 -->
               <view class="w-full" @click.prevent="goSearch">
-                <view class="my-disabled">
+                <!-- :placeholder="viewerStore.homeSearchPlaceholder" -->
+                <view class="my-disabled mr12">
                   <uni-search-input
                     :type="'2'"
-                    rounded
+                    :inputBorder="!isHomeStyle1"
+                    :rounded="isHomeStyle1"
                     :placeholder="viewerStore.homeSearchPlaceholder"
                   />
                 </view>
               </view>
-              <view v-if="globalGl.sConfig.isLangUygur === '1'" class="ml16">
+              <view
+                v-if="globalGl.sConfig.isLangUygur === '1'"
+                class="ml16 mr12"
+              >
                 <chooseLang />
               </view>
 
               <view
+                v-if="globalGl.sConfig.isOpenHelpOld === '1'"
+                class="bg-white flex items-center help-old pr12 pl8 pt4 pb4"
+              >
+                <image
+                  :src="
+                    globalGl.BASE_IMG +
+                    `stand3-home-help-old${
+                      gStores.globalStore.isTcmStyle ? '-tcm' : ''
+                    }.png`
+                  "
+                  mode="scaleToFill"
+                  class="img-help-old mr12 relative"
+                />
+                <view
+                  :style="{
+                    color: 'var(--other-1)',
+                  }"
+                  @click="openModeOld"
+                  class="text-no-wrap f32 font-semibold h-full"
+                >
+                  长辈版
+                </view>
+              </view>
+              <!-- <view
                 v-if="globalGl.sConfig.isOpenHelpOld === '1'"
                 class="openOld ml16"
                 @tap="openModeOld"
               >
                 <view class="iconfont icon-size">&#xe700;</view>
                 长辈模式
-              </view>
+              </view> -->
             </view>
 
             <view v-if="$global.sConfig?.homeTopBanner?.topShow" class="pt24">
@@ -89,89 +118,103 @@
             </view>
 
             <view class="card">
-              <g-login @handler-next="routerJump">
-                <!-- 登录之后 -->
-                <block v-if="globalStore.isLogin">
-                  <view
-                    class="top-card flex-normal-between animate__animated animate__fadeIn"
-                  >
-                    <!-- 有就诊人时 -->
-                    <block v-if="getShowName">
-                      <view class="flex-normal">
-                        <view
-                          v-if="personConfig.isQrCodeDisabled !== '1'"
-                          @tap="cardClick"
-                          class="iconfont icon-size"
-                          :class="getSysCode() == '1001036' ? 'revent' : ''"
-                        >
-                          &#xe6a7;
-                        </view>
-                        <view class="patient">
-                          <text>
-                            {{ getShowName }}
-                          </text>
-                          <text v-if="getShowPatId">
-                            ID
-                            {{ getShowPatId }}
-                          </text>
-                        </view>
-                      </view>
-                      <view class="switchPatient" @tap="chooseAction">
-                        更换就诊人
-                      </view>
-                    </block>
-                    <!-- 没有就诊人时 -->
-                    <block v-else>
-                      <view class="flex-normal">
-                        <view class="patient">
-                          <text v-if="globalGl.SYS_CODE === '1001081'">
-                            请认真填写问卷内容，保证如实填写
-                          </text>
-                          <text v-else>暂无就诊人</text>
-                        </view>
-                      </view>
-                      <view
-                        v-if="globalGl.SYS_CODE !== '1001081'"
-                        class="switchPatient"
-                        @tap="addPatient"
-                      >
-                        添加就诊人
-                      </view>
-                    </block>
-                  </view>
-                </block>
-                <block v-else>
-                  <!-- 未登录 -->
-                  <view
-                    class="top-card flex-normal-between animate__animated animate__fadeIn"
-                  >
-                    <view class="flex-normal no-login">
-                      <text>{{ getLangLabel('home:请登录') }}</text>
-                      <text>{{ getLangLabel('home:登录后享受更多服务') }}</text>
-                    </view>
-
+              <view v-if="!isHomeStyle1">
+                <g-login @handler-next="routerJump">
+                  <!-- 登录之后 -->
+                  <block v-if="globalStore.isLogin">
                     <view
-                      v-if="gStores.globalStore.ev === 'alipay'"
-                      class="switchPatient no-login-tip"
+                      class="top-card flex-normal-between animate__animated animate__fadeIn"
                     >
-                      {{ getLangLabel('home:请登录') }}
+                      <!-- 有就诊人时 -->
+                      <block v-if="getShowName">
+                        <view class="flex-normal">
+                          <view
+                            v-if="personConfig.isQrCodeDisabled !== '1'"
+                            @tap="cardClick"
+                            class="iconfont icon-size"
+                            :class="getSysCode() == '1001036' ? 'revent' : ''"
+                          >
+                            &#xe6a7;
+                          </view>
+                          <view class="patient">
+                            <text>
+                              {{ getShowName }}
+                            </text>
+                            <text v-if="getShowPatId">
+                              ID
+                              {{ getShowPatId }}
+                            </text>
+                          </view>
+                        </view>
+                        <view class="switchPatient" @tap="chooseAction">
+                          更换就诊人
+                        </view>
+                      </block>
+                      <!-- 没有就诊人时 -->
+                      <block v-else>
+                        <view class="flex-normal">
+                          <view class="patient">
+                            <text v-if="globalGl.SYS_CODE === '1001081'">
+                              请认真填写问卷内容，保证如实填写
+                            </text>
+                            <text v-else>暂无就诊人</text>
+                          </view>
+                        </view>
+                        <view
+                          v-if="globalGl.SYS_CODE !== '1001081'"
+                          class="switchPatient"
+                          @tap="addPatient"
+                        >
+                          添加就诊人
+                        </view>
+                      </block>
                     </view>
-
-                    <button
-                      v-if="
-                        gStores.globalStore.ev &&
-                        ['wx', 'web'].includes(gStores.globalStore.ev)
-                      "
-                      class="login-btn"
+                  </block>
+                  <block v-else>
+                    <!-- 未登录 -->
+                    <view
+                      class="top-card flex-normal-between animate__animated animate__fadeIn"
                     >
-                      {{ getLangLabel('home:请登录') }}
-                    </button>
-                  </view>
-                </block>
-              </g-login>
+                      <view class="flex-normal no-login">
+                        <text>{{ getLangLabel('home:请登录') }}</text>
+                        <text>
+                          {{ getLangLabel('home:登录后享受更多服务') }}
+                        </text>
+                      </view>
 
-              <view class="top-menu">
-                <view v-if="viewerStore.homeTopMenuList.length" class="box">
+                      <view
+                        v-if="gStores.globalStore.ev === 'alipay'"
+                        class="switchPatient no-login-tip"
+                      >
+                        {{ getLangLabel('home:请登录') }}
+                      </view>
+
+                      <button
+                        v-if="
+                          gStores.globalStore.ev &&
+                          ['wx', 'web'].includes(gStores.globalStore.ev)
+                        "
+                        class="login-btn"
+                      >
+                        {{ getLangLabel('home:请登录') }}
+                      </button>
+                    </view>
+                  </block>
+                </g-login>
+              </view>
+
+              <view
+                :class="{
+                  'top-menu-style1': isHomeStyle1,
+                  'top-menu-normal': !isHomeStyle1,
+                }"
+                class="top-menu"
+              >
+                <view
+                  v-if="viewerStore.homeTopMenuList.length"
+                  :class="{ pb24: isHomeStyle1 }"
+                  class="box"
+                >
                   <homeGrid
                     :list="viewerStore.homeTopMenuList"
                     :type="1"
@@ -179,6 +222,9 @@
                   />
                 </view>
                 <view
+                  :class="{
+                    normal: !isHomeStyle1,
+                  }"
                   class="notice flex-normal g-fade-in"
                   @click="goToNotice1"
                   v-if="
@@ -289,7 +335,7 @@
               <homeMenu
                 :list="viewerStore.homeMenuList"
                 :tabIndex="props.tabIndex"
-                :homeTabStyle="(isOpenHomeStyle1001093 && '1') || undefined"
+                :homeTabStyle="(isHomeStyle1 && '1') || undefined"
                 @open-share="openShare"
               />
             </view>
@@ -494,8 +540,9 @@
   const assistMessageRef = ref();
   const navOpacity = ref(0);
   const navHeight = ref(0);
-  const isOpenHomeStyle1001093 = computed(() => {
-    return gStores.globalStore.sysCode === '1001093';
+
+  const isHomeStyle1 = computed(() => {
+    return globalGl.sConfig.homeStyle === '1';
   });
 
   //骨架屏配置
@@ -1026,11 +1073,18 @@
       }
 
       .top-menu {
-        // background: #f2f6ff;
-        background: var(--hr-brand-color-3-light);
-        border: 2rpx solid var(--hr-brand-color-3);
+        &.top-menu-style1 {
+          background: #fff;
+          box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
+          backdrop-filter: blur(15px);
+        }
+
+        &.top-menu-normal {
+          background: var(--hr-brand-color-3-light);
+          box-shadow: 0px 8rpx 40rpx 0rpx rgba(0, 0, 0, 0.06);
+          border: 2rpx solid var(--hr-brand-color-3);
+        }
         border-radius: 24rpx;
-        box-shadow: 0px 8rpx 40rpx 0rpx rgba(0, 0, 0, 0.06);
         .box {
           padding: 40rpx 0 35rpx 0;
           min-height: 145rpx;
@@ -1065,10 +1119,14 @@
 
       .notice {
         height: 78rpx;
-        background: #fefefe;
         border-radius: 0 0 24rpx 24rpx;
-        box-shadow: 0 2rpx 0 0 var(--hr-brand-color-3) inset;
         padding: 0 31rpx;
+
+        &.normal {
+          box-shadow: 0 2rpx 0 0 var(--hr-brand-color-3) inset;
+          background: #fefefe;
+        }
+
         .notice-button {
           color: var(--hr-brand-color-6);
           display: inline-block;
@@ -1225,5 +1283,17 @@
     border-radius: 50%;
     padding: 6px;
     font-size: 56rpx !important;
+  }
+
+  .help-old {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 18px;
+    backdrop-filter: blur(15px);
+
+    .img-help-old {
+      width: 52rpx;
+      height: 52rpx;
+      // top: -2rpx;
+    }
   }
 </style>

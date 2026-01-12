@@ -132,6 +132,8 @@ export interface ISystemConfig_ {
     isConfirmOrderWithPay?: '1';
 
     /** 医生名片 */
+    // 党员标识样式2-（温附二）
+    isPartyMemberStyle?: '1';
     isHideDocJob?: '1';
     isHideHosName?: '1';
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？(不用 固定的)
@@ -343,7 +345,7 @@ export interface ISystemConfig_ {
     selMaterialLen?: number;
 
     /** 收钱方式 0 预收 1 按项目、目的(tollMode) 2    */
-    isItemCount?: '0' | '1';
+    isItemCount?: '0' | '1'; // 优先级更高
     tollMode?: '1'; // isItemCount(字段不统一)
     /** isItemCount | tollMode 为 1 时, 计算的金额不受选了多个目的影响 */
     itemCountExcludeAim?: '1';

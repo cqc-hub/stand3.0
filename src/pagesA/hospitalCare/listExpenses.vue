@@ -1,10 +1,11 @@
 <template>
   <view class="page">
     <dailyExpenseListDetial
-      :isHosDaylist="props.isHosDaylist"
-      :isHosTotallist="props.isHosTotallist"
-      :hospitalId="props.hospitalId"
-      :costDay="props.costDay"
+      :isHosDaylist="pageProps.isHosDaylist"
+      :isHosTotallist="pageProps.isHosTotallist"
+      :hospitalId="pageProps.hospitalId"
+      :costDay="pageProps.costDay"
+      :pageProps1="pageProps"
       ref="aaa"
     />
   </view>
@@ -14,17 +15,25 @@
   import { onLoad } from '@dcloudio/uni-app';
 
   import dailyExpenseListDetial from './components/dailyExpenseListDetial.vue';
+  import { deQueryForUrl } from '@/common';
 
-  const props = defineProps<{
-    costDay?: string;
-    isHosDaylist?: string;
-    isHosTotallist?: string;
-    hospitalId?: string;
-  }>();
+
+  const pageProps = ref(
+    {} as {
+      endDay?: string;
+      inDay?: string;
+      costDay?: string;
+      isHosDaylist?: string;
+      isHosTotallist?: string;
+      hospitalId?: string;
+    }
+  );
 
   const aaa = ref<any>('');
 
   onLoad((opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+
     uni.showLoading({
       mask: true,
     });

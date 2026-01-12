@@ -359,6 +359,10 @@ export const aliPayOldSystemPayType = () => {
     ];
 
     switch (sysCode) {
+      case '1001093':
+        channel = 'LIANZHONG_ICBC_H5';
+        break;
+
       case '1001063':
         channel = 'ICBC_JFT_H5';
         break;

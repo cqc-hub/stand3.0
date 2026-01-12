@@ -4,6 +4,8 @@ page {
   --h-qrcode-1: var(--hr-brand-color-6);
   --h-qrcode-2: var(--hr-brand-color-6-light-3);
 
+  --other-1: #00194c;
+
   /* 颜色 */
   --hr-neutral-color-1: #f6f6f6;
   --hr-neutral-color-2: #e6e6e6;
@@ -40,8 +42,8 @@ page {
   --hr-brand-color-3-light: #ebf1ff;
 
   /* tags背景色*/
-  --hr-brand-color-8: #00B39E;
-  --hr-brand-color-8-light: #E7FFF8;
+  --hr-brand-color-8: #00b39e;
+  --hr-brand-color-8-light: #e7fff8;
 
   /* banner背景色 */
   --hr-banner-color-1: #eef3ff;

@@ -33,6 +33,10 @@ export interface ISConfig {
   medicalCardDetailPackageDomain?: `http${string}`;
 
   // 首页 ----------------------------
+  /**
+   * - 1 不展示请登录模块
+   */
+  homeStyle?: '1';
   /** 替换首页标题(图片) */
   homeNavTitleLogo?: string;
   /** 首页顶部背景(图片) */
@@ -524,6 +528,7 @@ const scJson: Record<string, ISConfig> = {
 
   1001099: {
     isOpenHelpOld: '1',
+    isOpenWechatSI: true,
     login: {
       isSkipPerfect: '1',
     },
@@ -1006,7 +1011,9 @@ const scJson: Record<string, ISConfig> = {
     },
   },
   1001093: {
+    homeStyle: '1',
     isOpenHelpOld: '1',
+    // isLangUygur: '1',
     // isOpenAssistMessage: '1',
     login: {
       isAliAuthBase: '1',

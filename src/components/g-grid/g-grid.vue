@@ -56,6 +56,7 @@
                   : 'grid-resize'
               }  `"
               :src="item.iconfont"
+              class="mb12"
               mode="widthFix"
               lazy-load
             />
@@ -405,8 +406,8 @@
       padding: 15px 0;
 
       .grid-resize {
-        width: 54upx;
-        height: 54upx;
+        width: 48upx;
+        height: 48upx;
         position: relative;
       }
 

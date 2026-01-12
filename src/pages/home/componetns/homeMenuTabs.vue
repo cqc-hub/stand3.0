@@ -21,7 +21,7 @@
         }"
       >
         <view
-          class="v-tabs__container-item flex justify-center items-center f32"
+          class="v-tabs__container-item flex justify-center items-center f32 relative z-1"
           v-for="(v, i) in tabs"
           :key="i"
           :style="{
@@ -71,7 +71,7 @@
             left: lineLeft + 'px',
             transform: `translateX(-${lineWidth / 2}px)`,
           }"
-        ></view>
+        />
 
         <view
           v-if="pills === '2'"
@@ -90,10 +90,9 @@
             height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           }"
         />
-        <image
+        <!-- <image
           v-if="pills === '3'"
           :src="getImgPill3()"
-          class="h-full absolute"
           :class="{
             'v-tabs__container-pills-first': current === 0,
             'v-tabs__container-pills-last': current === tabs.length - 1,
@@ -105,6 +104,46 @@
             width: currentWidth + 'px',
             height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           }"
+          class="h-full absolute pill3 animate__animated animate__fadeIn"
+        /> -->
+        <image
+          v-if="pills === '3'"
+          :src="globalGl.BASE_IMG + 'stand3-homemenu-left-tab.png'"
+          :style="{
+            left: pillsLeft + 'px',
+            width: currentWidth + 'px',
+            height: height * 1 + 2 + (hasDetail ? 20 : 0) + 'rpx',
+          }"
+          :class="{
+            'my-hide': current !== 0,
+          }"
+          class="h-full absolute pill3 v-tabs__container-pills-first"
+        />
+        <image
+          v-if="pills === '3'"
+          :src="globalGl.BASE_IMG + 'stand3-homemenu-center-tab.png'"
+          :style="{
+            left: pillsLeft + 'px',
+            width: currentWidth + 'px',
+            height: height * 1 + 2 + (hasDetail ? 20 : 0) + 'rpx',
+          }"
+          :class="{
+            'my-hide': !(current !== 0 && current !== tabs.length - 1),
+          }"
+          class="h-full absolute pill3 v-tabs__container-pills-center"
+        />
+        <image
+          v-if="pills === '3'"
+          :src="globalGl.BASE_IMG + 'stand3-homemenu-right-tab.png'"
+          :style="{
+            left: pillsLeft + 'px',
+            width: currentWidth + 'px',
+            height: height * 1 + 2 + (hasDetail ? 20 : 0) + 'rpx',
+          }"
+          :class="{
+            'my-hide': current !== tabs.length - 1,
+          }"
+          class="h-full absolute pill3 v-tabs__container-pills-last"
         />
       </view>
     </scroll-view>
@@ -485,5 +524,11 @@
   }
   .f22 {
     font-size: 22rpx;
+  }
+
+  .pill3 {
+    z-index: -1;
+    transition: all 0.2s linear;
+    // bottom: -4rpx;
   }
 </style>

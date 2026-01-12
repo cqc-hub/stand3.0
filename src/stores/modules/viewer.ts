@@ -18,6 +18,8 @@ const viewerStore = defineStore('viewer', {
   },
 
   actions: {
+    sortList(list) {},
+
     async init(source = '') {
       if (!this.viewConfig.length) {
         this.version = '';
@@ -28,7 +30,7 @@ const viewerStore = defineStore('viewer', {
 
     async getViewConfig(source = '') {
       this.loading = true;
-      this.viewConfig = await ServerStaticData.getHomeConfig()
+      const result = await ServerStaticData.getHomeConfig()
         .catch((e) => {
           this.clearStore();
           console.error(e);
@@ -37,6 +39,8 @@ const viewerStore = defineStore('viewer', {
         .finally(() => {
           this.loading = false;
         });
+
+      this.viewConfig = result;
 
       // 新增公告展示判断 showFlag为1展示
       if (this.viewConfig[1].showFlag === '1') {
@@ -87,6 +91,8 @@ const viewerStore = defineStore('viewer', {
     },
 
     homeBannerLeftFunctionList(): any[] {
+      const list = this.viewConfig[2]?.leftFunctionList || [];
+
       return this.viewConfig[2]?.leftFunctionList || [];
     },
 

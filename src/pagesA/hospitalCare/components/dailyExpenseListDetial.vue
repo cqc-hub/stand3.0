@@ -55,6 +55,14 @@
             <view class="item-title">住院号</view>
             <view class="item-content">{{ costInfoDetal.inpatientNo }}</view>
           </view>
+
+          <view v-if="getInHosDay.length" class="item">
+            <view class="item-title">住院日期</view>
+            <view class="item-content">
+              {{ getInHosDay.join('~') }}
+            </view>
+          </view>
+
           <view class="item">
             <view class="item-title">费用总额</view>
             <view class="item-content-money">
@@ -190,9 +198,12 @@
     isHosDaylist?: string;
     isHosTotallist?: string;
     hospitalId?: string;
-    pageProps?: any;
+    pageProps1?: any;
   }>();
-  const _pageProps = computed(() => props.pageProps || {});
+  const _pageProps = computed(() => props.pageProps1 || {});
+  const getInHosDay = computed(() => {
+    return [_pageProps.value.inDay, _pageProps.value.endDay].filter((o) => o);
+  });
 
   const providePageProp = inject('pageProp', () => ({
     start: '',
