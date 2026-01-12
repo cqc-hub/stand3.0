@@ -31,11 +31,7 @@ interface IStateGlobal {
   sysCode: string;
   modeOld: boolean; // 敬老模式?
 
-  flagCaches: Array<{
-    title: string;
-    content: string;
-    initialText?: string;
-  }>;
+  flagCaches: Object;
 
   intAssistantImg: string;
 }
@@ -97,7 +93,7 @@ const globalStore = defineStore('global', {
       cacheData: {},
       envH5: 'wx',
       isShowFlag: false,
-      flagCaches: [],
+      flagCaches: {},
       intAssistantImg: '',
     };
   },
@@ -190,7 +186,7 @@ const globalStore = defineStore('global', {
       };
     },
     setFlagsCaches(flags) {
-      let needCacheFlags = new Array(5000) as any;
+      let needCacheFlags = {} as any;
       flags.forEach((item) => {
         needCacheFlags[item.typeFlag] = {
           content: item.content,
@@ -201,7 +197,7 @@ const globalStore = defineStore('global', {
     },
 
     clearFlagCaches() {
-      this.flagCaches = [];
+      this.flagCaches = {};
     },
 
     clearStore() {

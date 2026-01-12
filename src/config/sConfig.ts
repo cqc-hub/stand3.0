@@ -816,7 +816,7 @@ const scJson: Record<string, ISConfig> = {
           cardType: '01',
         },
         medicalFiling: '1',
-        // isFamilyPayment: '1',
+        isFamilyPayment: '1',
       },
     },
   },
