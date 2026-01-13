@@ -14,10 +14,7 @@
       @change="choosePat"
       ref="selHosRef"
     />
-    <g-choose-pat
-      :disabled="false"
-      @choose-pat="choosePat"
-    />
+    <g-choose-pat :disabled="false" @choose-pat="choosePat" />
     <g-tbanner
       v-if="gStores.userStore.patChoose.patientId"
       :config="yunBannerConfig"
@@ -399,7 +396,7 @@
       }
     }
 
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
   };
 
   let listLenHis = 0;
@@ -567,7 +564,7 @@
   //电子健康卡
   const handleFacility = async () => {
     // #ifdef MP-WEIXIN
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     let scene = '0101082';
     if (tabs.value[tabCurrent.value]?.headerType === 'jy') {
       scene = '0101082';
@@ -854,10 +851,12 @@
     //   }
 
     if (listYun) {
-      const { imgUrl } = listYun;
+      const { imgUrl, path } = listYun;
       const pat = gStores.userStore.patChoose;
 
-      if (Object.keys(pat).length) {
+      if (path) {
+        useTBanner(listYun);
+      } else if (Object.keys(pat).length) {
         const { cardNumber, patientId } = pat;
 
         const { result } = await api.getCloudReportUrl({

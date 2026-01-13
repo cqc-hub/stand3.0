@@ -1028,12 +1028,15 @@ const scJson: Record<string, ISConfig> = {
       wx: {
         medicalPlugin: '1',
         medicalDefault: '1', // TODO: 待确认
+        crossProgramBizType: {
+          clinic: 'T2loeEEdAO',
+        },
       },
 
       alipay: {
         medicalFiling: '1',
         medicalPlugin: {
-          orgId: { 13152: 'H33060300001' },
+          orgId: { 13152: 'H33010500310' },
           cardType: '01',
         },
       },
