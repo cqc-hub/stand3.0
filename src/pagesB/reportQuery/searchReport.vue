@@ -144,6 +144,17 @@
         _isLogin: true,
       });
     }
+
+    tempList.value.map((o) => {
+      const { key } = o;
+      if (key === 'repId') {
+        if (isShowScan(o)) {
+          o.placeholder = '扫码或输入检验单号';
+        } else {
+          o.placeholder = '请输入检验单号';
+        }
+      }
+    });
     gform.value.setList(tempList.value);
   });
 </script>
