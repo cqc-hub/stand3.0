@@ -57,12 +57,11 @@
               }  `"
               :src="item.iconfont"
               class="mb12"
-              mode="widthFix"
               lazy-load
             />
             <text
               v-else
-              :class="`icon-font ${
+              :class="`icon-font mb12 ${
                 options.type == 1 && options.list.length == 3
                   ? 'grid-resize1'
                   : 'grid-resize'
@@ -95,7 +94,6 @@
               v-if="isImg(item.iconfont)"
               :class="`icon-font grid-resize`"
               :src="item.iconfont"
-              mode="widthFix"
               lazy-load
             />
             <text v-else :class="`icon-font grid-resize ${item.iconfont}`" />
@@ -252,11 +250,13 @@
         width: 88upx;
         height: 88upx;
         position: relative;
+        display: inline-block;
       }
       .grid-resize1 {
-        width: 100upx;
-        height: 100upx;
+        width: 88upx;
+        height: 88upx;
         position: relative;
+        display: inline-block;
       }
 
       .grid-label {
@@ -406,8 +406,8 @@
       padding: 15px 0;
 
       .grid-resize {
-        width: 48upx;
-        height: 48upx;
+        width: 48rpx;
+        height: 48rpx;
         position: relative;
       }
 
