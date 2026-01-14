@@ -64,7 +64,6 @@ export const beforeEach = async (
   const userStore = useUserStore();
 
   const { extend } = currentRoute;
-
   let [login, patient, herenId] = [false, false, false];
 
   if (extend) {
