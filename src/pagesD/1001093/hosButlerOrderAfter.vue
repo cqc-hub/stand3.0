@@ -36,7 +36,7 @@
           <view class="flex flex-between p32">
             <view class="font-semibold f36">就诊人信息</view>
             <view
-              v-if="!editForm2"
+              v-if="!editForm2 && false"
               @click="
                 () => {
                   editForm2 = true;
@@ -66,7 +66,7 @@
           <view class="flex flex-between p32">
             <view class="font-semibold f36">联系人信息</view>
             <view
-              v-if="!editForm3"
+              v-if="!editForm3 && false"
               @click="
                 () => {
                   editForm3 = true;
@@ -158,14 +158,17 @@
       return;
     }
 
-    useTBanner({
-      type: 'h5',
-      isSelfH5: '1',
-      path: 'pagesA/1001093/hosButler',
-      addition: {
-        patientId: '_patientId',
+    useTBanner(
+      {
+        type: 'h5',
+        isSelfH5: '1',
+        path: 'pagesA/1001093/hosButler',
+        addition: {
+          patientId: '_patientId',
+        },
       },
-    });
+      'reLaunch'
+    );
   };
 
   const formatterTemp = (list: TInstance[], modeOld = false) => {
@@ -267,8 +270,8 @@
     const [birthProvince, birthCity, birthDistrict] = value;
 
     if (birthProvince && birthCity && birthDistrict) {
-      formData.value.birthProvince = birthProvince.text;
-      formData.value.birthCity = birthCity.text;
+      formData.value.birthProvince = birthProvince.value;
+      formData.value.birthCity = birthCity.value;
       formData.value.birthDistrict = birthDistrict.text;
     }
   };

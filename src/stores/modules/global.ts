@@ -337,7 +337,7 @@ const globalStore = defineStore('global', {
       // #endif
 
       // #ifdef MP-TOUTIAO
-       this.ev = 'tt';
+      this.ev = 'tt';
       updateBrowser({
         source: 66,
         accountType: 66,

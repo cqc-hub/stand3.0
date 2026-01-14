@@ -517,7 +517,7 @@ export interface ISystemConfig_ {
     // 开启报告解读（目前嘉二是列表 其他默认都详情）
     reportAnalysis: '1';
     // 报告解读悬浮框图片  标准版 中医版reportAnalysisImg_1001035.png
-    reportAnalysisImg:string;
+    reportAnalysisImg: string;
     // 列表页开放选择时间
     isOpenFilterReportByTime?: '1';
     // 详情页开放收藏按钮
@@ -541,8 +541,9 @@ export interface ISystemConfig_ {
 
     /** 报告查询列表云影像链接 */
     listYun?: {
+      // 只传入 imgUrl 调用后端接口获取三方h5链接
       imgUrl: string; // https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-yun-banner.png
-    };
+    } & TBannerConfig;
 
     jyListFooterBtn?: TButtonConfig[] | TButtonConfig;
     jcListFooterBtn?: TButtonConfig[] | TButtonConfig;

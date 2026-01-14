@@ -18,6 +18,7 @@ import api from '@/service/api';
  * - 职业 yqjc_job
  * - 学历 yqjc_edu
  * - 关系 yqjc_relationship
+ * - 婚姻 yqjc_marital
  * @returns
  */
 export const useHosButlerOrder = () => {
@@ -50,16 +51,6 @@ export const useHosButlerOrder = () => {
       my.enableAlertBeforeUnload(opt);
       // #endif
     }
-
-    // if (key === '1') {
-    //   formData2.value = {
-    //     ...formData.value,
-    //   };
-    // } else if (key === '2') {
-    //   formData3.value = {
-    //     ...formData.value,
-    //   };
-    // }
   };
 
   let resolve: (...any) => any = () => {};
@@ -235,16 +226,8 @@ export const useHosButlerOrder = () => {
         label: '婚姻',
         key: 'marital',
         showSuffixArrowIcon: true,
-        options: [
-          {
-            label: '未婚',
-            value: '未婚',
-          },
-          {
-            label: '已婚',
-            value: '已婚',
-          },
-        ],
+        autoOptions: 'yqjc_marital',
+        options: [],
         field: 'select',
         placeholder: '请选择',
       },
@@ -412,14 +395,10 @@ export const useHosButlerOrder = () => {
       ...pageProps.value,
       ...formData2.value,
       ...formData3.value,
-      birthProvince: '330000',
-      birthCity: '330100',
-      birthDistrict: '1',
-      citizenshipCode: '1',
-      relationship: '0',
+      // citizenshipCode: '1',
     };
 
-    await api.submitAdmissionApplication(reqArg);
+    // await api.submitAdmissionApplication(reqArg);
 
     await apiAsync(uni.showModal, {
       content: '提交成功',
@@ -493,8 +472,8 @@ export const useHosButlerOrder = () => {
       const [birthProvince, birthCity, birthDistrict] = value;
 
       if (birthProvince && birthCity && birthDistrict) {
-        formData.value.birthProvince = birthProvince.text;
-        formData.value.birthCity = birthCity.text;
+        formData.value.birthProvince = birthProvince.value;
+        formData.value.birthCity = birthCity.value;
         formData.value.birthDistrict = birthDistrict.text;
       }
     },
