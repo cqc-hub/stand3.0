@@ -873,7 +873,7 @@
 
           useTBanner(yunBannerConfig.value);
         } else {
-          gStores.messageStore.showMessage('未获取到云影像数据', 3000);
+          gStores.messageStore.showMessage('未获取到云影像数据', 1500);
         }
       }
     }

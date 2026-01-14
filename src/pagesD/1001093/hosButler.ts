@@ -398,7 +398,12 @@ export const useHosButlerOrder = () => {
       // citizenshipCode: '1',
     };
 
-    // await api.submitAdmissionApplication(reqArg);
+    const {
+      result: {
+        visitNo,
+        cardNumber
+      }
+    } = await api.submitAdmissionApplication(reqArg);
 
     await apiAsync(uni.showModal, {
       content: '提交成功',
@@ -406,7 +411,11 @@ export const useHosButlerOrder = () => {
     });
 
     uni.redirectTo({
-      url: joinQueryForUrl('/pagesD/1001093/hosButlerOrderAfter', reqArg),
+      url: joinQueryForUrl('/pagesD/1001093/hosButlerOrderAfter', {
+        ...reqArg,
+        visitNo,
+        cardNumber
+      }),
     });
   };
 

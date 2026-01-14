@@ -77,7 +77,7 @@
 
               <view
                 v-if="globalGl.sConfig.isOpenHelpOld === '1'"
-                class="bg-white flex items-center help-old pr12 pl8 pt4 pb4"
+                class="bg-white flex items-center help-old pr12 pl8 pt4 pb4 g-border"
               >
                 <image
                   :src="
@@ -1286,7 +1286,7 @@
   }
 
   .help-old {
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    // border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 18px;
     backdrop-filter: blur(15px);
 

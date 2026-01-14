@@ -61,7 +61,7 @@
           @ywz-click="ywzClick"
           @go-detail="goDetail"
           @go-hos-navigate="goHosNavigate"
-        > 
+        >
         </My-Registration-List-Card>
       </block>
 
