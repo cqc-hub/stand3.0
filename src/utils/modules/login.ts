@@ -246,13 +246,20 @@ export class LoginUtils extends GStores {
     if (['1001095'].includes(sysCode)) {
       await api.patSync({ source: this.globalStore.browser.source });
     }
+
+    if (['1001093'].includes(sysCode)) {
+      const reqData = {
+        source: this.globalStore.browser.source,
+        wxOpenId: this.globalStore.h5OpenId,
+      };
+      await api.patSync(reqData);
+    }
   }
   //判断是否需要前往手机号登录
   async judgeLoginByPhoneVerify() {
     let flag = false;
-    const { isLoginByPhoneVerify } = await ServerStaticData.getSystemConfig(
-      'RestOfConfig'
-    );
+    const { isLoginByPhoneVerify } =
+      await ServerStaticData.getSystemConfig('RestOfConfig');
     if (isLoginByPhoneVerify === '1') {
       // 把promise的resolve函数，赋值给messageStore的closeCallBack状态
       const { confirm } = await new Promise<any>((closeCallBack) => {
@@ -1160,9 +1167,8 @@ export class Login extends LoginUtils {
 export class PatientUtils extends LoginUtils {
   usePatDynamicCode = {
     async isOpen(path: string) {
-      const { GlobalConfig } = await cacheUtil.getSystemConfig(
-        'GlobalConfig'
-      )();
+      const { GlobalConfig } =
+        await cacheUtil.getSystemConfig('GlobalConfig')();
 
       return (GlobalConfig.refreshQrCode || []).includes(path);
     },
@@ -1475,9 +1481,8 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
-        data
-      );
+      const { healthCardId, qrCodeText } =
+        await this.regHealthCardByPatInfo(data);
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;
@@ -1529,9 +1534,8 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
-        data
-      );
+      const { healthCardId, qrCodeText } =
+        await this.regHealthCardByPatInfo(data);
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;
