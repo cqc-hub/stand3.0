@@ -605,9 +605,13 @@ export class LoginUtils extends GStores {
        *  - 开发设置-应用网关
        *  - 产品绑定-绑定产品-获取会员手机号
        *
-       * - 主体申请 会员手机号能力
+       * - 主体申请 会员手机号能力（已启用，配置isAliAuthBase）
        *
        */
+      /**
+       * sConfig 下配置isAliAuthBase支持直接手机号授权
+       */
+
       const resPhone = await apiAsync(my.getPhoneNumber, getPhoneNumberOpt);
       encrypData = resPhone.response;
     }

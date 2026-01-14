@@ -860,6 +860,7 @@ const scJson: Record<string, ISConfig> = {
   1001085: {
     login: {
       isSkipPerfect: '1',
+      isAliAuthBase: '1',
     },
   },
   /**

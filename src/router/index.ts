@@ -1,7 +1,7 @@
 import PAGE_DATA from '@/pages.json';
 import globalGl from '@/config/global';
 import { useGlobalStore, useUserStore } from '@/stores';
-import { joinQuery } from '@/common';
+import { joinQuery, getQueryUrl } from '@/common';
 
 const pageAdmin = new Map();
 const routerPages = [...PAGE_DATA.pages];
@@ -51,12 +51,20 @@ export const beforeEach = async (
     }
   }
 
+  const { setNavBarTitle } = getQueryUrl(fullUrl);
+  if (setNavBarTitle) {
+    setTimeout(() => {
+      uni.setNavigationBarTitle({ title: setNavBarTitle });
+    }, 500);
+  }
+
   const url = fullUrl.split('?')[0];
   const currentRoute = getCurrentRoute(url) || {};
   const globalStore = useGlobalStore();
   const userStore = useUserStore();
 
   const { extend } = currentRoute;
+
   let [login, patient, herenId] = [false, false, false];
 
   if (extend) {

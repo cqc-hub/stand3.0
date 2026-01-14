@@ -132,6 +132,7 @@
     });
   });
   const formSubmit = async ({ data }) => {
+    console.log(9999,data)
     const {
       result: { examineeNumber, fee, hosId, name, payState, payTime },
     } = await api.getExamPayResult(data);

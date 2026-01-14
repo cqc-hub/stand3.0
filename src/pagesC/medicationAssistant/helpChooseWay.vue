@@ -184,7 +184,11 @@
   import { getSrc } from './utils';
   import { useCacheStore } from '@/stores';
   import { getShowDrugName } from '@/pagesB/medicationAssistant/utils/medicalHelp';
-  import { aliPayOldSystemPayType, payMoneyOnline, toPayPull } from '@/components/g-pay/index';
+  import {
+    aliPayOldSystemPayType,
+    payMoneyOnline,
+    toPayPull,
+  } from '@/components/g-pay/index';
   import api from '@/service/api';
 
   import AddressBox from '../medRecordApply/components/MedRecordDetailsAddressBox.vue';
@@ -203,6 +207,7 @@
       mailMethod?: 'isYZ' | 'isSF';
     }
   );
+  const expressInfo = ref<any>({});
 
   const isChineseMedical = (item: any) => {
     return !!(item && item.drugTypeName && item.drugTypeName.includes('中药'));
@@ -299,12 +304,13 @@
     const addressData = addressList.value[0];
     const { city, county, province, senderName, senderPhone, detailedAddress } =
       addressData as any;
+    let expressCompany = aimValue.value[0];
     const params = {
       city,
       county,
       province,
       address: detailedAddress,
-      expressCompany: aimValue.value[0], //1-顺丰快递 2-邮政
+      expressCompany, //1-顺丰快递 2-邮政
       expressName: senderName,
       expressPhone: senderPhone,
       prescIdList: cacheStore.medicalHelpSelList.map((o) => o.prescId),
@@ -328,7 +334,13 @@
           : api.drugDeliveryCost;
       const { result } = await actionApi(params);
       const { totalFee, iceBagCharges, hosOrderId, expressList } = result;
-
+      expressInfo.value = {
+        expressCompany,
+        totalFee,
+        iceBagCharges,
+        hosOrderId,
+        expressList,
+      };
       if (type === 'SZYouZhen') {
         feeDetail.value = {
           totalFee: feeDetail.value.totalFee,
@@ -461,6 +473,13 @@
         iceBagNum.value > 0
       ) {
         getExpressFee(`SZYouZhen`);
+      }
+      if (args.expressCompany != expressInfo.value.expressCompany) {
+        gStores.messageStore.showMessage(
+          '快递费用信息已过期，请重新获取',
+          1500
+        );
+        return;
       }
       gotoExpressPay(args);
       return;

@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001083",
+  "sysCode": "1001085",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -399,7 +399,7 @@
     "1001085": {
       "wxAppid": "wx3a24f824ca86d6dc",
       "h5Appid1": "",
-      "alipayAppid": "",
+      "alipayAppid": "2021006124681484",
       "isvAlipayAppid": "",
       "name": "温州市中西医结合医院",
       "isStartComeTest": false,
