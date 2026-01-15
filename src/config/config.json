@@ -189,7 +189,7 @@
       "name": "濮阳市人民医院",
       "isSearchInHos": true,
       "isOpenOcr": false,
-      "isStartComeTest": true
+      "isStartComeTest": false
     },
     "1001059": {
       "wxAppid": "wxea8552a036115576",

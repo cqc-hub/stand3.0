@@ -43,7 +43,8 @@
               :style="cssInfoToObject(item.showBodyStyle)"
             >
               <slot :item="item" :value="getShowLabel(item)" name="showbody">
-                {{ getShowLabel(item) }}
+                <!-- {{ getShowLabel(item) }} -->
+                {{ maskValueItem(item) }}
               </slot>
             </view>
           </block>
@@ -458,7 +459,7 @@
     if (inputMask) {
       return inputMask(v, item);
     } else {
-      return v;
+      return getShowLabel(item);
     }
   };
 

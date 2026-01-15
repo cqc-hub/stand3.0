@@ -112,7 +112,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { apiAsync, GStores, useTBanner } from '@/utils';
+  import {
+    apiAsync,
+    GStores,
+    idCardConvert,
+    phoneConvert,
+    useTBanner,
+  } from '@/utils';
   import { computed, onMounted, ref } from 'vue';
   import { useHosButlerOrder } from './hosButler';
   import { onLoad } from '@dcloudio/uni-app';
@@ -174,6 +180,7 @@
   const formatterTemp = (list: TInstance[], modeOld = false) => {
     list.map((o, i) => {
       let baseSize = 180;
+      const { key } = o;
 
       if (modeOld) {
         o.labelWidth = `${baseSize + 30}rpx`;
@@ -198,7 +205,13 @@
       if (i === list.length) {
         o.rowStyle['border-radius'] = '8px';
       }
+
+      if (key === 'patientPhone') {
+        o.inputMask = phoneConvert;
+      }
     });
+
+    console.log(list);
   };
 
   const editForm = (formRef, list: TInstance[]) => {
@@ -266,6 +279,7 @@
       // #endif
     }
   };
+
   const addressChange = ({ value = [] as any[] }) => {
     const [birthProvince, birthCity, birthDistrict] = value;
 

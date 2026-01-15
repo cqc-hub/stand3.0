@@ -5,7 +5,6 @@
  *
  * ? 新的系统参数直接配置到 apiConfig.ts
  */
-
 export interface ISConfig {
   // 小程序登录相关 ----------------------------
   login?: {
@@ -152,25 +151,7 @@ export interface ISConfig {
         appId: string;
         path: string;
 
-        pathExtraData?: {
-          // 拼接到授权时候path - 东软医保模式必有以下可选字段
-          /** 固定值 getAuthCode */
-          openType: 'getAuthCode';
-          /** 固定值 04107 */
-          bizType: '04107';
-          /** 城市编码(邮件) */
-          cityCode: string;
-          /** 渠道号(邮件) */
-          channel: string;
-          /** 机构渠道认证编码 */
-          orgChnlCrtfCodg: string;
-          /** 定点医疗机构编码 */
-          orgCodg: string;
-          /** 定点医疗机构小程序/H5应用ID */
-          orgAppId: string;
-          /** 医保建档代授权字段 */
-          relatedType?: string;
-        } & BaseObject;
+        pathExtraData?: TMedicalNationWxConfig;
         // 走东软医保模式
         dongRuanMedicalInfo?: {
           h5BaseUrl: string;
@@ -245,6 +226,26 @@ export interface ISConfig {
   // 有药品配送功能?
   isDrugDelivery?: '1';
 }
+
+type TMedicalNationWxConfig = {
+  // 拼接到授权时候path - 东软医保模式必有以下可选字段
+  /** 固定值 getAuthCode */
+  openType: 'getAuthCode';
+  /** 固定值 04107 */
+  bizType: '04107';
+  /** 城市编码(邮件) */
+  cityCode: string;
+  /** 渠道号(邮件) */
+  channel: string;
+  /** 机构渠道认证编码 */
+  orgChnlCrtfCodg: string;
+  /** 定点医疗机构编码 */
+  orgCodg: string;
+  /** 定点医疗机构小程序/H5应用ID */
+  orgAppId: string;
+  /** 医保建档代授权字段 */
+  relatedType?: string;
+} & BaseObject;
 
 const scJson: Record<string, ISConfig> = {
   /**
@@ -1053,10 +1054,8 @@ const scJson: Record<string, ISConfig> = {
       },
     },
     homeTopBg:
-      // 'https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-1001094-home-topbg.png',
       'https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-1001093-home-topbg.png',
     homeNavTitleLogo:
-      // 'https://phsdevoss.eheren.com/pcloud/phs3.0/zhejiangshenzhongliunavtitle-white.png',
       'https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-1001093-home-navtitle.png',
   },
   1001094: {
@@ -1077,19 +1076,34 @@ const scJson: Record<string, ISConfig> = {
     },
     medicalMHelp: {
       wx: {
+        isMedicalOrder: '1',
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
           path: 'auth/pages/bindcard/auth/index',
+          // 黄河
+          // pathExtraData: {
+          //   openType: 'getAuthCode',
+          //   bizType: '04107',
+          //   cityCode: '650100',
+          //   channel: 'AAEZDc60WgTiVxo5xtoqTx-g',
+          //   orgChnlCrtfCodg:
+          //     'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsNriL3sY3GfFVjZHL7b0de',
+          //   orgCodg: 'H65010300208',
+          //   orgAppId: '1GJ8TA8QI0IE75430B0A0000F938BFC7',
+          //   sourceapp: 'wx081a6fb9ee8778e4-1',
+          // },
+
+          // 开发区
           pathExtraData: {
             openType: 'getAuthCode',
             bizType: '04107',
             cityCode: '650100',
-            channel: 'AAEZDc60WgTiVxo5xtoqTx-g',
+            channel: 'AAFnB6FxCsnf4D2WcS3JifN8',
             orgChnlCrtfCodg:
-              'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsNriL3sY3GfFVjZHL7b0de',
-            orgCodg: 'H65010300208',
-            orgAppId: '1GJ8TA8QI0IE75430B0A0000F938BFC7',
-            sourceapp: 'wx081a6fb9ee8778e4-1',
+              'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxup9p6OTEwpdxuIGgYrHBhV',
+            orgCodg: 'H65017100367',
+            orgAppId: '1ISCR539P0048D430B0A000030129568',
+            sourceapp: 'wx081a6fb9ee8778e4',
           },
         },
       },

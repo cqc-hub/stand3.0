@@ -2,6 +2,7 @@ import { TInstance } from '@/components/g-form';
 import {
   apiAsync,
   GStores,
+  idCardConvert,
   idValidator,
   rulePhone,
   useTBanner,
@@ -119,6 +120,9 @@ export const useHosButlerOrder = () => {
         key: 'idCard',
         field: 'input-text',
         disabled: true,
+        inputMask(v) {
+          return idCardConvert(v);
+        },
       },
       {
         label: '出生日期',
@@ -258,19 +262,19 @@ export const useHosButlerOrder = () => {
         field: 'input-text',
         placeholder: '请输入',
       },
-      {
-        label: '家庭联系人',
-        key: 'phone',
-        field: 'input-text',
-        placeholder: '请输入',
+      // {
+      //   label: '家庭联系人',
+      //   key: 'phone',
+      //   field: 'input-text',
+      //   placeholder: '请输入',
 
-        rule: [
-          {
-            message: '请确认手机号是否有误',
-            rule: rulePhone,
-          },
-        ],
-      },
+      //   rule: [
+      //     {
+      //       message: '请确认手机号是否有误',
+      //       rule: rulePhone,
+      //     },
+      //   ],
+      // },
 
       {
         label: '户口地址',
@@ -395,15 +399,13 @@ export const useHosButlerOrder = () => {
       ...pageProps.value,
       ...formData2.value,
       ...formData3.value,
-      // citizenshipCode: '1',
+      _address: addressLLabel,
     };
 
-    const {
-      result: {
-        visitNo,
-        cardNumber
-      }
-    } = await api.submitAdmissionApplication(reqArg);
+    // const {
+    //   result: { visitNo, cardNumber },
+    // } =
+    await api.submitAdmissionApplication(reqArg);
 
     await apiAsync(uni.showModal, {
       content: '提交成功',
@@ -413,11 +415,12 @@ export const useHosButlerOrder = () => {
     uni.redirectTo({
       url: joinQueryForUrl('/pagesD/1001093/hosButlerOrderAfter', {
         ...reqArg,
-        visitNo,
-        cardNumber
+        // visitNo,
+        // cardNumber,
       }),
     });
   };
+  let addressLLabel = '';
 
   return {
     pageProps,
@@ -484,6 +487,7 @@ export const useHosButlerOrder = () => {
         formData.value.birthProvince = birthProvince.value;
         formData.value.birthCity = birthCity.value;
         formData.value.birthDistrict = birthDistrict.text;
+        addressLLabel = `${birthProvince.text}${birthCity.text}${birthDistrict.text}`;
       }
     },
     async pageLoad(opt: any) {

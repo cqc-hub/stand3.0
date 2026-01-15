@@ -1,5 +1,5 @@
 <template>
-  <view class="g-page">
+  <view class="page">
     <view class="pt48">
       <hosStep
         :list="stepList"
@@ -18,6 +18,15 @@
         bodyBold
         ref="gform"
       />
+      <view class="safe-height"></view>
+      <view class="safe-height"></view>
+      <view class="safe-height"></view>
+      <view class="safe-height"></view>
+      <view class="safe-height"></view>
+      <view class="safe-height"></view>
+      <view class="safe-height"></view>
+      <view class="safe-height"></view>
+      <view class="safe-height"></view>
     </view>
 
     <view class="g-footer">
@@ -72,6 +81,17 @@
   .safe-height {
     &::before {
       height: 24rpx;
+    }
+  }
+
+  .page {
+    height: 100vh;
+
+    .g-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
   }
 </style>
