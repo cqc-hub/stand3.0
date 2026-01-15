@@ -399,7 +399,7 @@ export const useHosButlerOrder = () => {
       ...pageProps.value,
       ...formData2.value,
       ...formData3.value,
-      _address: addressLLabel,
+      // _address: addressLLabel,
     };
 
     // const {
@@ -420,7 +420,6 @@ export const useHosButlerOrder = () => {
       }),
     });
   };
-  let addressLLabel = '';
 
   return {
     pageProps,
@@ -486,8 +485,10 @@ export const useHosButlerOrder = () => {
       if (birthProvince && birthCity && birthDistrict) {
         formData.value.birthProvince = birthProvince.value;
         formData.value.birthCity = birthCity.value;
-        formData.value.birthDistrict = birthDistrict.text;
-        addressLLabel = `${birthProvince.text}${birthCity.text}${birthDistrict.text}`;
+        formData.value.birthDistrict = birthDistrict.value;
+        formData.value.birthProvinceName = birthProvince.text;
+        formData.value.birthCityName = birthCity.text;
+        formData.value.birthDistrictName = birthDistrict.text;
       }
     },
     async pageLoad(opt: any) {
@@ -501,8 +502,11 @@ export const useHosButlerOrder = () => {
         idType,
         idCard,
         birthDistrict,
+        birthDistrictName,
         birthCity,
+        birthCityName,
         birthProvince,
+        birthProvinceName,
       } = pageProps.value;
 
       formData1.value = {
@@ -512,19 +516,19 @@ export const useHosButlerOrder = () => {
       };
 
       if (birthDistrict && birthCity && birthProvince) {
-        formData2.value._address = `${birthProvince}${birthCity}${birthDistrict}`;
+        formData2.value._address = `${birthProvinceName}${birthCityName}${birthDistrictName}`;
         formData2.value.birthProvince = birthProvince;
         formData2.value.birthCity = birthCity;
         formData2.value.birthDistrict = birthDistrict;
       } else if (idType === '身份证' && idCard) {
-        const res = await idValidator.getIdCardAddress(idCard);
-        if (res) {
-          const { birthCity, birthDistrict, birthProvince } = res;
-          formData2.value._address = `${birthProvince}${birthCity}${birthDistrict}`;
-          formData2.value.birthProvince = birthProvince;
-          formData2.value.birthCity = birthCity;
-          formData2.value.birthDistrict = birthDistrict;
-        }
+        // const res = await idValidator.getIdCardAddress(idCard);
+        // if (res) {
+        //   const { birthCity, birthDistrict, birthProvince } = res;
+        //   formData2.value._address = `${birthProvince}${birthCity}${birthDistrict}`;
+        //   formData2.value.birthProvince = birthProvince;
+        //   formData2.value.birthCity = birthCity;
+        //   formData2.value.birthDistrict = birthDistrict;
+        // }
       }
     },
   };
