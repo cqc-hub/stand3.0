@@ -276,7 +276,7 @@
                     <view
                       style="font-weight: 400"
                       class="iconfont"
-                      v-if="judgeAllowNav()"
+                      v-if="judgeAllowNav(orderRegInfo)"
                     >
                       &#xe6c8;
                     </view>
@@ -502,7 +502,7 @@
     getOnlineMedicalConfig,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
-  import { HosNavData } from './utils/MyRegistration';
+  import { HosNavData,judgeAllowNav } from './utils/MyRegistration';
 
   import globalGl from '@/config/global';
 
@@ -1502,27 +1502,13 @@
 
   //院内导航
   const handleNav = async () => {
-    if (judgeAllowNav()) {
+    if (judgeAllowNav(orderRegInfo.value)) {
       let item = orderRegInfo.value;
       useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
     }
   };
 
-  const judgeAllowNav = () => {
-    if (gStores.globalStore.sysCode === '1001052') {
-      const { hosId, extend } = orderRegInfo.value;
-      if (['13001'].includes(hosId)) {
-        try {
-          if (JSON.parse(extend || '').areaId) {
-            return true;
-          }
-        } catch (e) {
-          return false;
-        }
-      }
-    }
-    return false;
-  };
+
 
   const useDeptTBanner = () => {
     let { hosDeptId, hosId } = orderRegInfo.value;

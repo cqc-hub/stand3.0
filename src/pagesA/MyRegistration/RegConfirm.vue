@@ -300,7 +300,7 @@
   });
 
   const isAddedNumSelf = computed(() => {
-    return pageConfig.value.isAddedNumSelf && isWaitReg.value;
+    return pageConfig.value.isAddedNumSelf === '1' && isWaitReg.value;
   });
 
   const agreeText = computed(() => {

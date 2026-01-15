@@ -95,30 +95,10 @@
           </button>
 
           <button
-            v-if="isShowRegCancel(getBtnData(item))"
-            @click="goDetail(item)" 
-            class="btn btn-round btn-size-small btn-border cancel-btn"
-          >
-            取消预约
-          </button>
-
-          <button
             v-if="isShowPaiDui(item)"
             class="btn btn-round btn-size-small btn-border cancel-btn"
           >
             排队叫号
-          </button>
-
-          <button
-            v-if="isShowRegPay(getBtnData(item))"
-            @click="
-                  goDetail(item, {
-                    _autoPay: '1',
-                  })
-                "
-            class="btn btn-round btn-size-small btn-warning"
-          >
-            去支付
           </button>
 
           <button
@@ -128,13 +108,14 @@
           >
             服务评价
           </button>
+          
           <button
             v-if="isNav(item)"
             @click="goHosNavigate(item)"
             class="btn btn-round btn-size-small btn-border cancel-btn"
           >
             院内导航
-          </button>   
+          </button>
 
           <button
             v-if="isShowMedicalRefund(getBtnData(item))"
@@ -150,6 +131,26 @@
             class="btn btn-round btn-size-small btn-border cancel-btn color-111"
           >
             去退号
+          </button>
+
+          <button
+            v-if="isShowRegCancel(getBtnData(item))"
+            @click="goDetail(item)"
+            class="btn btn-round btn-size-small btn-border cancel-btn"
+          >
+            取消预约
+          </button>
+
+          <button
+            v-if="isShowRegPay(getBtnData(item))"
+            @click="
+              goDetail(item, {
+                _autoPay: '1',
+              })
+            "
+            class="btn btn-round btn-size-small btn-warning"
+          >
+            去支付
           </button>
 
           <slot name="footer" :item="item" />
@@ -175,12 +176,15 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { IRegistrationCardItem } from '../../utils/MyRegistration';
+  import {
+    IRegistrationCardItem,
+    judgeAllowNav,
+  } from '../../utils/MyRegistration';
   import {
     getStatusConfig,
     IRegInfo,
     goAskForDoc1001048,
-    useRegBtnShows
+    useRegBtnShows,
   } from '../../utils/regDetail';
   import { joinQueryForUrl, joinQuery } from '@/common';
   import { GStores, ISystemConfig, useTBanner } from '@/utils';
@@ -191,7 +195,7 @@
   const gStores = new GStores();
   const props = defineProps<{
     typeId: number;
-    fatherProps:any;
+    fatherProps: any;
     list: IRegistrationCardItem[];
     showYuanNeiDaoHanBtn: string[];
     showPaiDuiJiaoHaoBtn: string[];
@@ -208,12 +212,12 @@
 
   const {
     isShowMedicalRefund,
-    isShowRegPay, 
+    isShowRegPay,
     isShowRegRefound,
-    isShowRegCancel, 
+    isShowRegCancel,
   } = useRegBtnShows();
 
-  const getBtnData = (item) => { 
+  const getBtnData = (item) => {
     return {
       ...props.fatherProps.value,
       typeId: props.typeId,
@@ -303,41 +307,7 @@
     if (props.isWaitReg) {
       return false;
     }
-    if (gStores.globalStore.ev === 'wx') {
-      const { sysCode } = gStores.globalStore;
-
-      if (sysCode === '1001093') {
-        return true;
-      }
-
-      if (sysCode === '1001046') {
-        return true;
-      }
-
-      if (sysCode === '1001035') {
-        const { hosId } = item;
-
-        if (['12675', '12713'].includes(hosId)) {
-          return true;
-        }
-      }
-
-      if (sysCode === '1001052') {
-        const { hosId } = item;
-
-        if (['13001'].includes(hosId)) {
-          try {
-            if (JSON.parse(item?.extend || '').areaId) {
-              return true;
-            }
-          } catch (e) {
-            return false;
-          }
-        }
-      }
-    }
-
-    return false;
+    return judgeAllowNav(item);
   };
 
   // 最新消息 (濮阳) 仅 "全部挂号" 开放
@@ -363,7 +333,7 @@
       isShowReOrderBtn(item) ||
       isShowYWZBtn(item) ||
       isNav(item) ||
-      isShowRegRefound(getBtnData(item)) || 
+      isShowRegRefound(getBtnData(item)) ||
       isShowMedicalRefund(getBtnData(item)) ||
       (!props.isWaitReg &&
         getCustomBtns.value.some((o) => isShowCustomBtn(item, o)))
@@ -432,7 +402,7 @@
     emits('ywz-click', item);
   };
 
-  const goDetail = (item: IRegistrationCardItem,payload: BaseObject = {}) => {
+  const goDetail = (item: IRegistrationCardItem, payload: BaseObject = {}) => {
     emits('go-detail', item, payload);
   };
 

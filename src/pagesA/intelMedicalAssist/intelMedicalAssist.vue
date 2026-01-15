@@ -91,6 +91,7 @@
     type?: 'report'|'homePage';
     reportId?: string; //报告id
     reportData?: any;
+    setNavBarTitle?: string;
   }>();
 
   const gStores = new GStores();

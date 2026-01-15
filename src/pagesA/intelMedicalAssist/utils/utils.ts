@@ -187,6 +187,8 @@ export const init = async (props) => {
     historyMess: false,
     headerLineMenu: props?.type?.includes('homePage') || 'back',
   };
+  const { setNavBarTitle } = props;
+  setNavBarTitle && (title.value = setNavBarTitle);
   const gStores = new GStores();
   const distinctiveImageList =
     pageConfig.value.intelMedicalAssistConfig?.distinctiveImage?.imageList;
@@ -220,9 +222,9 @@ const getRadomId = () => {
 };
 export const ininWithReport = async (reportId) => {
   console.log('ininWithReport', propsPbj.value);
-  setTimeout(()=>{
+  setTimeout(() => {
     msgState.value.msgLoad = true;
-  },300)
+  }, 300);
   const gStores = new GStores();
   const { source } = gStores.globalStore.browser;
   if (reportId) {
@@ -230,9 +232,9 @@ export const ininWithReport = async (reportId) => {
     const args: any[] = [];
     args.push({
       sysCode: globalGl.SYS_CODE,
-      source, 
-      cardNumber:gStores.userStore.patChoose.cardNumber,
-      ...JSON.parse(propsPbj.value.reportData)
+      source,
+      cardNumber: gStores.userStore.patChoose.cardNumber,
+      ...JSON.parse(propsPbj.value.reportData),
     });
     // #ifndef  H5
     typeInAsk(args, 'report');
@@ -586,8 +588,8 @@ export const inspectionAnalysis = async (reports) => {
       extend: element.extend,
       cardNumber: gStores.userStore.patChoose.cardNumber,
       herenId: gStores.globalStore.herenId,
-    }); 
-   }); 
+    });
+  });
   // #ifndef  H5
   typeInAsk(args, 'report');
   // #endif
@@ -996,7 +998,7 @@ const dealShowType10 = (list, requestId, chatId) => {
     latitude,
     longitude,
     phones,
-    hosId
+    hosId,
   } = list[0];
 
   msgList.value.push({
@@ -1012,7 +1014,7 @@ const dealShowType10 = (list, requestId, chatId) => {
       latitude,
       longitude,
       phones,
-      hosId
+      hosId,
     },
   });
 };
@@ -1221,11 +1223,11 @@ const typeInAsk = async (value, answertype) => {
   if (answertype == 'report') {
     settings.url = `${baseApi}/phs-extend/customer/aiStreamReportAsk`;
     settings.data = JSON.stringify({
-      args: value, 
+      args: value,
     });
   }
   console.warn('手动调用接口', settings);
-  
+
   // 立即设置loading状态和提示文本
   msgState.value.msgLoad = true;
   msgState.value.msgText = '正在分析中，请稍候...'; // 设置等待提示
@@ -1252,8 +1254,8 @@ const typeInAsk = async (value, answertype) => {
       }
     },
     complete: () => {
-       console.log('调用完成')
- // 延迟一小段时间确保所有数据块都已处理完毕
+      console.log('调用完成');
+      // 延迟一小段时间确保所有数据块都已处理完毕
       setTimeout(() => {
         msgState.value.msgLoad = false;
         msgState.value.msgText = '';
@@ -1265,20 +1267,19 @@ const typeInAsk = async (value, answertype) => {
     },
   });
   requestTask?.onHeadersReceived((res) => {
- console.log('连接已建立，等待响应数据...');
+    console.log('连接已建立，等待响应数据...');
     // 连接已建立，继续保持loading状态
     msgState.value.msgLoad = true;
     msgState.value.msgText = '连接已建立，正在接收数据...';
-
   });
-   // 监听数据块
+  // 监听数据块
   requestTask?.onChunkReceived((res) => {
-    // console.log('接收数据块...',res); 
+    // console.log('接收数据块...',res);
     chunkStatus.value.isTyping = true;
     const buf16 = buf2hex(res.data);
     const resStr = hexToString(buf16);
-    chunkStatus.value.chunkTemp += resStr; 
-    
+    chunkStatus.value.chunkTemp += resStr;
+
     processChunks(chunkStatus.value.chunkTemp, typeInIndex);
   });
 };
@@ -1320,12 +1321,12 @@ const typeInAskH5 = (value: any, answertype) => {
   if (answertype == 'report') {
     settings.url = `${env.baseApi}/phs-extend/customer/aiStreamReportAsk`;
     settings.data = JSON.stringify({
-      args: value, 
+      args: value,
     });
   }
 
   const typeInIndex = msgList.value.length;
-    // 立即设置loading状态
+  // 立即设置loading状态
   msgState.value.msgLoad = true;
   msgState.value.msgText = '正在分析中，请稍候...';
 
@@ -1351,10 +1352,10 @@ const typeInAskH5 = (value: any, answertype) => {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
           // 处理成功响应
-        setTimeout(() => {
-          chunkStatus.value.isTyping = false;
-          msgState.value.msgLoad = false;
-          msgState.value.msgText = '';
+          setTimeout(() => {
+            chunkStatus.value.isTyping = false;
+            msgState.value.msgLoad = false;
+            msgState.value.msgText = '';
           }, 300);
         } else {
           // 处理错误响应
@@ -1545,9 +1546,9 @@ const handlerConfirmPatReal = async () => {
       sysConfigId: '1204',
       showConfirmButton: true,
       confirmText: '去实名认证',
-    }
+    },
   };
-    // 确定当前平台配置
+  // 确定当前平台配置
   let currentConfig;
   // #ifdef MP-TOUTIAO || MP-HARMONY
   currentConfig = platformConfig['toutiao-harmony'];
@@ -1555,14 +1556,18 @@ const handlerConfirmPatReal = async () => {
   // #ifdef MP-WEIXIN || MP-ALIPAY
   currentConfig = platformConfig['wechat-alipay'];
   // #endif
-   
-  const { title, content } = await gStores.getSysAppMore(currentConfig.sysConfigId);
+
+  const { title, content } = await gStores.getSysAppMore(
+    currentConfig.sysConfigId
+  );
   const dialogOptions = {
     title,
     isShowCancel: true,
     cancelText: '暂不预约',
     isMaskClick: false,
-    ...(currentConfig.showConfirmButton && { confirmText: currentConfig.confirmText }),
+    ...(currentConfig.showConfirmButton && {
+      confirmText: currentConfig.confirmText,
+    }),
   };
   const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
     gStores.messageStore.showMessage(content, 0, {

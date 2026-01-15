@@ -1,5 +1,6 @@
 import { orderStatusMap, OrderStatus } from './regDetail';
 import { joinQuery } from '../../../common/utils';
+import { getSysCode } from '@/common';
 
 export type IRegistrationCardItem = {
   sysCode: string;
@@ -46,6 +47,17 @@ export type IRegistrationCardItem = {
 
 //多院区院内导航 根据hosId
 export const HosNavData = {
+  1281: () => {
+    return {
+      appId: 'wx8735a8a39cf58b5e',
+      path: 'pages/index?id=FBStSs2nQK&appKey=QCncL1CmoF',
+      text: '院内导航',
+      type: 'otherProgram',
+      addition: {
+        hosDeptId: 'poi',
+      },
+    };
+  },
   12930: () => {
     return {
       appId: 'wx8735a8a39cf58b5e',
@@ -103,25 +115,6 @@ export const HosNavData = {
       return null;
     }
   },
-  // #endif
-  // #ifdef  MP-ALIPAY
-  // 13178: (item: IRegistrationCardItem, type?: string) => {
-  //   return {
-  //     appId: '2018122862716277',
-  //     path: 'pages/index/index',
-  //     text: '院内导航',
-  //     type: 'otherProgram',
-  //     extraData: {
-  //       hisCode: item.hosDeptId,
-  //       buildingId: 208089,
-  //       type: 3,
-  //     },
-  //   };
-  // },
-  // #endif
-};
-
-export const HosNavData1001035 = {
   12675: () => {
     return {
       appId: 'wx8735a8a39cf58b5e',
@@ -144,9 +137,6 @@ export const HosNavData1001035 = {
       },
     };
   },
-};
-
-export const HosNavData1001093 = {
   13152: (item: IRegistrationCardItem) => {
     const { deptName: name, hosDeptId } = item;
 
@@ -176,4 +166,58 @@ export const HosNavData1001093 = {
       // },
     };
   },
+
+  // #endif
+  // #ifdef  MP-ALIPAY
+  // 13178: (item: IRegistrationCardItem, type?: string) => {
+  //   return {
+  //     appId: '2018122862716277',
+  //     path: 'pages/index/index',
+  //     text: '院内导航',
+  //     type: 'otherProgram',
+  //     extraData: {
+  //       hisCode: item.hosDeptId,
+  //       buildingId: 208089,
+  //       type: 3,
+  //     },
+  //   };
+  // },
+  // #endif
+};
+
+export const judgeAllowNav = (item) => {
+  const { hosId } = item;
+  const sysCode = getSysCode();
+   // #ifdef  MP-WEIXIN
+  if (sysCode === '1001093') {
+    return true;
+  }
+
+  if (sysCode === '1001046') {
+    return true;
+  }
+
+  if (sysCode === '1001035') {
+    if (['12675', '12713'].includes(hosId)) {
+      return true;
+    }
+  }
+  if (sysCode === '1001033') {
+    if (['1281'].includes(hosId)) {
+      return true;
+    }
+  }
+  if (sysCode === '1001052') {
+    if (['13001'].includes(hosId)) {
+      try {
+        if (JSON.parse(item?.extend || '').areaId) {
+          return true;
+        }
+      } catch (e) {
+        return false;
+      }
+    }
+  }
+   // #endif
+  return false;
 };
