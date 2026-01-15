@@ -625,7 +625,6 @@
         this.cale.setDate(date);
         this.weeks = this.cale.weeks;
         this.nowDate = this.calendar = this.cale.getInfo(date);
-        console.log('init', date, this.weeks, this.nowDate);
       },
       initAllData() {
         this.allMoths = [

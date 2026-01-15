@@ -154,12 +154,12 @@
     if (sysCode === '1001093') {
       tabField.value = [
         {
-          label: '按科室',
-          value: '1',
-        },
-        {
           label: '按症状',
           value: '99',
+        },
+        {
+          label: '按科室',
+          value: '1',
         },
       ];
 
@@ -191,8 +191,9 @@
           confirmText,
           cancelColor: 'var(--hr-brand-color-6)',
           maxHeight: 900,
-          titleBgSrc:
-            gStores.globalStore.isTcmStyle?'https://phsdevoss.eheren.com/pcloud/phs3.0/message_notice_bg_tc.png':'https://phsdevoss.eheren.com/pcloud/phs3.0/message_notice_bg.png',
+          titleBgSrc: gStores.globalStore.isTcmStyle
+            ? 'https://phsdevoss.eheren.com/pcloud/phs3.0/message_notice_bg_tc.png'
+            : 'https://phsdevoss.eheren.com/pcloud/phs3.0/message_notice_bg.png',
         },
         closeCallBack({ confirm, maskClose }) {
           if (!confirm && !maskClose) {
