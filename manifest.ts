@@ -119,12 +119,12 @@ const manifestFileDataObj: any = {
       signingConfigs: {
         default: {
           certpath:
-            '/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1763103743000.cer',
+            '/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1768358552415.cer',
           keyAlias: 'debugKey',
           keyPassword:
             '0000001BFC8B5B3C076B42F630A5A14F2F64D2C3E01545CA5B8EB12247500BC58C076E3B13A01357CDAF53',
           profile:
-            '/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1763103743000.p7b',
+            '/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1768441200752.p7b',
           signAlg: 'SHA256withECDSA',
           storeFile:
             '/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1763103743000.p12',

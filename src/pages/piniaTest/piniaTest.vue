@@ -699,6 +699,8 @@
     addition: {
       patientId: '_patientId',
     },
+    text: '',
+    _type: 'useTBanner',
   } as TButtonConfig;
 
   const 肿瘤云影响 = {
@@ -724,6 +726,7 @@
     // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
     useTBanner(肿瘤住院管家);
+    // useTBanner(电子导诊单);
     // useTBanner(肿瘤云影响);
     // patientUtils.faceVerify({
     //   name: '陈钦川',
