@@ -182,6 +182,8 @@ export interface ISConfig {
         reg?: string;
         // 门诊吱口令
         clinic?: string;
+        //医保建档
+        medicalFiling?: string;
       };
 
       /** 默认是医保? (个别项目后端不能返回 医保标签, 前端数据手动加上但是页面不显示医保标签) */
@@ -815,6 +817,14 @@ const scJson: Record<string, ISConfig> = {
       isSkipPerfect: '1',
     },
     medicalMHelp: {
+      wx: {
+        crossProgramBizType: {
+          clinic: 'yYwA6fRicn',
+          medicalFiling: 'xNetpdsuXc',
+        },
+         medicalFiling: '1',
+         medicalPlugin: '1',
+      },
       alipay: {
         medicalPlugin: {
           orgId: { 131401: 'H33030200021', 13140: 'H33030200021' },

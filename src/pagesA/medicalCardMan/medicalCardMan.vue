@@ -5,6 +5,17 @@
     }"
     class="f32"
   >
+  <!-- #ifdef  MP-WEIXIN -->
+  <code-btn
+    v-if="wxCrossProgramInfo.bizTypeMF"
+    :appId="wxCrossProgramInfo.appId"
+    :bizType="wxCrossProgramInfo.bizTypeMF"
+    :extInfo="wxCrossProgramInfo.extInfo"
+    id="codePlugin"
+    style="position: absolute; top: -100vh"
+    :zIndex="99"
+  ></code-btn>
+  <!-- #endif -->
     <g-flag typeFg="108" isShowFg />
     <view class="pat-box">
       <view v-if="isShowHealthCardMode" class="health-card">
@@ -50,7 +61,10 @@
         </view> -->
       </view>
       <!-- #ifdef  MP-WEIXIN -->
-      <view v-else-if="isMedicalFiling" class="health-card">
+      <view
+        v-else-if="isMedicalFiling && !wxCrossProgramInfo.bizTypeMF"
+        class="health-card"
+      >
         <view @click="goMedicalFiling" class="mr14">
           <view class="iconfont icon-resize color-blue">&#xe6ef;</view>
           <text class="text-no-wrap">医保建档</text>
@@ -245,6 +259,7 @@
       aaa
     />
   </Order-Reg-Confirm>
+  
 </template>
 
 <script lang="ts" setup>
@@ -276,6 +291,7 @@
   import {
     dealMedicalFiling,
     reDealMedicalFiling,
+    usePayPage,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
@@ -283,6 +299,7 @@
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import PatList from './components/PatList.vue';
 
+  const { wxCrossProgramInfo } = usePayPage();
   const gStores = new GStores();
   // expose global config to the template as $global to avoid template type errors
   const $global = globalGl;
@@ -344,9 +361,11 @@
 
   const showMedicalFiling = (pat) => {
     if (isMedicalFiling.value) {
-      // // #ifdef MP-WEIXIN
-      // return !pat.relationshipCode
-      // // #endif
+      // #ifdef MP-WEIXIN
+      if(wxCrossProgramInfo.value.bizTypeMF){
+          return pat.healthCardUser !== '2';
+      }
+      // #endif
       // #ifdef MP-ALIPAY
       return pat.healthCardUser !== '2';
       // #endif
@@ -483,6 +502,18 @@
     });
   };
   const goMedicalFiling = (pat) => {
+      // #ifdef MP-WEIXIN
+      if(wxCrossProgramInfo.value.bizTypeMF){
+         const curPagesList = getCurrentPages();
+        const curPages: any = curPagesList[curPagesList.length - 1];
+        console.log('curPages',curPages);
+        
+        const { openFunc } = curPages.selectComponent('#codePlugin');
+         console.log('curPagesads ',curPages.selectComponent('#codePlugin'));
+        openFunc();
+        return
+      }
+      // #endif
     if (pat?.patientId) {
       medicalFilingPat.value = pat;
     } else {

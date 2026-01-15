@@ -837,6 +837,7 @@ export const usePayPage = () => {
     appId: '',
     bizType: '',
     bizTypeReg: '',
+    bizTypeMF:'',
     extInfo: {},
   });
 
@@ -851,11 +852,13 @@ export const usePayPage = () => {
       if (wx) {
         const clinicBizType = wx?.crossProgramBizType?.clinic || '';
         const regBizType = wx?.crossProgramBizType?.reg || '';
-        if (clinicBizType || regBizType) {
+        const mfBizType = wx?.crossProgramBizType?.medicalFiling || '';
+        if (clinicBizType || regBizType||mfBizType) {
           wxCrossProgramInfo.value = {
             appId: alipayAppid,
             bizType: clinicBizType,
             bizTypeReg: regBizType,
+            bizTypeMF:mfBizType,
             extInfo: {},
           };
         }

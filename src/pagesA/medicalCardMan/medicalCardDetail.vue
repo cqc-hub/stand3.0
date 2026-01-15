@@ -4,6 +4,17 @@
       [gStores.globalStore.getPageClass]: true,
     }"
   >
+    <!-- #ifdef  MP-WEIXIN -->
+    <code-btn
+      v-if="wxCrossProgramInfo.bizTypeMF"
+      :appId="wxCrossProgramInfo.appId"
+      :bizType="wxCrossProgramInfo.bizTypeMF"
+      :extInfo="wxCrossProgramInfo.extInfo"
+      id="codePlugin"
+      style="position: absolute; top: -100vh"
+      :zIndex="99"
+    ></code-btn>
+    <!-- #endif -->
     <g-form
       v-model:value="formData"
       @change="formChange"
@@ -92,6 +103,7 @@
   import {
     dealMedicalFiling,
     reDealMedicalFiling,
+    usePayPage,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
   import xyDialog from '@/components/xy-dialog/xy-dialog.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
@@ -109,6 +121,8 @@
   const medicalFilingPat: Ref<any> = ref('');
   const isMedicalFiling = ref(false);
   let formList = [...patCardDetailTempList];
+
+  const { wxCrossProgramInfo } = usePayPage();
 
   const changeDefault = (value: boolean) => {
     const pat = gStores.userStore.clickPat;
@@ -155,6 +169,15 @@
     }
   };
   const goMedicalFiling = (pat) => {
+    // #ifdef MP-WEIXIN
+    if (wxCrossProgramInfo.value.bizTypeMF) {
+      const curPagesList = getCurrentPages();
+      const curPages: any = curPagesList[curPagesList.length - 1];
+      const { openFunc } = curPages.selectComponent('#codePlugin');
+      openFunc();
+      return;
+    }
+    // #endif
     medicalFilingPat.value = pat;
     regDialogMedicalFiling.value.show();
   };
@@ -184,6 +207,11 @@
     // #ifdef MP-ALIPAY
     isMedicalFiling.value = medicalMHelp?.alipay?.medicalFiling === '1';
     // #endif
+    // #ifdef MP-WEIXIN
+    isMedicalFiling.value =
+      medicalMHelp?.alipay?.medicalFiling === '1' &&
+      !!wxCrossProgramInfo.value.bizTypeMF;
+    // #endif
     const { healthCardUser } = pat;
 
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
@@ -202,7 +230,7 @@
           ).includes(o.key)
       );
     }
-    
+
     // #ifdef MP-WEIXIN || MP-ALIPAY
     const { isEditPatPhone } = pageConfig.value;
     if (isEditPatPhone === '1') {
@@ -215,7 +243,6 @@
       });
     }
     // #endif
-
 
     Object.keys(formData.value).map((key) => {
       if (formData.value[key] === '') {

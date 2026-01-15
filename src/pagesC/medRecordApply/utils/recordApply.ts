@@ -158,7 +158,7 @@ type TOutInfo = {
   hosName?: string;
   visitNo: string;
   outTime: string;
-  isOneself?: '0' | '1'; // 手动添加？ 0 shi 1 fou
+  isOneself?: '0' | '1'; // 手动添加？ 0 是 1 否
   admissionTime: string;
   clinicOnLine?: string;
   inHosTime?: string;

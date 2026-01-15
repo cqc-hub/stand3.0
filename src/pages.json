@@ -491,6 +491,7 @@
             "navigationBarTitleText": "添加就诊人",
             "usingComponents": {
               // #ifdef  MP-WEIXIN
+
               "health-card-users": "plugin://healthCardPlugins/healthCardUsers"
               // #endif
             }
@@ -505,7 +506,8 @@
             "navigationBarTitleText": "就诊人管理",
             "usingComponents": {
               // #ifdef  MP-WEIXIN
-              "health-card-login": "plugin://healthCardPlugins/healthCardLogin"
+              "health-card-login": "plugin://healthCardPlugins/healthCardLogin",
+              "code-btn": "plugin://crossProgramPlugins/code-pop-btn"
               // #endif
             }
           }
@@ -516,7 +518,12 @@
             "login": true
           },
           "style": {
-            "navigationBarTitleText": "就诊人详情"
+            "navigationBarTitleText": "就诊人详情",
+            "usingComponents": {
+              // #ifdef  MP-WEIXIN
+              "code-btn": "plugin://crossProgramPlugins/code-pop-btn"
+              // #endif
+            }
           }
         },
         {
