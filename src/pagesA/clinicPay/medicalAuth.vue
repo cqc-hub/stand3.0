@@ -83,9 +83,13 @@
   const submit = () => {
     // #ifdef  MP-WEIXIN
     if (pageProps.value.type === 'order') {
-      wxPayMoneyMedicalPlugin(orderSubmitAction);
+      wxPayMoneyMedicalPlugin(orderSubmitAction, {
+        hosId: pageProps.value.hosId,
+      });
     } else {
-      wxPayMoneyMedicalPlugin(submitAction);
+      wxPayMoneyMedicalPlugin(submitAction, {
+        hosId: pageProps.value.hosId,
+      });
     }
     // #endif
   };

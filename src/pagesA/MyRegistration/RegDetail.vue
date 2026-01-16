@@ -502,7 +502,7 @@
     getOnlineMedicalConfig,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
-  import { HosNavData,judgeAllowNav } from './utils/MyRegistration';
+  import { HosNavData, judgeAllowNav } from './utils/MyRegistration';
 
   import globalGl from '@/config/global';
 
@@ -1058,6 +1058,7 @@
         '/pagesA/MyRegistration/RegDetail',
         pageProps.value
       ),
+      hosId: orderRegInfo.value.hosId,
     });
 
     await medicalNationWx(
@@ -1123,7 +1124,11 @@
               medOrgOrd,
             });
           } else {
-            medicalNationWx(await getQxMedicalNation());
+            medicalNationWx(
+              await getQxMedicalNation({
+                hosId: orderRegInfo.value.hosId,
+              })
+            );
           }
           // #endif
 
@@ -1219,6 +1224,7 @@
           '/pagesA/MyRegistration/RegDetail',
           pageProps.value
         ),
+        hosId: orderRegInfo.value.hosId,
       }),
       {}
     );
@@ -1507,8 +1513,6 @@
       useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
     }
   };
-
-
 
   const useDeptTBanner = () => {
     let { hosDeptId, hosId } = orderRegInfo.value;

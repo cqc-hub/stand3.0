@@ -13,7 +13,7 @@
     GStores,
     LoginUtils,
     PatientUtils,
-    type TButtonConfig,
+    type TBannerConfig,
     useTBanner,
   } from '@/utils';
   import globalGl from '@/config/global';
@@ -25,7 +25,7 @@
   const { source } = gStores.globalStore.browser;
 
   // 电子发票
-  const eletronicInvoice: TButtonConfig = {
+  const eletronicInvoice = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesA/eletronicInvoice/eletronicInvoice',
@@ -38,10 +38,10 @@
       herenId: 'herenId',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
   // 用药管家
-  const yonyao: TButtonConfig = {
+  const yonyao = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/medicationManager/medicationList',
@@ -56,10 +56,10 @@
     },
 
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
   // 排队叫号
-  const queryNumber: TButtonConfig = {
+  const queryNumber = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/queueNumber/queueNumber',
@@ -73,10 +73,10 @@
       token: 'token',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
   // 病历查询
-  const queryCase: TButtonConfig = {
+  const queryCase = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/queryCase/queryCase',
@@ -90,10 +90,10 @@
       token: 'token',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
   // 意见反馈
-  const serviceCenter: TButtonConfig = {
+  const serviceCenter = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/queryCase/queryCase',
@@ -102,10 +102,10 @@
       pageType: 2,
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
   // 家医签约
-  const qinfenSignDocTeam: TButtonConfig = {
+  const qinfenSignDocTeam = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/qinfen/signDocTeam',
@@ -119,10 +119,10 @@
       patientId: 'a',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
   // 健康档案
-  const healthRecord: TButtonConfig = {
+  const healthRecord = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
@@ -133,7 +133,7 @@
     addition: {
       patientId: '_patientId',
     },
-  };
+  } as TBannerConfig;
 
   const tiyy1001035 = {
     _type: 'useTBanner',
@@ -150,7 +150,7 @@
   };
 
   // 智能导诊
-  const smartDiseaseGuide: TButtonConfig = {
+  const smartDiseaseGuide = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
@@ -162,10 +162,10 @@
       patientId: '_patientId',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
   // 麻醉病历申请
-  const historyAnaesthesia: TButtonConfig = {
+  const historyAnaesthesia = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
@@ -178,10 +178,10 @@
       patientId: '_patientId',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
   // 就诊后微信推送消息，用户填写问卷
-  const questionnaireAfterVisitDoc: TButtonConfig = {
+  const questionnaireAfterVisitDoc = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/question/questionAfterVisit',
@@ -190,9 +190,9 @@
       patientId: '_patientId',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
-  const questionkupperman: TButtonConfig = {
+  const questionkupperman = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
@@ -204,17 +204,17 @@
       patientId: '_patientId',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
-  const ziXun: TButtonConfig = {
+  const ziXun = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesA/healthAdvisory/healthAdvisory',
     text: '健康咨询',
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
-  const 绍兴检查预约: TButtonConfig = {
+  const 绍兴检查预约 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
@@ -226,9 +226,9 @@
       patientId: '_patientId',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
-  const 绍兴二院采血预约: TButtonConfig = {
+  const 绍兴二院采血预约 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
@@ -240,9 +240,9 @@
       patientId: '_patientId',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
-  const 消息订阅管理: TButtonConfig = {
+  const 消息订阅管理 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/subMsgs/subMsgs',
@@ -254,9 +254,9 @@
       patientId: '_patientId',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
-  const 电子导诊单: TButtonConfig = {
+  const 电子导诊单 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/medicalAssistant/medicalAssistant',
@@ -268,9 +268,9 @@
       isOpenDelivery: '1',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
-  const 客服中心: TButtonConfig = {
+  const 客服中心 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/serviceCenter/serviceChat',
@@ -279,9 +279,9 @@
     addition: {
       patientId: '_patientId',
     },
-  };
+  } as TBannerConfig;
 
-  const 医保结算清单: TButtonConfig = {
+  const 医保结算清单 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesA/eletronicInvoice/settleList',
@@ -290,7 +290,7 @@
     addition: {
       patientId: '_patientId',
     },
-  };
+  } as TBannerConfig;
 
   const 用药查询 = {
     type: 'h5',
@@ -302,9 +302,9 @@
       patientId: '_patientId',
     },
     _type: 'useTBanner',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
-  const 分数问卷: TButtonConfig = {
+  const 分数问卷 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
@@ -319,10 +319,10 @@
         source,
       }),
     },
-  };
+  } as TBannerConfig;
 
   // 健康档案
-  const 咸阳智能陪诊: TButtonConfig = {
+  const 咸阳智能陪诊 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
@@ -333,9 +333,9 @@
     addition: {
       patientId: '_patientId',
     },
-  };
+  } as TBannerConfig;
 
-  const 省中体检预约: TButtonConfig = {
+  const 省中体检预约 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
@@ -346,9 +346,9 @@
     addition: {
       patientId: '_patientId',
     },
-  };
+  } as TBannerConfig;
 
-  const 种植档案: TButtonConfig = {
+  const 种植档案 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesB/toothRecord/index',
@@ -359,9 +359,9 @@
     extraData: {
       hosId: 13078,
     },
-  };
+  } as TBannerConfig;
 
-  const 预问诊: TButtonConfig = {
+  const 预问诊 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pages/inquiries/inquiries3',
@@ -383,9 +383,9 @@
       token: 'token',
       herenId: 'herenId',
     },
-  };
+  } as TBannerConfig;
 
-  const 我的收藏: TButtonConfig = {
+  const 我的收藏 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/myDoctor/myCollect',
@@ -398,9 +398,9 @@
       herenId: 'herenId',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
-  const 会员权益: TButtonConfig = {
+  const 会员权益 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesB/discount/discount',
@@ -408,31 +408,31 @@
     addition: {
       patientId: '_patientId',
     },
-  };
+  } as TBannerConfig;
 
-  const 满意度: TButtonConfig = {
+  const 满意度 = {
     path: 'pagesC/question/questionAfterVisit',
     type: 'h5',
     isSelfH5: '1',
     addition: { patientId: '_p' },
     text: '满意度',
-  };
-  const 天水处方查询: TButtonConfig = {
+  } as TBannerConfig;
+  const 天水处方查询 = {
     path: 'pagesC/question/questionAfterVisit3',
     type: 'h5',
     isSelfH5: '1',
     addition: { patientId: '_p' },
     text: '天水处方查询',
-  };
+  } as TBannerConfig;
 
-  const 多住院记录: TButtonConfig = {
+  const 多住院记录 = {
     path: 'pagesA/hospitalCare/choosePatient',
     type: 'self',
     extraData: {
       type: '2',
     },
     text: '多住院记录',
-  };
+  } as TBannerConfig;
 
   const aaa = {
     path: 'pagesA/hospitalCare/choosePatient',
@@ -441,9 +441,9 @@
       type: '2',
     },
     text: '多住院记录',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
-  const 绍兴导航: TButtonConfig = {
+  const 绍兴导航 = {
     type: 'otherProgram',
     path: 'pages/index/index',
     text: '院内导航',
@@ -456,9 +456,9 @@
         hisName: 'A010215',
       }),
     },
-  };
+  } as TBannerConfig;
 
-  const 湖三检查预约: TButtonConfig = {
+  const 湖三检查预约 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
@@ -470,9 +470,9 @@
       herenId: 'herenId',
     },
     text: '检查预约',
-  };
+  } as TBannerConfig;
 
-  const 杭口质保卡: TButtonConfig = {
+  const 杭口质保卡 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/periodArchives/qualityEnsureCard',
@@ -484,9 +484,9 @@
       herenId: 'herenId',
     },
     text: '检查预约',
-  };
+  } as TBannerConfig;
 
-  const 红会旧就诊卡退款: TButtonConfig = {
+  const 红会旧就诊卡退款 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
@@ -498,9 +498,9 @@
       patientId: '_patientId',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
-  const 宜兴检查预约: TButtonConfig = {
+  const 宜兴检查预约 = {
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
@@ -512,7 +512,7 @@
       patientId: '_patientId',
     },
     isLocal: '1',
-  };
+  } as TBannerConfig;
 
   const 乐清产科问卷 = {
     _type: 'useTBanner',
@@ -529,7 +529,7 @@
       herenId: 'herenId',
     },
     isLocal: '1',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   const 省中云诊室 = {
     _type: 'useTBanner',
@@ -540,16 +540,16 @@
     extraData: {},
     addition: {},
     isLocal: '1',
-  } as TButtonConfig;
+  } as TBannerConfig;
   //药品详情
-  const medicineDetail: TButtonConfig = {
+  const medicineDetail = {
     type: 'self',
     path: 'pagesB/medicationAssistant/medicalHelpDetail',
     text: '用药详情',
     extraData: {
       linkRecordId: 'tIQQjB798AFfB',
     },
-  };
+  } as TBannerConfig;
   //h5首页
   const index = {
     _type: 'useTBanner',
@@ -558,13 +558,13 @@
     path: 'pages/index/index',
     text: 'h5首页',
     isLocal: '1',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   const 智能客服 = {
     text: '智能客服',
     path: 'pagesA/intelMedicalAssist/intelMedicalAssist',
     type: 'self',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   const 医院指南 = {
     text: '医院指南',
@@ -574,9 +574,9 @@
     extraData: {
       hosId: '12675',
     },
-  } as TButtonConfig;
+  } as TBannerConfig;
 
-  const testbuttonConfig = ref(智能客服);
+  const tesTBannerConfig = ref(智能客服);
 
   const 住院点餐 = {
     type: 'h5',
@@ -590,7 +590,7 @@
       patientId: '_patientId',
     },
     _type: 'useTBanner',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   const 住院点餐1 = {
     appId: 'wx081a6fb9ee8778e4',
@@ -598,7 +598,7 @@
     path: 'pages/home/home',
     text: ' ',
     _type: 'useTBanner',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   const 住院满意度问卷 = {
     _type: 'useTBanner',
@@ -613,7 +613,7 @@
       herenId: 'herenId',
     },
     isLocal: '1',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   const 住院点餐1001093 = {
     type: 'h5',
@@ -627,7 +627,7 @@
       patientId: '_patientId',
     },
     _type: 'useTBanner',
-  } as TButtonConfig;
+  } as TBannerConfig;
   const 用药查询1001093 = {
     type: 'h5',
     isSelfH5: '1',
@@ -640,7 +640,7 @@
       patientId: '_patientId',
     },
     _type: 'useTBanner',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   const 检查预约1001093 = {
     type: 'h5',
@@ -654,7 +654,7 @@
       patientId: '_patientId',
     },
     _type: 'useTBanner',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   const 停车发票1001093 = {
     type: 'h5',
@@ -664,7 +664,7 @@
       openId: 'openid',
     },
     _type: 'useTBanner',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   const viewImg = {
     type: 'h5',
@@ -676,7 +676,7 @@
       title: '健康体检中心',
     },
     _type: 'useTBanner',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   const patientUtils = new PatientUtils();
 
@@ -684,13 +684,14 @@
     type: 'otherProgram',
     appId: 'wxf1e8ea9f6a96c1db',
     path: 'pages/index/tenant/enter?linkType=11&emNo=815',
-  } as TButtonConfig;
+    _type: 'useTBanner',
+  } as TBannerConfig;
 
   const 肿瘤浙里护理护士页面支付宝 = {
     type: 'otherProgram',
     appId: '2021003155620159',
     path: 'pages/index/tenant/enter?linkType=11&emNo=815',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   const 肿瘤住院管家 = {
     type: 'h5',
@@ -701,7 +702,7 @@
     },
     text: '',
     _type: 'useTBanner',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   const 肿瘤云影响 = {
     type: 'h5',
@@ -715,7 +716,7 @@
       patientId: '_patientId',
     },
     _type: 'useTBanner',
-  } as TButtonConfig;
+  } as TBannerConfig;
 
   onMounted(() => {
     setTimeout(() => {
@@ -725,9 +726,13 @@
   const init = async () => {
     // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
-    useTBanner(肿瘤住院管家);
+    // useTBanner(肿瘤住院管家);
     // useTBanner(电子导诊单);
     // useTBanner(肿瘤云影响);
+    useTBanner({
+      type: 'h5',
+      path: 'https://mp.weixin.qq.com/s/2MXpPzd5Q2y54Ys2cWYTpw?scene=1&click_id=4',
+    });
     // patientUtils.faceVerify({
     //   name: '陈钦川',
     //   idCardNumber: '330326199908286713',
