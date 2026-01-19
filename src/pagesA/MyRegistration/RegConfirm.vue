@@ -107,6 +107,25 @@
         aaa
       />
     </Order-Reg-Confirm>
+    <Order-Reg-Confirm
+      :headerIcon="`null`"
+      :title="flagTitle1288"
+      :maskClickClose="false"
+      @cancel="cancelAsync"
+      @confirm="confirmAsync"
+      height="90vh"
+      confirmText="我已阅读并同意"
+      cannerText="不同意"
+      ref="regDialogConfirmBookFlag"
+    >
+      <g-flag
+        v-model:title="flagTitle1288"
+        typeFg="1288"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
+    </Order-Reg-Confirm>
 
     <xy-dialog
       :title="'请选择候补方式'"
@@ -265,6 +284,8 @@
   const isPreventOrder = ref(false);
   const preventOrderStr = ref('');
   const regDialogConfirm = ref<any>('');
+  const regDialogConfirmBookFlag = ref<any>('');
+  const flagTitle1288 = ref('知情同意书');
   const flagTitle9 = ref('');
   const greenToastDuration = ref(1500);
   const contentTitle = ref('');
@@ -415,6 +436,7 @@
       isOrderPay,
       wxOrderSubscribeMessage,
       isConfirmOrderWithConfirmDialog,
+      isConfirmOrderWithApplyBook,
     } = pageConfig.value;
     const { isGuardianWithIdCard } = personConfig.value;
     /**
@@ -596,6 +618,21 @@
       quickAppoint: '',
     };
     pageConfig.value?.isOrderBlur === '1' && (requestArg.disNo = disNo);
+
+    //提示知情同意书
+    if (isConfirmOrderWithApplyBook === '1') {
+      flagTitle1288.value = (await gStores.getSysAppMore(1288)).title;
+      regDialogConfirmBookFlag.value.show();
+      try {
+        await new Promise((r, j) => {
+          resolve = r;
+          reject = j;
+        });
+        requestArg.applyBookFlag = 1;
+      } catch (e) {
+        requestArg.applyBookFlag = 0;
+      }
+    }
 
     if (quickPat.value.patientName) {
       if (!quickPat.value.patientId) {

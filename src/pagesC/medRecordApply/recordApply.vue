@@ -20,17 +20,29 @@
 
     <view class="header-btn flex-normal">
       <view
+        v-if="isMandateUrl"
+        @click="getMandateUrl"
+        class="g-flex-rc-cc g-border"
+      >
+        <view class="icon-font ico_download-blue"></view>
+        <view class="g-nowrap">委托书下载</view>
+      </view>
+      <view
         v-if="isShowAddRecord"
         @click="goAddRecord"
         class="g-flex-rc-cc g-border"
       >
         <view class="iconfont color-blue">&#xe6fb;</view>
-        <view>手动添加记录</view>
+        <view class="g-nowrap">
+          {{ isMandateUrl && isShowAddRecord ? '手动添加' : '手动添加记录' }}
+        </view>
       </view>
 
       <view @click="goApplyRecord" class="g-flex-rc-cc g-border">
         <view class="iconfont color-green">&#xe6fc;</view>
-        <view>查看申请记录</view>
+        <view class="g-nowrap">
+          {{ isMandateUrl && isShowAddRecord ? '申请记录' : '查看申请记录' }}
+        </view>
       </view>
     </view>
 
@@ -126,6 +138,21 @@
         aaa
       />
     </Order-Reg-Confirm>
+    <Order-Reg-Confirm
+      :title="flagTitle1289"
+      @confirm="handleConfirm"
+      ref="mandateDialog"
+      :isShowCloseIcon="true"
+      confirmText="立即下载"
+    >
+      <g-flag
+        v-model:title="flagTitle1289"
+        typeFg="1289"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
+    </Order-Reg-Confirm>
     <g-message />
   </view>
 </template>
@@ -134,7 +161,14 @@
   import { computed, ref, nextTick } from 'vue';
   import { onShow, onLoad } from '@dcloudio/uni-app';
 
-  import { GStores, ServerStaticData, IHosInfo, ISystemConfig, PatientUtils } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    IHosInfo,
+    ISystemConfig,
+    PatientUtils,
+    downFile,
+  } from '@/utils';
   import { type TOutHosInfo, CACHE_KEY } from './utils/recordApply';
   import { deQueryForUrl, joinQuery } from '@/common/utils';
   import { setLocalStorage, getLocalStorage } from '@/common';
@@ -161,7 +195,9 @@
   );
 
   const flagTitle508 = ref('');
+  const flagTitle1289 = ref('');
   const regDialogConfirm = ref<any>('');
+  const mandateDialog = ref<any>('');
   const isCheck = ref(false);
 
   const itemClick = (item: TOutHosInfo) => {
@@ -292,7 +328,10 @@
   const isShowAddRecord = computed(() => {
     return pageConfig.value.isCustomPatRecord === '1';
   });
-
+  //委托书下载
+  const isMandateUrl = computed(() => {
+    return pageConfig.value.isMandateUrl;
+  });
   const getConfig = async () => {
     const listConfig = await ServerStaticData.getSystemConfig('medRecord');
     if (pageProps.value.hosId) {
@@ -352,6 +391,25 @@
     });
   };
 
+  const getMandateUrl = async () => {
+    new Promise((rl, rj) => {
+      resolve = rl;
+      mandateDialog.value.show();
+    }).then(async (res) => {
+      const filePath = await downFile(isMandateUrl.value || '');
+      uni.openDocument({
+        filePath,
+        fileType: 'docx',
+        showMenu: true,
+        complete(e) {
+          console.log('预览文件--', filePath);
+        },
+        fail(e) {
+          console.log('prev fail', e);
+        },
+      });
+    });
+  };
   const goAddRecord = async () => {
     new Promise((rl, rj) => {
       resolve = rl;
@@ -416,6 +474,10 @@
         .iconfont {
           font-size: var(--hr-font-size-xxl);
           margin-right: 14rpx;
+        }
+        .icon-font {
+          width: var(--hr-font-size-xxl);
+          height: var(--hr-font-size-xxl);
         }
       }
     }

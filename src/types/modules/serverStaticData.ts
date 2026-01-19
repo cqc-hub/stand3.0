@@ -126,6 +126,8 @@ export interface ISystemConfig_ {
     isConfirmOrderWithDeptTip?: '1' | '2'; // 1 科室页面不弹 2 科室、挂号确认页面均弹
     /** 挂号确认页面点击我已阅读时候需要弹窗 */
     isConfirmOrderWithConfirmDialog?: '1';
+    /** 挂号确认页面是否弹框提示知情同意书 */
+    isConfirmOrderWithApplyBook?: '1';
     /** 重复选择科室页面的提示 */
     isConfirmOrderOrderTipRepeat?: '1';
     /** 挂号确认页面 去预约变成去支付&跳到详情后自动拉起支付 */
@@ -357,6 +359,8 @@ export interface ISystemConfig_ {
 
     /** 是否支持自定义住院记录 */
     isCustomPatRecord?: '1';
+    /* 是否下载委托书 */
+    isMandateUrl?: string;
     /** 支持住院记录中选择目的的份数? */
     selPurposeInRecord?: '1';
     /** 复印最大份数 */

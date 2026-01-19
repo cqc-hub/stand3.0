@@ -698,6 +698,8 @@ const scJson: Record<string, ISConfig> = {
           // 生产
           path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=620500&channel=AAF-qIZucnqdnk72zjYzIJ38&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtjvE9yjYec3Tmc/8KSGSL7&orgCodg=H62050200075&orgAppId=1IC2S44OQ0028C430B0A0000A6FDEDE9',
         },
+        isGbFamilyPayment: '1',
+        // isMedicalOrder: '1',
         // medicalPlugin: '1',
       },
     },
@@ -823,8 +825,8 @@ const scJson: Record<string, ISConfig> = {
           clinic: 'yYwA6fRicn',
           medicalFiling: 'xNetpdsuXc',
         },
-         medicalFiling: '1',
-         medicalPlugin: '1',
+        medicalFiling: '1',
+        medicalPlugin: '1',
       },
       alipay: {
         medicalPlugin: {
@@ -948,6 +950,7 @@ const scJson: Record<string, ISConfig> = {
   1001036: {
     // isOpenHomeTabBarNetWorkBtn: '1',
     // isOpenPopularSci: '1',
+    isHideHomeLogo: '1',
     homeNavTitleLogo:
       'https://phsdevoss.eheren.com/pcloud/image/1001036logo3.png',
 
