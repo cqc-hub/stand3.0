@@ -17,18 +17,21 @@ export type THosButlerInfo = {
    * 出生地 市
    */
   birthCity: string;
+  birthCityName: string;
   /**
    * birthDistrict* string
    * example: 玄武区
    * 出生地 区/县
    */
   birthDistrict: string;
+  birthDistrictName: string;
   /**
    * birthProvince* string
    * example: 江苏省
    * 出生地 省
    */
   birthProvince: string;
+  birthProvinceName: string;
   /**
    * birthday* string
    * example: 1990-01-01

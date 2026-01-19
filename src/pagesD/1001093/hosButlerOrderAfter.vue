@@ -286,7 +286,10 @@
     if (birthProvince && birthCity && birthDistrict) {
       formData.value.birthProvince = birthProvince.value;
       formData.value.birthCity = birthCity.value;
-      formData.value.birthDistrict = birthDistrict.text;
+      formData.value.birthDistrict = birthDistrict.value;
+      formData.value.birthProvinceName = birthProvince.text;
+      formData.value.birthCityName = birthCity.text;
+      formData.value.birthDistrictName = birthDistrict.text;
     }
   };
 
