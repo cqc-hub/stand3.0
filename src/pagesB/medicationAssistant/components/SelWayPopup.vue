@@ -31,7 +31,9 @@
 
 <script lang="ts" setup>
   import { nextTick, ref, watch } from 'vue';
+  import { GStores } from '@/utils';
 
+  const gStores = new GStores();
   const selFiles = [
     {
       label: '医院窗口取药',
@@ -52,6 +54,10 @@
   const _refAddDialog = ref<any>('');
 
   const show = () => {
+    if (['1001085'].includes(gStores.globalStore.sysCode)) {
+      _refAddDialog.value.show();
+      return;
+    }
     if (props.optList.length === 1) {
       itemClick(props.optList[0]);
     } else {

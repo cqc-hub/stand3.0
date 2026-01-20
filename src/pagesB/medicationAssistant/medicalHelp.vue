@@ -80,7 +80,7 @@
         class="btn btn-primary flex1"
       >
         {{
-          selListOption1.length > 1 ? '选择取药方式' : selListOption1[0].value
+          selListOption1.length > 1 ? '选择取药方式' : selListOption1[0].label
         }}
       </button>
     </view>
@@ -212,10 +212,11 @@
   });
 
   const isShowSelItem = computed(() => {
+    const { params: sign } = pageProps.value;
     return (
       (listNow.value.length &&
         currentTabKey.value === '0' &&
-        globalGl.SYS_CODE !== '1001067') ||
+        !(['1001067', '1001085'].includes(globalGl.SYS_CODE) && sign)) ||
       false
     );
   });
@@ -236,9 +237,13 @@
       },
     ];
     if (gStores.globalStore.sysCode === '1001035') {
-      return list.every((item) => item.deliveryType === '5')
+      return list.every((item) => item?.deliveryType === '5')
         ? [opt2]
         : [opt1, opt2];
+    }
+    if (gStores.globalStore.sysCode === '1001085') {
+      //窗口取药、快递下单、仅填地址
+      return getSelOptList1001085(list);
     }
     let f = false;
 
@@ -251,7 +256,7 @@
         f = true;
       } else {
         const idx2 = list.findIndex((o) => {
-          return !isChineseMedical(o) && o.deliveryType === '1';
+          return !isChineseMedical(o) && o?.deliveryType === '1';
         });
 
         if (idx2 === -1) {
@@ -321,6 +326,7 @@
           selectAll1001035(item);
           return;
         }
+
         const list = [...selList.value, item];
 
         if (list.length === 1) {
@@ -334,12 +340,14 @@
             list.map((o) => isChineseMedical(o) && o.drugIsDelivery === '1')
           ),
         ];
+        const deliveryTypes = [...new Set(list.map((o) => o?.deliveryType))];
         const isDJ = isToBeFriedAndDelivery(item);
         let [
           isDifferentHosErr,
           isDifferentTypeErr,
           isDifferentToBeFriedAndDeliveryErr,
-        ] = [false, false, false];
+          isDifferentDeliveryType,
+        ] = [false, false, false, false];
 
         if (isDJ) {
           isDifferentToBeFriedAndDeliveryErr = !list.every((o) =>
@@ -355,11 +363,15 @@
           isDifferentHosErr = true;
         } else if (types.length > 1) {
           isDifferentTypeErr = true;
+        } else if (
+          ['1001085'].includes(gStores.globalStore.sysCode) &&
+          deliveryTypes.length > 1
+        ) {
+          isDifferentDeliveryType = true;
         } else if (!isDifferentToBeFriedAndDeliveryErr) {
           selList.value.push(item);
           return;
         }
-        const { params: sign } = pageProps.value;
 
         if (
           isDifferentHosErr ||
@@ -375,6 +387,11 @@
               gStores.messageStore.showMessage('请选择相同类型处方', 3000);
             } else if (isDifferentToBeFriedAndDeliveryErr) {
               gStores.messageStore.showMessage('请选择相同类型处方', 3000);
+            } else if (isDifferentDeliveryType) {
+              gStores.messageStore.showMessage(
+                '请选择相同取药方式的处方',
+                3000
+              );
             }
           }
         } else {
@@ -436,7 +453,7 @@
     const { params: sign } = pageProps.value;
     const { patientId } = gStores.userStore.patChoose;
     let args = {
-      takenDrug,
+      takenDrug: takenDrug || 0,
       patientId: sign ? undefined : patientId,
       clinicCate: sign ? undefined : 0,
       sign,
@@ -547,11 +564,12 @@
   };
 
   const dealWith1001067 = () => {
+    const { params: sign } = pageProps.value;
     // 温fu2 扫码药品配送， 不需要进列表 直接详情
-    if (globalGl.SYS_CODE === '1001067') {
+    if (['1001067', '1001085'].includes(globalGl.SYS_CODE) && sign) {
       if (listNow.value.length) {
         selList.value = [...listNow.value];
-        configToHome();
+        configToHome('withoutMail');
       } else {
         // uni.reLaunch({
         //   url: '/pages/home/home',
@@ -560,6 +578,52 @@
 
       throw new Error('1001067');
     }
+  };
+
+  const getSelOptList1001085 = (list) => {
+    const opts = [
+      {
+        label: '医院窗口取药',
+        value: '医院窗口取药',
+      },
+      {
+        label: '快递配送到家',
+        value: '填写快递地址',
+      },
+      {
+        label: '快递配送（填写快递地址）',
+        value: '快递配送（填写快递地址）',
+      },
+    ];
+    if (
+      [...new Set(list.map((o) => o.deliveryType))]?.length > 1 ||
+      [...new Set(list.map((o) => o.tcmDecoctionIndicator))]?.length > 1
+    ) {
+      return opts;
+    }
+    const [opt1, opt2, opt3] = opts;
+    const deliveryType = list[0]?.deliveryType;
+    const tcmDecoctionIndicator = list[0]?.tcmDecoctionIndicator;
+    //deliveryType 1 默认窗口自取可转快递 2窗口取药 3填写收货地址
+    //tcmDecoctionIndicator 0 自煎，1代煎
+    //只有自煎的可以窗口自提转快递配送
+    //自煎+快递 不支持转回窗口取药
+    let options = [opt1];
+    switch (deliveryType) {
+      case '1':
+        options = [opt3];
+        if (tcmDecoctionIndicator == '0') {
+          options = [opt2];
+        }
+        break;
+      case '2':
+        options = [opt1];
+        break;
+      case '6':
+        options = [opt3];
+        break;
+    }
+    return options;
   };
 
   const init = async () => {
@@ -594,6 +658,8 @@
     drayWaySelList.value = [item.value];
     if (item.value === '填写快递地址') {
       configToHome();
+    } else if (item.value === '快递配送（填写快递地址）') {
+      configToHome('withoutMail');
     } else {
       // 医院窗口取药
       // getMedicalInHos();
@@ -607,7 +673,7 @@
     getMedicalInHos();
   };
 
-  const configToHome = () => {
+  const configToHome = (type?: string) => {
     setLocalStorage({
       medicalHelp: selList.value,
     });
@@ -633,6 +699,7 @@
           ...pageProps.value,
           scan: pageProps.value?.params ? '1' : '0',
           mailMethod,
+          type,
         }),
       });
     }, 200);
@@ -681,7 +748,9 @@
     isShowDialog.value = true;
   };
 
-  onShow(() => {
+  onShow(async () => {
+    console.log(getLocalStorage('medicalHelp'));
+
     if (getLocalStorage('medicalHelp')) {
       getListData(tabField.value[tabCurrent.value]?.key);
       setLocalStorage({

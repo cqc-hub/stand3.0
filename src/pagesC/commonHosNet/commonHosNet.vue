@@ -7,7 +7,7 @@
         :src="BASE_IMG + 'img_h5bg@3x.png'"
       />
     </view>
-    <!-- <view class="cache-fixbottom">浙江和仁科技股份有限公司@技术支持</view> -->
+    <view class="cache-fixbottom">浙江和仁科技股份有限公司@技术支持</view>
   </view>
 </template>
 

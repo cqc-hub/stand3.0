@@ -89,7 +89,7 @@
           <text class="money">{{ hosInfoResObj.insuranceFee }}元</text>
         </view>
         <view class="card-detail-item" v-if="hosInfoResObj.defrayFee">
-          <text class="name">自费金额</text>
+          <text class="name">个人自付</text>
           <text class="money">{{ hosInfoResObj.defrayFee }}元</text>
         </view>
         <view v-if="hosInfoResObj.singleSelfPay" class="card-detail-item">

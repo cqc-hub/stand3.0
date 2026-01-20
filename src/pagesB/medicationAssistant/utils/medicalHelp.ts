@@ -25,8 +25,8 @@ export interface IWaitListItem {
   prescVisitType?: string;
   _id: string;
   scan?: number;
-  cardNumber?:string;
-  linkRecordId?:string
+  cardNumber?: string;
+  linkRecordId?: string;
 }
 
 interface IDrugDetailListItem {
@@ -77,9 +77,12 @@ export const isChineseMedical = (item) => {
 };
 
 export const isToBeFriedAndDelivery = (item: IWaitListItem) => {
-   const gStores = new GStores();
-  
-  if (isChineseMedical(item)&&gStores.globalStore.sysCode !== '1001035') {
+  const gStores = new GStores();
+  if (['1001085'].includes(gStores.globalStore.sysCode)) {
+    return item.tcmDecoctionIndicator === '1';
+  }
+
+  if (isChineseMedical(item) && gStores.globalStore.sysCode !== '1001035') {
     return item.drugIsDelivery === '1' && item.tcmDecoctionIndicator === '1';
   }
 
@@ -117,5 +120,3 @@ export const getSysAppMore = async (typeFlag: string) => {
   }
   return text;
 };
-
-

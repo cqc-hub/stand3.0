@@ -10,7 +10,7 @@
       />
     </view>
     <view class="color-888 f24 text-center pb70">
-      <!-- 浙江和仁科技股份有限公司@技术支持 -->
+      浙江和仁科技股份有限公司@技术支持
     </view>
   </view>
 </template>

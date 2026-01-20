@@ -70,6 +70,23 @@ export const HosNavData = {
     };
   },
   // #ifdef  MP-WEIXIN
+  13062: (item: IRegistrationCardItem) => {
+    let extraData: any = {
+      type: '8_2',
+      typeData: JSON.stringify({
+        buildingId: 209638,
+        type: '1',
+        hisName: item.hosDeptId,
+      }),
+    };
+      return {
+      appId: 'wx0815c00f0b4bd7c3',
+      path: 'pages/index/index',
+      text: '院内导航',
+      type: 'otherProgram',
+      extraData,
+    };
+  },
   13178: (item: IRegistrationCardItem, type?: string) => {
     let extraData: any = {
       type: '8_2',
@@ -81,6 +98,7 @@ export const HosNavData = {
         // hisCode:item.hosDeptId
       }),
     };
+
     if (type === '4') {
       extraData = {
         type: '8',
@@ -188,7 +206,7 @@ export const HosNavData = {
 export const judgeAllowNav = (item) => {
   const { hosId } = item;
   const sysCode = getSysCode();
-   // #ifdef  MP-WEIXIN
+  // #ifdef  MP-WEIXIN
   if (sysCode === '1001093') {
     return true;
   }
@@ -207,6 +225,11 @@ export const judgeAllowNav = (item) => {
       return true;
     }
   }
+  if (sysCode === '1001060') {
+    if (['13062'].includes(hosId)) {
+      return true;
+    }
+  }
   if (sysCode === '1001052') {
     if (['13001'].includes(hosId)) {
       try {
@@ -218,6 +241,6 @@ export const judgeAllowNav = (item) => {
       }
     }
   }
-   // #endif
+  // #endif
   return false;
 };

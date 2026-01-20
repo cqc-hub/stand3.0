@@ -117,7 +117,7 @@
         </view>
 
         <view
-          v-if="globalGl.SYS_CODE !== '1001067'"
+          v-if="!['1001067', '1001085'].includes(globalGl.SYS_CODE)"
           class="container-box g-border mb16 box-padding"
         >
           <view class="g-bold f36">备注</view>
@@ -161,7 +161,11 @@
         @click="submit"
         class="btn btn-primary flex1"
       >
-        {{ globalGl.SYS_CODE === '1001067' ? '提交' : '立即下单' }}
+        {{
+          ['1001067', '1001085'].includes(globalGl.SYS_CODE)
+            ? '提交'
+            : '立即下单'
+        }}
       </button>
     </view>
 
@@ -205,6 +209,7 @@
       scan?: 1 | 0;
       isYouzhen?: '1' | '0';
       mailMethod?: 'isYZ' | 'isSF';
+      type?: 'withoutMail';
     }
   );
   const expressInfo = ref<any>({});
@@ -403,7 +408,6 @@
       hosId = '13014';
     }
     const expressCompany = aimValue.value[0];
-    console.log('aimValue.value', aimValue.value);
 
     const detailsAddressData = addressList.value[0];
     let detailsAddress = '';
@@ -418,7 +422,7 @@
       scrollTo.value = '_address';
       return;
     }
-    if (!expressCompany) {
+    if (!expressCompany && pageProps.value.type !== 'withoutMail') {
       gStores.messageStore.showMessage('请选择快递方式', 3000);
       scrollTo.value = '_express';
       return;
@@ -497,14 +501,11 @@
       });
       return;
     }
-
-    gStores.globalStore.sysCode === '1001067'
+    ['1001067'].includes(gStores.globalStore.sysCode)
       ? uni.reLaunch({
           url: '/pages/home/home',
         })
-      : uni.reLaunch({
-          url: '/pagesB/medicationAssistant/medicalHelp?tabIndex=1',
-        });
+      : uni.navigateBack()
   };
 
   const gotoExpressPay = async (args) => {
@@ -598,7 +599,7 @@
     const companyList = pageConfig.value.company;
     const len = companyList && companyList.length;
 
-    if (len) {
+    if (len && pageProps.value.type !== 'withoutMail') {
       aimList.value = companyList;
       if (pageProps.value?.mailMethod === 'isYZ') {
         aimList.value = aimList.value.map((item) => {
@@ -614,7 +615,7 @@
         aimValue.value = [companyList[0].value];
       }
     } else {
-      if (globalGl.SYS_CODE !== '1001067') {
+      if (!['1001067', '1001085'].includes(globalGl.SYS_CODE)) {
         gStores.messageStore.showMessage('未配置快递信息');
       }
     }
