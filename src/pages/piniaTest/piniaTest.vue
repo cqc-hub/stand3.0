@@ -726,13 +726,9 @@
   const init = async () => {
     // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
-    // useTBanner(肿瘤住院管家);
+    useTBanner(肿瘤住院管家);
     // useTBanner(电子导诊单);
     // useTBanner(肿瘤云影响);
-    useTBanner({
-      type: 'h5',
-      path: 'https://mp.weixin.qq.com/s/2MXpPzd5Q2y54Ys2cWYTpw?scene=1&click_id=4',
-    });
     // patientUtils.faceVerify({
     //   name: '陈钦川',
     //   idCardNumber: '330326199908286713',

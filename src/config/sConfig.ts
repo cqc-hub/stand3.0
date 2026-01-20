@@ -1050,8 +1050,10 @@ const scJson: Record<string, ISConfig> = {
       wx: {
         medicalPlugin: '1',
         medicalDefault: '1', // TODO: 待确认
+        medicalFiling: '1',
         crossProgramBizType: {
           clinic: 'T2loeEEdAO',
+          medicalFiling: 'Xeu2ztYzX9',
         },
       },
 
