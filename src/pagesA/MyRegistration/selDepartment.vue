@@ -154,7 +154,7 @@
     if (sysCode === '1001093') {
       tabField.value = [
         {
-          label: '按症状',
+          label: '按病种',
           value: '99',
         },
         {
@@ -261,7 +261,11 @@
     });
   };
 
+  let i = 0;
   const hosChange = () => {
+    if (!i++) {
+      return;
+    }
     getDepList();
   };
 
@@ -273,7 +277,7 @@
     const requestArg = {
       source,
       hosId: hosId.value === '全院区' ? '' : hosId.value,
-      clinicalType: props.clinicalType,
+      clinicalType: pageProps.value.clinicalType,
       // resType   // 预约类型：1.预约挂号，2.当日挂号
       type: '',
     };
