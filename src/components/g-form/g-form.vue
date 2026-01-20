@@ -597,6 +597,8 @@
               : api.sendVerifyCode;
 
           await action(reqArg).catch((e) => {
+            // 尽量避免宏任务套宏任务的写法，对4000做特殊处理
+            if (e.code === 4000) return;
             const { message = '验证码发送失败' } = e;
 
             gStores.messageStore.showMessage(message, 1500, {
