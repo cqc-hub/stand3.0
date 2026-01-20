@@ -313,6 +313,7 @@ export const useHosButlerOrder = () => {
         key: 'membersPhone',
         field: 'input-text',
         showRequireIcon: true,
+        placeholder: '请输入联系人电话',
 
         rule: [
           {
@@ -320,6 +321,18 @@ export const useHosButlerOrder = () => {
             rule: rulePhone,
           },
         ],
+
+        async validator(v) {
+          if (pageProps.value.patientPhone === v) {
+            return {
+              success: false,
+              message: '联系人电话不能与本人电话一致',
+            };
+          }
+          return {
+            success: true,
+          };
+        },
       },
 
       // {
@@ -486,6 +499,7 @@ export const useHosButlerOrder = () => {
         formData.value.birthProvince = birthProvince.value;
         formData.value.birthCity = birthCity.value;
         formData.value.birthDistrict = birthDistrict.value;
+
         formData.value.birthProvinceName = birthProvince.text;
         formData.value.birthCityName = birthCity.text;
         formData.value.birthDistrictName = birthDistrict.text;
@@ -521,14 +535,31 @@ export const useHosButlerOrder = () => {
         formData2.value.birthCity = birthCity;
         formData2.value.birthDistrict = birthDistrict;
       } else if (idType === '身份证' && idCard) {
-        // const res = await idValidator.getIdCardAddress(idCard);
-        // if (res) {
-        //   const { birthCity, birthDistrict, birthProvince } = res;
-        //   formData2.value._address = `${birthProvince}${birthCity}${birthDistrict}`;
-        //   formData2.value.birthProvince = birthProvince;
-        //   formData2.value.birthCity = birthCity;
-        //   formData2.value.birthDistrict = birthDistrict;
-        // }
+        const res = await idValidator.getIdCardAddress('330326199908286713');
+        if (res) {
+          const {
+            birthCity,
+            birthDistrict,
+            birthProvince,
+            birthCityCode,
+            birthDistrictCode,
+            birthProvinceCode,
+          } = res;
+          if (birthProvinceCode && birthDistrictCode && birthCityCode) {
+            formData2.value._address = `${birthProvince}${birthCity}${birthDistrict}`;
+            formData2.value.birthProvince = birthProvince;
+            formData2.value.birthCity = birthCity;
+            formData2.value.birthDistrict = birthDistrict;
+
+            formData.value.birthProvince = birthProvinceCode;
+            formData.value.birthCity = birthCityCode;
+            formData.value.birthDistrict = birthDistrictCode;
+
+            formData.value.birthProvinceName = birthProvince;
+            formData.value.birthCityName = birthCity;
+            formData.value.birthDistrictName = birthDistrict;
+          }
+        }
       }
     },
   };

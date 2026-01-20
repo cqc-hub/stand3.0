@@ -152,6 +152,13 @@ export interface ISConfig {
         path: string;
 
         pathExtraData?: TMedicalNationWxConfig;
+        /**
+         * 同 pathExtraData， 用于一家医院有多个医保配置, 没获取到就用 pathExtraData
+         */
+        pathExtraDataConfig?: {
+          [hosId: string]: TMedicalNationWxConfig;
+        };
+
         // 走东软医保模式
         dongRuanMedicalInfo?: {
           h5BaseUrl: string;
@@ -1043,8 +1050,10 @@ const scJson: Record<string, ISConfig> = {
       wx: {
         medicalPlugin: '1',
         medicalDefault: '1', // TODO: 待确认
+        medicalFiling: '1',
         crossProgramBizType: {
           clinic: 'T2loeEEdAO',
+          medicalFiling: 'Xeu2ztYzX9',
         },
       },
 
@@ -1084,29 +1093,44 @@ const scJson: Record<string, ISConfig> = {
           appId: 'wxe183cd55df4b4369',
           path: 'auth/pages/bindcard/auth/index',
           // 黄河
-          // pathExtraData: {
-          //   openType: 'getAuthCode',
-          //   bizType: '04107',
-          //   cityCode: '650100',
-          //   channel: 'AAEZDc60WgTiVxo5xtoqTx-g',
-          //   orgChnlCrtfCodg:
-          //     'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsNriL3sY3GfFVjZHL7b0de',
-          //   orgCodg: 'H65010300208',
-          //   orgAppId: '1GJ8TA8QI0IE75430B0A0000F938BFC7',
-          //   sourceapp: 'wx081a6fb9ee8778e4-1',
-          // },
-
-          // 开发区
           pathExtraData: {
             openType: 'getAuthCode',
             bizType: '04107',
             cityCode: '650100',
-            channel: 'AAFnB6FxCsnf4D2WcS3JifN8',
+            channel: 'AAEZDc60WgTiVxo5xtoqTx-g',
             orgChnlCrtfCodg:
-              'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxup9p6OTEwpdxuIGgYrHBhV',
-            orgCodg: 'H65017100367',
-            orgAppId: '1ISCR539P0048D430B0A000030129568',
-            sourceapp: 'wx081a6fb9ee8778e4',
+              'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsNriL3sY3GfFVjZHL7b0de',
+            orgCodg: 'H65010300208',
+            orgAppId: '1GJ8TA8QI0IE75430B0A0000F938BFC7',
+            sourceapp: 'wx081a6fb9ee8778e4-1',
+          },
+
+          pathExtraDataConfig: {
+            // 黄河
+            '1314301': {
+              openType: 'getAuthCode',
+              bizType: '04107',
+              cityCode: '650100',
+              channel: 'AAEZDc60WgTiVxo5xtoqTx-g',
+              orgChnlCrtfCodg:
+                'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsNriL3sY3GfFVjZHL7b0de',
+              orgCodg: 'H65010300208',
+              orgAppId: '1GJ8TA8QI0IE75430B0A0000F938BFC7',
+              sourceapp: 'wx081a6fb9ee8778e4-1',
+            },
+
+            // 开发区
+            '1314302': {
+              openType: 'getAuthCode',
+              bizType: '04107',
+              cityCode: '650100',
+              channel: 'AAFnB6FxCsnf4D2WcS3JifN8',
+              orgChnlCrtfCodg:
+                'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxup9p6OTEwpdxuIGgYrHBhV',
+              orgCodg: 'H65017100367',
+              orgAppId: '1ISCR539P0048D430B0A000030129568',
+              sourceapp: 'wx081a6fb9ee8778e4',
+            },
           },
         },
       },

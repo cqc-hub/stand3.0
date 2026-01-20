@@ -755,7 +755,9 @@
               medOrgOrd,
             });
           } else {
-            wxPayMoneyMedicalPlugin(medicalNationWx);
+            wxPayMoneyMedicalPlugin(medicalNationWx, {
+              hosId: selUnPayList.value[0].hosId,
+            });
           }
         }
       }

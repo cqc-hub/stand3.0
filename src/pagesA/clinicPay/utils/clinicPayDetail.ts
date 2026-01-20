@@ -338,12 +338,16 @@ export const getOnlineMedicalConfig = async () => {
   };
 };
 
-export const getMedicalAuthCode = async (opt?: {
-  userName?: string;
-  idCard?: string;
-  type?: 'pay' | 'medicalFiling';
-}): Promise<string> => {
+export const getMedicalAuthCode = async (
+  opt = {} as {
+    userName?: string;
+    idCard?: string;
+    type?: 'pay' | 'medicalFiling';
+    hosId?: string;
+  }
+): Promise<string> => {
   let fCode = '';
+  const { type, hosId } = opt;
 
   const gStores = new GStores();
   const cacheStore = useCacheStore();
@@ -360,8 +364,15 @@ export const getMedicalAuthCode = async (opt?: {
     if (!qrCode) {
       const w = _wx!;
       const { medicalNation } = w;
-      let { appId, path, pathExtraData } = medicalNation!;
-      if (opt?.type === 'medicalFiling') {
+      let { appId, path, pathExtraData, pathExtraDataConfig } = medicalNation!;
+
+      if (pathExtraDataConfig && hosId) {
+        const findConfig = pathExtraDataConfig[hosId];
+        if (findConfig) {
+          pathExtraData = findConfig;
+        }
+      }
+      if (type === 'medicalFiling') {
         const medicalFilingPath = 'auth/pages/bindcard/auth/index';
         if (pathExtraData) {
           path = medicalFilingPath;
@@ -433,15 +444,19 @@ export const _getQxMedicalNation = async (
   payload = {} as {
     returnUrl?: string;
     params?: string;
+    hosId?: string; //
   }
 ) => {
   const {
     returnUrl = '/pagesA/clinicPay/clinicPayDetail',
     params: enHosPatientId,
+    hosId,
   } = payload;
   const gStores = new GStores();
   const cacheStore = useCacheStore();
-  const qrCode = await getMedicalAuthCode();
+  const qrCode = await getMedicalAuthCode({
+    hosId,
+  });
   const { patientId } = gStores.userStore.patChoose;
 
   const {
@@ -467,6 +482,7 @@ export const _getQxMedicalNation = async (
     callUrl: '',
     openId: '',
     qrCode,
+    hosId,
   };
 
   //请亲付字段，先根据系统码判断添加，等待后端接口兼容
@@ -490,6 +506,7 @@ export const _getQxMedicalNation = async (
     requestArg.aliPayUserId = await getOpenId();
   }
   await api.authorization({
+    hosId,
     ...cacheStore.medicalPathArg,
     accountType: 21,
     code: qrCode,
@@ -541,6 +558,7 @@ export const getQxMedicalNation = async (
   payload = {} as {
     returnUrl?: string;
     params?: string;
+    hosId?: string;
   }
 ) => {
   const gStores = new GStores();
@@ -559,10 +577,15 @@ export const getQxMedicalNation = async (
     return authorize as TWxAuthorize;
   }
 
-  const { returnUrl = '/pagesA/clinicPay/clinicPayDetail', params } = payload;
+  const {
+    returnUrl = '/pagesA/clinicPay/clinicPayDetail',
+    params,
+    hosId,
+  } = payload;
   const result = (await _getQxMedicalNation({
     returnUrl,
     params,
+    hosId,
   })) as any;
 
   // #ifdef MP-ALIPAY
@@ -837,7 +860,7 @@ export const usePayPage = () => {
     appId: '',
     bizType: '',
     bizTypeReg: '',
-    bizTypeMF:'',
+    bizTypeMF: '',
     extInfo: {},
   });
 
@@ -853,12 +876,12 @@ export const usePayPage = () => {
         const clinicBizType = wx?.crossProgramBizType?.clinic || '';
         const regBizType = wx?.crossProgramBizType?.reg || '';
         const mfBizType = wx?.crossProgramBizType?.medicalFiling || '';
-        if (clinicBizType || regBizType||mfBizType) {
+        if (clinicBizType || regBizType || mfBizType) {
           wxCrossProgramInfo.value = {
             appId: alipayAppid,
             bizType: clinicBizType,
             bizTypeReg: regBizType,
-            bizTypeMF:mfBizType,
+            bizTypeMF: mfBizType,
             extInfo: {},
           };
         }
@@ -1956,7 +1979,9 @@ export const usePayPage = () => {
             medOrgOrd,
           });
         } else {
-          wxPayMoneyMedicalPlugin(medicalNationWx);
+          wxPayMoneyMedicalPlugin(medicalNationWx, {
+            hosId: selUnPayList.value[0].hosId,
+          });
         }
         // #endif
       }
@@ -2276,7 +2301,10 @@ export const usePayPage = () => {
 
   // 微信 & 医保
   const wxPayMoneyMedicalPlugin = async (
-    callback: (authorize: TWxAuthorize) => any = () => {}
+    callback: (authorize: TWxAuthorize) => any = () => {},
+    payload = {} as {
+      hosId?: string;
+    }
   ) => {
     const {
       sConfig: { medicalMHelp },
@@ -2314,6 +2342,7 @@ export const usePayPage = () => {
       } else if (medicalNation) {
         const authorize = await getQxMedicalNation({
           params: pageProps.value.params,
+          hosId: payload.hosId,
         });
         callback(authorize);
         return authorize;
