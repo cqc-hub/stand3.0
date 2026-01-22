@@ -41,7 +41,11 @@
   },
   "quickapp": {},
   "mp-weixin": {
+<<<<<<< HEAD
     "appid": "wx868bfb27a64b370c",
+=======
+    "appid": "wxc3ee6623e27269a7",
+>>>>>>> ae572598 (1)
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -66,7 +70,16 @@
       "chooseAddress"
     ],
     "usingComponents": true,
+<<<<<<< HEAD
     "plugins": {},
+=======
+    "plugins": {
+      "crossProgramPlugins": {
+        "version": "latest",
+        "provider": "wx12cec70855c0cacf"
+      }
+    },
+>>>>>>> ae572598 (1)
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -75,21 +88,17 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      },
-      "codePlugin": {
-        "version": "*",
-        "provider": "2021003163608051"
-      },
       "auth-pay-plugin": {
         "version": "*",
         "provider": "2021003147699046"
       }
     },
     "mergeVirtualHostAttributes": true,
+<<<<<<< HEAD
     "appid": "",
+=======
+    "appid": "2021005172668444",
+>>>>>>> ae572598 (1)
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -141,7 +150,11 @@
     "enable": false
   },
   "vueVersion": "3",
+<<<<<<< HEAD
   "name": "舟山市普陀区人民医院",
+=======
+  "name": "温州市人民医院",
+>>>>>>> ae572598 (1)
   "h5": {
     "optimization": {
       "treeShaking": {
