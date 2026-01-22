@@ -119,7 +119,11 @@ export interface ISConfig {
       /** 挂号医保 */
       isMedicalOrder?: '1';
 
-      /** 医保开启亲情付 */
+      /**
+       *
+       * 医保开启亲情付
+       * 亲情付需要联系支付宝bd申请 提供 APPID应用渠道id、 appKey应用渠道秘钥
+       *  */
       isFamilyPayment?: '1';
       /** 医保开启亲情付 */
       isGbFamilyPayment?: '1';
@@ -549,6 +553,18 @@ const scJson: Record<string, ISConfig> = {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
           path: 'auth/pages/bindcard/auth/index',
+          // cs
+          // pathExtraData: {
+          //   openType: 'getAuthCode',
+          //   bizType: '04107',
+          //   cityCode: '410101',
+          //   channel: 'AAG05QdjP5yQIRc05wpvThnI',
+          //   orgChnlCrtfCodg:
+          //     'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtqg5V3ila4Zg8ONhjCsZO5',
+          //   orgCodg: 'H41010200019',
+          //   orgAppId: '1JBCC0LUB14U4460C80A0000C7255DC3',
+          // },
+          // zs
           pathExtraData: {
             openType: 'getAuthCode',
             bizType: '04107',
@@ -557,7 +573,7 @@ const scJson: Record<string, ISConfig> = {
             orgChnlCrtfCodg:
               'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtqg5V3ila4Zg8ONhjCsZO5',
             orgCodg: 'H41010200019',
-            orgAppId: '1JBCC0LUB14U4460C80A0000C7255DC3',
+            orgAppId: '1JFFNJORA0BQ8D430B0A0000DFBC6F57',
           },
         },
       },
@@ -1055,9 +1071,10 @@ const scJson: Record<string, ISConfig> = {
           medicalFiling: 'Xeu2ztYzX9',
         },
       },
-
       alipay: {
+        medicalDefault: '1',
         medicalFiling: '1',
+        isFamilyPayment: '1',
         medicalPlugin: {
           orgId: { 13152: 'H33010500310' },
           cardType: '01',

@@ -74,7 +74,20 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "ocrPlugin": {
+        "version": "*",
+        "provider": "2021001130678316"
+      },
+      "codePlugin": {
+        "version": "*",
+        "provider": "2021003163608051"
+      },
+      "auth-pay-plugin": {
+        "version": "*",
+        "provider": "2021003147699046"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "appid": "",
     "window": {
