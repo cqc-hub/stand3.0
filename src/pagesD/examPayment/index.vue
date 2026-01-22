@@ -152,7 +152,6 @@
   };
 
   const pay = async (data) => {
-    console.log('formSubmit', data);
     const { source } = gStores.globalStore.browser;
     const requestData = {
       ...data,
@@ -163,7 +162,7 @@
     const {
       result: { paySign, phsOrderNo },
     } = await api.addExamOrder(requestData);
-    const { hosId, hosName, contribName: patientName } = requestData;
+    const { hosId, hosName, name: patientName } = requestData;
 
     const payRes = await payMoneyOnline({
       paySign,

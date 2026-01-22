@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001094",
+  "sysCode": "1001097",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -483,7 +483,7 @@
     },
     "1001097": {
       "wxAppid": "wx868bfb27a64b370c",
-      "h5Appid": "",
+      "h5Appid1": "",
       "alipayAppid": "",
       "isvAlipayAppid": "",
       "name": "舟山市普陀区人民医院",

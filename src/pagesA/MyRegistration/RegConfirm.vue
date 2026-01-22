@@ -976,12 +976,14 @@
     waitRegSchSecondResultList.value = schSecondResultList;
 
     if (schSecondResultList && schSecondResultList.length) {
-      isShowSelWaitRegSch.value = true;
+      selWaitRegSch.value=props.value.ampm
 
-      await new Promise((r, j) => {
-        resolve = r;
-        reject = j;
-      });
+      // isShowSelWaitRegSch.value = true;
+
+      // await new Promise((r, j) => {
+      //   resolve = r;
+      //   reject = j;
+      // });
 
       const selSchItem = schSecondResultList.find(
         (o) => o.ampm === selWaitRegSch.value

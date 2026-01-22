@@ -960,7 +960,6 @@ const scJson: Record<string, ISConfig> = {
     isHideHomeLogo: '1',
     homeNavTitleLogo:
       'https://phsdevoss.eheren.com/pcloud/image/1001036logo3.png',
-
     homeTopBanner: {
       topShow: true,
       bannerHeight: 230,
@@ -1140,6 +1139,8 @@ const scJson: Record<string, ISConfig> = {
     login: {
       isSkipPerfect: '1',
     },
+    homeNavTitleLogo:
+      'https://phsdevoss.eheren.com/pcloud/phs3.0/yw_logoname.png',
   },
   1001097: {
     isDrugDelivery: '1',
