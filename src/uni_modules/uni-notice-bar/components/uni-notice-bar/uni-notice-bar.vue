@@ -310,7 +310,7 @@
 		flex-direction: row;
 		align-items: center;
 		// padding: 10px 12px;
-		/* #ifndef MP-TOUTIAO */
+		/* #ifndef MP-TOUTIAO ||  MP-HARMONY */
 		margin-bottom: 10px;
 		/* #endif */
 	}

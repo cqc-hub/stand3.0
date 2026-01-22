@@ -90,7 +90,7 @@
         @profile-click="profileClick"
         @card-click="cardClick"
       >
-        <!-- #ifndef MP-TOUTIAO -->
+        <!-- #ifdef MP-WEIXIN || MP-ALIPAY-->
         <template #footer="{ pat }: { pat: IPat }">
           <view>
             <view class="button-line">
