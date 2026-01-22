@@ -29,7 +29,6 @@ import {
 import api from '@/service/api';
 import globalGl from '@/config/global';
 import { useCacheStore } from '@/stores';
-import { ISConfig } from '@/config/sConfig';
 import dayjs from 'dayjs';
 
 export const tradeType = {
@@ -2818,7 +2817,7 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
     const authPayPlugin = requirePlugin('auth-pay-plugin');
     let orgId = '';
     Object.entries(medicalPlugin!.orgId).forEach(([k, v]) => {
-      orgId = v;
+      orgId = v as any;
     });
     let token = await authPayPlugin.toArchive({
       // 授权获取的authCode

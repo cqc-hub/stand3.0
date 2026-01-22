@@ -1,19 +1,16 @@
 import manifest from '../manifest.json';
 import systemConfig from './config.json';
-import { getSConfig } from './sConfig';
 export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静态资源服务器
 
 export let SYS_CODE = systemConfig.sysCode;
 
-let env: 'dev' | 'test' | 'prod' = 'prod'; // dev 开发； test 测试； prod 生产
+let env: 'dev' | 'test' | 'prod' = 'test'; // dev 开发； test 测试； prod 生产
 
 const WEB_OUT_LOGIN_TIME = 0; // web 环境下自动退出登录时间 ms
 const wxAppid = manifest['mp-weixin'].appid;
 const YMD = '20250408'; //年月日，每次版本更新必须同步更新
-
 const HM = '1723'; //时分，每次版本更新必须同步更新
 const version = '0.0.2'; //暂定
-
 
 const VERSION = version + '.' + YMD; //版本号
 const TIMESTAMP = version + '.' + YMD + HM; //时间戳，修改时间戳会清理项目缓存
@@ -60,7 +57,7 @@ const globalGl = {
   wxAppid,
   h5AppId: '',
   systemInfo,
-  systemConfig: systemConfig.sysConfig[SYS_CODE] || {},
+  systemConfig: systemConfig.sysConfig,
   addPersonUrl: systemInfo?.isSearchInHos
     ? '/pagesA/medicalCardMan/perfectReal'
     : '/pagesA/medicalCardMan/addMedical',
@@ -68,7 +65,7 @@ const globalGl = {
   isOpenSm4,
   netUrl,
   h5Url,
-  sConfig: getSConfig(SYS_CODE),
+  sConfig: (systemConfig.sysConfig.sConfig || {}) as ISConfig,
   WEB_OUT_LOGIN_TIME,
   q: getK('q'),
   r: getK('s'),
@@ -77,7 +74,7 @@ const globalGl = {
 Object.defineProperties(globalGl, {
   systemInfo: {
     get() {
-      return systemConfig.sysConfig[globalGl.SYS_CODE] || {};
+      return systemConfig.sysConfig || {};
     },
   },
 
@@ -95,12 +92,7 @@ Object.defineProperties(globalGl, {
       return this.systemInfo.h5Appid;
     },
   },
-
-  sConfig: {
-    get() {
-      return getSConfig(this.SYS_CODE);
-    },
-  },
 });
 
 export default globalGl;
+export const sysConfig = systemConfig;

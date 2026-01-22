@@ -32,10 +32,7 @@
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "alwaysStrict": true,
-    "typeRoots": [
-      "types",
-      "node_modules/vue/types",
-    ]
+    "typeRoots": ["types", "node_modules/vue/types"]
   },
   //哪些代码需要解析
   "include": [
@@ -43,7 +40,9 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "src/env.d.ts"
+    "src/env.d.ts",
+    "proConfig.ts",
+    "manifest.ts",
   ],
   //排除
   "exclude": ["node_modules"]

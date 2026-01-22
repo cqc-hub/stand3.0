@@ -1,4 +1,8 @@
-export const miniProgramConfig = {
+/// <reference path="./src/index.d.ts" />
+
+export const miniProgramConfig: {
+  [key: string]: ISystemGlobalItem;
+} = {
   '1001033': {
     wxAppid: 'wxe26143481567cb97',
     alipayAppid: '2021002139602458',
@@ -8,7 +12,6 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isSearchInHos: true,
     isOpenOcr: true,
-
     sConfig: {
       isOpenAlipayZndz: true,
       isDrugDelivery: '1',
@@ -16,15 +19,12 @@ export const miniProgramConfig = {
       isOpenWechatSI: true,
       medicalMHelp: {
         wx: {
-          crossProgramBizType: {
-            clinic: 'iAZhaFg90P',
-          },
+          crossProgramBizType: { clinic: 'iAZhaFg90P' },
           medicalPlugin: '1',
         },
-
         alipay: {
           medicalPlugin: {
-            orgId: { 1279: 'H33100300340', 1281: 'H3310030034020' },
+            orgId: { '1279': 'H33100300340', '1281': 'H3310030034020' },
             cardType: '01',
           },
           medicalFiling: '1',
@@ -44,8 +44,40 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isOpenOcr: false,
     isSearchInHos: true,
+    sConfig: {
+      homeNavTitleLogo:
+        'https://phsdevoss.eheren.com/pcloud/phs3.0/jiangsushengzhonnavtitle.png',
+      isOpenMessageAuth: '1',
+      isMessageBtnShowNew: '1',
+      isOpenPopularSci: { wx: '1' },
+      isOpenWechatSI: true,
+      isOpenHelpOld: '1',
+      homeTopBanner: { topShow: true },
+      medicalMHelp: {
+        wx: {
+          isMedicalOrder: '1',
+          isGbFamilyPayment: '1',
+          medical1001035: {
+            auth: {
+              appId: 'wxfde9fffbfa82be54',
+              path: 'pages/allOutPayCashier/authUniPro/authUni',
+              extraData: { appid: '96391c9afe2c46b3bba52436351dd418' },
+            },
+            pay: {
+              appId: 'wxfde9fffbfa82be54',
+              path: 'pages/allOutPayCashier/cashierUniPro/cashierUni',
+              extraData: {
+                appid: '96391c9afe2c46b3bba52436351dd418',
+                channel_code: 'b756bf71948144f993bcc768fe7b0910',
+                fixmedinsCode: 'H32010400468',
+                fixmedinsName: '江苏省中医院',
+              },
+            },
+          },
+        },
+      },
+    },
   },
-
   '1001036': {
     wxAppid: 'wx8c42096613665ada',
     h5Appid1: 'wxab05eba59d902b5f',
@@ -55,6 +87,12 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isOpenOcr: false,
     isSearchInHos: true,
+    sConfig: {
+      isHideHomeLogo: '1',
+      homeNavTitleLogo:
+        'https://phsdevoss.eheren.com/pcloud/image/1001036logo3.png',
+      homeTopBanner: { topShow: true, bannerHeight: 230 },
+    },
   },
   '1001038': {
     wxAppid: 'wxf64e84cf578fe0a7',
@@ -70,15 +108,9 @@ export const miniProgramConfig = {
       isOpenHelpOld: '1',
       isOpenHomeTabBarNetWorkBtn: '1',
       medicalMHelp: {
-        wx: {
-          medicalPlugin: '1',
-        },
-        // isOpenPatToMedicalPat: {},
+        wx: { medicalPlugin: '1' },
         alipay: {
-          medicalPlugin: {
-            orgId: { 13014: 'H33040200352' },
-            cardType: '01',
-          },
+          medicalPlugin: { orgId: { '13014': 'H33040200352' }, cardType: '01' },
         },
       },
     },
@@ -98,16 +130,9 @@ export const miniProgramConfig = {
       isOpenWechatSI: true,
       medicalMHelp: {
         isOpenPatToMedicalPat: {},
-
-        wx: {
-          medicalPlugin: '1',
-        },
-
+        wx: { medicalPlugin: '1' },
         alipay: {
-          medicalPlugin: {
-            orgId: { 12694: 'H33050200031' },
-            cardType: '01',
-          },
+          medicalPlugin: { orgId: { '12694': 'H33050200031' }, cardType: '01' },
           medicalFiling: '1',
         },
       },
@@ -120,10 +145,7 @@ export const miniProgramConfig = {
     isSearchInHos: false,
     isStartComeTest: false,
     isOpenOcr: false,
-    sConfig: {
-      // 大医二院普湾院区
-      isOpenHomeTabBarMessageBtn: '1',
-    },
+    sConfig: { isOpenHomeTabBarMessageBtn: '1' },
   },
   '1001044': {
     wxAppid: 'wxb54f397780bfacbc',
@@ -134,6 +156,20 @@ export const miniProgramConfig = {
     isSearchInHos: false,
     isStartComeTest: false,
     isOpenOcr: false,
+    sConfig: {
+      homeNavTitleLogo:
+        'https://phsdevoss.eheren.com/pcloud/phs3.0/ankangzhongnavtitle.png',
+      login: {},
+      medicalMHelp: {
+        isOpenPatToMedicalPat: {},
+        wx: {
+          medicalNation: {
+            appId: 'wxe183cd55df4b4369',
+            path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610900&channel=AAEfZXu8U-gLigchujuuMHOR&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxv7ltjDddRhreS6tc6M0416&orgCodg=H61090200044&orgAppId=1GTNPT4M90H576430B0A0000D5352BB7',
+          },
+        },
+      },
+    },
   },
   '1001045': {
     wxAppid: 'wx39ce500d25aa3328',
@@ -144,12 +180,7 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isOpenOcr: false,
     sConfig: {
-      medicalMHelp: {
-        alipay: {
-          medicalDefault: '1',
-          medicalNation: {},
-        },
-      },
+      medicalMHelp: { alipay: { medicalDefault: '1', medicalNation: {} } },
     },
   },
   '1001046': {
@@ -162,24 +193,19 @@ export const miniProgramConfig = {
     isSearchInHos: true,
     isOpenOcr: true,
     sConfig: {
-      // 绍兴人民
       isOpenWechatSI: true,
       isOpenHomeTabBarMessageBtn: '1',
-      login: {
-        isAliAuthBase: '1',
-      },
+      login: { isAliAuthBase: '1' },
       medicalMHelp: {
         isOpenPatToMedicalPat: {},
         wx: {
-          crossProgramBizType: {
-            clinic: '6f8FEzfB6q',
-          },
+          crossProgramBizType: { clinic: '6f8FEzfB6q' },
           medicalPlugin: '1',
         },
         alipay: {
           medicalPlugin: {
-            orgId: { 12930: 'H33060200131', 13178: 'H3306020013120' },
-            appId: { 13178: '20' },
+            orgId: { '12930': 'H33060200131', '13178': 'H3306020013120' },
+            appId: { '13178': '20' },
             cardType: '01',
           },
           medicalFiling: '1',
@@ -197,14 +223,12 @@ export const miniProgramConfig = {
     isStartComeTest: true,
     isOpenOcr: true,
     sConfig: {
-      // isOpenWechatSI: true,
       isOpenHelpOld: '1',
       medicalMHelp: {
         wx: {
           medicalNation: {
             appId: 'wxe183cd55df4b4369',
-            // path: `auth/pages/bindcard/auth/index?openType=getAuthCode&cityCode=${'320200'}&channel=${'AAGDjhBtPzo4LJTh9gCenRkB'}&orgChnlCrtfCodg=${'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe'}&orgCodg=${'H32028200358'}&bizType=04107&orgAppId=${'1GU9S5QVB01M76430B0A000038F064B8'}`,
-            path: `auth/pages/bindcard/auth/index`,
+            path: 'auth/pages/bindcard/auth/index',
             pathExtraData: {
               openType: 'getAuthCode',
               cityCode: '320200',
@@ -252,16 +276,11 @@ export const miniProgramConfig = {
       isOpenWechatSI: true,
       medicalMHelp: {
         wx: {
-          crossProgramBizType: {
-            clinic: '6vtqCjFiWg',
-          },
+          crossProgramBizType: { clinic: '6vtqCjFiWg' },
           medicalPlugin: '1',
         },
         alipay: {
-          medicalPlugin: {
-            orgId: { 13001: 'H33038200118' },
-            cardType: '01',
-          },
+          medicalPlugin: { orgId: { '13001': 'H33038200118' }, cardType: '01' },
         },
       },
     },
@@ -283,19 +302,16 @@ export const miniProgramConfig = {
     sConfig: {
       homeNavTitleLogo:
         'https://phsdevoss.eheren.com/pcloud/phs3.0/xianyannavtitle.png',
-
       isOpenHomeTabBarNetWorkBtn: '1',
       isHideHomeSearch: '1',
       isOpenWechatSI: true,
       medicalMHelp: {
         isOpenPatToMedicalPat: {},
-
         wx: {
           medicalNation: {
             appId: 'wxe183cd55df4b4369',
             path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610400&channel=AAFwLnLNBzDZNXVZVKdvs0v_&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtn+S/XPoOIr53u3xRWP6xq&orgCodg=H61040200092&orgAppId=1GLE8RTS20N376430B0A0000CAE3B2A4',
           },
-          // medicalDefault: '1',
           isMedicalOrder: '1',
         },
       },
@@ -314,10 +330,7 @@ export const miniProgramConfig = {
     isSearchInHos: false,
     alipayPid: 'dl5dt/lx8x6q93cionolzw==',
     isOpenOcr: false,
-    sConfig: {
-      isOpenAlipayZndz: true,
-      isHideHomeLogo: '1',
-    },
+    sConfig: { isOpenAlipayZndz: true, isHideHomeLogo: '1' },
   },
   '1001056': {
     wxAppid: 'wx4d8f68fdc6b6831c',
@@ -341,7 +354,6 @@ export const miniProgramConfig = {
             appId: 'wxe183cd55df4b4369',
             path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=650100&channel=AAHXJbrzmhk_q05MEUW1ioQn&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxuHF+LhHk733m/BRrPGb2V8&orgCodg=H65010300478&orgAppId=1GU9PR6L900C76430B0A00006D4C0BE7',
           },
-          // medicalDefault: '1',
         },
       },
     },
@@ -367,27 +379,17 @@ export const miniProgramConfig = {
       medicalCardDetailPackageDomain: 'https://01-h5-health.tengmed.com',
       medicalMHelp: {
         isOpenPatToMedicalPat: {},
-
         alipay: {
-          // medicalDefault: '1',
           medicalNation: {},
           isMedicalOrder: '1',
           isGbFamilyPayment: '1',
         },
-
         wx: {
           medicalNation: {
             appId: 'wxe183cd55df4b4369',
-            // path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610100&channel=AAFCflpRouGx9rzCduR7IDwV&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxveJKftoNCw+TCAqUwy6fwh&orgCodg=H61010300557&orgAppId=1G8FTSHFR0F63F60C80A00003310E195',
-            // 生产
             path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610100&channel=AAFCflpRouGx9rzCduR7IDwV&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxveJKftoNCw+TCAqUwy6fwh&orgCodg=H61010300557&orgAppId=1H39F4EL9015E2470B0A000095823F28',
           },
-          crossProgramBizType: {
-            clinic: 'mAuUBT4u0E',
-            reg: 'w4XIxwNWzW',
-          },
-
-          // medicalDefault: '1',
+          crossProgramBizType: { clinic: 'mAuUBT4u0E', reg: 'w4XIxwNWzW' },
           isMedicalOrder: '1',
           isGbFamilyPayment: '1',
         },
@@ -406,28 +408,13 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     sConfig: {
       isOpenWechatSI: true,
-      login: {
-        isAliAuthBase: '1',
-      },
+      login: { isAliAuthBase: '1' },
       isSearchHosForAddPatHasMoreThanOneCard: '1',
-
       medicalMHelp: {
         wx: {
           medicalNation: {
             appId: 'wxe183cd55df4b4369',
             path: 'auth/pages/bindcard/auth/index',
-            // pathExtraData: {
-            //   openType: 'getAuthCode',
-            //   bizType: '04107',
-            //   cityCode: '410901',
-            //   channel: 'AAESBm3dgscMbm3owOheQVk0',
-            //   orgChnlCrtfCodg:
-            //     'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtJRKQswprsB52V1kSQVkyD',
-            //   orgCodg: 'H41090200004',
-            //   orgAppId: '1HPSM9AQ20183F60C80A000061EF761F',
-            // },
-
-            // zs
             pathExtraData: {
               openType: 'getAuthCode',
               bizType: '04107',
@@ -449,9 +436,7 @@ export const miniProgramConfig = {
     name: '濮阳市第五人民医院',
     isSearchInHos: true,
     isOpenOcr: false,
-    sConfig: {
-      isSearchHosForAddPatHasMoreThanOneCard: '1',
-    },
+    sConfig: { isSearchHosForAddPatHasMoreThanOneCard: '1' },
   },
   '1001060': {
     wxAppid: 'wx799315279808c901',
@@ -464,16 +449,10 @@ export const miniProgramConfig = {
     isOpenOcr: false,
     sConfig: {
       isOpenHelpOld: '1',
-      login: {
-        // isAliAuthBase: '1',
-      },
+      login: {},
       medicalMHelp: {
-        // isOpenPatToMedicalPat: {},
         alipay: {
-          medicalPlugin: {
-            orgId: { 13060: 'H33060300001' },
-            cardType: '01',
-          },
+          medicalPlugin: { orgId: { '13060': 'H33060300001' }, cardType: '01' },
         },
       },
     },
@@ -497,13 +476,9 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isOpenOcr: false,
     sConfig: {
-      login: {
-        isSkipPerfect: '1',
-        isAliAuthBase: '1',
-      },
+      login: { isSkipPerfect: '1', isAliAuthBase: '1' },
       isOpenAlipayFollow: '81fa167551234b1f8585325f56bd6726',
       isOpenWechatSI: true,
-      // isOpenHomeTabBarNetWorkBtn: '1',
     },
   },
   '1001065': {
@@ -514,11 +489,7 @@ export const miniProgramConfig = {
     isSearchInHos: false,
     isStartComeTest: true,
     isOpenOcr: false,
-    sConfig: {
-      login: {
-        isSkipPerfect: '1',
-      },
-    },
+    sConfig: { login: { isSkipPerfect: '1' } },
   },
   '1001066': {
     wxAppid: 'wxbe1f8ae346536759',
@@ -531,13 +502,9 @@ export const miniProgramConfig = {
     isOpenOcr: false,
     sConfig: {
       isOpenWechatSI: true,
-      login: {
-        isSkipPerfect: '1',
-        isAliAuthBase: '1',
-      },
+      login: { isSkipPerfect: '1', isAliAuthBase: '1' },
     },
   },
-
   '1001067': {
     wxAppid: 'wx08440928b105c3bf',
     alipayAppid: '2021002129645591',
@@ -546,26 +513,18 @@ export const miniProgramConfig = {
     isSearchInHos: true,
     isOpenOcr: false,
     sConfig: {
-      login: {
-        // isAliIndependentDev: '1',
-        isSkipPerfect: '1',
-        isAliAuthBase: '1',
-        isLoginByOpenId: '1',
-      },
+      login: { isSkipPerfect: '1', isAliAuthBase: '1', isLoginByOpenId: '1' },
       isOpenHelpOld: '1',
       isOpenMessageAuth: '1',
       isOpenWechatSI: true,
-      // isOpenHomeTabBarMessageBtn: '1',
-      // isOpenHomeTabBarNetWorkBtn: '1'
-
       medicalMHelp: {
         alipay: {
           medicalPlugin: {
             orgId: {
-              13012: 'H33030200034',
-              13013: 'H33030200034',
-              13009: 'H33030200034',
-              13011: 'H33030200034',
+              '13009': 'H33030200034',
+              '13011': 'H33030200034',
+              '13012': 'H33030200034',
+              '13013': 'H33030200034',
             },
             cardType: '01',
           },
@@ -582,9 +541,7 @@ export const miniProgramConfig = {
     isSearchInHos: false,
     isStartComeTest: true,
     isOpenOcr: false,
-    sConfig: {
-      isOpenWechatSI: true,
-    },
+    sConfig: { isOpenWechatSI: true },
   },
   '1001069': {
     wxAppid: 'wxf544358f2736cd20',
@@ -596,17 +553,14 @@ export const miniProgramConfig = {
     isSearchInHos: false,
     isOpenOcr: false,
     sConfig: {
-      /*浙江省人民医院毕节医院金海湖院区 */
       isOpenWechatSI: true,
       medicalMHelp: {
         wx: {
           medicalNation: {
             appId: 'wxe183cd55df4b4369',
-            //测试
             path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=520500&channel=AAEBc2RH-gUYFz7T2U2NVQhi&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxuumfluttL87+gDtSEtCYLx&orgCodg=H52050200015&orgAppId=1JBJL87EA1684460C80A000078F00A4C',
           },
           isMedicalOrder: '1',
-          // medicalPlugin: '1',
           isGbFamilyPayment: '1',
           medicalFiling: '1',
         },
@@ -631,10 +585,7 @@ export const miniProgramConfig = {
     isSearchInHos: false,
     isStartComeTest: false,
     isOpenOcr: false,
-    sConfig: {
-      // 杭口未来医院
-      // isOpenHomeTabBarNetWorkBtn: '1',
-    },
+    sConfig: {},
   },
   '1001073': {
     wxAppid: 'wxdd1ed079167189fa',
@@ -645,7 +596,6 @@ export const miniProgramConfig = {
     isOpenOcr: false,
     _des: '过渡板小程序引导跳转',
   },
-
   '1001074': {
     wxAppid: 'wxbef5313efdabfde1',
     alipayAppid: '2021004193658562',
@@ -661,6 +611,22 @@ export const miniProgramConfig = {
       isCardQueryComp: true,
       isNewMode: false,
     },
+    sConfig: {
+      isHideHomeLogo: '1',
+      isOpenWechatSI: true,
+      login: {},
+      medicalMHelp: {
+        isOpenPatToMedicalPat: {},
+        alipay: {},
+        wx: {
+          medicalNation: {
+            appId: 'wxe183cd55df4b4369',
+            path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=620500&channel=AAF-qIZucnqdnk72zjYzIJ38&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtjvE9yjYec3Tmc/8KSGSL7&orgCodg=H62050200075&orgAppId=1IC2S44OQ0028C430B0A0000A6FDEDE9',
+          },
+          isGbFamilyPayment: '1',
+        },
+      },
+    },
   },
   '1001076': {
     wxAppid: 'wxe1c48c70681bfc56',
@@ -671,6 +637,7 @@ export const miniProgramConfig = {
     isSearchInHos: false,
     isStartComeTest: false,
     isOpenOcr: false,
+    sConfig: { login: { isSkipPerfect: '1' } },
   },
   '1001077': {
     wxAppid: 'wx9dcb98a8c18d44ea',
@@ -680,7 +647,21 @@ export const miniProgramConfig = {
     name: '陕西省中医医院',
     isStartComeTest: false,
     isOpenOcr: false,
-    desc: '陕西省中医医院',
+    _des: '陕西省中医医院',
+    sConfig: {
+      login: { isAliAuthBase: '1' },
+      medicalMHelp: {
+        isOpenPatToMedicalPat: {},
+        wx: {
+          medicalNation: {
+            appId: 'wxe183cd55df4b4369',
+            path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610101&channel=AAEoVvqZuWU8BNSYVtMM15px&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxv2/NlHf1H5KZT+T46wCMi1&orgCodg=H61010400913&orgAppId=1IPJEE9D306C8C430B0A000022532554',
+          },
+          isMedicalOrder: '1',
+          isGbFamilyPayment: '1',
+        },
+      },
+    },
   },
   '1001078': {
     wxAppid: 'wx5a88bc0cf40aa66f',
@@ -691,6 +672,7 @@ export const miniProgramConfig = {
     isSearchInHos: false,
     isStartComeTest: false,
     isOpenOcr: false,
+    sConfig: { login: { isSkipPerfect: '1' } },
   },
   '1001080': {
     wxAppid: 'wx58ffd2c3a557bef0',
@@ -700,6 +682,13 @@ export const miniProgramConfig = {
     isSearchInHos: true,
     isStartComeTest: true,
     isOpenOcr: false,
+    sConfig: {
+      login: { isSkipPerfect: '1', isAliAuthBase: '1', isLoginByOpenId: '1' },
+      isOpenHelpOld: '1',
+      isOpenMessageAuth: '1',
+      isOpenWechatSI: true,
+      isOpenHomeTabBarNetWorkBtn: '1',
+    },
   },
   '1001081': {
     wxAppid: 'wx55b38fca9c378c7b',
@@ -709,6 +698,9 @@ export const miniProgramConfig = {
     name: '浙江省健康人才发展协会',
     isStartComeTest: false,
     isOpenOcr: false,
+    sConfig: {
+      login: { isSkipPerfect: '1', isAliAuthBase: '1', isLoginByOpenId: '1' },
+    },
   },
   '1001082': {
     wxAppid: 'wx7c53b0e82e20494e',
@@ -718,6 +710,11 @@ export const miniProgramConfig = {
     name: '健康温州',
     isStartComeTest: false,
     isOpenOcr: false,
+    sConfig: {
+      isOpenPopularSci: '1',
+      login: { isAliAuthBase: '1' },
+      isOpenWechatSI: true,
+    },
   },
   '1001083': {
     wxAppid: 'wxc3ee6623e27269a7',
@@ -728,6 +725,27 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isSearchInHos: true,
     isOpenOcr: false,
+    sConfig: {
+      login: { isSkipPerfect: '1' },
+      medicalMHelp: {
+        wx: {
+          crossProgramBizType: {
+            clinic: 'yYwA6fRicn',
+            medicalFiling: 'xNetpdsuXc',
+          },
+          medicalFiling: '1',
+          medicalPlugin: '1',
+        },
+        alipay: {
+          medicalPlugin: {
+            orgId: { '13140': 'H33030200021', '131401': 'H33030200021' },
+            cardType: '01',
+          },
+          medicalFiling: '1',
+          isFamilyPayment: '1',
+        },
+      },
+    },
   },
   '1001084': {
     wxAppid: 'wxa50129d260033b82',
@@ -738,6 +756,32 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isOpenOcr: false,
     isSearchInHos: true,
+    sConfig: {
+      login: { isAliAuthBase: '1', isLoginByOpenId: '1' },
+      medicalMHelp: {
+        wx: {
+          medicalNation: {
+            appId: 'wxe183cd55df4b4369',
+            path: 'auth/pages/bindcard/auth/index',
+            pathExtraData: {
+              openType: 'getAuthCode',
+              cityCode: '320400',
+              orgCodg: 'H32048100095',
+              orgChnlCrtfCodg:
+                'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvXg/++7e1yfc/kbkno5H2B',
+              bizType: '04107',
+              orgAppId: '1I4IKUE4808A8C430B0A000072CBC284',
+              channel: 'AAGIeU0wtURqrsaTlQYAvi6z',
+            },
+            dongRuanMedicalInfo: {
+              h5BaseUrl: 'https://ybj.jscz.org.cn/cashierui',
+            },
+          },
+          isMedicalOrder: '1',
+          isGbFamilyPayment: '1',
+        },
+      },
+    },
   },
   '1001085': {
     wxAppid: 'wx3a24f824ca86d6dc',
@@ -748,6 +792,7 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isOpenOcr: false,
     isSearchInHos: true,
+    sConfig: { login: { isSkipPerfect: '1', isAliAuthBase: '1' } },
   },
   '1001086': {
     wxAppid: 'wxa4a2728d9d7598f1',
@@ -760,7 +805,7 @@ export const miniProgramConfig = {
       healthCardText: '新疆维吾尔自治区卫生健康委员会',
       hospitalId: '35088',
     },
-    desc: '过渡',
+    _des: '过渡',
     sConfig: {
       homeNavTitleLogo:
         'https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png',
@@ -795,6 +840,29 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isOpenOcr: false,
     isSearchInHos: true,
+    sConfig: {
+      isOpenHelpOld: '1',
+      login: { isAliAuthBase: '1', isSkipPerfect: '1' },
+      medicalMHelp: {
+        wx: {
+          medicalNation: {
+            appId: 'wxe183cd55df4b4369',
+            path: 'auth/pages/bindcard/auth/index',
+            pathExtraData: {
+              openType: 'getAuthCode',
+              bizType: '04107',
+              cityCode: '610600',
+              channel: 'AAFjWNlsD_YjoGPGECfQP-LW',
+              orgChnlCrtfCodg:
+                'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtVok110ttUbcrc5BbIj9rW',
+              orgCodg: 'H61060200365',
+              orgAppId: '1JAQFM29V01U8C430B0A0000C1B4E028',
+            },
+          },
+          isMedicalOrder: '1',
+        },
+      },
+    },
   },
   '1001093': {
     wxAppid: 'wx2e06292a91e9f162',
@@ -805,6 +873,34 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isOpenOcr: false,
     isSearchInHos: true,
+    sConfig: {
+      homeStyle: '1',
+      isOpenHelpOld: '1',
+      login: { isAliAuthBase: '1', isSkipPerfect: '1' },
+      isOpenWechatSI: true,
+      homeTopBanner: { topShow: true, bannerHeight: 230 },
+      medicalMHelp: {
+        wx: {
+          medicalPlugin: '1',
+          medicalDefault: '1',
+          medicalFiling: '1',
+          crossProgramBizType: {
+            clinic: 'T2loeEEdAO',
+            medicalFiling: 'Xeu2ztYzX9',
+          },
+        },
+        alipay: {
+          medicalDefault: '1',
+          medicalFiling: '1',
+          isFamilyPayment: '1',
+          medicalPlugin: { orgId: { '13152': 'H33010500310' }, cardType: '01' },
+        },
+      },
+      homeTopBg:
+        'https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-1001093-home-topbg.png',
+      homeNavTitleLogo:
+        'https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-1001093-home-navtitle.png',
+    },
   },
   '1001094': {
     wxAppid: 'wx081a6fb9ee8778e4',
@@ -817,6 +913,59 @@ export const miniProgramConfig = {
       healthCardText: '新疆维吾尔自治区卫生健康委员会',
       hospitalId: '40652',
     },
+    sConfig: {
+      homeNavTitleLogo:
+        'https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png',
+      isOpenHelpOld: '1',
+      isOpenPopularSci: '1',
+      isOpenWechatSI: true,
+      homeTopBanner: { topShow: true, bannerHeight: 200 },
+      login: { isSkipPerfect: '1' },
+      medicalMHelp: {
+        wx: {
+          isMedicalOrder: '1',
+          medicalNation: {
+            appId: 'wxe183cd55df4b4369',
+            path: 'auth/pages/bindcard/auth/index',
+            pathExtraData: {
+              openType: 'getAuthCode',
+              bizType: '04107',
+              cityCode: '650100',
+              channel: 'AAEZDc60WgTiVxo5xtoqTx-g',
+              orgChnlCrtfCodg:
+                'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsNriL3sY3GfFVjZHL7b0de',
+              orgCodg: 'H65010300208',
+              orgAppId: '1GJ8TA8QI0IE75430B0A0000F938BFC7',
+              sourceapp: 'wx081a6fb9ee8778e4-1',
+            },
+            pathExtraDataConfig: {
+              '1314301': {
+                openType: 'getAuthCode',
+                bizType: '04107',
+                cityCode: '650100',
+                channel: 'AAEZDc60WgTiVxo5xtoqTx-g',
+                orgChnlCrtfCodg:
+                  'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsNriL3sY3GfFVjZHL7b0de',
+                orgCodg: 'H65010300208',
+                orgAppId: '1GJ8TA8QI0IE75430B0A0000F938BFC7',
+                sourceapp: 'wx081a6fb9ee8778e4-1',
+              },
+              '1314302': {
+                openType: 'getAuthCode',
+                bizType: '04107',
+                cityCode: '650100',
+                channel: 'AAFnB6FxCsnf4D2WcS3JifN8',
+                orgChnlCrtfCodg:
+                  'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxup9p6OTEwpdxuIGgYrHBhV',
+                orgCodg: 'H65017100367',
+                orgAppId: '1ISCR539P0048D430B0A000030129568',
+                sourceapp: 'wx081a6fb9ee8778e4',
+              },
+            },
+          },
+        },
+      },
+    },
   },
   '1001095': {
     wxAppid: 'wx41ed9678ac802d7e',
@@ -827,6 +976,11 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isOpenOcr: false,
     isSearchInHos: true,
+    sConfig: {
+      login: { isSkipPerfect: '1' },
+      homeNavTitleLogo:
+        'https://phsdevoss.eheren.com/pcloud/phs3.0/yw_logoname.png',
+    },
   },
   '1001097': {
     wxAppid: 'wx868bfb27a64b370c',
@@ -838,6 +992,7 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isSearchInHos: true,
     isOpenOcr: false,
+    sConfig: { isDrugDelivery: '1' },
   },
   '1001098': {
     wxAppid: 'wxe57689990fa308f8',
@@ -849,6 +1004,7 @@ export const miniProgramConfig = {
     isStartComeTest: false,
     isSearchInHos: false,
     isOpenOcr: false,
+    sConfig: { isOpenHelpOld: '1' },
   },
   '1001099': {
     wxAppid: 'wx64d48b1de1c41cb8',
@@ -861,16 +1017,13 @@ export const miniProgramConfig = {
     sConfig: {
       isOpenHelpOld: '1',
       isOpenWechatSI: true,
-      login: {
-        isSkipPerfect: '1',
-      },
+      login: { isSkipPerfect: '1' },
       medicalMHelp: {
         wx: {
           isMedicalOrder: '1',
           medicalNation: {
             appId: 'wxe183cd55df4b4369',
             path: 'auth/pages/bindcard/auth/index',
-            // zs
             pathExtraData: {
               openType: 'getAuthCode',
               bizType: '04107',
@@ -914,5 +1067,176 @@ export const miniProgramConfig = {
     isStartComeTest: true,
     isSearchInHos: false,
     isOpenOcr: false,
+  },
+};
+
+export const manifestFileDataObj: any = {
+  appid: '__UNI__DC06FC7',
+  description: '',
+  versionName: '1.0.0',
+  versionCode: '100',
+  transformPx: false,
+  'app-plus': {
+    usingComponents: true,
+    nvueStyleCompiler: 'uni-app',
+    compilerVersion: 3,
+    splashscreen: {
+      alwaysShowBeforeRender: true,
+      waiting: true,
+      autoclose: true,
+      delay: 0,
+    },
+    modules: {},
+    distribute: {
+      android: {
+        permissions: [
+          '<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>',
+          '<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>',
+          '<uses-permission android:name="android.permission.VIBRATE"/>',
+          '<uses-permission android:name="android.permission.READ_LOGS"/>',
+          '<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>',
+          '<uses-feature android:name="android.hardware.camera.autofocus"/>',
+          '<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>',
+          '<uses-permission android:name="android.permission.CAMERA"/>',
+          '<uses-permission android:name="android.permission.GET_ACCOUNTS"/>',
+          '<uses-permission android:name="android.permission.READ_PHONE_STATE"/>',
+          '<uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>',
+          '<uses-permission android:name="android.permission.WAKE_LOCK"/>',
+          '<uses-permission android:name="android.permission.FLASHLIGHT"/>',
+          '<uses-feature android:name="android.hardware.camera"/>',
+          '<uses-permission android:name="android.permission.WRITE_SETTINGS"/>',
+        ],
+      },
+      ios: {},
+      sdkConfigs: {},
+    },
+  },
+  quickapp: {},
+  'mp-weixin': {
+    appid: 'wxe26143481567cb97',
+    __usePrivacyCheck__: true,
+    setting: {
+      urlCheck: false,
+      postcss: false,
+      minified: true,
+      es6: true,
+    },
+    optimization: {
+      subPackages: true,
+      treeShaking: {
+        enable: true, // 启用 Tree-Shaking
+      },
+    },
+    permission: {
+      'scope.userLocation': {
+        desc: '你的位置信息将用于小程序位置接口的效果展示',
+      },
+    },
+    requiredPrivateInfos: ['chooseLocation', 'getLocation', 'chooseAddress'],
+    usingComponents: true,
+    plugins: {},
+    mergeVirtualHostAttributes: true,
+    lazyCodeLoading: 'requiredComponents',
+    libVersion: 'latest',
+  },
+  'mp-alipay': {
+    component2: true,
+    usingComponents: true,
+    plugins: {},
+    mergeVirtualHostAttributes: true,
+    appid: '2021002139602458',
+
+    window: {
+      navigationStyle: 'custom',
+      defaultTitle: '',
+      titleBarColor: '#ffffff',
+    },
+
+    'mini.project.json': {
+      compileOptions: {
+        codeObfuscation: {
+          enable: true, // 启用混淆
+          type: 'strong', // 混淆强度：normal/strong
+        },
+      },
+    },
+  },
+  'mp-harmony': {
+    distribute: {
+      compileSdkVersion: 10,
+      targetSdkVersion: 10,
+      signingConfigs: {
+        default: {
+          certpath:
+            '/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1768358552415.cer',
+          keyAlias: 'debugKey',
+          keyPassword:
+            '0000001BFC8B5B3C076B42F630A5A14F2F64D2C3E01545CA5B8EB12247500BC58C076E3B13A01357CDAF53',
+          profile:
+            '/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1768441200752.p7b',
+          signAlg: 'SHA256withECDSA',
+          storeFile:
+            '/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1763103743000.p12',
+          storePassword:
+            '0000001BFC8B5B3C076B42F630A5A14F2F64D2C3E01545CA5B8EB12247500BC58C076E3B13A01357CDAF53',
+        },
+
+        release: {
+          certpath:
+            '/Users/chaoqincai/Documents/resource/项目资料/省中/harmony/sz_dev.cer',
+          keyAlias: 'dev',
+          keyPassword:
+            '0000001951F42454F47F50213ED5BBB157176836DDF14EE074D9E11A7018E5F542AA53A47827421D0C',
+          profile:
+            '/Users/chaoqincai/Documents/resource/项目资料/省中/harmony/dev-testRelease.p7b',
+          signAlg: 'SHA256withECDSA',
+          storeFile:
+            '/Users/chaoqincai/Documents/resource/项目资料/省中/harmony/dev.p12',
+          storePassword:
+            '00000019E4EA8EDFBA9D17FC4BF30C97A89A40DCDA1A7858E69A234307BEA262EB2E0A246986FE94F5',
+        },
+      },
+      bundleName: 'com.atomicservice.6917564602329951506',
+    },
+    // domainList: [
+    //   {
+    //     domain: 'testphs.eheren.com', // 目标接口域名（如 https://api.xxx.com 则填 xxx.com）
+    //     type: 'business',
+    //     description: '接口请求域名',
+    //   },
+    //   {
+    //     domain: 'netphs.eheren.com', // 目标接口域名（如 https://api.xxx.com 则填 xxx.com）
+    //     type: 'business',
+    //     description: '接口请求域名',
+    //   },
+    // ],
+  },
+  'mp-baidu': {
+    usingComponents: true,
+  },
+  'mp-toutiao': {
+    usingComponents: true,
+  },
+  uniStatistics: {
+    enable: false,
+  },
+  vueVersion: '3',
+  name: '台州市第一人民医院',
+  h5: {
+    optimization: {
+      treeShaking: {
+        enable: false,
+      },
+    },
+    router: {
+      base: './',
+    },
+    sdkConfigs: {
+      maps: {
+        qqmap: {
+          key: 'GH4BZ-SD6L3-2WN3U-3BAE5-7UYIH-3SFRJ',
+        },
+      },
+    },
   },
 };
