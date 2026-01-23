@@ -1,163 +1,151 @@
 {
-  "appid": "__UNI__DC06FC7",
-  "description": "",
-  "versionName": "1.0.0",
-  "versionCode": "100",
-  "transformPx": false,
-  "app-plus": {
-    "usingComponents": true,
-    "nvueStyleCompiler": "uni-app",
-    "compilerVersion": 3,
-    "splashscreen": {
-      "alwaysShowBeforeRender": true,
-      "waiting": true,
-      "autoclose": true,
-      "delay": 0
-    },
-    "modules": {},
-    "distribute": {
-      "android": {
-        "permissions": [
-          "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
-          "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
-          "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
-          "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
-          "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
-          "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
-          "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
-          "<uses-permission android:name=\"android.permission.CAMERA\"/>",
-          "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
-          "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-          "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
-          "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-          "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
-          "<uses-feature android:name=\"android.hardware.camera\"/>",
-          "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
-        ]
-      },
-      "ios": {},
-      "sdkConfigs": {}
-    }
-  },
-  "quickapp": {},
-  "mp-weixin": {
-    "appid": "wx2e06292a91e9f162",
-    "__usePrivacyCheck__": true,
-    "setting": {
-      "urlCheck": false,
-      "postcss": false,
-      "minified": true,
-      "es6": true
-    },
-    "optimization": {
-      "subPackages": true,
-      "treeShaking": {
-        "enable": true
-      }
-    },
-    "permission": {
-      "scope.userLocation": {
-        "desc": "你的位置信息将用于小程序位置接口的效果展示"
-      }
-    },
-    "requiredPrivateInfos": [
-      "chooseLocation",
-      "getLocation",
-      "chooseAddress"
-    ],
-    "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      },
-      "crossProgramPlugins": {
-        "version": "latest",
-        "provider": "wx12cec70855c0cacf"
-      }
-    },
-    "mergeVirtualHostAttributes": true,
-    "lazyCodeLoading": "requiredComponents",
-    "libVersion": "latest"
-  },
-  "mp-alipay": {
-    "component2": true,
-    "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
-    "mergeVirtualHostAttributes": true,
-    "appid": "2021003104628364",
-    "window": {
-      "navigationStyle": "custom",
-      "defaultTitle": "",
-      "titleBarColor": "#ffffff"
-    },
-    "mini.project.json": {
-      "compileOptions": {
-        "codeObfuscation": {
-          "enable": true,
-          "type": "strong"
-        }
-      }
-    }
-  },
-  "mp-harmony": {
-    "distribute": {
-      "compileSdkVersion": 10,
-      "targetSdkVersion": 10,
-      "signingConfigs": {
-        "default": {
-          "certpath": "/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1768358552415.cer",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001BFC8B5B3C076B42F630A5A14F2F64D2C3E01545CA5B8EB12247500BC58C076E3B13A01357CDAF53",
-          "profile": "/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1768441200752.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1763103743000.p12",
-          "storePassword": "0000001BFC8B5B3C076B42F630A5A14F2F64D2C3E01545CA5B8EB12247500BC58C076E3B13A01357CDAF53"
+    "appid" : "__UNI__39FC98C",
+    "description" : "",
+    "versionName" : "1.0.0",
+    "versionCode" : "100",
+    "transformPx" : false,
+    "app-plus" : {
+        "usingComponents" : true,
+        "nvueStyleCompiler" : "uni-app",
+        "compilerVersion" : 3,
+        "splashscreen" : {
+            "alwaysShowBeforeRender" : true,
+            "waiting" : true,
+            "autoclose" : true,
+            "delay" : 0
         },
-        "release": {
-          "certpath": "/Users/chaoqincai/Documents/resource/项目资料/省中/harmony/sz_dev.cer",
-          "keyAlias": "dev",
-          "keyPassword": "0000001951F42454F47F50213ED5BBB157176836DDF14EE074D9E11A7018E5F542AA53A47827421D0C",
-          "profile": "/Users/chaoqincai/Documents/resource/项目资料/省中/harmony/dev-testRelease.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "/Users/chaoqincai/Documents/resource/项目资料/省中/harmony/dev.p12",
-          "storePassword": "00000019E4EA8EDFBA9D17FC4BF30C97A89A40DCDA1A7858E69A234307BEA262EB2E0A246986FE94F5"
+        "modules" : {},
+        "distribute" : {
+            "android" : {
+                "permissions" : [
+                    "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+                    "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+                    "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+                    "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
+                ]
+            },
+            "ios" : {},
+            "sdkConfigs" : {}
         }
-      },
-      "bundleName": "com.atomicservice.6917564602329951506"
-    }
-  },
-  "mp-baidu": {
-    "usingComponents": true
-  },
-  "mp-toutiao": {
-    "usingComponents": true
-  },
-  "uniStatistics": {
-    "enable": false
-  },
-  "vueVersion": "3",
-  "name": "浙江省肿瘤医院",
-  "h5": {
-    "optimization": {
-      "treeShaking": {
-        "enable": false
-      }
     },
-    "router": {
-      "base": "./"
+    "quickapp" : {},
+    "mp-weixin" : {
+        "appid" : "wxacb96ee66c3dee84",
+        "__usePrivacyCheck__" : true,
+        "setting" : {
+            "urlCheck" : false,
+            "postcss" : false,
+            "minified" : true,
+            "es6" : true
+        },
+        "optimization" : {
+            "subPackages" : true,
+            "treeShaking" : {
+                "enable" : true
+            }
+        },
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "你的位置信息将用于小程序位置接口的效果展示"
+            }
+        },
+        "requiredPrivateInfos" : [ "chooseLocation", "getLocation", "chooseAddress" ],
+        "usingComponents" : true,
+        "plugins" : {
+            "SIPlugin" : {
+                "version" : "0.3.6",
+                "provider" : "wx069ba97219f66d99"
+            }
+        },
+        "mergeVirtualHostAttributes" : true,
+        "lazyCodeLoading" : "requiredComponents",
+        "libVersion" : "latest"
     },
-    "sdkConfigs": {
-      "maps": {
-        "qqmap": {
-          "key": "GH4BZ-SD6L3-2WN3U-3BAE5-7UYIH-3SFRJ"
+    "mp-alipay" : {
+        "component2" : true,
+        "usingComponents" : true,
+        "plugins" : {},
+        "mergeVirtualHostAttributes" : true,
+        "appid" : "2021003104670597",
+        "window" : {
+            "navigationStyle" : "custom",
+            "defaultTitle" : "",
+            "titleBarColor" : "#ffffff"
+        },
+        "mini.project.json" : {
+            "compileOptions" : {
+                "codeObfuscation" : {
+                    "enable" : true,
+                    "type" : "strong"
+                }
+            }
         }
-      }
+    },
+    "mp-harmony" : {
+        "distribute" : {
+            "compileSdkVersion" : 10,
+            "targetSdkVersion" : 10,
+            "signingConfigs" : {
+                "default" : {
+                    "certpath" : "/Users/ddd/Documents/harmony/ddDev/ddDev.cer",
+                    "keyAlias" : "ddDevAlias",
+                    "keyPassword" : "0000001D077DADAA60B9CFFDE7D388BB1C4FD5099C122B2E7B365345B29D2EA24475C728D02B12727CCBEDB571",
+                    "profile" : "/Users/ddd/Documents/harmony/ddDev/ddDevProFileDebug.p7b",
+                    "signAlg" : "SHA256withECDSA",
+                    "storeFile" : "/Users/ddd/Documents/harmony/ddDev/ddDev.p12",
+                    "storePassword" : "0000001D3D4D515D310910C57ED041A219E20544F6936BDBB3475D8F17B8F2D132424FB6B03E177FA9DBDA020C"
+                },
+                "release" : {
+                    "certpath" : "/Users/ddd/Documents/harmony/dddProd/ddProd.cer",
+                    "keyAlias" : "dddProdAlias",
+                    "keyPassword" : "0000001D8097C06E383AF488D3204C218D0E1F7AA6770B0AE0410088FEF8BC806E43A8D1C7CDA9F47FC59DC3DA",
+                    "profile" : "/Users/ddd/Documents/harmony/dddProd/dddProdProfileRelease.p7b",
+                    "signAlg" : "SHA256withECDSA",
+                    "storeFile" : "/Users/ddd/Documents/harmony/dddProd/dddProd.p12",
+                    "storePassword" : "0000001DE9E9A56D8EC74C70E40508CE453D70077DA6C6A89609C2B5AC81A58B21030914AED626902C4C9039B7"
+                }
+            },
+            "bundleName" : "com.atomicservice.6917564602329951506"
+        }
+    },
+    "mp-baidu" : {
+        "usingComponents" : true
+    },
+    "mp-toutiao" : {
+        "usingComponents" : true,
+        "appid" : "tt00a7761a9facebee01"
+    },
+    "uniStatistics" : {
+        "enable" : false
+    },
+    "vueVersion" : "3",
+    "name" : "江苏省中医院",
+    "h5" : {
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : false
+            }
+        },
+        "router" : {
+            "base" : "./"
+        },
+        "sdkConfigs" : {
+            "maps" : {
+                "qqmap" : {
+                    "key" : "GH4BZ-SD6L3-2WN3U-3BAE5-7UYIH-3SFRJ"
+                }
+            }
+        }
     }
-  }
 }
