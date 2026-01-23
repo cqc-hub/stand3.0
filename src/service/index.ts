@@ -281,6 +281,7 @@ function deepEqualClean(localVersion, newVersion) {
     if (val1.version != val2.version) {
       if (val1.functionType == 1) {
         uni.removeStorageSync('systemConfig');
+        uni.removeStorageSync('hosList');
         globalStore.clearFlagCaches();
       }
       if (val1.functionType == 2) {
