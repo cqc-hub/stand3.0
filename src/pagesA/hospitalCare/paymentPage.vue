@@ -12,9 +12,13 @@
       </view>
       <view class="buttons">
         <view
-          :class="list[index] == defalutMoney ? 'activeButton' : 'button'"
           v-for="(item, index) in list"
           :key="index"
+          :class="{
+            activeButton: list[index] == defalutMoney,
+            button: list[index] != defalutMoney,
+            disabled: pageProps.disabledChangeMoney === '1',
+          }"
           @click="checkMoney(item)"
         >
           ¥{{ item }}
@@ -32,6 +36,7 @@
             class="uni-input"
             maxlength="13"
             placeholder-style="font-size:32rpx;color:#888"
+            :disabled="pageProps.disabledChangeMoney === '1'"
             :type="getMoneyInputType"
             v-model="defalutMoney"
             @change="inputMoneyChange"
@@ -71,7 +76,14 @@
   import { useHosPayPage } from './utils/inpatientInfo';
 
   import api from '@/service/api';
-  import { GStores, ServerStaticData, wait, ISystemConfig } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    wait,
+    ISystemConfig,
+    useTBanner,
+    changePatient,
+  } from '@/utils';
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { payOrderResult } from './utils/inpatientInfo';
@@ -98,8 +110,10 @@
     hospitalAccount?: string;
     reason?: string;
     type?: string; //有值1代表预交来的 所有预缴都不传patientid
-    _type?: 'fromSelDepartment';
+    _type?: 'fromSelDepartment' | 'fromHosButler1001093';
     _url?: string; // 充值成功后回跳
+    _pd?: string; // 切换患者
+    disabledChangeMoney?: '1'; // 禁止修改金额
   };
 
   interface IGPay {
@@ -124,6 +138,9 @@
     }
   });
   const checkMoney = (item) => {
+    if (pageProps.value.disabledChangeMoney === '1') {
+      return;
+    }
     defalutMoney.value = String(item);
   };
 
@@ -229,7 +246,7 @@
 
   const payAfter = async () => {
     const _url = pageProps.value._url;
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     await wait(1000);
     uni.hideLoading();
     if (_url) {
@@ -246,6 +263,19 @@
           noTipDialog: '1',
         }),
       });
+    } else if (pageProps.value._type === 'fromHosButler1001093') {
+      useTBanner(
+        {
+          type: 'h5',
+          isSelfH5: '1',
+          path: 'pagesA/1001093/hosButler',
+          addition: {
+            patientId: '_patientId',
+          },
+          text: '',
+        },
+        'reLaunch'
+      );
     } else {
       uni.navigateBack({
         delta: 1,
@@ -371,8 +401,13 @@
       });
     }
   });
-  onLoad((opt) => {
+  onLoad((opt: any) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    const { _pd } = pageProps.value ;
+    if (_pd) {
+      changePatient(_pd);
+    }
+
     console.log(pageProps.value, '----');
     if (pageProps.value.defaultMoney) {
       defalutMoney.value = pageProps.value.defaultMoney;
@@ -427,6 +462,10 @@
         text-align: center;
         line-height: 112rpx;
         margin-bottom: 16rpx;
+      }
+
+      .disabled {
+        opacity: 0.6;
       }
     }
     .pay-input {

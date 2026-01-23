@@ -259,7 +259,7 @@
       aaa
     />
   </Order-Reg-Confirm>
-  
+
 </template>
 
 <script lang="ts" setup>
@@ -507,7 +507,7 @@
          const curPagesList = getCurrentPages();
         const curPages: any = curPagesList[curPagesList.length - 1];
         console.log('curPages',curPages);
-        
+
         const { openFunc } = curPages.selectComponent('#codePlugin');
          console.log('curPagesads ',curPages.selectComponent('#codePlugin'));
         openFunc();
@@ -521,7 +521,7 @@
     }
     regDialogMedicalFiling.value.show();
   };
-  //医保更新用户信息,医保建档
+  // 医保更新用户信息,医保建档
   const medicalFiling = async () => {
     const flag = await dealMedicalFiling(medicalFilingPat.value?.patientId);
     if (flag) {

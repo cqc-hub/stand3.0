@@ -293,6 +293,8 @@ export const useOrder = (props: Ref<IOrderProps>) => {
 
             if (isShowFilterOrderSourceBtn === '1') {
               return ['0', '2'].includes(schState);
+            } else if (gStores.globalStore.sysCode === '1001093') {
+              return true;
             } else {
               return schState === '0';
             }
@@ -624,7 +626,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       docTitleName,
       regVerificationMode,
       visitingArea,
-      specialClinicDept
+      specialClinicDept,
     } = selectSchInfo;
     const { disNo, numId, timeDesc, enData } = item;
     const { promptMessage, thRegisterId, hosId: _pHosId } = props.value;
@@ -656,7 +658,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       thRegisterId,
       regVerificationMode,
       visitingArea,
-      specialClinicDept
+      specialClinicDept,
     };
     selectOrderSourceNumId.value = numId;
 

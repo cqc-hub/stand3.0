@@ -448,7 +448,7 @@ const queryApi = {
     service.post<T>('/phs-query/caseCopy/copyOfCasePaySupplement', parm(data)),
 
   // 获取住院信息
-  getInHospitalInfo: <T>(data) =>
+  getInHospitalInfo: <T = any>(data) =>
     service.post<T>('/phs-query/hospital/getInHospitalInfo', parm(data)),
 
   getInHospitalList: <T = any>(data) =>

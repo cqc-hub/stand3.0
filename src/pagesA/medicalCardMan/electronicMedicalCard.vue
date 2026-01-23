@@ -62,7 +62,7 @@
                   'mask-show': tabCurrentKey === '0',
                 }"
                 @click="_goElectronicMedicalCard('byMedical')"
-                class="absolute z-999 f36 btn btn-primary pr64 pl64 transition medical-btn-2"
+                class="absolute z-999 f36 btn btn-primary pr64 pl64 transition"
               >
                 点击出示医保码
               </view>
@@ -824,9 +824,5 @@
     right: 0;
     top: 0;
     bottom: 0;
-  }
-
-  .medical-btn-2 {
-    // top: 50%;
   }
 </style>

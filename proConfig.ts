@@ -844,6 +844,7 @@ export const miniProgramConfig: {
       isOpenHelpOld: '1',
       login: { isAliAuthBase: '1', isSkipPerfect: '1' },
       medicalMHelp: {
+        isOpenPatToMedicalPat: {},
         wx: {
           medicalNation: {
             appId: 'wxe183cd55df4b4369',
@@ -1166,31 +1167,26 @@ export const manifestFileDataObj: any = {
       compileSdkVersion: 10,
       targetSdkVersion: 10,
       signingConfigs: {
-      default: {
-          certpath:
-            '/Users/ddd/Documents/harmony/ddDev/ddDev.cer',
+        default: {
+          certpath: '/Users/ddd/Documents/harmony/ddDev/ddDev.cer',
           keyAlias: 'ddDevAlias',
           keyPassword:
             '0000001D077DADAA60B9CFFDE7D388BB1C4FD5099C122B2E7B365345B29D2EA24475C728D02B12727CCBEDB571',
-          profile:
-            '/Users/ddd/Documents/harmony/ddDev/ddDevProFileDebug.p7b',
+          profile: '/Users/ddd/Documents/harmony/ddDev/ddDevProFileDebug.p7b',
           signAlg: 'SHA256withECDSA',
-          storeFile:
-            '/Users/ddd/Documents/harmony/ddDev/ddDev.p12',
+          storeFile: '/Users/ddd/Documents/harmony/ddDev/ddDev.p12',
           storePassword:
             '0000001D3D4D515D310910C57ED041A219E20544F6936BDBB3475D8F17B8F2D132424FB6B03E177FA9DBDA020C',
         },
         release: {
-          certpath:
-            '/Users/ddd/Documents/harmony/dddProd/ddProd.cer',
+          certpath: '/Users/ddd/Documents/harmony/dddProd/ddProd.cer',
           keyAlias: 'dddProdAlias',
           keyPassword:
             '0000001D8097C06E383AF488D3204C218D0E1F7AA6770B0AE0410088FEF8BC806E43A8D1C7CDA9F47FC59DC3DA',
           profile:
             '/Users/ddd/Documents/harmony/dddProd/dddProdProfileRelease.p7b',
           signAlg: 'SHA256withECDSA',
-          storeFile:
-            '/Users/ddd/Documents/harmony/dddProd/dddProd.p12',
+          storeFile: '/Users/ddd/Documents/harmony/dddProd/dddProd.p12',
           storePassword:
             '0000001DE9E9A56D8EC74C70E40508CE453D70077DA6C6A89609C2B5AC81A58B21030914AED626902C4C9039B7',
         },

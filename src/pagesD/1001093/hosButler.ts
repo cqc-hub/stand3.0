@@ -408,6 +408,8 @@ export const useHosButlerOrder = () => {
   };
 
   const handlerSubmit = async () => {
+    const { cardNumber, patientId } = gStores.userStore.patChoose;
+    const { recommendedPrepaidCost } = pageProps.value;
     const reqArg = {
       ...pageProps.value,
       ...formData2.value,
@@ -425,13 +427,26 @@ export const useHosButlerOrder = () => {
       showCancel: false,
     });
 
+    const { result: hosInfoResult = {} } = await api.getInHospitalInfo({
+      cardNumber,
+      patientId,
+    });
+
     uni.redirectTo({
-      url: joinQueryForUrl('/pagesD/1001093/hosButlerOrderAfter', {
-        ...reqArg,
-        // visitNo,
-        // cardNumber,
+      url: joinQueryForUrl('/pagesA/hospitalCare/paymentPage', {
+        ...hosInfoResult,
+        defaultMoney: recommendedPrepaidCost,
+        _type: 'fromHosButler1001093',
+        disabledChangeMoney: '1',
+        _pd: patientId,
       }),
     });
+
+    // uni.redirectTo({
+    //   url: joinQueryForUrl('/pagesD/1001093/hosButlerOrderAfter', {
+    //     ...reqArg,
+    //   }),
+    // });
   };
 
   return {

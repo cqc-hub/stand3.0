@@ -1,4 +1,8 @@
 export type THosButlerInfo = {
+  // 实际预交金额
+  actualPrepaidCost: number;
+  // 建议预交金额
+  recommendedPrepaidCost: number;
   /**
    * address* string
    * example: 南京市秦淮区XX路XX号
