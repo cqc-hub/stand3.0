@@ -60,6 +60,7 @@
                 'my-hide my-disabled mask-hide': tabCurrentKey !== '0',
                 'mask-show': tabCurrentKey === '0',
               }"
+              @click="_goElectronicMedicalCard('byMedical')"
               class="relative z-1 f36 btn btn-primary pr64 pl64 transition"
             >
               点击出示医保码
