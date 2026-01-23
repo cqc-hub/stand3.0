@@ -3,15 +3,83 @@
     v-if="isPageRender"
     :class="{
       [gStores.globalStore.getPageClass]: true,
+      'bg-blue-light page-2': pageStyle === '2',
     }"
     class="g-page"
   >
-    <view class="relative z-1">
+    <view v-if="pageStyle === '1'" class="relative z-1">
       <g-flag isShowFg typeFg="113" :isShowFgBg="false" />
     </view>
-    <g-choose-pat @hide="patActionHide" @choose-pat="choosePatHandler1" />
+    <g-choose-pat @choose-pat="choosePatHandler1" class="relative z-999" />
 
-    <scroll-view scroll-y class="g-container">
+    <view v-if="pageStyle === '2'" class="pt32">
+      <view class="container-tabs relative z-1">
+        <tabs1
+          v-model:value="tabCurrent"
+          :tabs="tabs"
+          :scroll="false"
+          :all-blod="false"
+          @change="tabsChange"
+          line-height="2px"
+          active-color="var(--hr-brand-color-6)"
+          line-color="var(--hr-brand-color-6)"
+          bgColor="transparent"
+          field="label"
+          pills="3"
+          height="88"
+        />
+
+        <view class="container-tabs-mask absolute my-disabled"></view>
+      </view>
+
+      <view class="m32c rounded-xl bg-blue container">
+        <view class="f28 p32c pt24 color-fff pb24">
+          <text class="mr32">
+            {{ gStores.userStore.clickPat.patientNameEncry }}
+          </text>
+
+          <text>{{ options.code }}</text>
+        </view>
+
+        <view
+          class="bg-white rounded-xl p32 flex flex-col items-center justify-center relative transition"
+        >
+          <img :src="barImg" mode="widthFix" class="bar-img mb32" />
+          <img :src="qrImg" mode="widthFix" class="qrcode-img pb32" />
+
+          <view
+            :class="{
+              'my-hide': tabCurrentKey !== '0',
+            }"
+            class="absolute absolute-full flex items-center justify-center transition"
+          >
+            <view class="mask-qrcode absolute absolute-full rounded-xl"></view>
+
+            <view
+              :class="{
+                'my-hide my-disabled mask-hide': tabCurrentKey !== '0',
+                'mask-show': tabCurrentKey === '0',
+              }"
+              class="relative z-1 f36 btn btn-primary pr64 pl64 transition"
+            >
+              点击出示医保码
+            </view>
+          </view>
+        </view>
+
+        <view class="p32c pb24 pt24 color-warn">
+          <g-flag
+            typeFg="113"
+            :isShowFgBg="false"
+            fclass="f28"
+            justShowText
+            aaa
+          />
+        </view>
+      </view>
+    </view>
+
+    <scroll-view v-if="pageStyle === '1'" scroll-y class="g-container">
       <view class="top-bg z-0 my-disabled" />
 
       <view class="card-content p32 z-1">
@@ -111,7 +179,7 @@
         </view>
       </view>
 
-     <!-- #ifdef MP-WEIXIN || MP-ALIPAY -->
+      <!-- #ifdef MP-WEIXIN || MP-ALIPAY -->
       <view class="pl32 pr32">
         <view
           :style="{
@@ -147,22 +215,31 @@
           </view>
         </view>
       </view>
-     <!-- #endif -->
-
+      <!-- #endif -->
     </scroll-view>
 
     <g-message />
 
+    <view class="my-display-none">
+      <w-barcode
+        :options="barCodeOpt"
+        @generate="barCodeGenerate"
+        ref="refBarCode1"
+      />
+
+      <uv-qrcode
+        v-if="qrOptions.code"
+        :options="qrOptions2"
+        :value="qrOptions.code"
+        @change="qrComplete"
+        ref="refQrCode1"
+        size="380rpx"
+      />
+    </view>
+
     <homeTabbar
       v-if="pageProps.showNavBar === '1'"
       :systemModeOld="gStores.globalStore.modeOld"
-    />
-  </view>
-  <view class="relative z-999">
-    <ChoosePatAction
-      ref="actionSheet"
-      @choose-pat="choosePatHandler"
-      @hide="patActionHide"
     />
   </view>
 </template>
@@ -172,7 +249,7 @@
   import { storeToRefs } from 'pinia';
   import { onLoad } from '@dcloudio/uni-app';
 
-  import { IPat, isAreaProgram } from '@/stores';
+  import { isAreaProgram } from '@/stores';
   import {
     GStores,
     wait,
@@ -183,15 +260,15 @@
     cacheUtil,
   } from '@/utils';
 
-  import { setLocalStorage, getLocalStorage, deQueryForUrl } from '@/common';
+  import { deQueryForUrl } from '@/common';
   import { _goElectronicMedicalCard } from '@/pages/home/utils';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
 
   import refreshQrcode from '@/components/refresh-qrcode/refresh-qrcode.vue';
-  import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import homeTabbar from '@/pages/home/componetns/homeTabbar.vue';
+  import tabs1 from './components/tabs1.vue';
 
   const pageProps = ref(
     {} as {
@@ -210,6 +287,33 @@
   const patientUtils = new PatientUtils();
   const isShowRefreshQrCode = ref(false);
   const refBarCode = ref('' as any);
+  const refBarCode1 = ref('' as any);
+  const refQrCode1 = ref('' as any);
+  const qrImg = ref('');
+  const barImg = ref('');
+  /**
+   * 1 旧 2新
+   */
+  const pageStyle = ref('1');
+  const tabs = ref([
+    {
+      label: '医保码',
+      value: '0',
+    },
+    {
+      label: '电子就诊卡',
+      value: '1',
+    },
+    // {
+    //   label: '电子健康卡',
+    //   value: '2',
+    // },
+  ]);
+  const tabCurrent = ref(0);
+  const tabCurrentKey = computed(() => {
+    return tabs.value[tabCurrent.value].value;
+  });
+  const tabsChange = async () => {};
 
   const toggleQrLabel = computed(() => {
     if (toggleList.value.length > 2) {
@@ -237,18 +341,6 @@
     img: '',
   });
 
-  const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
-  const chooseAction = () => {
-    if (actionSheet.value) {
-      actionSheet.value.show();
-    }
-  };
-  const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
-    gStores.userStore.updatePatChoose(item);
-    gStores.userStore.updatePatClick(item);
-    init();
-  };
-
   const choosePatHandler1 = async () => {
     const pat = gStores.userStore.patChoose;
     gStores.userStore.updatePatClick(pat);
@@ -260,13 +352,6 @@
       toggleListCurrent.value = 1;
       setStatus();
     }
-  };
-
-  const patActionHide = async () => {
-    // await wait(20);
-    // refBarCode.value?.SpecialTreatment(barCodeOpt.value);
-    // await wait(20);
-    // refBarCode.value?.generateCode();
   };
 
   uni.getSystemInfo({}).then(({ screenWidth }) => {
@@ -294,10 +379,6 @@
     _name: '',
   });
   const isNameEncry = ref(true);
-  const eyesClick = () => {
-    isNameEncry.value = !isNameEncry.value;
-    changeShowName();
-  };
   const isHasHealthCode = computed(() => {
     return !!clickPat.value.healthQrCodeText;
   });
@@ -321,12 +402,6 @@
   if (isAreaProgram()) {
     showCodeLabel.value = clickPat.value.idCard;
   }
-
-  const goDetail = () => {
-    uni.navigateTo({
-      url: '/pagesA/medicalCardMan/medicalCardDetail',
-    });
-  };
 
   const toggleQrCode = async () => {
     let oldSel = toggleListCurrent.value;
@@ -371,7 +446,7 @@
     return {
       foregroundImageSrc: showHealthCode.value
         ? globalGl.BASE_IMG + 'health-card-logo.png'
-        : '',
+        : globalGl.BASE_IMG + 'stand3-patcarddetail-qrcode-img.png',
     };
   });
 
@@ -451,6 +526,18 @@
       : clickPat.value.healthQrCodeText || clickPat.value._showId;
     barCodeOpt.value.code = options.value.code;
     isPageRender.value = true;
+
+    if (pageStyle.value === '2') {
+      await wait(120);
+
+      const { tempFilePath: img } = await refBarCode1.value.GetCodeImg();
+      barImg.value = img;
+      refQrCode1.value.toTempFilePath({
+        success({ tempFilePath }) {
+          qrImg.value = tempFilePath;
+        },
+      });
+    }
   };
 
   onMounted(async () => {
@@ -461,7 +548,7 @@
 
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
     init();
-
+    tabsChange();
     if (isHasHealthCode.value) {
       toggleList.value.push({
         label: '电子健康卡',
@@ -481,6 +568,9 @@
 
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    if (gStores.globalStore.sysCode === '1001093') {
+      pageStyle.value = '2';
+    }
   });
 </script>
 
@@ -662,5 +752,74 @@
 
   .bar-code-img {
     height: 120rpx;
+  }
+  // ====
+
+  .page-2 {
+    .bg-blue-light {
+      background-color: #daebff;
+    }
+
+    .container-tabs {
+      border-top: 1px solid #ffffff;
+      border-radius: 12px 12px 0 0;
+
+      .container-tabs-mask {
+        mask-image: linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.4) 80%,
+          transparent 100%
+        );
+
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+    .container {
+      background: linear-gradient(
+        180deg,
+        var(--hr-brand-color-6) 0,
+        var(--hr-brand-color-6) 120rpx,
+        var(--hr-warning-color-1) 50%,
+        var(--hr-warning-color-1) 100%
+      );
+
+      .bar-img {
+        width: 600rpx;
+      }
+      .qrcode-img {
+        width: 320rpx;
+      }
+
+      .mask-qrcode {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+
+  .mask-hide {
+    transform: translateY(-10rpx);
+    visibility: hidden;
+  }
+  .mask-show {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+
+  .transition {
+    transition: all 0.3s linear;
+  }
+
+  .absolute-full {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
   }
 </style>

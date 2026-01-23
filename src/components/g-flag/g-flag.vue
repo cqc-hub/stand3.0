@@ -2,8 +2,8 @@
   <view
     :class="{
       aaa: !aaa,
+      [fclass]: true,
     }"
-    class="f32"
   >
     <slot :title="mTitle" :text="text">
       <view
@@ -20,6 +20,8 @@
         <view class="title" v-if="!isHideTitle">{{ mTitle }}</view>
         <rich-text :nodes="text" />
       </view>
+
+      <rich-text v-if="justShowText" :nodes="text" />
     </slot>
   </view>
 </template>
@@ -37,12 +39,15 @@
     isHideTitle?: boolean;
     disabledFormatterParse?: boolean;
     aaa?: boolean; // 不要 padding
+    justShowText?: boolean;
+    fclass?: string;
   }
 
   const props = withDefaults(defineProps<IProps>(), {
     value: '',
     isShowFg: false,
     isShowFgBg: true,
+    fclass: 'f32',
   });
   const gStores = new GStores();
 

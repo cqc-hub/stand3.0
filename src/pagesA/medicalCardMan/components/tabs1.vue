@@ -1,0 +1,500 @@
+<template>
+  <view :id="elId" class="v-tabs menu-style-tabs">
+    <scroll-view
+      id="scrollContainer "
+      :scroll-x="scroll"
+      :scroll-left="scroll ? scrollLeft : 0"
+      :scroll-with-animation="scroll"
+      :style="{
+        position: fixed ? 'fixed' : 'relative',
+        zIndex: zIndex,
+      }"
+    >
+      <view
+        class="v-tabs__container"
+        :style="{
+          display: scroll ? 'inline-flex' : 'flex',
+          whiteSpace: scroll ? 'nowrap' : 'normal',
+          background: bgColor,
+          height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
+          padding,
+        }"
+      >
+        <view
+          class="v-tabs__container-item flex justify-center items-center f32 relative z-1"
+          v-for="(v, i) in tabs"
+          :key="i"
+          :style="{
+            color: current == i ? activeColor : color,
+            fontWeight:
+              (allBlod && 'blod') || (bold && current == i) ? 'bold' : '',
+            justifyContent: !scroll ? 'center' : '',
+            flex: scroll ? '' : 1,
+            padding: paddingItem,
+            minWidth: itemMinWidth,
+            width: itemWidth,
+            flexDirection: v.detail ? 'column' : 'inherit',
+          }"
+          @click="change(i)"
+        >
+          <view class="">
+            <text
+              :class="{
+                'custom-font f36': fontStyle === '1' && current == i,
+              }"
+            >
+              {{ field ? v[field] : v }}
+            </text>
+          </view>
+          <!-- <view>{{  JSON.stringify(v)}}</view> -->
+          <view
+            v-if="v.detail"
+            class="v-tabs__subtitle"
+            :style="{
+              color: current == i ? activeColor : '',
+            }"
+          >
+            <rich-text
+              class="f22"
+              :nodes="$HTMLParser(v.detail.replaceAll('  ', '<br/>'))"
+            ></rich-text>
+          </view>
+        </view>
+        <view
+          class="v-tabs__container-line"
+          :style="{
+            background: lineColor,
+            width: lineWidth + 'px',
+            height: lineHeight,
+            borderRadius: lineRadius,
+            left: lineLeft + 'px',
+            transform: `translateX(-${lineWidth / 2}px)`,
+          }"
+        />
+
+        <image
+          v-if="pills === '3'"
+          :src="globalGl.BASE_IMG + 'stand3-patcarddetail-tab-left.png'"
+          :style="{
+            left: pillsLeft + 'px',
+            width: currentWidth + 'px',
+            height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
+          }"
+          :class="{
+            'my-hide': current !== 0,
+          }"
+          class="h-full absolute pill3 v-tabs__container-pills-first"
+        />
+        <image
+          v-if="pills === '3'"
+          :src="globalGl.BASE_IMG + 'stand3-patcarddetail-tab-center.png'"
+          :style="{
+            left: pillsLeft + 'px',
+            width: currentWidth + 'px',
+            height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
+          }"
+          :class="{
+            'my-hide': !(current !== 0 && current !== tabs.length - 1),
+          }"
+          class="h-full absolute pill3 v-tabs__container-pills-center"
+        />
+        <image
+          v-if="pills === '3'"
+          :src="globalGl.BASE_IMG + 'stand3-patcarddetail-tab-right.png'"
+          :style="{
+            left: pillsLeft + 'px',
+            width: currentWidth + 'px',
+            height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
+          }"
+          :class="{
+            'my-hide': current !== tabs.length - 1,
+          }"
+          class="h-full absolute pill3 v-tabs__container-pills-last"
+        />
+      </view>
+    </scroll-view>
+    <view
+      class="v-tabs__placeholder"
+      :style="{
+        height: fixed ? height * 1 + (hasDetail ? 20 : 0) + 'rpx' : '0',
+        padding,
+      }"
+    ></view>
+  </view>
+</template>
+
+<script>
+  import globalGl from '@/config/global';
+  import { wait } from '@/utils';
+  import { onMounted } from 'vue';
+  /**
+   * v-tabs
+   * @property {Number} value 选中的下标
+   * @property {Array} tabs tabs 列表
+   * @property {String} bgColor = '#fff' 背景颜色
+   * @property {String} color = '#333' 默认颜色
+   * @property {String} activeColor = '#2979ff' 选中文字颜色
+   * @property {String} fontSize = '28rpx' 默认文字大小
+   * @property {String} activeFontSize = '28rpx' 选中文字大小
+   * @property {Boolean} bold = [true | false] 选中文字是否加粗
+   * @property {Boolean} scroll = [true | false] 是否滚动
+   * @property {String} height = '60rpx' tab 的高度
+   * @property {String} lineHeight = '10rpx' 下划线的高度
+   * @property {String} lineColor = '#2979ff' 下划线的颜色
+   * @property {Number} lineScale = 0.5 下划线的宽度缩放比例
+   * @property {String} lineRadius = '10rpx' 下划线圆角
+   * @property {Boolean} pills = [true | false] 是否胶囊样式
+   * @property {String} pillsColor = 'var(--hr-brand-color-6)' 胶囊背景色
+   * @property {String} pillsBorderRadius = '10rpx' 胶囊圆角大小
+   * @property {String} field 如果是对象，显示的键名
+   * @property {Boolean} fixed = [true | false] 是否固定
+   * @property {String} paddingItem = '0 22rpx' 选项的边距
+   *
+   * @event {Function(current)} change 改变标签触发
+   */
+  export default {
+    props: {
+      itemMinWidth: {
+        type: String,
+        default: 'auto',
+      },
+      itemWidth: {
+        type: String,
+        default: 'auto',
+      },
+      value: {
+        type: Number,
+        default: 0,
+      },
+      allBlod: {
+        type: Boolean,
+        default: true,
+      },
+      homeTabStyle: {
+        type: Boolean,
+        default: false,
+      },
+      tabs: {
+        type: Array,
+        default() {
+          return [];
+        },
+      },
+      // '1' 自定义字体1
+      fontStyle: {
+        type: String,
+      },
+      bgColor: {
+        type: String,
+        default: '#fff',
+      },
+      padding: {
+        type: String,
+        default: '0',
+      },
+      color: {
+        type: String,
+        default: '#999',
+      },
+      activeColor: {
+        type: String,
+        default: '#111111',
+      },
+      fontSize: {
+        type: String,
+        default: '32rpx',
+      },
+      activeFontSize: {
+        type: String,
+        default: '32rpx',
+      },
+      bold: {
+        type: Boolean,
+        default: true,
+      },
+      scroll: {
+        type: Boolean,
+        default: true,
+      },
+      height: {
+        type: String,
+        default: '88rpx',
+      },
+      lineColor: {
+        type: String,
+        default: 'linear-gradient(270deg,#53a8ff, var(--hr-brand-color-6))',
+      },
+      lineHeight: {
+        type: String,
+        default: '10rpx',
+      },
+      lineScale: {
+        type: Number,
+        default: 0.5,
+      },
+      lineRadius: {
+        type: String,
+        default: '0',
+      },
+      pills: {
+        type: String, // 1 2 3
+        default: '1',
+      },
+      pillsColor: {
+        type: String,
+        default: 'var(--hr-brand-color-6)',
+      },
+      pillsBorderRadius: {
+        type: String,
+        // default: '10rpx',
+        default: '0',
+      },
+      field: {
+        type: String,
+        default: '',
+      },
+      fixed: {
+        type: Boolean,
+        default: false,
+      },
+      paddingItem: {
+        type: String,
+        default: '0 22rpx',
+      },
+      zIndex: {
+        type: String,
+        default: '1996',
+      },
+    },
+    data() {
+      return {
+        globalGl,
+        elId: '',
+        lineWidth: 30,
+        currentWidth: 0, // 当前选项的宽度
+        lineLeft: 0, // 滑块距离左侧的位置
+        pillsLeft: 0, // 胶囊距离左侧的位置
+        scrollLeft: 0, // 距离左边的位置
+        containerWidth: 0, // 容器的宽度
+        current: 0, // 当前选中项
+        hasDetail: false, //有无副标题
+      };
+    },
+    watch: {
+      value(newVal) {
+        this.current = newVal;
+        this.$nextTick(() => {
+          this.getTabItemWidth();
+        });
+      },
+      current(newVal) {
+        this.$emit('input', newVal);
+        this.$emit('update:value', newVal);
+      },
+      tabs(newVal) {
+        this.$nextTick(() => {
+          this.getTabItemWidth();
+        });
+      },
+    },
+    methods: {
+      getImgPill3() {
+        if (this.current === 0) {
+          return globalGl.BASE_IMG + 'stand3-homemenu-left-tab.png';
+        } else if (this.current === this.tabs.length - 1) {
+          return globalGl.BASE_IMG + 'stand3-homemenu-right-tab.png';
+        } else {
+          return globalGl.BASE_IMG + 'stand3-homemenu-center-tab.png';
+        }
+      },
+      // 产生随机字符串
+      randomString(len) {
+        len = len || 32;
+        let $chars =
+          'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        let maxPos = $chars.length;
+        let pwd = '';
+        for (let i = 0; i < len; i++) {
+          pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        return pwd;
+      },
+      // 切换事件
+      change(index) {
+        if (this.current !== index) {
+          this.current = index;
+
+          setTimeout(() => {
+            this.$emit('change', index);
+          }, 20);
+        }
+      },
+      // 获取左移动位置
+      async getTabItemWidth() {
+        await wait(200);
+        let query = uni.createSelectorQuery();
+        // #ifndef MP-TOUTIAO
+        query = query.in(this);
+        // #endif
+        // 获取容器的宽度
+        query
+          .select(`#scrollContainer`)
+          .boundingClientRect((data) => {
+            if (!this.containerWidth && data) {
+              this.containerWidth = data.width;
+            }
+          })
+          .exec();
+        // 获取所有的 tab-item 的宽度
+        query
+          .selectAll('.v-tabs__container-item')
+          .boundingClientRect(async (data) => {
+            if (!data) {
+              return;
+            }
+            let lineLeft = 0;
+            let currentWidth = 0;
+            if (data) {
+              for (let i = 0; i < data.length; i++) {
+                if (i < this.current) {
+                  lineLeft += data[i].width;
+                } else if (i == this.current) {
+                  currentWidth = data[i].width;
+                } else {
+                  break;
+                }
+              }
+            }
+            // 当前滑块的宽度
+            this.currentWidth = currentWidth;
+            if (this.pills === '3') {
+              if (this.current === 0 || this.current === this.tabs.length - 1) {
+                this.currentWidth += 20;
+              }
+            }
+            // 缩放后的滑块宽度
+            // this.lineWidth = currentWidth * this.lineScale * 1;
+
+            this.lineWidth = 24;
+            // 滑块作移动的位置
+            this.lineLeft = lineLeft + currentWidth / 2;
+            // 胶囊距离左侧的位置
+            this.pillsLeft = lineLeft;
+
+            if (this.pills === '3') {
+              if (this.current === this.tabs.length - 1) {
+                this.pillsLeft -= 20;
+              }
+            }
+            // 计算滚动的距离左侧的位置
+            if (this.scroll) {
+              this.scrollLeft = this.lineLeft - this.containerWidth / 2 - 40;
+
+              if (this.pills === '3' && this.current === 0) {
+                this.scrollLeft = 0;
+              }
+            }
+
+            if (this.currentWidth < 15) {
+              await wait(1000);
+              this.getTabItemWidth();
+            }
+          })
+          .exec();
+      },
+    },
+    mounted() {
+      this.tabs.forEach((item) => {
+        if (item?.detail && item?.detail !== '') {
+          this.hasDetail = true;
+        }
+      });
+      this.elId = 'xfjpeter_' + this.randomString();
+      this.current = this.value;
+      this.$nextTick(() => {
+        this.getTabItemWidth();
+      });
+    },
+  };
+</script>
+
+<style lang="scss" scoped>
+  .v-tabs__subtitle {
+    text-align: center;
+    line-height: 34rpx;
+    font-weight: normal !important;
+    color: var(--hr-neutral-color-7);
+  }
+  .v-tabs {
+    width: 100%;
+    box-sizing: border-box;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    .v-tabs__container {
+      min-width: 100%;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+
+      .v-tabs__container-item {
+        height: 100%;
+        position: relative;
+        z-index: 10;
+        padding: 0 11px;
+        transition: all 0.2s;
+        white-space: nowrap;
+        view {
+          width: max-content;
+        }
+      }
+
+      .v-tabs__container-line {
+        position: absolute;
+        bottom: 14rpx;
+        transition: all 0.2s ease-out;
+      }
+
+      .v-tabs__container-pills {
+        position: absolute;
+        transition: all 0.2s ease-out;
+        // transition-delay: 0.2s;
+        z-index: 9;
+        &.v-tabs__container-pills-first {
+          clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 0 100%);
+          border-top-right-radius: 90rpx 200rpx !important;
+        }
+        &.v-tabs__container-pills-last {
+          clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0 100%);
+          border-top-left-radius: 90rpx 200rpx !important;
+        }
+        &.v-tabs__container-pills-center {
+          clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0 100%);
+          border-top-left-radius: 90rpx 200rpx !important;
+          border-top-right-radius: 90rpx 200rpx !important;
+        }
+      }
+
+      .v-tabs__container-pills3 {
+        &.v-tabs__container-pills-first {
+        }
+        &.v-tabs__container-pills-last {
+        }
+        &.v-tabs__container-pills-center {
+        }
+      }
+    }
+  }
+  .f22 {
+    font-size: 22rpx;
+  }
+
+  .pill3 {
+    z-index: -1;
+    transition: all 0.2s linear;
+    // bottom: -4rpx;
+  }
+</style>
