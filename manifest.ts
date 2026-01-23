@@ -1,26 +1,19 @@
 /// <reference types="node" />
 /// <reference path="./src/index.d.ts" />
 
-import { getSConfig } from './src/config/sConfig';
 import { miniProgramConfig, manifestFileDataObj } from './proConfig';
 
 const fs = require('fs');
 
-const sysInfo: ISystemGlobalConfig = JSON.parse(
-  fs.readFileSync('./src/config/config.json')
-);
-
-const sysCode = sysInfo.sysCode;
-const sysConfig = sysInfo.sysConfig[sysCode];
-const sConfig = getSConfig(sysCode);
-
 let manifestFileUrl = `${__dirname}/src/manifest.json`;
 let pagesExportFileUrl = `${__dirname}/src/pages.json`;
+const configFileUrl = `${__dirname}/src/config/config.json`;
 const dynamicUtilUrl = `${__dirname}/src/utils/dynamicUtil.ts`;
+const sysInfo: ISystemGlobalConfig = JSON.parse(fs.readFileSync(configFileUrl));
 
-// let manifestFileData = fs.readFileSync(manifestFileUrl, { encoding: 'utf8' });
-// // 移除注释
-// manifestFileData = manifestFileData.replace(/\/\*[\s\S]*?\*\//g, '');
+const sysCode = sysInfo.sysCode;
+const sysConfig = miniProgramConfig[sysCode];
+const sConfig = sysConfig.sConfig || {};
 
 const {
   wxAppid,
@@ -129,6 +122,21 @@ manifestFileDataObj['name'] = sysName;
 fs.writeFileSync(
   manifestFileUrl,
   JSON.stringify(manifestFileDataObj, null, 2),
+  {
+    encoding: 'utf8',
+  }
+);
+
+fs.writeFileSync(
+  configFileUrl,
+  JSON.stringify(
+    {
+      sysCode,
+      sysConfig,
+    },
+    null,
+    2
+  ),
   {
     encoding: 'utf8',
   }

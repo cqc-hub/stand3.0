@@ -300,6 +300,11 @@
                   :lab="item"
                   @click-row="(v) => colRowClick(item, v)"
                 />
+                <GuideBtns
+                  :item="item"
+                  :btns="zqqdBtns"
+                  @btn-click="(v) => emits('btn-click', v)"
+                />
               </view>
 
               <view v-else-if="item.title === '复诊签到'">
@@ -367,6 +372,12 @@
   const mzqhBtns = computed(() => {
     return props.config.mzqhBtns || [];
   });
+
+  // 诊区签到下面的按钮
+  const zqqdBtns = computed(() => {
+    return props.config.zqqdBtns || [];
+  });
+
 
   // 门诊取药下面按钮
   const takeDrugBtns = computed(() => {
