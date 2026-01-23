@@ -15,7 +15,7 @@
       <view
         class="xy-dialog__header"
         v-if="title.length > 0 && !titleBgSrc"
-      ></view>
+      >{{ title }}</view>
       <view
         class="xy-dialog__header xy-dialog__headerBg "
         :style="{ background: `url(${titleBgSrc}) 50% 0% no-repeat` ,backgroundSize: '100% 100%'}"
