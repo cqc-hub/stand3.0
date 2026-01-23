@@ -12,7 +12,7 @@
     </view>
     <g-choose-pat @choose-pat="choosePatHandler1" class="relative z-999" />
 
-    <view v-if="pageStyle === '2'" class="pt32">
+    <view v-if="pageStyle === '2'" class="pt32 relative z-1 flex flex-col">
       <view class="container-tabs relative z-1">
         <tabs1
           v-model:value="tabCurrent"
@@ -51,19 +51,21 @@
             :class="{
               'my-hide': tabCurrentKey !== '0',
             }"
-            class="absolute absolute-full flex items-center justify-center transition"
+            class="absolute absolute-full z-1 transition"
           >
-            <view class="mask-qrcode absolute absolute-full rounded-xl"></view>
-
             <view
-              :class="{
-                'my-hide my-disabled mask-hide': tabCurrentKey !== '0',
-                'mask-show': tabCurrentKey === '0',
-              }"
-              @click="_goElectronicMedicalCard('byMedical')"
-              class="relative z-1 f36 btn btn-primary pr64 pl64 transition"
+              class="mask-qrcode absolute absolute-full rounded-xl flex justify-center items-center"
             >
-              点击出示医保码
+              <view
+                :class="{
+                  'my-hide my-disabled mask-hide': tabCurrentKey !== '0',
+                  'mask-show': tabCurrentKey === '0',
+                }"
+                @click="_goElectronicMedicalCard('byMedical')"
+                class="absolute z-999 f36 btn btn-primary pr64 pl64 transition medical-btn-2"
+              >
+                点击出示医保码
+              </view>
             </view>
           </view>
         </view>
@@ -797,20 +799,20 @@
 
       .mask-qrcode {
         background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10rpx);
+        border-radius: 24rpx;
       }
     }
   }
 
   .mask-hide {
     transform: translateY(-10rpx);
-    visibility: hidden;
+    opacity: 0 !important;
   }
+
   .mask-show {
     opacity: 1;
     transform: translateY(0);
-    visibility: visible;
   }
 
   .transition {
@@ -822,5 +824,9 @@
     right: 0;
     top: 0;
     bottom: 0;
+  }
+
+  .medical-btn-2 {
+    // top: 50%;
   }
 </style>
