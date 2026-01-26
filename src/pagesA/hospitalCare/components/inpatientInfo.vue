@@ -291,14 +291,17 @@
       placeList,
       choosePlaceFlag,
       extend,
+      visitNo,
     } = hosInfoResObj.value;
 
     const args = {
+      ...hosInfoResObj.value,
       hosId,
       cardNumber,
       patientName,
       hosName,
       extend,
+      visitNo,
     };
 
     if (!choosePlaceFlag && placeList && placeList.length) {
@@ -503,9 +506,8 @@
         cardNumber,
       };
     }
-    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>(
-      args
-    );
+    const { result } =
+      await api.getInHospitalInfo<getInHospitalInfoResult>(args);
 
     hosInfoResObj.value = result;
 

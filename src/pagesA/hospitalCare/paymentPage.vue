@@ -108,6 +108,7 @@
     patientName?: string; //扫码的时候传 支付用
     cardNumber?: string;
     hospitalAccount?: string;
+    visitNo?: string;
     reason?: string;
     type?: string; //有值1代表预交来的 所有预缴都不传patientid
     _type?: 'fromSelDepartment' | 'fromHosButler1001093';
@@ -349,24 +350,6 @@
       }
     }
   };
-  // const int = async () => {
-  //   const { patientName, cardNumber, hosId, hosName } = pageProps.value;
-  //   const { result } = await api.createInHospitalPayOrder<payOrderResult>({
-  //     fee: defalutMoney.value,
-  //     orderType: pageProps.value.hospitalAccount
-  //       ? pageProps.value.hospitalAccount
-  //       : '3',
-  //     patientId:
-  //       pageProps.value.type == '1'
-  //         ? ''
-  //         : gStores.userStore.patChoose.patientId,
-  //     patientName,
-  //     cardNumber,
-  //     hosId,
-  //     hosName,
-  //   });
-  //   payOrder.value = result;
-  // };
 
   const moneyUtil = computed(() => {
     return transformUnit((defalutMoney.value as unknown as number) * 1);

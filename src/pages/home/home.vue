@@ -77,7 +77,7 @@
 
               <view
                 v-if="globalGl.sConfig.isOpenHelpOld === '1'"
-                class="bg-white flex items-center help-old pr12 pl8 pt4 pb4 g-border"
+                class="bg-white flex items-center help-old pr24 pl8 pt6 pb6 g-border"
               >
                 <image
                   :src="
