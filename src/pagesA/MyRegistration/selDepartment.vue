@@ -172,7 +172,7 @@
     }
 
     orderConfig.value = data;
-    if (hosId.value) {
+    if (pageProps.value.hosId) {
       await getDepList();
     }
 
@@ -261,11 +261,7 @@
     });
   };
 
-  let i = 0;
   const hosChange = () => {
-    if (!i++) {
-      return;
-    }
     getDepList();
   };
 

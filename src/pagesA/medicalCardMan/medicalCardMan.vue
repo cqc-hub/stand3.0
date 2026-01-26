@@ -5,17 +5,17 @@
     }"
     class="f32"
   >
-  <!-- #ifdef  MP-WEIXIN -->
-  <code-btn
-    v-if="wxCrossProgramInfo.bizTypeMF"
-    :appId="wxCrossProgramInfo.appId"
-    :bizType="wxCrossProgramInfo.bizTypeMF"
-    :extInfo="wxCrossProgramInfo.extInfo"
-    id="codePlugin"
-    style="position: absolute; top: -100vh"
-    :zIndex="99"
-  ></code-btn>
-  <!-- #endif -->
+    <!-- #ifdef  MP-WEIXIN -->
+    <code-btn
+      v-if="wxCrossProgramInfo.bizTypeMF"
+      :appId="wxCrossProgramInfo.appId"
+      :bizType="wxCrossProgramInfo.bizTypeMF"
+      :extInfo="wxCrossProgramInfo.extInfo"
+      id="codePlugin"
+      style="position: absolute; top: -100vh"
+      :zIndex="99"
+    ></code-btn>
+    <!-- #endif -->
     <g-flag typeFg="108" isShowFg />
     <view class="pat-box">
       <view v-if="isShowHealthCardMode" class="health-card">
@@ -259,7 +259,6 @@
       aaa
     />
   </Order-Reg-Confirm>
-
 </template>
 
 <script lang="ts" setup>
@@ -362,8 +361,8 @@
   const showMedicalFiling = (pat) => {
     if (isMedicalFiling.value) {
       // #ifdef MP-WEIXIN
-      if(wxCrossProgramInfo.value.bizTypeMF){
-          return pat.healthCardUser !== '2';
+      if (wxCrossProgramInfo.value.bizTypeMF) {
+        return pat.healthCardUser !== '2';
       }
       // #endif
       // #ifdef MP-ALIPAY
@@ -502,18 +501,16 @@
     });
   };
   const goMedicalFiling = (pat) => {
-      // #ifdef MP-WEIXIN
-      if(wxCrossProgramInfo.value.bizTypeMF){
-         const curPagesList = getCurrentPages();
-        const curPages: any = curPagesList[curPagesList.length - 1];
-        console.log('curPages',curPages);
+    // #ifdef MP-WEIXIN
+    if (wxCrossProgramInfo.value.bizTypeMF) {
+      const curPagesList = getCurrentPages();
+      const curPages: any = curPagesList[curPagesList.length - 1];
 
-        const { openFunc } = curPages.selectComponent('#codePlugin');
-         console.log('curPagesads ',curPages.selectComponent('#codePlugin'));
-        openFunc();
-        return
-      }
-      // #endif
+      const { openFunc } = curPages.selectComponent('#codePlugin');
+      openFunc();
+      return;
+    }
+    // #endif
     if (pat?.patientId) {
       medicalFilingPat.value = pat;
     } else {

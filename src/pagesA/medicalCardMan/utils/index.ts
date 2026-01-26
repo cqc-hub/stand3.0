@@ -323,9 +323,8 @@ export const tempList: TInstance[] = [
     key: formKey.upIdCard,
     validator: async (v: unknown, item: any) => {
       if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
-        const { ageGuardian } = await ServerStaticData.getSystemConfig(
-          'person'
-        );
+        const { ageGuardian } =
+          await ServerStaticData.getSystemConfig('person');
 
         const info = idValidator.getIdCardInfo(v);
 
@@ -646,10 +645,7 @@ export const getDefaultFormData = async (
     }
 
     if (ev === 'wx') {
-      const wxPhone = decryptDes(
-        gStores.userStore.phoneNum,
-        'N1@ae^T:phone'
-      );
+      const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
       data[formKey.patientPhone] = wxPhone;
     }
   } else if (ev === 'alipay') {
@@ -959,9 +955,8 @@ export const useProgramPaySign = () => {
     flagTitle1226,
     isSignExist,
     async initSign() {
-      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
-        'person'
-      );
+      const { isPayWithoutSecretAuth } =
+        await ServerStaticData.getSystemConfig('person');
 
       if (isPayWithoutSecretAuth === '1') {
         // regDialogConfirmSign.value.show();
@@ -972,9 +967,8 @@ export const useProgramPaySign = () => {
     async goPaySign(patientId, payload = {} as TSingnPayload) {
       const { type = 'addPat', cb } = payload;
 
-      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
-        'person'
-      );
+      const { isPayWithoutSecretAuth } =
+        await ServerStaticData.getSystemConfig('person');
       if (isPayWithoutSecretAuth !== '1') {
         return;
       }
@@ -1590,7 +1584,7 @@ export const insertSortFormExtraKey = (
 export const goEditPhone = async (pat: IPat) => {
   const gStores = new GStores();
   const personConfig = await ServerStaticData.getSystemConfig('person');
-  const { isChangeHosPhoneWay } = personConfig;
+  const { isChangeHosPhoneWay = ['face'] } = personConfig;
 
   if (isChangeHosPhoneWay) {
     let q: any = {};

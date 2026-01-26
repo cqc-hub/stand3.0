@@ -2795,7 +2795,7 @@ export const compareDetailCostItem = (o: TConstListItem, k: TConstListItem) => {
 //医保建档
 export const dealMedicalFiling = async (patientId, type = 'first') => {
   const gStores = new GStores();
-  const { ev, sysCode } = gStores.globalStore;
+  const { ev } = gStores.globalStore;
   let authCodeType: any = undefined;
   if (ev === 'wx') {
     authCodeType = 'medicalFiling';
@@ -2805,6 +2805,7 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
       uni.removeStorageSync('yibaoPatientId');
     }
   }
+
   const authCode = await getMedicalAuthCode({ type: authCodeType });
 
   if (ev === 'alipay') {
@@ -2825,37 +2826,35 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
       // 机构ID
       orgId,
     });
+
     if (type === 'first') {
       uni.setStorageSync('yibaoPatientId', patientId);
     } else {
       uni.removeStorageSync('yibaoPatientId');
     }
 
-    if (token) {
-      const res = await api
-        .updateHosInfo({
-          insPsnToken: token,
-          patientId: patientId,
-          herenId: patientUtil.globalStore.herenId,
-          source: gStores.globalStore.browser.source,
-        })
-        .catch(async (err) => {
-          await patientUtil.getPatCardList();
-          setTimeout(() => {
-            my.reLaunch({ url: `/pagesA/medicalCardMan/medicalCardMan` });
-          }, 1600);
-          throw new Error(err);
-        });
-      if (res && res.result) {
-        uni.showToast({
-          title: '您已更新为医保用户！',
-          icon: 'none',
-        });
-        if (type === 'first') {
-          return true;
-        }
-      }
+    await api.updateHosInfo({
+      insPsnToken: token,
+      patientId: patientId,
+      herenId: patientUtil.globalStore.herenId,
+      source: gStores.globalStore.browser.source,
+    });
+    // .catch(async (err) => {
+    //   await patientUtil.getPatCardList();
+    //   setTimeout(() => {
+    //     my.reLaunch({ url: `/pagesA/medicalCardMan/medicalCardMan` });
+    //   }, 1600);
+    //   throw new Error(err);
+    // });
+    uni.showToast({
+      title: '您已更新为医保用户！',
+      icon: 'none',
+    });
+
+    if (type === 'first') {
+      return true;
     }
+
     await patientUtil.getPatCardList();
     setTimeout(() => {
       my.reLaunch({ url: `/pagesA/medicalCardMan/medicalCardMan` });

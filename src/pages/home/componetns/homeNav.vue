@@ -10,7 +10,8 @@
       <view class="custom-nav" :style="{ height: navTotalHeight + 'px' }">
         <view :style="{ height: statusBarHeight + 'px' }"></view>
         <view v-if="homeNavTitleLogo" class="pl32">
-          <image :src="homeNavTitleLogo" mode="widthFix" class="logo" />
+          <!-- <image :src="homeNavTitleLogo" mode="widthFix" class="logo" /> -->
+          <image :src="homeNavTitleLogo" mode="heightFix" class="logo" />
         </view>
         <view
           v-else
@@ -158,7 +159,7 @@
   }
 
   .logo {
-    height: 66rpx;
-    max-width: 500rpx;
+    height: 88rpx;
+    // max-width: 500rpx;
   }
 </style>
