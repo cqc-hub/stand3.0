@@ -227,10 +227,8 @@ export class LoginUtils extends GStores {
         loginData: this.globalStore.token.loginData,
         source: this.globalStore.browser.source,
       });
-
       await api.wfePatSync(reqData);
     }
-
     if (['1001086', '1001094'].includes(sysCode) && ev === 'wx') {
       const reqData = getH5OpenidParam({
         source: this.globalStore.browser.source,
@@ -238,11 +236,11 @@ export class LoginUtils extends GStores {
       });
       await api.xjzyyPatSync(reqData);
     }
-    //通过手机号同步
     if (['1001083'].includes(sysCode)) {
       await api.wzrmPatSync({ source: this.globalStore.browser.source });
     }
-
+    
+    //通过手机号同步
     if (['1001095'].includes(sysCode)) {
       await api.patSync({ source: this.globalStore.browser.source });
     }

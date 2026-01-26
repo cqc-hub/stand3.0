@@ -47,8 +47,10 @@ Request.interceptors.request((request: IRequest) => {
   // #ifdef MP-WEIXIN
   // 检查是否存在h5Openid缓存
   const h5Openid = globalStore.h5OpenId;
+  const h5AppId = globalGl.h5AppId;
   if (
     globalStore.isLogin &&
+    h5AppId &&
     !h5Openid &&
     ['1001083', '1001093'].includes(globalStore.sysCode) &&
     request.url !== '/phs-user/authUser/allinoneAuthApi' &&
