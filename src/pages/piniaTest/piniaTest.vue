@@ -726,9 +726,10 @@
   const init = async () => {
     // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
-    useTBanner(肿瘤住院管家);
+    // useTBanner(肿瘤住院管家);
     // useTBanner(电子导诊单);
     // useTBanner(肿瘤云影响);
+    useTBanner(eletronicInvoice);
     // patientUtils.faceVerify({
     //   name: '陈钦川',
     //   idCardNumber: '330326199908286713',

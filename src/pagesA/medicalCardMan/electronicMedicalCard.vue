@@ -571,7 +571,7 @@
 
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    if (gStores.globalStore.sysCode === '1001093') {
+    if (!gStores.globalStore.isTcmStyle) {
       pageStyle.value = '2';
     }
   });

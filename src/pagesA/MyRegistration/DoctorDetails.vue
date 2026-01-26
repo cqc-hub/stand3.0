@@ -32,17 +32,11 @@
                     mode="aspectFill"
                     class="doc-avatar g-border"
                   />
-                       <!-- 2种党员样式 -->
-                    <image
-                      v-if="isPliticalDoc && pageConfig.isPartyMemberStyle ==='1'"
-                      class="CPC-icon1"
-                      :src="globalGl.BASE_IMG + 'is_party_member.png'"
-                    ></image>
-                    <image
-                      v-if="isPliticalDoc && pageConfig.isPartyMemberStyle !=='1'"
-                      class="CPC-icon"
-                      :src="globalGl.BASE_IMG + 'CPC-icon2.png'"
-                    ></image>
+                  <image
+                    v-if="isPliticalDoc"
+                    class="CPC-icon1"
+                    :src="globalGl.BASE_IMG + 'is_party_member.png'"
+                  />
 
                   <view class="flex-normal header-btn">
                     <g-login @handler-next="collectDoc">
@@ -1126,9 +1120,9 @@
     if (isOpenComment === '1' && isHideCommentListInDocDetail !== '1') {
       getCommentList();
     }
-    
+
     // #ifndef MP-TOUTIAO
-     if (isOpenDocCardOnlineService === '1') {
+    if (isOpenDocCardOnlineService === '1') {
       getDocService();
     }
     // #endif
@@ -1164,7 +1158,6 @@
 
       props.value = deQueryForUrl(deQueryForUrl(queryParams));
     }
-    console.log(opt, Object.keys(props.value).length, props.value);
     // 扫码进来, 不处理
     if (props.value.q || props.value.qrCode) {
       return;
@@ -1253,7 +1246,7 @@
       .CPC-icon1 {
         position: absolute;
         width: 60rpx;
-        height: 60rpx; 
+        height: 60rpx;
         bottom: 0;
         left: 130rpx;
       }

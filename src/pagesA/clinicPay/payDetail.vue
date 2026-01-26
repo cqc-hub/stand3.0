@@ -109,6 +109,7 @@
 
           <block v-if="detailData.costList && detailData.costList.length">
             <view class="mt8">
+
               <pay-Detail-Cost-List
                 :disabled="isDisabledCostList"
                 :list="detailData.costList"

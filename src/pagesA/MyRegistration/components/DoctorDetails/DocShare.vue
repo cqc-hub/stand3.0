@@ -399,7 +399,7 @@
       gStores.globalStore.isTcmStyle ? '-tcm' : ''
     }.png`;
 
-    let cpc_img = props.pageConfig.isPartyMemberStyle === '1' ? `${globalGl.BASE_IMG}is_party_member.png` : `${globalGl.BASE_IMG}CPC-icon2.png`;
+    let cpc_img = `${globalGl.BASE_IMG}is_party_member.png`;
 
     // #ifdef MP-TOUTIAO
     avatar_img = `${globalGl.BASE_IMG}order-doctor-avatar.png`;
@@ -494,7 +494,7 @@
 
     ctx.restore();
 
-    if (_cpc_img && props.pageConfig.isPartyMemberStyle === '1') {
+    if (_cpc_img) {
       ctx.drawImage(
         _cpc_img,
         avatarBox.left + 10,
@@ -502,7 +502,7 @@
         painWidthAvatar - 36,
         painWidthAvatar - 36
       );
-    }else{
+    } else {
       ctx.drawImage(
         _cpc_img,
         avatarBox.left - 42,

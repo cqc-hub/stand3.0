@@ -17,18 +17,13 @@
             class="doc-info-avatar"
             mode="aspectFill"
             lazy-load
-          /> 
+          />
           <!-- 2种党员样式 -->
           <image
-            v-if="isPliticalDoc(item) && pageConfig.isPartyMemberStyle ==='1'"
+            v-if="isPliticalDoc(item)"
             class="CPC-icon1"
             :src="globalGl.BASE_IMG + 'is_party_member.png'"
-          ></image>
-          <image
-            v-if="isPliticalDoc(item) && pageConfig.isPartyMemberStyle !=='1'"
-            class="CPC-icon"
-            :src="globalGl.BASE_IMG + 'CPC-icon2.png'"
-          ></image>
+          />
 
           <view @click="avatarClick(item)" class="doc-info-introduce">
             <view class="doc-info-introduce-header">
@@ -94,7 +89,11 @@
   import { IDocResItem } from '../../utils/RegSearch';
   import HTMLParser from '@/common/html-parser';
   import globalGl from '@/config/global';
-  import { GStores, throughCharacterLineFeed,  type ISystemConfig, } from '@/utils';
+  import {
+    GStores,
+    throughCharacterLineFeed,
+    type ISystemConfig,
+  } from '@/utils';
 
   defineProps<{
     list: IDocResItem[];
@@ -154,7 +153,7 @@
       .CPC-icon1 {
         position: absolute;
         width: 60rpx;
-        height: 60rpx; 
+        height: 60rpx;
         transform: translate(100%, 80%);
       }
 

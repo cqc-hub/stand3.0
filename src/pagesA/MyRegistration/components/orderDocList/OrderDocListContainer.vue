@@ -18,17 +18,12 @@
         lazy-load
       />
       <!-- 2种党员样式 -->
-       <image
-        v-if="isPliticalDoc && pageConfig.isPartyMemberStyle ==='1'"
+      <image
+        v-if="isPliticalDoc"
         class="CPC-icon1"
         :src="globalGl.BASE_IMG + 'is_party_member.png'"
-      ></image>
-      <image
-        v-if="isPliticalDoc && pageConfig.isPartyMemberStyle !=='1'"
-        class="CPC-icon"
-        :src="globalGl.BASE_IMG + 'CPC-icon2.png'"
-      ></image>
-      
+      />
+
       <!-- </g-login> -->
 
       <view @click="avatarClick" class="doc-info-introduce">
@@ -247,7 +242,7 @@
       .CPC-icon1 {
         position: absolute;
         width: 60rpx;
-        height: 60rpx; 
+        height: 60rpx;
         transform: translate(100%, 80%);
       }
 
