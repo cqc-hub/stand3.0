@@ -300,7 +300,7 @@ export const useHosPayPage = () => {
    * 传参type 默认是预交金充值  outHos是出院结算
    */
   const getCreateInHospitalPayOrderData = async (data, fee, type?) => {
-    const { patientName, cardNumber, hosId, hosName } = data;
+    const { patientName, cardNumber, hosId, hosName, visitNo } = data;
     let extend = {};
     if (data.extend) {
       if (typeof data.extend === 'string') {
@@ -319,6 +319,7 @@ export const useHosPayPage = () => {
       };
     }
     const { result } = await api.createInHospitalPayOrder<payOrderResult>({
+      visitNo,
       fee,
       orderType: data.hospitalAccount ? data.hospitalAccount : '3',
       patientId: data.type == '1' ? '' : gStores.userStore.patChoose.patientId,
