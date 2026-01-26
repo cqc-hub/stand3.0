@@ -15,7 +15,7 @@
     "build:mp-toutiao": "cross-env NODE_ENV=production npm run rewrite:manifest && uni build -p mp-toutiao",
     "build:mp-harmony": "cross-env NODE_ENV=production npm run rewrite:manifest && uni build -p mp-harmony",
     "dev:mp-weixin-w": "npm run rewrite:manifest && uni -p mp-weixin --minify",
-    "dev:mp-alipay-w": "npm run rewrite:manifest && uni -p mp-alipay --minify",
+    "dev:mp-alipay-w": "npm run rewrite:manifest && uni -p mp-alipay ",
     "dev:app": "uni -p app",
     "dev:custom": "uni -p",
     "dev:h5:ssr": "uni --ssr",

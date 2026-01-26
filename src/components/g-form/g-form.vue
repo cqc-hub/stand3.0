@@ -616,6 +616,7 @@
         let waitTime = item.verifySecond;
 
         verifyTip.value = `${waitTime--}s后重新发送`;
+        // @ts-expect-error
         timer = setInterval(() => {
           verifyTip.value = `${waitTime--}s后重新发送`;
 
