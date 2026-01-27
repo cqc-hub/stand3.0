@@ -420,6 +420,9 @@ export const useHosButlerOrder = () => {
     // const {
     //   result: { visitNo, cardNumber },
     // } =
+    // console.log(reqArg);
+    // console.log(JSON.stringify(reqArg));
+    // return
     await api.submitAdmissionApplication(reqArg);
 
     await apiAsync(uni.showModal, {
@@ -550,7 +553,7 @@ export const useHosButlerOrder = () => {
         formData2.value.birthCity = birthCity;
         formData2.value.birthDistrict = birthDistrict;
       } else if (idType === '身份证' && idCard) {
-        const res = await idValidator.getIdCardAddress('330326199908286713');
+        const res = await idValidator.getIdCardAddress(idCard);
         if (res) {
           const {
             birthCity,

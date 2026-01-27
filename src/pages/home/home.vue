@@ -213,8 +213,7 @@
               >
                 <view
                   v-if="viewerStore.homeTopMenuList.length"
-                  :class="{ pb24: isHomeStyle1 }"
-                  class="box pt24"
+                  class="box pt24 mb24"
                 >
                   <homeGrid
                     :list="viewerStore.homeTopMenuList"

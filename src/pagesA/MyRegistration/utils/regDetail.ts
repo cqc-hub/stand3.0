@@ -607,6 +607,7 @@ export class RegDetailUtil {
     const { returnUrl = '/pagesA/MyRegistration/MyRegistration' } = opt;
 
     await api.cancelHosReg({
+      ...this.prop.value,
       hosOrderId,
       patientId,
       hosId,
@@ -831,6 +832,8 @@ export const goAskForDoc1001045 = async (orderInfo) => {
 
 export const useRegBtnShows = () => {
   const orderConfig = ref({} as ISystemConfig['order']);
+  const gStores = new GStores();
+
 
   const initConfig = async () => {
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
@@ -843,6 +846,7 @@ export const useRegBtnShows = () => {
    */
   const isShowRegCancel = (item) => {
     const { orderStatus, typeId, isAllOrder1001094 } = item;
+    console.log(item);
     const { isOrderPay } = orderConfig.value;
     if ((typeId && !['0', '1'].includes(typeId)) || isAllOrder1001094 === '1') {
       return false;

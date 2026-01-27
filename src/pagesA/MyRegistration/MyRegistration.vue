@@ -45,7 +45,7 @@
     <view class="g-container">
       <block v-if="showList.length && isComplete">
         <My-Registration-List-Card
-          :typeId=tabCurrentDetail?.typeId
+          :typeId="tabCurrentDetail?.typeId"
           :fatherProps="props"
           :isWaitReg="isWaitReg || tabCurrentDetail?.typeId === 2"
           :list="showList"
@@ -61,8 +61,7 @@
           @ywz-click="ywzClick"
           @go-detail="goDetail"
           @go-hos-navigate="goHosNavigate"
-        >
-        </My-Registration-List-Card>
+        ></My-Registration-List-Card>
       </block>
 
       <view class="empty-list" v-else-if="isComplete">
@@ -157,10 +156,7 @@
     onReady,
   } from '@dcloudio/uni-app';
 
-  import {
-    IRegistrationCardItem,
-    HosNavData,
-  } from './utils/MyRegistration';
+  import { IRegistrationCardItem, HosNavData } from './utils/MyRegistration';
   import { isAreaProgram, IPat } from '@/stores';
   import { deQueryForUrl, joinQueryForUrl, setLocalStorage } from '@/common';
   import { beforeEach } from '@/router';
@@ -327,7 +323,6 @@
     await getList(patientId, cardNumber);
   };
 
-
   const getList = async (patientId = '', cardNumber = '') => {
     isComplete.value = false;
     list.value = [];
@@ -378,7 +373,7 @@
       useTBanner(pageConfig.value.preConsultationBtn, 'navigateTo', item);
     } else {
       const { patientSex, patientAge, patientName } =
-      gStores.userStore.patChoose;
+        gStores.userStore.patChoose;
       const {
         orderId,
         hosDeptId,
@@ -387,7 +382,7 @@
         patientId,
         deptName,
         hosId,
-        hosDocId
+        hosDocId,
       } = item;
       const preConsultation: TButtonConfig = {
         type: 'h5',
@@ -476,7 +471,7 @@
 
   //多院区院内导航
   const goHosNavigate = (item: IRegistrationCardItem) => {
-      useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
+    useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
   };
 
   const _patChange = (item) => {
@@ -551,13 +546,14 @@
   };
 
   onLoad(async (opt) => {
-    tabs.value = [
-      {
+    const { sysCode } = gStores.globalStore;
+    tabs.value = [];
+    if (sysCode !== '1001093') {
+      tabs.value.push({
         typeId: 0,
-        headerName:
-          gStores.globalStore.sysCode === '1001035' ? '小程序挂号' : '在线挂号',
-      },
-    ];
+        headerName: sysCode === '1001035' ? '小程序挂号' : '在线挂号',
+      });
+    }
     props.value = deQueryForUrl(deQueryForUrl(opt));
     await getConfig();
     isRender.value = true;
