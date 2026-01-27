@@ -52,6 +52,7 @@
               [gStores.globalStore.getPageClass]: true,
             }"
           >
+            <view class="safe-height" />
             <view
               class="search flex-between"
               v-if="globalGl.sConfig.isHideHomeSearch != '1'"
@@ -117,7 +118,7 @@
               />
             </view>
 
-            <view class="card">
+            <view class="card mt32">
               <view v-if="!isHomeStyle1">
                 <g-login @handler-next="routerJump">
                   <!-- 登录之后 -->
@@ -213,7 +214,7 @@
                 <view
                   v-if="viewerStore.homeTopMenuList.length"
                   :class="{ pb24: isHomeStyle1 }"
-                  class="box"
+                  class="box pt24"
                 >
                   <homeGrid
                     :list="viewerStore.homeTopMenuList"
@@ -225,7 +226,7 @@
                   :class="{
                     normal: !isHomeStyle1,
                   }"
-                  class="notice flex-normal g-fade-in"
+                  class="notice pr34 pl42 flex-normal g-fade-in"
                   @click="goToNotice1"
                   v-if="
                     viewerStore.homeNoticeText ||
@@ -240,18 +241,18 @@
                     </text>
                   </template>
                   <template v-else>
-                    <text
-                      v-if="!gStores.globalStore.isTcmStyle"
-                      class="icon-font img_announcement icon-size"
-                    ></text>
                     <image
                       v-if="gStores.globalStore.isTcmStyle"
                       :src="$global.BASE_IMG + `img_announcement-tcm@3x.png`"
                       mode="widthFix"
-                      class="icon-font icon-size"
+                      class="icon-font notice-icon-size"
+                    />
+                    <text
+                      v-else
+                      class="icon-font img_announcement notice-icon-size"
                     />
                   </template>
-                  <view class="bar-swiper">
+                  <view class="bar-swiper pl24">
                     <uni-notice-bar
                       :text="
                         healthCounselConfig?.noticeReplaceParam?.text ||
@@ -259,7 +260,7 @@
                       "
                       :speed="80"
                       scrollable
-                      color="--hr-neutral-color-10"
+                      color="var(--other-1)"
                       style="width: 100%"
                       background-color="transparent"
                     />
@@ -328,7 +329,7 @@
               <lifestyle :sceneId="globalGl.sConfig.isOpenAlipayFollow" />
             </view>
             <!-- #endif -->
-            <view class="fun-list" v-if="viewerStore.homeMenuList.length">
+            <view class="mt32" v-if="viewerStore.homeMenuList.length">
               <!--  :homeTabStyle="
                   gStores.globalStore.sysCode === '1001093' ? '1' : undefined
                 " -->
@@ -916,7 +917,6 @@
       z-index: 999;
     }
     image {
-      // width: 100rpx;
       height: 148rpx;
     }
   }
@@ -924,7 +924,7 @@
   .homePage {
     padding: 0 32rpx 188rpx 32rpx;
     .search {
-      padding-top: 32rpx;
+      // padding-top: 32rpx;
     }
     .w70 {
       width: 70%;
@@ -957,7 +957,6 @@
     }
 
     .card {
-      margin-top: var(--h-margin-24);
       .top-card {
         padding-top: var(--h-margin-24);
         margin: 0 26rpx;
@@ -1086,7 +1085,7 @@
         }
         border-radius: 24rpx;
         .box {
-          padding: 40rpx 0 35rpx 0;
+          // padding: 40rpx 0 35rpx 0;
           min-height: 145rpx;
         }
 
@@ -1120,7 +1119,6 @@
       .notice {
         height: 78rpx;
         border-radius: 0 0 24rpx 24rpx;
-        padding: 0 31rpx;
 
         &.normal {
           box-shadow: 0 2rpx 0 0 var(--hr-brand-color-3) inset;
@@ -1132,10 +1130,10 @@
           display: inline-block;
           line-height: 60rpx;
         }
-        .icon-size {
-          width: 64rpx;
-          height: 64rpx;
-          // margin-right: 16rpx;
+        .notice-icon-size {
+          width: 60rpx;
+          height: 60rpx;
+          transform: translateY(-1px);
         }
 
         text {
@@ -1154,10 +1152,6 @@
       width: 100%;
       margin-bottom: -17rpx;
       margin-top: 10rpx;
-    }
-
-    .fun-list {
-      margin-top: var(--h-margin-24);
     }
   }
 

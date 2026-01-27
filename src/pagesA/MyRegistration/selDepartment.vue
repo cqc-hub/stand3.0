@@ -143,32 +143,12 @@
   };
 
   const init = async () => {
-    const { sysCode, isLogin } = gStores.globalStore;
+    const { sysCode } = gStores.globalStore;
     const data = await ServerStaticData.getSystemConfig('order');
     let { deptDialogBtnCannel } = data;
 
     if (sysCode === '1001052' && pageProps.value.hosId === '13118') {
       deptDialogBtnCannel = undefined;
-    }
-
-    if (sysCode === '1001093') {
-      tabField.value = [
-        {
-          label: '按病种',
-          value: '99',
-        },
-        {
-          label: '按科室',
-          value: '1',
-        },
-      ];
-
-      if (isLogin) {
-        tabField.value.push({
-          label: '最近就诊',
-          value: '-1',
-        });
-      }
     }
 
     orderConfig.value = data;
@@ -435,6 +415,27 @@
 
   const isRender = ref(false);
   onLoad(async (opt = {}) => {
+    const { sysCode, isLogin } = gStores.globalStore;
+    if (sysCode === '1001093') {
+      tabField.value = [
+        {
+          label: '按病种',
+          value: '99',
+        },
+        {
+          label: '按科室',
+          value: '1',
+        },
+      ];
+
+      if (isLogin) {
+        tabField.value.push({
+          label: '最近就诊',
+          value: '-1',
+        });
+      }
+    }
+
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     unNeedPosition.value = pageProps.value.unPoi === '1';
     deptStore.changeActiveLv1({} as any);

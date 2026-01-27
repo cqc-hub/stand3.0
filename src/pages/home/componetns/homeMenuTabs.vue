@@ -106,13 +106,22 @@
           }"
           class="h-full absolute pill3 animate__animated animate__fadeIn"
         /> -->
+
+        <view
+          v-if="pills === '3'"
+          class="v-tabs__container-line v-tabs__container-round-line"
+          :style="{
+            left: lineLeft + 'px',
+            transform: `translateX(-${lineWidth / 2}px)`,
+          }"
+        />
         <image
           v-if="pills === '3'"
           :src="globalGl.BASE_IMG + 'stand3-homemenu-left-tab.png'"
           :style="{
             left: pillsLeft + 'px',
             width: currentWidth + 'px',
-            height: height * 1  + (hasDetail ? 20 : 0) + 'rpx',
+            height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           }"
           :class="{
             'my-hide': current !== 0,
@@ -125,7 +134,7 @@
           :style="{
             left: pillsLeft + 'px',
             width: currentWidth + 'px',
-            height: height * 1  + (hasDetail ? 20 : 0) + 'rpx',
+            height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           }"
           :class="{
             'my-hide': !(current !== 0 && current !== tabs.length - 1),
@@ -138,7 +147,7 @@
           :style="{
             left: pillsLeft + 'px',
             width: currentWidth + 'px',
-            height: height * 1  + (hasDetail ? 20 : 0) + 'rpx',
+            height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           }"
           :class="{
             'my-hide': current !== tabs.length - 1,
@@ -406,10 +415,14 @@
                 this.currentWidth += 20;
               }
             }
-            // 缩放后的滑块宽度
             // this.lineWidth = currentWidth * this.lineScale * 1;
+            // 缩放后的滑块宽度
+            if (this.pills === '3') {
+              this.lineWidth = 32;
+            } else {
+              this.lineWidth = 24;
+            }
 
-            this.lineWidth = 24;
             // 滑块作移动的位置
             this.lineLeft = lineLeft + currentWidth / 2;
             // 胶囊距离左侧的位置
@@ -488,8 +501,11 @@
 
       .v-tabs__container-line {
         position: absolute;
-        bottom: 0;
+        bottom: 10px;
         transition: all 0.2s ease-out;
+
+        &.v-tabs__container-round-line {
+        }
       }
 
       .v-tabs__container-pills {
