@@ -135,7 +135,7 @@
 
           <button
             v-if="isShowRegCancel(getBtnData(item))"
-            @click="goDetail(item)"
+            @click="cancelReg(item) "
             class="btn btn-round btn-size-small btn-border cancel-btn"
           >
             取消预约
@@ -208,7 +208,7 @@
     thRegisterId?: string;
     config: ISystemConfig['order'];
   }>();
-  const emits = defineEmits(['ywz-click', 'go-detail', 'go-hos-navigate']);
+  const emits = defineEmits(['ywz-click', 'go-detail', 'go-hos-navigate', 'cancel-reg']);
 
   const {
     isShowMedicalRefund,
@@ -220,7 +220,7 @@
   const getBtnData = (item) => {
     return {
       ...props.fatherProps.value,
-      typeId: props.typeId,
+      typeId: `${props.typeId}`,
       ...item,
     };
   };
@@ -408,6 +408,10 @@
 
   const goHosNavigate = (item: IRegistrationCardItem) => {
     emits('go-hos-navigate', item);
+  };
+
+  const cancelReg = (item: IRegistrationCardItem) => {
+    emits('cancel-reg', item);
   };
 </script>
 

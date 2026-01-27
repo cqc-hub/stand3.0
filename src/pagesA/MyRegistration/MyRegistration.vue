@@ -61,6 +61,7 @@
           @ywz-click="ywzClick"
           @go-detail="goDetail"
           @go-hos-navigate="goHosNavigate"
+          @cancel-reg="cancelReg"
         ></My-Registration-List-Card>
       </block>
 
@@ -142,7 +143,7 @@
       :content="dialogContent"
       :show="isCancelOrderDialogShow"
       @cancelButton="isCancelOrderDialogShow = false"
-      @confirmButton="cancelOrderDialogConfirm"
+      @confirmButton="cancelOrderDialogConfirm1"
     />
   </view>
 </template>
@@ -173,6 +174,7 @@
     getOrderStatusTitle,
     getStatusConfig,
     goAskForDoc1001045,
+    RegDetailUtil,
   } from './utils/regDetail';
 
   import api from '@/service/api';
@@ -217,7 +219,7 @@
   const selOrderStatus = ref('');
 
   const list = ref<IRegistrationCardItem[]>([]);
-  const pageConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
+  const pageConfig = ref({} as ISystemConfig['order']);
   const tabCurrent = ref(0);
 
   const tabs = ref<TTabItem[]>([]);
@@ -279,6 +281,9 @@
   const isCancelOrderDialogShow = ref(false);
   const dialogContent = ref('');
   let cancelOrderDialogConfirm: (any) => any = async () => {};
+  const cancelOrderDialogConfirm1: (any) => any = async () => {
+    cancelOrderDialogConfirm(void 0);
+  };
 
   const isShowReOrderBtn = computed(
     () => pageConfig.value.isOpenReOrder === '1'
@@ -467,6 +472,36 @@
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', query),
     });
+  };
+
+  const handlerCancelReg = async (item: IRegistrationCardItem) => {
+    dialogContent.value = '确认取消该订单?';
+    isCancelOrderDialogShow.value = true;
+
+    const { initialText } = await gStores.getSysAppMore(1282);
+    initialText && (dialogContent.value = initialText);
+    await new Promise((confirm) => {
+      cancelOrderDialogConfirm = confirm;
+    });
+    isCancelOrderDialogShow.value = false;
+    const regDetailUtil = RegDetailUtil.getInstance(
+      {
+        prop: ref(item),
+        orderConfig: pageConfig,
+      },
+      true
+    );
+    await regDetailUtil.getDataDetail();
+    await regDetailUtil.cancelReg();
+    getList();
+  };
+
+  const cancelReg = async (item: IRegistrationCardItem) => {
+    if (gStores.globalStore.sysCode === '1001093') {
+      handlerCancelReg(item);
+    } else {
+      goDetail(item);
+    }
   };
 
   //多院区院内导航

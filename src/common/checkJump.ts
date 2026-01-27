@@ -366,7 +366,6 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
         uni.navigateTo({
           url: item.path,
         });
-        console.log('报错了哈哈哈哈哈哈哈');
       }
       // #endif
 
