@@ -50,24 +50,31 @@
             </view>
             <img
               v-if="isImg(item.iconfont)"
-              :class="`${
-                options.type == 1 && options.list.length == 3
+              :class="{
+                [options.type == 1 && options.list.length == 3
                   ? 'grid-resize1'
-                  : 'grid-resize'
-              }  `"
+                  : 'grid-resize']: true,
+              }"
               :src="item.iconfont"
               class="mb12"
               lazy-load
             />
             <text
               v-else
-              :class="`icon-font mb12 ${
-                options.type == 1 && options.list.length == 3
+              :class="{
+                [options.type == 1 && options.list.length == 3
                   ? 'grid-resize1'
-                  : 'grid-resize'
-              } ${item.iconfont}`"
+                  : 'grid-resize']: 1,
+                [item.iconfont || '']: true,
+              }"
+              class="icon-font mb12"
             />
-            <view class="grid-label text-ellipsis">
+            <view
+              :class="{
+                f36: type === 1,
+              }"
+              class="grid-label text-ellipsis"
+            >
               {{ getShowTitle(item, type) }}
             </view>
 
@@ -253,15 +260,13 @@
         display: inline-block;
       }
       .grid-resize1 {
-        width: 88upx;
-        height: 88upx;
-        position: relative;
-        display: inline-block;
+        width: 104upx;
+        height: 104upx;
       }
 
       .grid-label {
-        color: var(--hr-neutral-color-9);
-        margin-top: 8upx;
+        // color: var(--hr-neutral-color-9);
+        color: var(--other-1);
         font-size: var(--hr-font-size-s);
         font-weight: var(--h-weight-2);
       }

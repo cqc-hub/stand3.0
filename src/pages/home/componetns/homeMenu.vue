@@ -6,26 +6,28 @@
       }"
       class="menu-pannel-style"
     >
-      <homeMenuTabs
-        v-model:value="tabIndex1"
-        :tabs="props.list"
-        @change="activeMenu"
-        :itemWidth="100 / props.list.length + '%'"
-        :itemMinWidth="getItemMinWidth()"
-        :homeTabStyle="isTabStyle1"
-        :fontStyle="homeTabStyle"
-        field="typeName"
-        pillsColor="#fff"
-        bgColor="#fff0"
-        color="#24314D"
-        activeColor="var(--hr-brand-color-6)"
-        pillsBorderRadius="42rpx 42rpx 0 0"
-        paddingItem="0"
-        height="88"
-        scroll
-        :pills="isTabStyle1 ? '3' : '2'"
-        :allBlod="false"
-      />
+      <view class="relative menu-tabs-container">
+        <homeMenuTabs
+          v-model:value="tabIndex1"
+          :tabs="props.list"
+          @change="activeMenu"
+          :itemWidth="100 / props.list.length + '%'"
+          :itemMinWidth="getItemMinWidth()"
+          :homeTabStyle="isTabStyle1"
+          :fontStyle="homeTabStyle"
+          field="typeName"
+          pillsColor="#fff"
+          bgColor="#fff0"
+          color="#24314D"
+          activeColor="var(--hr-brand-color-6)"
+          pillsBorderRadius="42rpx 42rpx 0 0"
+          paddingItem="0"
+          height="88"
+          scroll
+          :pills="isTabStyle1 ? '3' : '2'"
+          :allBlod="false"
+        />
+      </view>
       <swiper
         :style="{
           height: height + 'px',
@@ -206,6 +208,19 @@
     border-radius: 24rpx 0rpx 0rpx 24rpx;
     .menu-pannel-style {
       padding: 32rpx 32rpx 0 32rpx;
+
+      .menu-tabs-container {
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0px;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background: #fff;
+          pointer-events: none;
+        }
+      }
     }
     .menu-swiper-style {
       background: #fff;
