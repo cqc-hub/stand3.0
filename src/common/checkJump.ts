@@ -16,7 +16,7 @@ import wxH5 from 'weixin-js-sdk';
 // #endif
 
 //拦截-登录
-export const checkLogin = (item: IRoute) => {
+export const checkLogin = (item?: IRoute) => {
   const gStores = new GStores();
   const routerStore = useRouterStore();
   //获取当前的来源地址
@@ -41,7 +41,7 @@ export const checkLogin = (item: IRoute) => {
 };
 
 //拦截-就诊人
-export const checkPatient = (item: IRoute) => {
+export const checkPatient = (item?: IRoute) => {
   const gStores = new GStores();
   return new Promise((resolve, reject) => {
     if (!gStores.globalStore.herenId) {

@@ -939,6 +939,12 @@
           }
         },
         {
+          "path": "common/addRegMiddlePage",
+          "style": {
+            "navigationBarTitleText": "加号信息关联"
+          }
+        },
+        {
           "path": "patient/familyAdd",
           "style": {
             "navigationBarTitleText": "补充联系人信息"

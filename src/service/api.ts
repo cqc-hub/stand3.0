@@ -656,6 +656,9 @@ const regApi = {
   canRegAlternate: <T = any>(data: any) =>
     service.post<T>('/phs-reg/regAlt/canRegAlternate', parm(data)),
 
+  netAddHosSch: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/regAlt/netAddHosSch', parm(data)),
+
   getQnRecordTemp: (data: any) =>
     service.post('/phs-reg/regDoc/getQnRecordTemp', parm(data)),
 
