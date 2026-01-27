@@ -1,14 +1,29 @@
 <template>
   <view class="cache">
-    <view class="cache-img-container">
-      <image
-        mode="aspectFit"
-        class="cache-img"
-        :src="BASE_IMG + 'img_h5bg@3x.png'"
+    <view
+      v-if="gStores.globalStore.sysCode === '1001093'"
+      class="w-full h-full"
+    >
+      <img
+        :src="BASE_IMG + 'stand3-netcache-page-bg-1001093.png'"
+        class="w-full h-full"
+        mode="widthFix"
       />
     </view>
-    <view v-if="$global.sConfig.isHideHomeLogo !== '1'" class="cache-fixbottom">
-      浙江和仁科技股份有限公司@技术支持
+    <view v-else>
+      <view class="cache-img-container">
+        <image
+          mode="aspectFit"
+          class="cache-img"
+          :src="BASE_IMG + 'img_h5bg@3x.png'"
+        />
+      </view>
+      <view
+        v-if="$global.sConfig.isHideHomeLogo !== '1'"
+        class="cache-fixbottom"
+      >
+        浙江和仁科技股份有限公司@技术支持
+      </view>
     </view>
     <g-message />
   </view>

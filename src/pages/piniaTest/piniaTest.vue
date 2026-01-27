@@ -729,7 +729,7 @@
     // useTBanner(肿瘤住院管家);
     // useTBanner(电子导诊单);
     // useTBanner(肿瘤云影响);
-    useTBanner(电子导诊单);
+    useTBanner(eletronicInvoice);
     // patientUtils.faceVerify({
     //   name: '陈钦川',
     //   idCardNumber: '330326199908286713',
