@@ -2833,7 +2833,7 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
       uni.removeStorageSync('yibaoPatientId');
     }
 
-    await api.updateHosInfo({
+    const { result } = await api.updateHosInfo({
       insPsnToken: token,
       patientId: patientId,
       herenId: patientUtil.globalStore.herenId,

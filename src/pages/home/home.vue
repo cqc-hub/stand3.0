@@ -52,6 +52,7 @@
               [gStores.globalStore.getPageClass]: true,
             }"
           >
+            <view class="safe-height" />
             <view
               class="search flex-between"
               v-if="globalGl.sConfig.isHideHomeSearch != '1'"
@@ -117,7 +118,7 @@
               />
             </view>
 
-            <view class="card">
+            <view class="card mt32">
               <view v-if="!isHomeStyle1">
                 <g-login @handler-next="routerJump">
                   <!-- 登录之后 -->
@@ -328,7 +329,7 @@
               <lifestyle :sceneId="globalGl.sConfig.isOpenAlipayFollow" />
             </view>
             <!-- #endif -->
-            <view class="fun-list" v-if="viewerStore.homeMenuList.length">
+            <view class="mt32" v-if="viewerStore.homeMenuList.length">
               <!--  :homeTabStyle="
                   gStores.globalStore.sysCode === '1001093' ? '1' : undefined
                 " -->
@@ -916,7 +917,6 @@
       z-index: 999;
     }
     image {
-      // width: 100rpx;
       height: 148rpx;
     }
   }
@@ -924,7 +924,7 @@
   .homePage {
     padding: 0 32rpx 188rpx 32rpx;
     .search {
-      padding-top: 32rpx;
+      // padding-top: 32rpx;
     }
     .w70 {
       width: 70%;
@@ -957,7 +957,6 @@
     }
 
     .card {
-      margin-top: var(--h-margin-24);
       .top-card {
         padding-top: var(--h-margin-24);
         margin: 0 26rpx;
@@ -1154,10 +1153,6 @@
       width: 100%;
       margin-bottom: -17rpx;
       margin-top: 10rpx;
-    }
-
-    .fun-list {
-      margin-top: var(--h-margin-24);
     }
   }
 
