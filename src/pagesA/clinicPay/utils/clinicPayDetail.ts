@@ -2155,11 +2155,10 @@ export const usePayPage = () => {
   };
 
   /** 插件亲情付 新增入参 */
-  const getFamilyArgs = async () => {
-    const { patientId } = gStores.userStore.patChoose;
+  const getFamilyArgs = async (patientId) => {
     const { result } = await api.getAliMedicalPat({
       hosId: selUnPayList.value[0].hosId,
-      patientId: patientId,
+      patientId,
     });
     return result;
   };
@@ -2277,7 +2276,9 @@ export const usePayPage = () => {
       };
 
       if (isFamilyPayment === '1') {
-        const { anotherIdNo, anotherName } = await getFamilyArgs();
+        const { anotherIdNo, anotherName } = await getFamilyArgs(
+          gStores.userStore.patChoose.patientId
+        );
         params.anotherIdNo = anotherIdNo;
         params.anotherName = anotherName;
       }
@@ -2820,11 +2821,25 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
     Object.entries(medicalPlugin!.orgId).forEach(([k, v]) => {
       orgId = v as any;
     });
+    const { anotherIdNo, anotherName } =
+      await patientUtil.getPluginFamilyDesArgs(patientId);
+    console.log(
+      JSON.stringify({
+        // 授权获取的authCode
+        authCode,
+        // 机构ID
+        orgId,
+        anotherIdNo,
+        anotherName,
+      })
+    );
     let token = await authPayPlugin.toArchive({
       // 授权获取的authCode
       authCode,
       // 机构ID
       orgId,
+      anotherIdNo,
+      anotherName,
     });
 
     if (type === 'first') {

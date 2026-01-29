@@ -59,7 +59,7 @@
           <view v-if="getInHosDay.length" class="item">
             <view class="item-title">住院日期</view>
             <view class="item-content">
-              {{ getInHosDay.join('~') }}
+              {{ getInHosDay.join(' ~ ') }}
             </view>
           </view>
 

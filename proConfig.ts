@@ -861,6 +861,7 @@ export const miniProgramConfig: {
             },
           },
           isMedicalOrder: '1',
+          isGbFamilyPayment: '1',
         },
       },
     },

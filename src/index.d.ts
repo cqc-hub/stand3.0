@@ -330,7 +330,10 @@ interface ISConfig {
       /** 挂号医保 */
       isMedicalOrder?: '1';
 
-      /** 医保开启亲情付 */
+      /**
+       * 医保开启亲情付
+       * 亲情付需要联系微信bd申请开通
+       *  */
       isGbFamilyPayment?: '1';
 
       /** 医保建档 */

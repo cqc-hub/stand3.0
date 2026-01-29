@@ -239,7 +239,7 @@ export class LoginUtils extends GStores {
     if (['1001083'].includes(sysCode)) {
       await api.wzrmPatSync({ source: this.globalStore.browser.source });
     }
-    
+
     //通过手机号同步
     if (['1001095'].includes(sysCode)) {
       await api.patSync({ source: this.globalStore.browser.source });
@@ -265,9 +265,8 @@ export class LoginUtils extends GStores {
   //判断是否需要前往手机号登录
   async judgeLoginByPhoneVerify() {
     let flag = false;
-    const { isLoginByPhoneVerify } = await ServerStaticData.getSystemConfig(
-      'RestOfConfig'
-    );
+    const { isLoginByPhoneVerify } =
+      await ServerStaticData.getSystemConfig('RestOfConfig');
     if (isLoginByPhoneVerify === '1') {
       // 把promise的resolve函数，赋值给messageStore的closeCallBack状态
       const { confirm } = await new Promise<any>((closeCallBack) => {
@@ -348,6 +347,17 @@ export class LoginUtils extends GStores {
       uni.hideLoading();
       return Promise.reject(error);
     }
+  }
+
+  async getPluginFamilyDesArgs(patientId): Promise<{
+    anotherIdNo: string;
+    anotherName: string;
+  }> {
+    const { result } = await api.getAliMedicalPat({
+      patientId,
+    });
+
+    return result;
   }
 
   async faceVerify({ name, idCardNumber }) {
@@ -1178,9 +1188,8 @@ export class Login extends LoginUtils {
 export class PatientUtils extends LoginUtils {
   usePatDynamicCode = {
     async isOpen(path: string) {
-      const { GlobalConfig } = await cacheUtil.getSystemConfig(
-        'GlobalConfig'
-      )();
+      const { GlobalConfig } =
+        await cacheUtil.getSystemConfig('GlobalConfig')();
 
       return (GlobalConfig.refreshQrCode || []).includes(path);
     },
@@ -1493,9 +1502,8 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
-        data
-      );
+      const { healthCardId, qrCodeText } =
+        await this.regHealthCardByPatInfo(data);
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;
@@ -1547,9 +1555,8 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
-        data
-      );
+      const { healthCardId, qrCodeText } =
+        await this.regHealthCardByPatInfo(data);
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;
