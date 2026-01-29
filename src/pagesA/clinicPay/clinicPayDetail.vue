@@ -271,6 +271,7 @@
     _getQxMedicalNation,
     IPayListItem,
     getWxMedicalAuth1001035,
+    getQxMedicalNation,
   } from './utils/clinicPayDetail';
   import { apiAsync, useTBanner, wait } from '@/utils';
   import {
@@ -336,7 +337,7 @@
     isListCanPayedItem,
     isCanSelServerFee,
     selDeailtItem,
-    expressClick
+    expressClick,
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
@@ -524,6 +525,9 @@
     }
 
     await wait(650);
+    // await getQxMedicalNation({
+    //   params: pageProps.value.params,
+    // });
 
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
