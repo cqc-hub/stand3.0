@@ -30,7 +30,7 @@
         </template>
         <template #suffixIcon>
           <view class="flex-normal">
-            <view @click.stop="clear" class="suffix-icon">
+            <view @click.stop.prevent="clear" class="suffix-icon">
               <view v-if="value" class="iconfont icon-search icon-searchColor">
                 &#xe6de;
               </view>
@@ -161,6 +161,7 @@
   }
 
   .suffix-icon {
+    z-index: 3;
     padding: 0 20rpx;
     padding-left: 10rpx;
   }
