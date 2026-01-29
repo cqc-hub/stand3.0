@@ -531,7 +531,12 @@
     isPageRender.value = true;
 
     if (pageStyle.value === '2') {
-      await wait(120);
+      uni.showLoading({
+        mask: true,
+        title: ' ',
+      });
+      await wait(320);
+      uni.hideLoading();
 
       const { tempFilePath: img } = await refBarCode1.value.GetCodeImg();
       barImg.value = img;

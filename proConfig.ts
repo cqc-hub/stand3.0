@@ -876,7 +876,7 @@ export const miniProgramConfig: {
     isOpenOcr: false,
     isSearchInHos: true,
     sConfig: {
-      homeMyShowTogglePatComponent: '1',
+      // homeMyShowTogglePatComponent: '1',
       homeStyle: '1',
       isOpenHelpOld: '1',
       login: { isAliAuthBase: '1', isSkipPerfect: '1' },
@@ -885,7 +885,7 @@ export const miniProgramConfig: {
       medicalMHelp: {
         wx: {
           medicalPlugin: '1',
-          medicalDefault: '1',
+          // medicalDefault: '1',
           medicalFiling: '1',
           crossProgramBizType: {
             clinic: 'T2loeEEdAO',
@@ -893,7 +893,7 @@ export const miniProgramConfig: {
           },
         },
         alipay: {
-          medicalDefault: '1',
+          // medicalDefault: '1',
           medicalFiling: '1',
           isFamilyPayment: '1',
           medicalPlugin: { orgId: { '13152': 'H33010500310' }, cardType: '01' },
