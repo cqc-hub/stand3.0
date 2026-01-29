@@ -1778,7 +1778,6 @@ export const usePayPage = () => {
   const getPayListLabel = () => {
     const {
       sConfig: { medicalMHelp },
-      systemConfig: { isvAlipayAppid },
     } = globalGl;
     const wx = medicalMHelp?.wx;
 
@@ -2308,7 +2307,6 @@ export const usePayPage = () => {
   ) => {
     const {
       sConfig: { medicalMHelp },
-      systemConfig: { isvAlipayAppid },
     } = globalGl;
 
     const { wx } = medicalMHelp!;
@@ -2848,10 +2846,13 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
       uni.removeStorageSync('yibaoPatientId');
     }
 
-    const { result } = await api.updateHosInfo({
+    if (!token) {
+      throw new Error('获取建档token失败');
+    }
+
+    await api.updateHosInfo({
       insPsnToken: token,
-      patientId: patientId,
-      herenId: patientUtil.globalStore.herenId,
+      patientId,
       source: gStores.globalStore.browser.source,
     });
     // .catch(async (err) => {

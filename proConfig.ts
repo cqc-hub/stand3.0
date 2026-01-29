@@ -876,6 +876,7 @@ export const miniProgramConfig: {
     isOpenOcr: false,
     isSearchInHos: true,
     sConfig: {
+      homeMyShowTogglePatComponent: '1',
       homeStyle: '1',
       isOpenHelpOld: '1',
       login: { isAliAuthBase: '1', isSkipPerfect: '1' },

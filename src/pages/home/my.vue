@@ -11,7 +11,7 @@
         :loading="viewerStore.loading"
       >
         <view class="top-bg" />
-        <personRecord />
+        <personRecord @show-choose-pat="chooseAction" />
 
         <view class="my-menu" v-if="!gStores.globalStore.modeOld">
           <view v-if="viewerStore.myMenu1List?.length" class="list g-fade-in">
@@ -20,7 +20,7 @@
               :list="viewerStore.myMenu1List"
               @open-share="openShare"
             ></homeGrid>
-          </view> 
+          </view>
           <view v-if="viewerStore.myMenu2List?.length" class="list g-fade-in">
             <view class="title">我的服务</view>
             <homeGrid
@@ -67,6 +67,9 @@
     </scroll-view>
 
     <homePopup ref="refOldDialog" />
+
+    <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
+
     <homeH5SharePopup
       ref="homeH5SharePopupRef"
       :configData="h5QrCodeData || undefined"
@@ -79,7 +82,7 @@
 
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue';
-  import { useMessageStore, useRouterStore } from '@/stores';
+  import { IPat, useMessageStore, useRouterStore } from '@/stores';
   import { useViewerStore } from '@/stores/modules/viewer';
 
   import { onLoad, onShareTimeline } from '@dcloudio/uni-app';
@@ -96,6 +99,7 @@
   import { useCommonTo } from '@/common/checkJump';
   import api from '@/service/api';
   import { getLangLabel } from '@/config/lang';
+  import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
 
   const homeH5SharePopupRef = ref('' as any);
   const h5QrCodeData = ref({});
@@ -138,6 +142,17 @@
   const routeStore = useRouterStore();
   const gStores = new GStores();
   const refOldDialog = ref();
+
+  const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
+  const chooseAction = () => {
+    console.log('object');
+    if (actionSheet.value) {
+      actionSheet.value.show();
+    }
+  };
+  const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
+    gStores.userStore.updatePatChoose(item);
+  };
 
   // 互联网医院和第三方微信小程序（携带登录信息）h5直接跳转scan页面
   const dealHosNet = async (opt: {
@@ -182,6 +197,42 @@
     });
   };
 
+  if (gStores.globalStore.ev === 'wx') {
+    //分享到朋友圈
+    onShareTimeline(() => {
+      return {
+        title: global.systemInfo.name,
+        query: '',
+      };
+    });
+  }
+
+  const openModeOld = () => {
+    if (refOldDialog.value) {
+      refOldDialog.value.show();
+    }
+  };
+
+  //打开关注框
+  const openShare = (item, type?) => {
+    if (type === 'attention') {
+      h5QrCodeData.value = item.query && JSON.parse(item.query);
+      clickShareItem.value = item;
+    } else {
+      h5QrCodeData.value = item;
+    }
+    homeH5SharePopupRef.value.show();
+  };
+
+  const closePopClick = () => {
+    const query = clickShareItem.value.query;
+    if (query && JSON.parse(query).attention === '1') {
+      setTimeout(() => {
+        useCommonTo(clickShareItem.value);
+      }, 500);
+    }
+  };
+
   onLoad((opt) => {
     console.log('获取到参数--my', opt);
     if (!viewerStore.version) {
@@ -212,15 +263,6 @@
     }
   });
 
-  if (gStores.globalStore.ev === 'wx') {
-    //分享到朋友圈
-    onShareTimeline(() => {
-      return {
-        title: global.systemInfo.name,
-        query: '',
-      };
-    });
-  }
   onMounted(() => {
     routeStore.receiveQuery(props);
     if (props.setOutLogin === '1') {
@@ -235,32 +277,6 @@
       messageStore.showMessage('登录过期,请重新登录', 1000);
     }
   });
-
-  const openModeOld = () => {
-    if (refOldDialog.value) {
-      refOldDialog.value.show();
-    }
-  };
-
-  //打开关注框
-  const openShare = (item, type?) => {
-    if (type === 'attention') {
-      h5QrCodeData.value = item.query && JSON.parse(item.query);
-      clickShareItem.value = item;
-    } else {
-      h5QrCodeData.value = item;
-    }
-    homeH5SharePopupRef.value.show();
-  };
-
-  const closePopClick = () => {
-    const query = clickShareItem.value.query;
-    if (query && JSON.parse(query).attention === '1') {
-      setTimeout(() => {
-        useCommonTo(clickShareItem.value);
-      }, 500);
-    }
-  };
 </script>
 
 <style lang="scss" scoped>

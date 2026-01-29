@@ -5,7 +5,12 @@
     }"
     class="choose-pat relative z-999"
   >
-    <g-popup :title="title" @hide="onActionSheetHide" ref="actionSheet">
+    <g-popup
+      :title="title"
+      maxHeight="80vh"
+      @hide="onActionSheetHide"
+      ref="actionSheet"
+    >
       <view class="choose-pat-container g-flex-rc-cc">
         <view style="width: 100%">
           <Pat-List :isShowAll="isShowAll" @choose-pat="actionSheetItemClick" />
@@ -52,12 +57,11 @@
       isShowAll: {
         type: Boolean,
         default: false,
-      }, 
+      },
 
       pat: {
         type: Object as PropType<IPat>,
       },
-
     },
 
     components: {
