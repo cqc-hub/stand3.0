@@ -993,7 +993,7 @@ export const miniProgramConfig: {
     isStartComeTest: false,
     isSearchInHos: true,
     isOpenOcr: false,
-    sConfig: { isDrugDelivery: '1' },
+    sConfig: { isDrugDelivery: '1', isOpenHelpOld: '1' },
   },
   '1001098': {
     wxAppid: 'wxe57689990fa308f8',
