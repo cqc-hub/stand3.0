@@ -9,8 +9,8 @@
     </view>
 
     <view class="g-page" v-if="pageConfig && isConfigGet">
-      <g-flag typeFg="503" isShowFg />
       <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
+        <g-flag typeFg="503" isShowFg />
         <view class="content-box">
           <view
             v-if="pickupTypeOpt.length > 1"
@@ -1267,7 +1267,7 @@
     const fee = getPayMoneyNum.value;
 
     if (isPayWithoutSecretAuth.value) {
-      uni.showLoading({ title: '加载中'});;
+      uni.showLoading({ title: '加载中' });
       const u: any = await new Promise((r) => {
         require('../../pagesA/medicalCardMan/utils/index', r);
       });

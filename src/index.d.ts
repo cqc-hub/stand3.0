@@ -226,6 +226,10 @@ interface ISConfig {
   //是否开启微信同声传译插件 https://mp.weixin.qq.com/wxopen/pluginbasicprofile?action=intro&appid=wx069ba97219f66d99&token=699624033&lang=zh_CN
   isOpenWechatSI?: boolean;
 
+  // pages/home/my
+  /** home/my 顶部显示变更为切换就诊人 */
+  homeMyShowTogglePatComponent?: '1';
+
   // 门诊缴费 ----------------------------
   // 医保(各个平台之间最多存在一种医保模式)? 如果是 his 结算模式直接维护后台配置即可
   medicalMHelp?: {
@@ -330,7 +334,10 @@ interface ISConfig {
       /** 挂号医保 */
       isMedicalOrder?: '1';
 
-      /** 医保开启亲情付 */
+      /**
+       * 医保开启亲情付
+       * 亲情付需要联系微信bd申请开通
+       *  */
       isGbFamilyPayment?: '1';
 
       /** 医保建档 */

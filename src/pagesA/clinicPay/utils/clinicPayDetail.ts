@@ -391,7 +391,7 @@ export const getMedicalAuthCode = async (
 
       await new Promise((success, j) => {
         let envVersion: any = globalGl.env === 'prod' ? 'release' : 'trial';
-        if (sysCode === '1001092') {
+        if (['1001092', '1001099'].includes(sysCode)) {
           envVersion = 'release';
         }
         console.warn(
@@ -1778,7 +1778,6 @@ export const usePayPage = () => {
   const getPayListLabel = () => {
     const {
       sConfig: { medicalMHelp },
-      systemConfig: { isvAlipayAppid },
     } = globalGl;
     const wx = medicalMHelp?.wx;
 
@@ -2155,11 +2154,10 @@ export const usePayPage = () => {
   };
 
   /** 插件亲情付 新增入参 */
-  const getFamilyArgs = async () => {
-    const { patientId } = gStores.userStore.patChoose;
+  const getFamilyArgs = async (patientId) => {
     const { result } = await api.getAliMedicalPat({
       hosId: selUnPayList.value[0].hosId,
-      patientId: patientId,
+      patientId,
     });
     return result;
   };
@@ -2277,7 +2275,9 @@ export const usePayPage = () => {
       };
 
       if (isFamilyPayment === '1') {
-        const { anotherIdNo, anotherName } = await getFamilyArgs();
+        const { anotherIdNo, anotherName } = await getFamilyArgs(
+          gStores.userStore.patChoose.patientId
+        );
         params.anotherIdNo = anotherIdNo;
         params.anotherName = anotherName;
       }
@@ -2307,7 +2307,6 @@ export const usePayPage = () => {
   ) => {
     const {
       sConfig: { medicalMHelp },
-      systemConfig: { isvAlipayAppid },
     } = globalGl;
 
     const { wx } = medicalMHelp!;
@@ -2820,11 +2819,25 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
     Object.entries(medicalPlugin!.orgId).forEach(([k, v]) => {
       orgId = v as any;
     });
+    const { anotherIdNo, anotherName } =
+      await patientUtil.getPluginFamilyDesArgs(patientId);
+    console.log(
+      JSON.stringify({
+        // 授权获取的authCode
+        authCode,
+        // 机构ID
+        orgId,
+        anotherIdNo,
+        anotherName,
+      })
+    );
     let token = await authPayPlugin.toArchive({
       // 授权获取的authCode
       authCode,
       // 机构ID
       orgId,
+      anotherIdNo,
+      anotherName,
     });
 
     if (type === 'first') {
@@ -2833,10 +2846,13 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
       uni.removeStorageSync('yibaoPatientId');
     }
 
-    const { result } = await api.updateHosInfo({
+    if (!token) {
+      throw new Error('获取建档token失败');
+    }
+
+    await api.updateHosInfo({
       insPsnToken: token,
-      patientId: patientId,
-      herenId: patientUtil.globalStore.herenId,
+      patientId,
       source: gStores.globalStore.browser.source,
     });
     // .catch(async (err) => {

@@ -3,7 +3,7 @@
     <view class="container">
       <g-login @handler-next="routerJump">
         <image
-          :src="gStores.userStore.getAvatar"
+          :src="getAvatarSrc"
           @click="avatarClick"
           mode="widthFix"
           class="user-avatar g-fade-in"
@@ -11,21 +11,42 @@
       </g-login>
 
       <g-login @handler-next="routerJump">
-        <view class="info">
+        <view class="info h-full animate__animated animate__fadeIn">
           <block v-if="gStores.globalStore.isLogin">
-            <text class="user-name animate__animated animate__fadeIn">
-              {{
-                gStores.userStore.name ||
-                gStores.userStore.cellPhoneNum ||
-                '已登录'
-              }}
-            </text>
+            <view @click="patInfoClick" class="h-full">
+              <view
+                v-if="
+                  isShowTogglePatComponent && gStores.userStore.patList.length
+                "
+                class="h-full flex flex-col justify-center"
+              >
+                <view>
+                  <text class="color-111 f48 font-semibold mr8">
+                    {{ gStores.userStore.patChoose.patientNameEncry }}
+                  </text>
+
+                  <text class="iconfont qr-toggle-icon color-blue f60 absolute">
+                    &#xe6f9;
+                  </text>
+                </view>
+
+                <view class="color-666 f28">
+                  <text class="mr8">就诊号</text>
+                  <text>{{ gStores.userStore.patChoose._showId }}</text>
+                </view>
+              </view>
+              <text v-else class="color-111 f48 font-semibold">
+                {{
+                  gStores.userStore.name ||
+                  gStores.userStore.cellPhoneNum ||
+                  '已登录'
+                }}
+              </text>
+            </view>
           </block>
 
           <block v-else>
-            <button
-              class="user-name login-btn animate__animated animate__fadeIn"
-            >
+            <button class="f48 login-btn font-semibold color-111">
               {{ getLangLabel('home:请登录') }}
             </button>
           </block>
@@ -106,11 +127,29 @@
   import global from '@/config/global';
   import { computed } from 'vue';
   import { getLangLabel } from '@/config/lang';
+  import globalGl from '@/config/global';
+  import { getAvatar } from '@/stores';
 
   const gStores = new GStores();
   const viewerStore = useViewerStore();
 
+  const emits = defineEmits(['show-choose-pat']);
+
+  const showChoosePat = () => {
+    emits('show-choose-pat');
+  };
+
+  const patInfoClick = () => {
+    if (isShowTogglePatComponent.value) {
+      showChoosePat();
+    }
+  };
+
   const avatarClick = () => {
+    if (isShowTogglePatComponent.value) {
+      showChoosePat();
+      return;
+    }
     uni.navigateTo({
       url: '/pages/home/accountInfo?type=outLogin',
     });
@@ -119,6 +158,18 @@
   const jumpFor = (record: IRoute) => {
     useCommonTo(record);
   };
+
+  const getAvatarSrc = computed(() => {
+    if (isShowTogglePatComponent.value) {
+      return getAvatar(gStores.userStore.patChoose.patientSex);
+    }
+
+    return gStores.userStore.getAvatar;
+  });
+
+  const isShowTogglePatComponent = computed(
+    () => globalGl.sConfig.homeMyShowTogglePatComponent === '1'
+  );
 
   const backImg = computed(() => {
     let icons = ['v3-my-jzk', 'v3-my-pz'];
@@ -163,11 +214,6 @@
       display: flex;
       flex-direction: column;
       margin-left: 20upx;
-      .user-name {
-        color: var(--hr-neutral-color-10);
-        font-weight: var(--h-weight-1);
-        font-size: var(--hr-font-size-xxl);
-      }
 
       .user-id {
         color: var(--hr-neutral-color-8);
