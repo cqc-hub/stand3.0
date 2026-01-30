@@ -279,35 +279,6 @@
               />
             </view>
 
-            <!-- 首页悬浮球 -->
-            <drag-button
-              v-if="
-                viewerStore.homeBallList &&
-                viewerStore.homeBallList.length === 1
-              "
-              :right="1"
-              :edge="100"
-              :offsetHeight="0"
-              zid="33"
-              @btnClick="useCommonTo(viewerStore.homeBallList[0])"
-              isDock
-              scrollY
-            >
-              <view class="auto-person g-fade-in">
-                <text v-if="viewerStore.homeBallList[0].detail">
-                  {{ viewerStore.homeBallList[0].detail }}
-                </text>
-                <image
-                  :src="
-                    assistantImg
-                      ? `${globalGl.BASE_IMG}menu/${assistantImg}`
-                      : viewerStore.homeBallList[0].iconfont
-                  "
-                  mode="heightFix"
-                ></image>
-              </view>
-            </drag-button>
-
             <!-- #ifdef MP-WEIXIN -->
             <view>
               <official-account></official-account>
@@ -455,6 +426,32 @@
       @click-btn="onAgree"
     />
     <g-message v-else />
+
+    <!-- 首页悬浮球 -->
+    <drag-button
+      v-if="viewerStore.homeBallList && viewerStore.homeBallList.length === 1"
+      :right="1"
+      :edge="100"
+      :offsetHeight="0"
+      zid="33"
+      @btnClick="useCommonTo(viewerStore.homeBallList[0])"
+      isDock
+      scrollY
+    >
+      <view class="auto-person g-fade-in">
+        <text v-if="viewerStore.homeBallList[0].detail">
+          {{ viewerStore.homeBallList[0].detail }}
+        </text>
+        <image
+          :src="
+            assistantImg
+              ? `${globalGl.BASE_IMG}menu/${assistantImg}`
+              : viewerStore.homeBallList[0].iconfont
+          "
+          mode="heightFix"
+        ></image>
+      </view>
+    </drag-button>
 
     <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
 
