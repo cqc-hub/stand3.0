@@ -5,6 +5,7 @@ import { getSysCode } from '@/common';
 export type IRegistrationCardItem = {
   sysCode: string;
   hosData?: string;
+  schDate?: string;
   deptName: string;
   ampm: string;
   orderId: string;
