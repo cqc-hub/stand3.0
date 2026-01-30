@@ -23,7 +23,7 @@
               </text>
             </view>
 
-            <view class="flex-1"></view>
+            <view class="flex-1" />
 
             <img
               :src="globalGl.BASE_IMG + 'stand3-home-pat-toggle-icon.png'"
@@ -35,7 +35,7 @@
               {{ getLangLabel('home:已登录') }}
             </view>
 
-            <view class="flex-1"></view>
+            <view class="flex-1" />
 
             <view>
               <view
@@ -56,7 +56,7 @@
             <text class="color-888 f28">登录后享受更多服务</text>
           </view>
 
-          <view class="flex-1"></view>
+          <view class="flex-1" />
 
           <view>
             <view
@@ -72,18 +72,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from 'vue';
-
   import { GStores } from '@/utils';
   import { getLangLabel } from '@/config/lang';
-  import globalGl from '@/config/global';
   import { getAvatar } from '@/stores';
+  import globalGl from '@/config/global';
 
   const gStores = new GStores();
-
-  const getAvatarSrc = computed(() => {
-    return gStores.userStore.getAvatar;
-  });
 
   const emits = defineEmits(['toggle-pat', 'add-pat']);
   const togglePat = () => {

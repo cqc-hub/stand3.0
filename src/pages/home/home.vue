@@ -781,10 +781,6 @@
     routerJump();
   };
   const addPatient = () => {
-    // uni.navigateTo({
-    //   url: '/pagesA/medicalCardMan/medicalCardMan',
-    // });
-
     if (actionSheet.value) {
       actionSheet.value.goAddPat();
     }

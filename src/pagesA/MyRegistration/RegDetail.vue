@@ -1372,6 +1372,8 @@
     isCancelOrderDialogShow.value = false;
 
     await api.cancelAlternate({
+      ...pageProps.value,
+      ...orderRegInfo.value,
       alternateId: pageProps.value.alternateId,
       source: gStores.globalStore.browser.source,
     });
