@@ -17,22 +17,28 @@
   import { BASE_IMG } from '@/config/global';
   import { GStores } from '@/utils';
   import { joinQuery, deQueryForUrl } from '@/common';
+  import globalGl from '@/config/global';
   import { beforeEach } from '@/router';
-  import { checkLoginExpired } from '@/common/checkJump';
+  import {
+    checkLoginExpired,
+    checkLogin,
+    checkPatient,
+  } from '@/common/checkJump';
   import api from '@/service/api';
-
 
   const gStores = new GStores();
   const pageProps = ref(
     <
       {
-        appointAdtStatus: string;
+        cardNumber: string;
+        hosorderId: string;
+        numId: string;
         [key: string]: any;
       }
     >{}
   );
 
-  onLoad(async () => {
+  onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
 
     const pages = getCurrentPages();
@@ -43,7 +49,10 @@
       _isLogin: true,
       _isPatient: true,
     });
-
+    if (!gStores.globalStore.isLogin) {
+      await checkLogin();
+    }
+    await checkPatient();
     const isExpired = await checkLoginExpired();
     if (isExpired) {
       uni.reLaunch({
@@ -53,42 +62,37 @@
         }),
       });
     }
+    const pat = gStores.userStore.patList.find(
+      (item) => item.cardNumber === pageProps.value.cardNumber
+    );
+    if (!pat) {
+      gStores.messageStore.showMessage(
+        `当前账户未绑定就诊号为${pageProps.value.cardNumber}的患者，请先绑定`,
+        3000,
+        {
+          closeCallBack: () => {
+            uni.reLaunch({
+              url:
+                globalGl.addPersonUrl +
+                '?_directUrl=' +
+                encodeURIComponent(fullPathNow),
+            });
+          },
+        }
+      );
+      return;
+    }
     gStores.messageStore.showMessage('正在加号请稍等...', 3000);
-    await handleData();
+    await handleData(pat);
   });
 
-  const handleData = async () => {
+  const handleData = async (pat) => {
+    const { patientId, cardNumber } = pat!;
     const args = {
-      addFlag: '1',
-      addedNum: 5,
-      alternateData: 'eyJhcHBJZCI6IjEwMDEwMTciLCJwYWdlSWQiOiI2ODU3ODY1In0=',
-      ampm: '1',
-      cardNumber: '1398266480',
-      categor: '1',
-      categorName: '普通号',
-      clinicalType: '1',
-      deptName: '儿科',
-      disNo: '001',
-      docName: '张医生',
-      fee: '50.00',
-      herenId: 6857865,
-      hisResult: 'SUCCESS',
-      hosDeptId: 'A01020170000',
-      hosDocId: 'D100001',
-      hosId: 'H1001',
-      hosOrderId: '2026020610000341',
-      hrRequestId: 'REQ123456',
-      numId: 'N98765',
-      patientId: '1398266480',
-      preInqyiry: {},
-      promptMessage: '请空腹就诊',
-      schDate: '2026-02-10',
-      schId: 'SCH88888',
-      schQukCategor: '普通门诊',
-      source: '19',
-      sysCode: '1001017',
-      timeDesc: '13:00-13:15',
-      visitingArea: '门诊楼3楼305室',
+      hosorderId: pageProps.value.hosorderId,
+      numId: pageProps.value.numId,
+      patientId,
+      cardNumber,
     };
     const {
       result: { orderId },
