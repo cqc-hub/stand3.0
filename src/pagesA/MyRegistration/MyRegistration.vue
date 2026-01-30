@@ -354,6 +354,7 @@
     if (result && result.length) {
       result.map(async (o) => {
         // o.orderStatus = '70';
+        const { schDate, appointmentDate } = o;
         o._statusLabel = getOrderStatusTitle(
           o.orderStatus,
           pageConfig.value.isOrderPay,
@@ -363,6 +364,12 @@
         if (o._statusLabel.startsWith('未知')) {
           // @ts-expect-error
           o.orderStatus = '--';
+        }
+
+        if (gStores.globalStore.sysCode === '1001093') {
+          if (!schDate) {
+            o.schDate = appointmentDate;
+          }
         }
       });
     }
