@@ -54,7 +54,7 @@
           >
             <view class="safe-height" />
             <view
-              class="search flex-between"
+              class="flex-between"
               v-if="globalGl.sConfig.isHideHomeSearch != '1'"
             >
               <!-- 在有搜索框的前提下 是否开启助老版本 -->
@@ -100,17 +100,12 @@
                   长辈版
                 </view>
               </view>
-              <!-- <view
-                v-if="globalGl.sConfig.isOpenHelpOld === '1'"
-                class="openOld ml16"
-                @tap="openModeOld"
-              >
-                <view class="iconfont icon-size">&#xe700;</view>
-                长辈模式
-              </view> -->
             </view>
 
-            <view v-if="$global.sConfig?.homeTopBanner?.topShow" class="pt24">
+            <view
+              v-if="$global.sConfig?.homeTopBanner?.topShow"
+              class="pt24 mb32"
+            >
               <homeBanner
                 :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
                 :functionList="viewerStore.homeBannerFunctionList"
@@ -118,8 +113,15 @@
               />
             </view>
 
-            <view class="card mt32">
-              <view v-if="!isHomeStyle1">
+            <view class="card">
+              <view
+                v-if="isHomeStyle1"
+                class="mb32 bg-white rounded-xl pt16 pb16 pr24 pl24"
+              >
+                <homeLogin @add-pat="addPatient" @toggle-pat="chooseAction" />
+              </view>
+
+              <view v-else>
                 <g-login @handler-next="routerJump">
                   <!-- 登录之后 -->
                   <block v-if="globalStore.isLogin">
@@ -512,6 +514,7 @@
   import homeButtomProductionIcon from './componetns/homeButtomProductionIcon.vue';
   import chooseLang from './componetns/chooseLang.vue';
   import assistMessage from './componetns/assistMessage.vue';
+  import homeLogin from './componetns/home-login.vue';
 
   const props = ref({
     code: '',
@@ -778,9 +781,13 @@
     routerJump();
   };
   const addPatient = () => {
-    uni.navigateTo({
-      url: '/pagesA/medicalCardMan/medicalCardMan',
-    });
+    // uni.navigateTo({
+    //   url: '/pagesA/medicalCardMan/medicalCardMan',
+    // });
+
+    if (actionSheet.value) {
+      actionSheet.value.goAddPat();
+    }
   };
   const getSelfPat = (): IPat => {
     const selfPat = gStores.userStore.patList.find(
@@ -919,38 +926,6 @@
 
   .homePage {
     padding: 0 32rpx 188rpx 32rpx;
-    .search {
-      // padding-top: 32rpx;
-    }
-    .w70 {
-      width: 70%;
-    }
-    .w100 {
-      width: 100%;
-    }
-    .scan-icon {
-      width: 88rpx;
-      height: 88rpx;
-    }
-    .openOld {
-      width: 200rpx;
-      height: 64rpx;
-      background: var(--h-h-main-c);
-      border-radius: 32rpx 0 0 32rpx;
-      color: #fff;
-      font-size: var(--hr-font-size-xs);
-      padding: 12rpx 24rpx;
-      display: flex;
-      align-items: center;
-      box-sizing: border-box;
-      margin-right: -32rpx;
-      white-space: nowrap;
-      .icon-size {
-        font-size: var(--h-size-40);
-        color: #fff;
-        font-weight: 400;
-      }
-    }
 
     .card {
       .top-card {
