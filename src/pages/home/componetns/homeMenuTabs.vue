@@ -107,12 +107,15 @@
           class="h-full absolute pill3 animate__animated animate__fadeIn"
         /> -->
 
-        <view
+        <image
           v-if="pills === '3'"
+          :src="globalGl.BASE_IMG + 'stand3-homemenu-tab-pill.png'"
           class="v-tabs__container-line v-tabs__container-round-line"
           :style="{
             left: lineLeft + 'px',
             transform: `translateX(-${lineWidth / 2}px)`,
+            width: '30' + 'px',
+            height: '4px'
           }"
         />
         <image
@@ -505,6 +508,7 @@
         transition: all 0.2s ease-out;
 
         &.v-tabs__container-round-line {
+          bottom: 5px;
         }
       }
 

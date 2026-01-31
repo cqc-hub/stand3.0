@@ -87,7 +87,7 @@
       if (sys.windowTop) {
         this.windowHeight += sys.windowTop;
       }
-      let query = uni.createSelectorQuery(); 
+      let query = uni.createSelectorQuery();
       // #ifndef MP-TOUTIAO
       query = query.in(this);
       // #endif
@@ -131,9 +131,6 @@
         }
 
         let clientY = e.touches[0].clientY - this.offsetHeight;
-        // #ifdef H5
-        clientY += this.height;
-        // #endif
         let edgeBottom = this.windowHeight - this.height - this.edge;
 
         // 上下触及边界

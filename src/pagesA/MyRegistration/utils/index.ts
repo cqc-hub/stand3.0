@@ -364,6 +364,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       secondHosDeptId,
       isExpertDeptId,
     } = payload;
+    console.log(payload);
 
     const args = {
       source: gStores.globalStore.browser.source,

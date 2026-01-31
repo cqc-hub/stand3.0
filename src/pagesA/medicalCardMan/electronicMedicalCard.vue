@@ -234,7 +234,7 @@
         v-if="qrOptions.code"
         :options="qrOptions2"
         :value="qrOptions.code"
-        @change="qrComplete"
+        @complete="qrComplete"
         ref="refQrCode1"
         size="380rpx"
       />
@@ -454,7 +454,15 @@
   });
 
   const qrComplete = (e) => {
-    console.log(e);
+    console.log('qrComplete', e);
+    const { success } = e;
+    if (success && pageStyle.value === '2') {
+      refQrCode1.value.toTempFilePath({
+        success({ tempFilePath }) {
+          qrImg.value = tempFilePath;
+        },
+      });
+    }
   };
 
   const setStatus = async () => {
@@ -535,16 +543,11 @@
         mask: true,
         title: ' ',
       });
-      await wait(320);
+      await wait(220);
       uni.hideLoading();
 
       const { tempFilePath: img } = await refBarCode1.value.GetCodeImg();
       barImg.value = img;
-      refQrCode1.value.toTempFilePath({
-        success({ tempFilePath }) {
-          qrImg.value = tempFilePath;
-        },
-      });
     }
   };
 
