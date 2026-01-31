@@ -987,8 +987,8 @@ export const miniProgramConfig: {
   },
   '1001097': {
     wxAppid: 'wx868bfb27a64b370c',
-    h5Appid: '',
-    alipayAppid: '',
+    h5Appid: 'wx329a8f2cab652552',
+    alipayAppid: '2021002193673800',
     isvAlipayAppid: '',
     name: '舟山市普陀区人民医院',
     h5AppidDisabledInTest: true,

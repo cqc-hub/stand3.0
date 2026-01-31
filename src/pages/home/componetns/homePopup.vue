@@ -9,7 +9,7 @@
         <view class="g-container">
           <view class="old-bg">
             <img
-              :src="` ${$global.BASE_IMG}${
+              :src="`${$global.BASE_IMG}${
                 gStores.globalStore.isTcmStyle
                   ? 'img_old@3x-tcm.png'
                   : 'img_old@3x.png'

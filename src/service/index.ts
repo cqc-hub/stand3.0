@@ -52,7 +52,7 @@ Request.interceptors.request((request: IRequest) => {
     globalStore.isLogin &&
     h5AppId &&
     !h5Openid &&
-    ['1001083', '1001093'].includes(globalStore.sysCode) &&
+    ['1001083', '1001093', '1001097'].includes(globalStore.sysCode) &&
     request.url !== '/phs-user/authUser/allinoneAuthApi' &&
     !isGettingOpenId
   ) {
