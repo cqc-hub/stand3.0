@@ -370,6 +370,10 @@
           if (!schDate) {
             o.schDate = appointmentDate;
           }
+
+          if (!o.timeDesc) {
+            o.timeDesc = appointmentDate;
+          }
         }
       });
     }

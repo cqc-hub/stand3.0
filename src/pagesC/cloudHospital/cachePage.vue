@@ -21,7 +21,6 @@
     aliPayMedicalPluginGetAuthCode,
     getMedicalAuthCode,
     aliPayMedicalPluginPayInit,
-    getClinicUtils,
     handlerMedicalPayDongRuan,
   } from './utils/cloudHospital';
   import { apiAsync, GStores, wait } from '@/utils';
