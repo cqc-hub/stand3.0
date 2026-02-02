@@ -354,7 +354,7 @@
     if (result && result.length) {
       result.map(async (o) => {
         // o.orderStatus = '70';
-        const { schDate, appointmentDate } = o;
+        const { schDate, appointmentDate, appointmentTime } = o;
         o._statusLabel = getOrderStatusTitle(
           o.orderStatus,
           pageConfig.value.isOrderPay,
@@ -370,9 +370,11 @@
           if (!schDate) {
             o.schDate = appointmentDate;
           }
-
           if (!o.timeDesc) {
-            o.timeDesc = appointmentDate;
+            o.timeDesc = appointmentTime;
+          }
+          if (!o.disNo) {
+            o.disNo = o.appointmentNumber;
           }
         }
       });

@@ -6,6 +6,7 @@ export type IRegistrationCardItem = {
   sysCode: string;
   hosData?: string;
   schDate?: string;
+  disNo?: string;
   timeDesc?: string;
   deptName: string;
   ampm: string;
