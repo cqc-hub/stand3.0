@@ -641,7 +641,7 @@
     }
 
     if (gStores.globalStore.ev === 'wx') {
-      if (props.value.code) {
+      if (props.value.code && !gStores.globalStore.h5OpenId) {
         const getNoPublicOpenIdOnly =
           getLocalStorage('getNoPublicOpenIdOnly') === '1';
 
