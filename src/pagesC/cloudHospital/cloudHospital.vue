@@ -34,15 +34,17 @@
 
   import { BASE_IMG } from '@/config/global';
   import { useCacheStore, useGlobalStore } from '@/stores';
-  import { wait, GStores, useTBanner } from '@/utils';
+  import { wait, GStores } from '@/utils';
   import {
     setLocalStorage,
     getLocalStorage,
     joinQueryForUrl,
     joinQuery,
-    encryptDes,
   } from '@/common';
-  import { handlerMedicalPayDongRuan } from './utils/cloudHospital';
+  import {
+    getQxMedicalNation,
+    handlerMedicalPayDongRuan,
+  } from './utils/cloudHospital';
   const globalStore = useGlobalStore();
   const gStores = new GStores();
   const cacheStore = useCacheStore();
@@ -86,15 +88,21 @@
       if (authCode) {
         // 获取授权码
         if (getLocalStorage('get-wx-medical-netWork-path')) {
-          gStores.globalStore.onAppShow({});
           const resultConfig = JSON.parse(
             decodeURIComponent(getLocalStorage('get-wx-medical-netWork-path'))
           );
           console.warn('有授权码的路径', resultConfig);
           console.warn('有授权码的路径参数', resultConfig.query);
+
+          let authInfo1 = {};
+          if (resultConfig?.payAuthNo) {
+            authInfo1 = await getQxMedicalNation({});
+          }
           setLocalStorage({
             'get-wx-medical-netWork-path': '',
           });
+          gStores.globalStore.onAppShow({});
+
           try {
             uni.navigateTo({
               url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
@@ -102,6 +110,7 @@
                 ...resultConfig.query,
                 ...authInfo,
                 authCode,
+                ...authInfo1,
               }),
             });
           } catch (error) {
