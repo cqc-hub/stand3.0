@@ -54,7 +54,7 @@
           >
             <view class="safe-height" />
             <view
-              class="flex-between"
+              class="flex-between mb24"
               v-if="globalGl.sConfig.isHideHomeSearch != '1'"
             >
               <!-- 在有搜索框的前提下 是否开启助老版本 -->
@@ -102,10 +102,7 @@
               </view>
             </view>
 
-            <view
-              v-if="$global.sConfig?.homeTopBanner?.topShow"
-              class="pt24 mb32"
-            >
+            <view v-if="$global.sConfig?.homeTopBanner?.topShow" class="mb24">
               <homeBanner
                 :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
                 :functionList="viewerStore.homeBannerFunctionList"
@@ -113,10 +110,10 @@
               />
             </view>
 
-            <view class="card">
+            <view class="card mb24">
               <view
                 v-if="isHomeStyle1"
-                class="mb32 bg-white rounded-xl pt16 pb16 pr24 pl24"
+                class="mb24 bg-white rounded-xl pt16 pb16 pr24 pl24"
               >
                 <homeLogin @add-pat="addPatient" @toggle-pat="chooseAction" />
               </view>
@@ -270,10 +267,7 @@
               </view>
             </view>
 
-            <view
-              v-if="!$global.sConfig?.homeTopBanner?.topShow"
-              class="pt24 pb24"
-            >
+            <view v-if="!$global.sConfig?.homeTopBanner?.topShow" class="mb24">
               <homeBanner
                 :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
                 :functionList="viewerStore.homeBannerFunctionList"
