@@ -297,13 +297,17 @@
         label: '近三个月',
         _value: 'month-3',
       },
-      {
-        label: '近半年',
-        _value: 'month-6',
-      },
+      // {
+      //   label: '近半年',
+      //   _value: 'month-6',
+      // },
       {
         label: '近一年',
         _value: 'month-12',
+      },
+      {
+        label: '近三年',
+        _value: 'month-36',
       },
     ].map((o) => {
       const [util, _value] = o._value.split('-') as any;
