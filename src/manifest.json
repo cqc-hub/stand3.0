@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx2e06292a91e9f162",
+    "appid": "wx081a6fb9ee8778e4",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -70,10 +70,6 @@
       "SIPlugin": {
         "version": "0.3.6",
         "provider": "wx069ba97219f66d99"
-      },
-      "crossProgramPlugins": {
-        "version": "latest",
-        "provider": "wx12cec70855c0cacf"
       }
     },
     "mergeVirtualHostAttributes": true,
@@ -83,14 +79,8 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003104628364",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -142,7 +132,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "浙江省肿瘤医院",
+  "name": "新疆维吾尔自治区中医医院",
   "h5": {
     "optimization": {
       "treeShaking": {

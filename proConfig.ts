@@ -940,6 +940,7 @@ export const miniProgramConfig: {
       homeTopBanner: { topShow: true, bannerHeight: 200 },
       login: { isSkipPerfect: '1' },
       medicalMHelp: {
+        isOpenPatToMedicalPat: {},
         wx: {
           isMedicalOrder: '1',
           medicalNation: {
