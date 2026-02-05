@@ -358,8 +358,8 @@
     routerJump();
   };
 
-  const showMedicalFiling = (pat) => {
-    if (isMedicalFiling.value) {
+  const showMedicalFiling = (pat: IPat) => {
+    if (isMedicalFiling.value && pat.idType === '01') {
       // #ifdef MP-WEIXIN
       if (wxCrossProgramInfo.value.bizTypeMF) {
         return pat.healthCardUser !== '2';
