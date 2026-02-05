@@ -36,6 +36,7 @@ export const useScan = () => {
        * - 18 健康温州 云影像
        * - 19 江苏省中 健康商城
        * - 23 用药查询
+       * - 24 检查预约 1001093
        */
       type:
         | '_1'
@@ -61,7 +62,8 @@ export const useScan = () => {
         | '20'
         | '21'
         | '22'
-        | '23';
+        | '23'
+        | '24';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
@@ -552,6 +554,23 @@ export const useScan = () => {
   };
 
   /**
+   * 检查预约1001093
+   */
+  const goJCYY1001093 = () => {
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/choosePat/choosePat',
+      extraData: {
+        _type: 'jcyy1001093',
+      },
+      addition: {
+        patientId: '_patientId',
+      },
+    });
+  };
+
+  /**
    * 江苏省中——健康商城(有问题)
    */
   const healthMall1001035 = () => {
@@ -613,6 +632,7 @@ export const useScan = () => {
     wenxinzaixian1001082,
     healthCheckUp1001082,
     healthMall1001035,
-    goYYcx
+    goYYcx,
+    goJCYY1001093,
   };
 };

@@ -48,7 +48,8 @@
     yun1001082,
     healthMall1001035,
     healthCheckUp1001082,
-    goYYcx
+    goYYcx,
+    goJCYY1001093,
   } = useScan();
 
   const init = async () => {
@@ -179,6 +180,10 @@
 
       case '23':
         goYYcx();
+        break;
+
+      case '24':
+        goJCYY1001093();
         break;
 
       default:
