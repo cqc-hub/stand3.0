@@ -632,7 +632,6 @@
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/question/questionAfterVisit',
-    text: '住院点餐',
     extraData: {
       type: 'yycx',
     },

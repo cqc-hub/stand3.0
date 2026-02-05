@@ -162,6 +162,7 @@
   });
 
   onLoad((opt) => {
+    console.log('获取到参数---', opt);
     if (opt && opt.orderId) {
       pageProps.value = opt as any;
 
