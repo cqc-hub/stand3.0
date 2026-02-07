@@ -29,7 +29,7 @@ import monitor from '@/js_sdk/alipay/alipayLogger.js';
 
 const Request = new requestClass();
 
-let outLoginTimer: number;
+let outLoginTimer: any;
 
 //是否加密 正式环境默认开启sm4加密
 // 20250108 由于sm4容易导致系统压力大 所以统一改为des加密
@@ -53,7 +53,7 @@ Request.interceptors.request((request: IRequest) => {
     h5AppId &&
     !h5Openid &&
     ['1001083', '1001093', '1001097'].includes(globalStore.sysCode) &&
-    request.url !== '/phs-user/authUser/allinoneAuthApi' &&
+    // request.url !== '/phs-user/authUser/allinoneAuthApi' &&
     !isGettingOpenId
   ) {
     //温人民单独判断

@@ -73,6 +73,8 @@ export interface ISystemConfig_ {
     orderMode?: '1';
     // 选择科室医生页面顶部可选择的天数， chooseDay > 20 出现组件 ‘日历’
     chooseDay: number;
+    /** 日历日期下面显示号源状态（有号、约满...） */
+    calendarShowOrderStatus?: '1';
     // 过滤无号医生按钮
     isShowFilterOrderSourceBtn?: '1';
     /** 按日期, 分组名 categorName 隐藏 */
@@ -431,6 +433,8 @@ export interface ISystemConfig_ {
     purpose?: string[];
     /** 可选择的复印目的长度 默认 3 */
     selPurposeLen?: number;
+    // /** 至少选择的复印目的长度 */
+    // selPurposeLenAtLeast?: number;
     /** 目的有没有份数可以选择 */
     isPurposeRadio?: '1';
 

@@ -1420,19 +1420,19 @@
       return;
     }
 
-    // if (isPurposeRadio === '1') {
-    //   if (!aimValue.value.length) {
-    //     scrollTo.value = '_aim';
-    //     showMessage('请先选择复印目的', 3000);
-    //     return;
-    //   }
-    // } else {
-    //   if (!purposeCount.value.length) {
-    //     scrollTo.value = '_aim';
-    //     showMessage('请先选择复印目的', 3000);
-    //     return;
-    //   }
-    // }
+    if (isPurposeRadio === '1') {
+      if (!aimValue.value.length) {
+        scrollTo.value = '_aim';
+        showMessage('请先选择复印目的', 3000);
+        return;
+      }
+    } else {
+      if (!purposeCount.value.length) {
+        scrollTo.value = '_aim';
+        showMessage('请先选择复印目的', 3000);
+        return;
+      }
+    }
 
     if (isSelPurposeCountInRecord.value) {
       scrollTo.value = '_record';
@@ -1499,7 +1499,10 @@
       uni.hideLoading();
     }
 
-    const copyAim = aimValue.value.join('、');
+    const copyAim =
+      typeof aimValue.value === 'string'
+        ? aimValue.value
+        : aimValue.value.join('、');
     const copyData = materialValue.value.join('、');
     const printCount =
       (purposeCount.value.length && JSON.stringify(purposeCount.value)) || '';

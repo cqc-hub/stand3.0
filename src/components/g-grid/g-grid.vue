@@ -73,7 +73,7 @@
               :class="{
                 f36: type === 1,
               }"
-              class="grid-label text-ellipsis"
+              class="grid-label text-no-wrap"
             >
               {{ getShowTitle(item, type) }}
             </view>

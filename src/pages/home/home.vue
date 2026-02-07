@@ -658,6 +658,10 @@
           getNoPublicOpenIdOnly
         );
 
+        if (gStores.globalStore.isLogin) {
+          await patientUtils.getPatCardList();
+        }
+
         routerJump();
       }
       if (props.value.openId) {
