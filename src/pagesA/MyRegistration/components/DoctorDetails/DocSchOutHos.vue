@@ -45,7 +45,7 @@
   import { getChooseDays, IChooseDays, TSchInfo } from '../../utils';
   import { type ISystemConfig, GStores } from '@/utils';
 
-  import OrderSelDate from '../orderSelDate/OrderSelDate.vue';
+  import OrderSelDate from '../orderSelDate/orderSelDate.vue';
   import DocSchItem from '../DoctorDetails/DocShcItem.vue';
 
   const props = defineProps<{

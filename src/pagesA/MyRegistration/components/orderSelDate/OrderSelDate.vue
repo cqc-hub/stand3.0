@@ -18,7 +18,7 @@
             fullDay: '',
           })
         "
-        class="choose-day-all item"
+        class="item flex items-center justify-center flex-col rounded font-semibold ml8 pt22 pb22 pr24 pl24 f28"
       >
         <view>全部</view>
         <view>日期</view>
@@ -39,10 +39,18 @@
             :key="`${item.day}${generateUuid()}`"
             :id="'day-' + item.fullDay"
             @click="change(item)"
-            class="choose-day-item g-flex-rc-cc item"
+            class="choose-day-item item g-flex-rc-cc flex-col rounded relative pr10 pl10 pt15 pb15"
           >
-            <view class="choose-day-item-day">{{ item.day }}</view>
-            <view class="choose-day-item-weekday">{{ item.weekday }}</view>
+            <view v-if="isShowOrderStatus" class="f24 text-no-wrap mb4">
+              {{ item.weekday }}
+            </view>
+            <view class="font-semibold text-no-wrap mb4">{{ item.day }}</view>
+            <view v-if="!isShowOrderStatus" class="f24 text-no-wrap">
+              {{ item.weekday }}
+            </view>
+            <view v-if="isShowOrderStatus" class="f24 text-no-wrap">
+              {{ getOrderSchStateLabel(enableDays[item.fullDay]) }}
+            </view>
           </view>
         </view>
       </scroll-view>
@@ -50,11 +58,11 @@
       <view
         v-if="isOpenCalendar"
         @click="showCalendar"
-        class="choose-day-all choose-day-calendar"
+        class="choose-day-calendar flex flex-col justify-center items-center color-666 relative f24 pr32 pl32"
       >
         <view>展开</view>
         <view>日历</view>
-        <view class="iconfont ico-arrow">&#xe6c4;</view>
+        <view class="iconfont ico-arrow absolute">&#xe6c4;</view>
       </view>
     </view>
 
@@ -77,7 +85,7 @@
 
 <script lang="ts" setup>
   import { nextTick, ref, getCurrentInstance, watch, computed } from 'vue';
-  import { IChooseDays } from '../../utils';
+  import { getOrderSchStateLabel, IChooseDays } from '../../utils';
   import { GStores, generateUuid } from '@/utils';
   import isoWeek from 'dayjs/plugin/isoWeek';
   import dayjs from 'dayjs';
@@ -90,8 +98,10 @@
     defineProps<{
       chooseDays: IChooseDays[];
       enableDays?: Record<string, string>;
-      value?: string;
       isShowAllDate?: boolean;
+      /** 展示该天挂号状态 */
+      isShowOrderStatus?: boolean;
+      value?: string;
     }>(),
     {
       chooseDays: () => [],
@@ -117,6 +127,8 @@
   };
 
   const change = (item: IChooseDays) => {
+    console.log(props.enableDays);
+    console.log(item);
     if (props.value === item.fullDay) {
       return;
     }
@@ -148,7 +160,7 @@
     () => props.value,
     () => {
       nextTick(async () => {
-        let query = uni.createSelectorQuery(); 
+        let query = uni.createSelectorQuery();
         // #ifndef MP-TOUTIAO
         query = query.in(inst);
         // #endif
@@ -223,27 +235,13 @@
       display: flex;
       padding: 8rpx 0;
 
-      .choose-day-all {
-        font-size: var(--hr-font-size-xs);
-        border-radius: 16rpx;
-        font-weight: 600;
-        margin-left: 8rpx;
-        padding: 22rpx 24rpx;
-      }
-
       .choose-day-calendar {
         font-weight: 400;
-        color: var(--hr-neutral-color-8);
-        position: relative;
-        font-size: var(--hr-font-size-xxxs);
-        position: relative;
         border-radius: 0 16rpx 16rpx 0;
         box-shadow: -14rpx 0px 14rpx -14rpx #5e5e5e57;
 
         .ico-arrow {
-          position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
+          bottom: 0;
         }
       }
 
@@ -257,26 +255,6 @@
         .scroll-content {
           display: flex;
         }
-      }
-    }
-
-    .choose-day-item {
-      flex-direction: column;
-      padding: 15rpx 10rpx;
-      position: relative;
-      border-radius: 16rpx;
-
-      view {
-        white-space: nowrap;
-      }
-
-      &-day {
-        font-weight: 600;
-        margin-bottom: 10rpx;
-      }
-
-      &-weekday {
-        font-size: var(--hr-font-size-xxxs);
       }
     }
 

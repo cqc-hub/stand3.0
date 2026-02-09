@@ -252,6 +252,9 @@
                         ? docHosSchList[tabCurrent].enabledDays
                         : enabledDays
                     "
+                    :isShowOrderStatus="
+                      pageConfig.calendarShowOrderStatus === '1'
+                    "
                     @change="dateChange"
                   />
                 </view>
@@ -575,7 +578,7 @@
   import globalGl from '@/config/global';
   import HTMLParser from '@/common/html-parser';
 
-  import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
+  import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import DocDetails from './components/DoctorDetails/DocDetails.vue';
   import DocShare from './components/DoctorDetails/DocShare.vue';

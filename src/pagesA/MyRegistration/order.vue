@@ -11,6 +11,7 @@
         :value="checkedDay"
         :choose-days="chooseDays"
         :enable-days="enabledDays"
+        :isShowOrderStatus="pageConfig.calendarShowOrderStatus === '1'"
         @change="dateChange"
         isShowAllDate
       />
@@ -129,7 +130,7 @@
   import { joinQuery, deQueryForUrl, cloneUtil } from '@/common';
   import api from '@/service/api';
 
-  import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
+  import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import OrderDocItemAll from './components/orderDocList/OrderDocItemAll.vue';
   import OrderDocItemDate from './components/orderDocList/OrderDocItemDate.vue';

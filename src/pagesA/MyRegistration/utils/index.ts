@@ -177,6 +177,17 @@ interface IOrderProps {
   thRegisterId?: string;
 }
 
+export const getOrderSchStateLabel = (schState: string) => {
+  const stateMap = {
+    0: '有号',
+    1: '停诊',
+    2: '约满',
+    3: '无号',
+  };
+
+  return stateMap[schState] || '无排班';
+};
+
 export const useOrder = (props: Ref<IOrderProps>) => {
   const orderConfig = ref<ISystemConfig['order']>(<any>{
     chooseDay: 0,

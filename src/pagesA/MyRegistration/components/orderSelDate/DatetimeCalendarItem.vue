@@ -49,6 +49,7 @@
 
 <script>
   import dayjs from 'dayjs';
+  import { getOrderSchStateLabel as getOrderSchStateLabel1 } from '../../utils';
 
   export default {
     props: {
@@ -106,14 +107,7 @@
       },
 
       getOrderSchStateLabel() {
-        const stateMap = {
-          0: '有号',
-          1: '停诊',
-          2: '约满',
-          3: '无号',
-        };
-
-        return stateMap[this.getOrderSchState] || '无排班';
+        return getOrderSchStateLabel1(this.getOrderSchState);
       },
     },
 
