@@ -73,6 +73,8 @@ export interface ISystemConfig_ {
     orderMode?: '1';
     // 选择科室医生页面顶部可选择的天数， chooseDay > 20 出现组件 ‘日历’
     chooseDay: number;
+    /** 日历日期下面显示号源状态（有号、约满...） */
+    calendarShowOrderStatus?: '1';
     // 过滤无号医生按钮
     isShowFilterOrderSourceBtn?: '1';
     /** 按日期, 分组名 categorName 隐藏 */
@@ -112,7 +114,10 @@ export interface ISystemConfig_ {
     };
     /**开启后候补加号（候补兼容加号模式）*/
     isOpenAddedNum?: '1';
-    /**开启后候补挂号与加号分离（目前只供演示用）*/
+    /**
+     * 开启后候补挂号与加号分离
+     * 不分离就是 候补即加号
+     * */
     isAddedNumSelf?: '1';
     /** 预约挂号, 取消预约挂号时候  订阅微信消息(单次最多三个) */
     wxOrderSubscribeMessage?: string[];
@@ -206,6 +211,101 @@ export interface ISystemConfig_ {
     AfterConfirmNoShowGoPayBtn?: '1'; //签到成功后不展示缴费按钮
     AfterConfirmNoShowQRcodeBtn?: '1'; //签到成功后不展示刷码签到按钮
     isTakeNumerWithPay?: '1'; //是否为缴费取号模式
+  };
+
+  // 门诊缴费  CLINIC_PAY_CONFIG ...
+  pay: {
+    /**
+     * 列表页
+     */
+    /** 可以切换院区? */
+    isListToggleHos?: '1';
+    /** 扫码进来(带 params 场景下待缴费无数据的跳转动作) */
+    scanPayEmptyAction?: TButtonConfig;
+
+    /**
+     * 待缴费选择选择医保或者慢特病点击支付存在自费项目时候， 引导先自费（可以继续缴费医保或者慢特病）
+     */
+    isGuideSelfPayFirst?: '1';
+
+    /** 门诊类型  网络医院/线下门诊 (是否展示) */
+    isListShowClinicType?: '1';
+    /** 待缴费点击缴费时候提示的协议编号 (不配没有) */
+    confirmPayFg?: string;
+    // 已缴费底部的按钮
+    payedFooterBtn?: TButtonConfig | TButtonConfig[];
+    /** 预结算 */
+    isPreSettle?: '1';
+
+    /** 是否开启数字人民币支付 */
+    payList?: {
+      wx?: IPayListObj;
+      alipay?: IPayListObj;
+    };
+    /** 扫码缴费是否隐藏列表金额 */
+    isScanListHideMoney?: '1';
+
+    /** 页面顶部 banner */
+    bannerPay?: TBannerConfig;
+
+    //门诊缴费自定义tabs
+    tabField?: IOptions[];
+
+    //支付后已缴费列表是否查询草药代煎列表
+    isQueryChineseMedicine?: '1';
+
+    //门诊缴费列表支持分项支付
+    isListCanPayedItem?: '1';
+
+    //门诊缴费支持库存调用释放
+    // isDrugPreemption?: '1';
+    /**
+     * 详情页
+     */
+    /** 待缴费详情页面 的费用总额是否可以让用户选择缴费 */
+    isSubitemPay?: '1';
+    /** 子费用项(处方)可选缴费 */
+    // isSubitemChildrenPay?: '1';
+    /** 待缴费详情页禁用查看费用明细 */
+    isDisabledShowCostList?: '1';
+    // 申请退单
+    isOpenChargeback?: '1';
+    // 已缴费详情页面对某一条具体的费用进行申请退费
+    isPayedItemDetailRefund?: '1';
+    // 已缴费详情底部的按钮
+    payedDetailFooterBtns?: TButtonConfig[];
+
+    // 缴费完成后跳转
+    /**
+     * prop 对应缴费列表 clinicType 值
+     * 1-线下就诊
+     * 2-网络问诊
+     * 3-会诊
+     */
+    pageNextAdress?: Record<
+      '1' | '2' | '3',
+      {
+        /**
+         * @mode
+         * 1-电子导诊单
+         * 2-药品助手
+         * 3-门诊取号
+         */
+        mode: '1' | '2' | '3';
+        extraData?: BaseObject;
+      }
+    >;
+
+    // 缴费完成后跳转 与 pageNextAdress 区别是不看 clinicType 且 pageNextAdress 优先
+    payNextAction?: TButtonConfig;
+
+    // 医保在线配置(个别项目需要支持医保退费但不需要医保支付)-  默认开启， 关闭时候设置 '0'
+    medical?: {
+      // 开启挂号医保
+      isMedicalOrder?: '0' | '1';
+      // 开启门诊医保
+      isMedicalPay?: '0' | '1';
+    };
   };
 
   /** 移动端伦理委员会(h5) */
@@ -336,6 +436,8 @@ export interface ISystemConfig_ {
     purpose?: string[];
     /** 可选择的复印目的长度 默认 3 */
     selPurposeLen?: number;
+    // /** 至少选择的复印目的长度 */
+    // selPurposeLenAtLeast?: number;
     /** 目的有没有份数可以选择 */
     isPurposeRadio?: '1';
 
@@ -419,101 +521,6 @@ export interface ISystemConfig_ {
     /**
      * pagesA/hospitalCare/choosePatientInfo
      */
-  };
-
-  // 门诊缴费  CLINIC_PAY_CONFIG ...
-  pay: {
-    /**
-     * 列表页
-     */
-    /** 可以切换院区? */
-    isListToggleHos?: '1';
-    /** 扫码进来(带 params 场景下待缴费无数据的跳转动作) */
-    scanPayEmptyAction?: TButtonConfig;
-
-    /**
-     * 待缴费选择选择医保或者慢特病点击支付存在自费项目时候， 引导先自费（可以继续缴费医保或者慢特病）
-     */
-    isGuideSelfPayFirst?: '1';
-
-    /** 门诊类型  网络医院/线下门诊 (是否展示) */
-    isListShowClinicType?: '1';
-    /** 待缴费点击缴费时候提示的协议编号 (不配没有) */
-    confirmPayFg?: string;
-    // 已缴费底部的按钮
-    payedFooterBtn?: TButtonConfig | TButtonConfig[];
-    /** 预结算 */
-    isPreSettle?: '1';
-
-    /** 是否开启数字人民币支付 */
-    payList?: {
-      wx?: IPayListObj;
-      alipay?: IPayListObj;
-    };
-    /** 扫码缴费是否隐藏列表金额 */
-    isScanListHideMoney?: '1';
-
-    /** 页面顶部 banner */
-    bannerPay?: TBannerConfig;
-
-    //门诊缴费自定义tabs
-    tabField?: IOptions[];
-
-    //支付后已缴费列表是否查询草药代煎列表
-    isQueryChineseMedicine?: '1';
-
-    //门诊缴费列表支持分项支付
-    isListCanPayedItem?: '1';
-
-    //门诊缴费支持库存调用释放
-    // isDrugPreemption?: '1';
-    /**
-     * 详情页
-     */
-    /** 待缴费详情页面 的费用总额是否可以让用户选择缴费 */
-    isSubitemPay?: '1';
-    /** 子费用项(处方)可选缴费 */
-    // isSubitemChildrenPay?: '1';
-    /** 待缴费详情页禁用查看费用明细 */
-    isDisabledShowCostList?: '1';
-    // 申请退单
-    isOpenChargeback?: '1';
-    // 已缴费详情页面对某一条具体的费用进行申请退费
-    isPayedItemDetailRefund?: '1';
-    // 已缴费详情底部的按钮
-    payedDetailFooterBtns?: TButtonConfig[];
-
-    // 缴费完成后跳转
-    /**
-     * prop 对应缴费列表 clinicType 值
-     * 1-线下就诊
-     * 2-网络问诊
-     * 3-会诊
-     */
-    pageNextAdress?: Record<
-      '1' | '2' | '3',
-      {
-        /**
-         * @mode
-         * 1-电子导诊单
-         * 2-药品助手
-         * 3-门诊取号
-         */
-        mode: '1' | '2' | '3';
-        extraData?: BaseObject;
-      }
-    >;
-
-    // 缴费完成后跳转 与 pageNextAdress 区别是不看 clinicType 且 pageNextAdress 优先
-    payNextAction?: TButtonConfig;
-
-    // 医保在线配置(个别项目需要支持医保退费但不需要医保支付)-  默认开启， 关闭时候设置 '0'
-    medical?: {
-      // 开启挂号医保
-      isMedicalOrder?: '0' | '1';
-      // 开启门诊医保
-      isMedicalPay?: '0' | '1';
-    };
   };
 
   //报告查询 REPORT_QUERY_CONFIG
@@ -840,6 +847,15 @@ export type TButtonConfig = Omit<TBannerConfig, 'src'> & {
   text: string;
   icon?: string;
   isExpired?: string;
+};
+
+/**
+ * 首页菜单配置
+ */
+export type TBannerHomeMenuConfig = TBannerConfig & {
+  _type: 'useTBanner';
+  _tip?: string;
+  _disabled?: '1';
 };
 
 /** 挂号记录*/

@@ -395,8 +395,7 @@ type TMedicalNationWxConfig = {
   // 拼接到授权时候path - 东软医保模式必有以下可选字段
   /** 固定值 getAuthCode */
   openType: 'getAuthCode';
-  /** 固定值 04107 */
-  bizType: '04107';
+  bizType: string;
   /** 城市编码(邮件) */
   cityCode: string;
   /** 渠道号(邮件) */
@@ -409,6 +408,8 @@ type TMedicalNationWxConfig = {
   orgAppId: string;
   /** 医保建档代授权字段 */
   relatedType?: string;
+  /** 合作方appid */
+  sourceapp?: string;
 } & BaseObject;
 
 // declare namespace UniNamespace {

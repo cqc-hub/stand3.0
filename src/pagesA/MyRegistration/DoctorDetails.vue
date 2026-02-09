@@ -252,6 +252,9 @@
                         ? docHosSchList[tabCurrent].enabledDays
                         : enabledDays
                     "
+                    :isShowOrderStatus="
+                      pageConfig.calendarShowOrderStatus === '1'
+                    "
                     @change="dateChange"
                   />
                 </view>
@@ -575,7 +578,7 @@
   import globalGl from '@/config/global';
   import HTMLParser from '@/common/html-parser';
 
-  import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
+  import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import DocDetails from './components/DoctorDetails/DocDetails.vue';
   import DocShare from './components/DoctorDetails/DocShare.vue';
@@ -1004,6 +1007,7 @@
   const getDocService = async () => {
     const { netHosId } = pageConfig.value;
     const { hosDocId } = props.value;
+    const { sysCode } = gStores.globalStore;
 
     const args = {
       hosDocId,
@@ -1014,6 +1018,9 @@
     const { data } = await api.sendNetHos(args);
 
     if (data) {
+      if (sysCode === '1001093') {
+        data.jsonParam = undefined;
+      }
       const { receptionMode, jsonParam, pictureParam, videoParam, phoneParam } =
         data;
 

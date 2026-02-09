@@ -252,7 +252,11 @@
     await wait(0);
 
     const fList = [...formList];
-    if (globalGl.SYS_CODE !== '1001067' && healthCardUser) {
+    if (
+      globalGl.SYS_CODE !== '1001067' &&
+      pat.idType === '01' &&
+      healthCardUser
+    ) {
       formData.value['healthCardUserLabel'] =
         healthCardUser === '2' ? '医保' : '自费';
 

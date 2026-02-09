@@ -272,6 +272,7 @@
     IPayListItem,
     getWxMedicalAuth1001035,
     getQxMedicalNation,
+    getMedicalArgWithFamily,
   } from './utils/clinicPayDetail';
   import { apiAsync, useTBanner, wait } from '@/utils';
   import {
@@ -525,6 +526,7 @@
     }
 
     await wait(650);
+    // await getMedicalArgWithFamily(pageProps.value.params);
     // await getQxMedicalNation({
     //   params: pageProps.value.params,
     // });

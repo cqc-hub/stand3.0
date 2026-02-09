@@ -53,59 +53,9 @@
             }"
           >
             <view class="safe-height" />
-            <view
-              class="flex-between mb12"
-              v-if="globalGl.sConfig.isHideHomeSearch != '1'"
-            >
-              <!-- 在有搜索框的前提下 是否开启助老版本 -->
-              <view class="w-full" @click.prevent="goSearch">
-                <!-- :placeholder="viewerStore.homeSearchPlaceholder" -->
-                <view class="my-disabled mr12">
-                  <uni-search-input
-                    :type="'2'"
-                    :inputBorder="!isHomeStyle1"
-                    :rounded="isHomeStyle1"
-                    :placeholder="viewerStore.homeSearchPlaceholder"
-                  />
-                </view>
-              </view>
-              <view
-                v-if="globalGl.sConfig.isLangUygur === '1'"
-                class="ml16 mr12"
-              >
-                <chooseLang />
-              </view>
+            <home1 @open-mode-old="openModeOld" />
 
-              <view
-                v-if="globalGl.sConfig.isOpenHelpOld === '1'"
-                class="bg-white flex items-center help-old pr24 pl8 pt6 pb6 g-border"
-              >
-                <image
-                  :src="
-                    globalGl.BASE_IMG +
-                    `stand3-home-help-old${
-                      gStores.globalStore.isTcmStyle ? '-tcm' : ''
-                    }.png`
-                  "
-                  mode="scaleToFill"
-                  class="img-help-old mr12 relative"
-                />
-                <view
-                  :style="{
-                    color: 'var(--other-1)',
-                  }"
-                  @click="openModeOld"
-                  class="text-no-wrap f32 font-semibold h-full"
-                >
-                  长辈版
-                </view>
-              </view>
-            </view>
-
-            <view
-              v-if="$global.sConfig?.homeTopBanner?.topShow"
-              class="pt24 mb32"
-            >
+            <view v-if="$global.sConfig?.homeTopBanner?.topShow" class="mb24">
               <homeBanner
                 :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
                 :functionList="viewerStore.homeBannerFunctionList"
@@ -113,10 +63,10 @@
               />
             </view>
 
-            <view class="card">
+            <view class="card mb24">
               <view
                 v-if="isHomeStyle1"
-                class="mb32 bg-white rounded-xl pt16 pb16 pr24 pl24"
+                class="mb24 bg-white rounded-xl pt16 pb16 pr24 pl24"
               >
                 <homeLogin @add-pat="addPatient" @toggle-pat="chooseAction" />
               </view>
@@ -270,10 +220,7 @@
               </view>
             </view>
 
-            <view
-              v-if="!$global.sConfig?.homeTopBanner?.topShow"
-              class="pt24 pb24"
-            >
+            <view v-if="!$global.sConfig?.homeTopBanner?.topShow" class="mb24">
               <homeBanner
                 :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
                 :functionList="viewerStore.homeBannerFunctionList"
@@ -512,9 +459,9 @@
   import homeArticle from './componetns/homeArticle/index.vue';
   import homeDocCommend from './componetns/homeDocCommend.vue';
   import homeButtomProductionIcon from './componetns/homeButtomProductionIcon.vue';
-  import chooseLang from './componetns/chooseLang.vue';
   import assistMessage from './componetns/assistMessage.vue';
   import homeLogin from './componetns/home-login.vue';
+  import home1 from './componetns/home-1.vue';
 
   const props = ref({
     code: '',
@@ -647,7 +594,7 @@
     }
 
     if (gStores.globalStore.ev === 'wx') {
-      if (props.value.code) {
+      if (props.value.code && !gStores.globalStore.h5OpenId) {
         const getNoPublicOpenIdOnly =
           getLocalStorage('getNoPublicOpenIdOnly') === '1';
 
@@ -663,6 +610,10 @@
           props.value.code,
           getNoPublicOpenIdOnly
         );
+
+        if (gStores.globalStore.isLogin) {
+          await patientUtils.getPatCardList();
+        }
 
         routerJump();
       }
@@ -794,33 +745,6 @@
   const cardClick = (pat: IPat) => {
     gStores.userStore.updatePatClick(gStores.userStore.patChoose);
     goElectronicMedicalCard();
-  };
-
-  const goSearch = async () => {
-    const pageConfig = await ServerStaticData.getSystemConfig(
-      'Electronic_Consultation_Sheet'
-    );
-
-    if (pageConfig?.intelMedicalAssistConfig?.isReplaceHomeSearch === '1') {
-      uni.navigateTo({
-        url: '/pagesA/intelMedicalAssist/intelMedicalAssist',
-      });
-      return;
-    }
-    let searchConfig = viewerStore.viewConfig[8]?.showFlag;
-    if (searchConfig == 1) {
-      uni.navigateTo({
-        url: '/pagesA/MyRegistration/RegSearch',
-      });
-    } else {
-      let url =
-        (globalGl.env as string) === 'prod'
-          ? 'https://h5.eheren.com/V3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom'
-          : 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom';
-      uni.navigateTo({
-        url: '/pagesC/cloudHospital/myPath?type=1&path=' + url,
-      });
-    }
   };
 
   const goClinicPay = () => {
@@ -1244,17 +1168,5 @@
     border-radius: 50%;
     padding: 6px;
     font-size: 56rpx !important;
-  }
-
-  .help-old {
-    // border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 18px;
-    backdrop-filter: blur(15px);
-
-    .img-help-old {
-      width: 52rpx;
-      height: 52rpx;
-      // top: -2rpx;
-    }
   }
 </style>

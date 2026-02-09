@@ -21,8 +21,8 @@
     aliPayMedicalPluginGetAuthCode,
     getMedicalAuthCode,
     aliPayMedicalPluginPayInit,
-    getClinicUtils,
     handlerMedicalPayDongRuan,
+    getQxMedicalNation,
   } from './utils/cloudHospital';
   import { apiAsync, GStores, wait } from '@/utils';
 
@@ -232,7 +232,13 @@
       insuranceParamsWx?.registerType || payBackParams?.registerType;
 
     if (insuranceParamsWx) {
-      if (insuranceParamsWx.authCode == 1) {
+      let { authCode, payAuthNo } = insuranceParamsWx;
+
+      if (payAuthNo === 1) {
+        authCode = 1;
+      }
+
+      if (insuranceParamsWx.authCode === 1) {
         let payBackParams = JSON.stringify(fd.payBackParams);
         setLocalStorage({
           'get-wx-medical-netWork-path': encodeURIComponent(
@@ -241,6 +247,7 @@
               query: {
                 payBackParams: payBackParams,
               },
+              payAuthNo: payAuthNo || '',
             })
           ),
         });
@@ -427,9 +434,18 @@
     console.warn('跳转网络医院携带数据', para);
     console.warn('跳转网络医院的路径', src.value);
     aliPayMedicalPluginPayInit();
+
+    setTimeout(() => {
+      // 测试医保-1
+      // getMedicalAuthCode([
+      //   {
+      //     hosId: 'virtualHosId',
+      //   },
+      // ]);
+    }, 3000);
   });
 
-  onShow(() => {
+  onShow(async () => {
     console.log('');
     const medicalWx = getLocalStorage('get-wx-medical-auth-code');
     // 微信医保小程序跳回来后中断了链路 重新走下
@@ -442,6 +458,8 @@
       const authCode =
         gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode;
       if (authCode) {
+        // 测试医保-2
+        // await getQxMedicalNation({});
       } else {
         gStores.messageStore.showMessage(
           '未完成电子医保凭证授权,无法继续医保结算',

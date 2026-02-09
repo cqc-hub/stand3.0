@@ -239,6 +239,20 @@ export const miniProgramConfig: {
               bizType: '04107',
               orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
             },
+            pathExtraDataConfig: {
+              // 虚拟id
+              virtualHosId: {
+                openType: 'getAuthCode',
+                cityCode: '320200',
+                channel: 'AAFEEOdTYZNbEzD1gmhG9skn',
+                orgChnlCrtfCodg:
+                  'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe',
+                orgCodg: 'H32028200358',
+                bizType: '04104',
+                orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
+                sourceapp: 'wx8358079c24acea42-1',
+              },
+            },
             dongRuanMedicalInfo: {
               h5BaseUrl:
                 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui/#/pay-loading',
@@ -427,6 +441,7 @@ export const miniProgramConfig: {
             },
           },
           isMedicalOrder: '1',
+          isGbFamilyPayment: '1',
         },
       },
     },
@@ -893,7 +908,7 @@ export const miniProgramConfig: {
           },
         },
         alipay: {
-          // medicalDefault: '1',
+          medicalDefault: '1',
           medicalFiling: '1',
           isFamilyPayment: '1',
           medicalPlugin: { orgId: { '13152': 'H33010500310' }, cardType: '01' },
@@ -925,6 +940,7 @@ export const miniProgramConfig: {
       homeTopBanner: { topShow: true, bannerHeight: 200 },
       login: { isSkipPerfect: '1' },
       medicalMHelp: {
+        isOpenPatToMedicalPat: {},
         wx: {
           isMedicalOrder: '1',
           medicalNation: {
@@ -1024,6 +1040,7 @@ export const miniProgramConfig: {
       medicalMHelp: {
         wx: {
           isMedicalOrder: '1',
+          isGbFamilyPayment: '1',
           medicalNation: {
             appId: 'wxe183cd55df4b4369',
             path: 'auth/pages/bindcard/auth/index',

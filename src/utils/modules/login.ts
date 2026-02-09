@@ -222,44 +222,48 @@ export class LoginUtils extends GStores {
   async onAfterLoginAndBeforeGetPatList() {
     const { sysCode, ev, openId } = this.globalStore;
 
-    if (sysCode === '1001067') {
-      const reqData = getH5OpenidParam({
-        loginData: this.globalStore.token.loginData,
-        source: this.globalStore.browser.source,
-      });
-      await api.wfePatSync(reqData);
-    }
-    if (['1001086', '1001094'].includes(sysCode) && ev === 'wx') {
-      const reqData = getH5OpenidParam({
-        source: this.globalStore.browser.source,
-        wxOpenId: openId,
-      });
-      await api.xjzyyPatSync(reqData);
-    }
-    if (['1001083'].includes(sysCode)) {
-      await api.wzrmPatSync({ source: this.globalStore.browser.source });
-    }
+    try {
+      if (sysCode === '1001067') {
+        const reqData = getH5OpenidParam({
+          loginData: this.globalStore.token.loginData,
+          source: this.globalStore.browser.source,
+        });
+        await api.wfePatSync(reqData);
+      }
+      if (['1001086', '1001094'].includes(sysCode) && ev === 'wx') {
+        const reqData = getH5OpenidParam({
+          source: this.globalStore.browser.source,
+          wxOpenId: openId,
+        });
+        await api.xjzyyPatSync(reqData);
+      }
+      if (['1001083'].includes(sysCode)) {
+        await api.wzrmPatSync({ source: this.globalStore.browser.source });
+      }
 
-    //通过手机号同步
-    if (['1001095'].includes(sysCode)) {
-      await api.patSync({ source: this.globalStore.browser.source });
-    }
-    //通过微信openId去同步 type传1 ，复用老小程序则取用openId，
-    if ([ '1001085'].includes(sysCode)) {
-      await api.patSync({
-        source: this.globalStore.browser.source,
-        type: 1,
-        wxOpenId: openId,
-      });
-    }
-    //通过微信h5OpenId去同步 type传1 ，复用老公众号则取用h5OpenId，
-    if (['1001097','1001093'].includes(sysCode)) {
-      const reqData = {
-        source: this.globalStore.browser.source,
-        wxOpenId: this.globalStore.h5OpenId,
-        type: 1,
-      };
-      await api.patSync(reqData);
+      //通过手机号同步
+      if (['1001095'].includes(sysCode)) {
+        await api.patSync({ source: this.globalStore.browser.source });
+      }
+      //通过微信openId去同步 type传1 ，复用老小程序则取用openId，
+      if (['1001085'].includes(sysCode)) {
+        await api.patSync({
+          source: this.globalStore.browser.source,
+          type: 1,
+          wxOpenId: openId,
+        });
+      }
+      //通过微信h5OpenId去同步 type传1 ，复用老公众号则取用h5OpenId，
+      if (['1001097', '1001093'].includes(sysCode)) {
+        const reqData = {
+          source: this.globalStore.browser.source,
+          wxOpenId: this.globalStore.h5OpenId,
+          type: 1,
+        };
+        await api.patSync(reqData);
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
   //判断是否需要前往手机号登录

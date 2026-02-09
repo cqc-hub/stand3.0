@@ -89,16 +89,27 @@ export const getMedicalAuthCode = async (data): Promise<string> => {
 
     const clinicUtils = await getClinicUtils();
     await clinicUtils.getMedicalArgWithFamily();
+    const { hosId } = data[0] || {};
 
-    const code = await clinicUtils.getMedicalAuthCode().catch(() => {
-      // cbPath();
-      j();
+    const code = await clinicUtils
+      .getMedicalAuthCode({
+        hosId,
+      })
+      .catch(() => {
+        // cbPath();
+        j();
 
-      throw new Error('取消');
-    });
+        throw new Error('取消');
+      });
 
     r(code);
   });
+};
+
+export const getQxMedicalNation = async (opt: { hosId?: string } = {}) => {
+  const clinicUtils = await getClinicUtils();
+
+  return await clinicUtils.getQxMedicalNation(opt);
 };
 
 /**微信自费支付 */

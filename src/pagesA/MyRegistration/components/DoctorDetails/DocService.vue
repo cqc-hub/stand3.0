@@ -102,6 +102,7 @@
 
   const init = async (item: IDocService) => {
     isComplete.value = false;
+    const { sysCode } = gStores.globalStore;
     serList.value = serList.value.filter((o) => {
       const { key } = o;
 
@@ -111,15 +112,21 @@
       }
 
       if (key === 'jsonParam') {
-        if (gStores.globalStore.sysCode === '1001035') {
+        if (sysCode === '1001035') {
           o.title = '图文问诊';
           o.img =
             'card_doctor_twzx_n' +
             (gStores.globalStore.isTcmStyle ? '-tcm' : '');
         }
 
-        if (gStores.globalStore.sysCode === '1001067') {
+        if (sysCode === '1001067') {
           o.title = '在线问诊';
+        }
+      }
+
+      if (key === 'pictureParam') {
+        if (sysCode === '1001093') {
+          o.title = '医生咨询';
         }
       }
 

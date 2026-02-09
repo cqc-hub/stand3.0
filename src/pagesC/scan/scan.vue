@@ -48,6 +48,9 @@
     yun1001082,
     healthMall1001035,
     healthCheckUp1001082,
+    goYYcx,
+    goJCYY1001093,
+    goYQFW1001093
   } = useScan();
 
   const init = async () => {
@@ -174,6 +177,19 @@
       //健康温州—学生体检
       case '20':
         healthCheckUp1001082();
+        break;
+
+      case '23':
+        goYYcx();
+        break;
+
+      case '24':
+        goJCYY1001093();
+        break;
+
+      // 院前服务
+      case '25':
+        goYQFW1001093();
         break;
 
       default:

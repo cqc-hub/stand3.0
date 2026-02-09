@@ -14,6 +14,7 @@
     LoginUtils,
     PatientUtils,
     type TBannerConfig,
+    TBannerHomeMenuConfig,
     useTBanner,
   } from '@/utils';
   import globalGl from '@/config/global';
@@ -213,6 +214,13 @@
     text: '健康咨询',
     isLocal: '1',
   } as TBannerConfig;
+
+  const 病案复印: TBannerHomeMenuConfig = {
+    type: 'self',
+    path: 'pagesC/medRecordApply/recordApply',
+    _type: 'useTBanner',
+    _tip: '<div>我是提示233</div>'
+  };
 
   const 绍兴检查预约 = {
     type: 'h5',
@@ -632,7 +640,6 @@
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/question/questionAfterVisit',
-    text: '住院点餐',
     extraData: {
       type: 'yycx',
     },
@@ -729,7 +736,7 @@
     // useTBanner(肿瘤住院管家);
     // useTBanner(电子导诊单);
     // useTBanner(肿瘤云影响);
-    useTBanner(eletronicInvoice);
+    useTBanner(ziXun);
     // patientUtils.faceVerify({
     //   name: '陈钦川',
     //   idCardNumber: '330326199908286713',

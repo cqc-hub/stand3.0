@@ -15,7 +15,7 @@ type TDialogOpt = {
   titleBgSrc?: string;
 };
 
-let timer: null | number = null;
+let timer: any = null;
 const messageStore = defineStore('message', {
   state() {
     return {

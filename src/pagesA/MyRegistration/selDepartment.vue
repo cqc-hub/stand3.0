@@ -419,12 +419,12 @@
     if (sysCode === '1001093') {
       tabField.value = [
         {
-          label: '按病种',
-          value: '99',
-        },
-        {
           label: '按科室',
           value: '1',
+        },
+        {
+          label: '按病种',
+          value: '99',
         },
       ];
 
