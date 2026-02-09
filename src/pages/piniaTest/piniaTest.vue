@@ -14,6 +14,7 @@
     LoginUtils,
     PatientUtils,
     type TBannerConfig,
+    TBannerHomeMenuConfig,
     useTBanner,
   } from '@/utils';
   import globalGl from '@/config/global';
@@ -213,6 +214,13 @@
     text: '健康咨询',
     isLocal: '1',
   } as TBannerConfig;
+
+  const 病案复印: TBannerHomeMenuConfig = {
+    type: 'self',
+    path: 'pagesC/medRecordApply/recordApply',
+    _type: 'useTBanner',
+    _tip: '<div>我是提示233</div>'
+  };
 
   const 绍兴检查预约 = {
     type: 'h5',

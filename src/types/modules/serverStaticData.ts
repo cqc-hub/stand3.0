@@ -849,6 +849,15 @@ export type TButtonConfig = Omit<TBannerConfig, 'src'> & {
   isExpired?: string;
 };
 
+/**
+ * 首页菜单配置
+ */
+export type TBannerHomeMenuConfig = TBannerConfig & {
+  _type: 'useTBanner';
+  _tip?: string;
+  _disabled?: '1';
+};
+
 /** 挂号记录*/
 type TRegListButtonItem = {
   /** 哪些环境显示, 不配全显 */

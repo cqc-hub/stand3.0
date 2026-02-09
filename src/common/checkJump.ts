@@ -6,6 +6,7 @@ import {
   packageAuthParams,
   LoginUtils,
   getLocation,
+  TBannerHomeMenuConfig,
 } from '@/utils';
 import { useRouterStore } from '@/stores';
 import { joinQuery } from '@/common';
@@ -145,6 +146,24 @@ const interceptorRoute = async function (item: any) {
           });
           throw new Error('登录已过期，请重新登录');
         }
+      }
+      assignType<TBannerHomeMenuConfig>(query);
+      const { _disabled, _tip } = query;
+
+      if (_tip) {
+        await new Promise((closeCallBack) =>
+          gStores.messageStore.showMessage(_tip, 0, {
+            closeCallBack,
+            useDialog: true,
+            dialogOpt: {
+              isShowCancel: false,
+            },
+          })
+        );
+      }
+
+      if (_disabled === '1') {
+        throw new Error('禁用 useTBanner函数跳转');
       }
       useTBanner(query, 'navigateTo', gStores.globalStore.h5MenuExtraData);
       throw new Error('使用 useTBanner函数跳转');
