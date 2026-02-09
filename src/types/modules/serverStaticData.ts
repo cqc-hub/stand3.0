@@ -114,7 +114,10 @@ export interface ISystemConfig_ {
     };
     /**开启后候补加号（候补兼容加号模式）*/
     isOpenAddedNum?: '1';
-    /**开启后候补挂号与加号分离（目前只供演示用）*/
+    /**
+     * 开启后候补挂号与加号分离
+     * 不分离就是 候补即加号
+     * */
     isAddedNumSelf?: '1';
     /** 预约挂号, 取消预约挂号时候  订阅微信消息(单次最多三个) */
     wxOrderSubscribeMessage?: string[];
