@@ -220,7 +220,7 @@ export const miniProgramConfig: {
     alipayAppid: '2021003144603328',
     name: '宜兴市人民医院',
     isSearchInHos: true,
-    isStartComeTest: true,
+    // isStartComeTest: true,
     isOpenOcr: true,
     sConfig: {
       isOpenHelpOld: '1',

@@ -55,12 +55,10 @@
   import { GStores, ServerStaticData } from '@/utils';
   import globalGl from '@/config/global';
   import { useViewerStore } from '@/stores/modules/viewer';
-  import { useGlobalStore } from '@/stores';
   import chooseLang from './chooseLang.vue';
 
   const gStores = new GStores();
   const viewerStore = useViewerStore();
-  const globalStore = useGlobalStore();
   const emits = defineEmits(['open-mode-old']);
 
   const isHomeStyle1 = computed(() => {
