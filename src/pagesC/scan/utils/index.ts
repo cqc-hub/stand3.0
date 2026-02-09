@@ -37,6 +37,7 @@ export const useScan = () => {
        * - 19 江苏省中 健康商城
        * - 23 用药查询
        * - 24 检查预约 1001093
+       * - 25 院前服务 1001093
        */
       type:
         | '_1'
@@ -63,7 +64,8 @@ export const useScan = () => {
         | '21'
         | '22'
         | '23'
-        | '24';
+        | '24'
+        | '25';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
@@ -571,6 +573,21 @@ export const useScan = () => {
   };
 
   /**
+   * 院前服务 1001093
+   */
+  const goYQFW1001093 = () => {
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesA/1001093/hosButler',
+      addition: {
+        patientId: '_patientId',
+      },
+      text: '',
+    });
+  };
+
+  /**
    * 江苏省中——健康商城(有问题)
    */
   const healthMall1001035 = () => {
@@ -634,5 +651,6 @@ export const useScan = () => {
     healthMall1001035,
     goYYcx,
     goJCYY1001093,
+    goYQFW1001093,
   };
 };

@@ -50,6 +50,7 @@
     healthCheckUp1001082,
     goYYcx,
     goJCYY1001093,
+    goYQFW1001093
   } = useScan();
 
   const init = async () => {
@@ -184,6 +185,11 @@
 
       case '24':
         goJCYY1001093();
+        break;
+
+      // 院前服务
+      case '25':
+        goYQFW1001093();
         break;
 
       default:
