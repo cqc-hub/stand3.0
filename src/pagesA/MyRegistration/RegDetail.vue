@@ -468,6 +468,7 @@
     cloneUtil,
     setLocalStorage,
     getLocalStorage,
+    getSysCode,
   } from '@/common';
   import { beforeEach } from '@/router';
 
@@ -694,6 +695,58 @@
     });
     if (pageProps.value.needOrderStatus !== orderRegInfo.value.orderStatus) {
       captureStatus(++count);
+    }
+  };
+
+  const beforePay1001035 = () => {
+    const {
+      orderId,
+      hosDeptId,
+      hosOrderId,
+      patientId,
+      deptName,
+      hosId,
+      hosDocId,
+      categor,
+      categorName,
+    } = orderRegInfo.value;
+    const { inquiriesBack } = pageProps.value;
+    const { patientSex, patientAge, patientName } = gStores.userStore.patChoose;
+    if (
+      inquiriesBack !== '1' &&
+      categorName === '门诊MDT' &&
+      categor === '22' &&
+      getSysCode() === '1001035'
+    ) {
+      const preConsultation: TButtonConfig = {
+        type: 'h5',
+        isSelfH5: '1',
+        // path: 'pages/inquiries/inquiries3',
+        path: 'pagesC/inquiries/inquiriesResSzMDT',
+        text: '预问诊',
+        extraData: {
+          orderId,
+          hosDeptId,
+          hosOrderId,
+          patientId,
+          patientName,
+          patientAge,
+          patientSex,
+          deptName,
+          hosId,
+          hosDocId,
+          extends: JSON.stringify({
+            ...pageProps.value,
+            inquiriesBack: '1',
+          }),
+        },
+        addition: {
+          token: 'token',
+          herenId: 'herenId',
+        },
+      };
+      useTBanner(preConsultation);
+      throw new Error('中断支付流程，去预问诊');
     }
   };
 
@@ -1015,6 +1068,7 @@
   };
 
   const payOrder = async () => {
+    beforePay1001035();
     const { fee } = orderRegInfo.value;
     if (fee === 0) {
       toPay();
@@ -1599,6 +1653,9 @@
 
     if (needOrderStatus && orderRegInfo.value.orderStatus !== needOrderStatus) {
       captureStatus();
+    }
+    if (pageProps.value.inquiriesBack == '1') {
+      payOrder();
     }
   });
 </script>

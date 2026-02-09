@@ -159,7 +159,12 @@
 
   import { IRegistrationCardItem, HosNavData } from './utils/MyRegistration';
   import { isAreaProgram, IPat } from '@/stores';
-  import { deQueryForUrl, joinQueryForUrl, setLocalStorage } from '@/common';
+  import {
+    deQueryForUrl,
+    getSysCode,
+    joinQueryForUrl,
+    setLocalStorage,
+  } from '@/common';
   import { beforeEach } from '@/router';
 
   import {
@@ -384,6 +389,7 @@
       //指定的预问诊跳转
       useTBanner(pageConfig.value.preConsultationBtn, 'navigateTo', item);
     } else {
+      let path = 'pagesC/inquiries/inquiriesRes1';
       const { patientSex, patientAge, patientName } =
         gStores.userStore.patChoose;
       const {
@@ -395,12 +401,21 @@
         deptName,
         hosId,
         hosDocId,
+        categor,
+        categorName,
       } = item;
+      if (
+        categorName === '门诊MDT' &&
+        categor === '22' &&
+        getSysCode() === '1001035'
+      ) {
+        path = 'pagesC/inquiries/inquiriesResSzMDT';
+      }
       const preConsultation: TButtonConfig = {
         type: 'h5',
         isSelfH5: '1',
         // path: 'pages/inquiries/inquiries3',
-        path: 'pagesC/inquiries/inquiriesRes1',
+        path,
         text: '预问诊',
         extraData: {
           orderId,

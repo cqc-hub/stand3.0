@@ -54,7 +54,7 @@
           >
             <view class="safe-height" />
             <view
-              class="flex-between"
+              class="flex-between mb12"
               v-if="globalGl.sConfig.isHideHomeSearch != '1'"
             >
               <!-- 在有搜索框的前提下 是否开启助老版本 -->

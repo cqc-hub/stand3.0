@@ -195,9 +195,9 @@
      * - 5: MDT ( 需要通过 mdtHosOpened 过滤医院列表)
      * - 6: 附近停车场
      * - 7: 服务电话
-     *
+     * - 8: 1001046 专用 护工预约
      */
-    _type: '1' | '2' | '3' | '4' | '5' | '6' | '7';
+    _type: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
     _questionId: number; //问卷id
     _isPay: number;
     isLogin?: '1'; // 需要登录?
@@ -345,6 +345,25 @@
         'navigateTo',
         item
       );
+      return;
+    }
+    if (globalGl.SYS_CODE === '1001046' && _type === '8') {
+      if (item.hosId === '13178') {
+        //镜湖总院
+        useTBanner({
+          appId: 'wx64640a5943469344',
+          path: 'pages_index/merchantDetails/index?shop_id=188&promote_code=55',
+          text: '护工预约',
+          type: 'otherProgram',
+        });
+      } else if (item.hosId === '12930') {
+        //昌安院区
+        useTBanner({
+          type: 'h5',
+          path: 'https://www.youehu.com/business/h5/gtp/home.html#/preorderOrg/1135366844861960193',
+          text: '护工预约',
+        });
+      }
       return;
     }
     //药店不可点击
@@ -496,8 +515,9 @@
     }
     if (getTypeNow.value === '病案复印') {
       isMedCopy.value = true;
-      medCopyConfigList.value =
-        await ServerStaticData.getSystemConfig('medRecord');
+      medCopyConfigList.value = await ServerStaticData.getSystemConfig(
+        'medRecord'
+      );
     }
 
     if (isRequestApi) {
@@ -660,8 +680,9 @@
     }
 
     if (_type === '2' || _url.includes('/pagesC/selfService/nucleicBilling')) {
-      selfBillingConfig.value =
-        await ServerStaticData.getSystemConfig('selfBilling');
+      selfBillingConfig.value = await ServerStaticData.getSystemConfig(
+        'selfBilling'
+      );
     }
     if (_type === '4') {
       uni.setNavigationBarTitle({
