@@ -201,6 +201,8 @@ interface ISConfig {
   isOpenHelpOld?: '1';
   /** 维吾尔语切换 */
   isLangUygur?: '1';
+  /** 中-英 微信切换 */
+  isWxShowToggleEcZh?: '1';
   //是否开启健康科普
   isOpenPopularSci?:
     | '1'

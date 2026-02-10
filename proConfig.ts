@@ -896,6 +896,7 @@ export const miniProgramConfig: {
       isOpenHelpOld: '1',
       login: { isAliAuthBase: '1', isSkipPerfect: '1' },
       isOpenWechatSI: true,
+      isWxShowToggleEcZh: '1',
       homeTopBanner: { topShow: true, bannerHeight: 230 },
       medicalMHelp: {
         wx: {

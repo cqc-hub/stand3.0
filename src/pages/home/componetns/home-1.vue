@@ -20,6 +20,12 @@
         <chooseLang />
       </view>
 
+      <!-- #ifdef MP-WEIXIN -->
+      <view v-if="globalGl.sConfig.isWxShowToggleEcZh === '1'" class="mr12">
+        <!-- <img :src="`${ globalGl.BASE_IMG}stand3-home-en-zh-translate.png`" /> -->
+      </view>
+      <!-- #endif -->
+
       <view
         v-if="globalGl.sConfig.isOpenHelpOld === '1'"
         class="bg-white flex items-center help-old pr24 pl8 pt6 pb6 g-border"

@@ -17,6 +17,7 @@
         "isSkipPerfect": "1"
       },
       "isOpenWechatSI": true,
+      "isWxShowToggleEcZh": "1",
       "homeTopBanner": {
         "topShow": true,
         "bannerHeight": 230
