@@ -71,7 +71,7 @@
             />
             <view
               :class="{
-                f36: type === 1,
+                f32: type === 1,
               }"
               class="grid-label text-no-wrap"
             >
