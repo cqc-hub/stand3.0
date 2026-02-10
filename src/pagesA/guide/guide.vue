@@ -130,6 +130,8 @@ const pageProps = ref(
     type?: "refoundOrder";
     // 今日就诊定位
     visitNo?: string;
+    // 根据就诊时间判断tab
+    visitDate?: string;
   }
 );
 const gStores = new GStores();
@@ -476,12 +478,12 @@ const getHistory = async () => {
             key: "drugs",
             sort: 9,
           },
-          "D": {
+          "C": {
             title: "检验项目",
             key: "labs",
             sort: 5,
           },
-          "C": {
+          "D": {
             title: "检查项目",
             key: "exams",
             sort: 6,
@@ -492,7 +494,7 @@ const getHistory = async () => {
           processResultList.map((q) => {
             // q.title =
             const {
-              orderClass, // A 西药中药 B草药 C检查 D检验  E处置
+              orderClass, // A 西药中药 B草药 C检验  D检查  E处置
               disposeStatus, // 1 未执行 2已执行 3 部分执行
               reportPlace,
             } = q;
@@ -807,7 +809,6 @@ const goDept = (item) => {
 };
 
 const goDocDetail = (item) => {
-  console.log(22222, item);
   const { hosId, hosDocId } = item;
 
   uni.navigateTo({
@@ -874,13 +875,24 @@ onShow(async () => {
 
 onLoad(async (opt) => {
   pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-  const { tabKey } = pageProps.value;
+  const { tabKey, visitDate } = pageProps.value;
 
   if (tabKey) {
     const tabIdx = tabField.value.findIndex((o) => o.key === tabKey);
 
     if (tabIdx > -1) {
       tabCurrent.value = tabIdx;
+    }
+  }else if(visitDate){
+    const currentDate = dayjs().format('YYYY-MM-DD');
+    const visitDateFormatted = dayjs(visitDate?.substring(0, 10)).format('YYYY-MM-DD');
+
+    if (visitDateFormatted === currentDate) {
+      tabCurrent.value = 0; // 当日就诊
+    } else if (dayjs(visitDateFormatted).isAfter(currentDate)) {
+      tabCurrent.value = 1; // 未来就诊
+    } else {
+      tabCurrent.value = 2; // 历史就诊
     }
   }
   await init();
