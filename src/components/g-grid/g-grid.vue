@@ -71,7 +71,7 @@
             />
             <view
               :class="{
-                f36: type === 1,
+                f32: type === 1,
               }"
               class="grid-label text-no-wrap"
             >
@@ -267,7 +267,7 @@
       .grid-label {
         color: var(--hr-neutral-color-9);
         // color: var(--other-1);
-        font-size: var(--hr-font-size-s);
+        font-size: var(--hr-font-size-xs);
         font-weight: var(--h-weight-2);
       }
       .grid-title {

@@ -401,16 +401,24 @@
   // const
 
   onShareAppMessage((res) => {
-    console.warn('分享', res, shareData.value);
+    console.warn('分享233', res, shareData.value);
     let path = '';
     if (JSON.stringify(shareData.value) === '{}' && res.webViewUrl) {
-      path = joinQueryForUrl('/pagesA/webView/webView', {
-        https: res.webViewUrl,
+      const _url = res.webViewUrl.split('#/')[1];
+      // s
+      path = joinQueryForUrl('/pagesC/cloudHospital/cloudHospital', {
+        _url,
       });
     } else {
-      path = `/pagesC/commonHosNet/commonHosNet?returnUrl=${encodeURIComponent(
+      path = `/pagesC/cloudHospital/cloudHospital?_url=${encodeURIComponent(
         shareData.value.path
       )}`;
+    }
+
+    if (!path.includes('initSysCode=')) {
+      path = joinQuery(path, {
+        initSysCode: gStores.globalStore.sysCode,
+      });
     }
     return {
       title: shareData.value.title,

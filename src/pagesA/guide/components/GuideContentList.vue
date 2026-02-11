@@ -38,7 +38,7 @@
                 class="pl24 pr24 pt32 pb32 bg-white animate__animated relative collapse-header"
               >
                 <view class="flex items-center">
-                  <view class="f40">{{ item.title }}</view>
+                  <view class="f40">{{ getNodeTitle(item)}}</view>
                   <view class="flex-1"></view>
                   <!-- v-if="item.completionStatus === 1" -->
                   <!-- v-if="item.title !== '门诊缴费'" -->
@@ -340,7 +340,7 @@
   import TagStatus from './TagStatus.vue';
   import { TVisitInfo } from '../guide';
   import { ApiParamsConfig, TButtonConfig, TGuideButtonConfig } from '@/types';
-
+  import { GStores } from '@/utils';
   import GuideContentListCol from './GuideContentListCol.vue';
   import GuideReportProgress from './GuideReportProgress.vue';
   import GuideBtns from './GuideBtns.vue';
@@ -355,6 +355,18 @@
       list: () => [],
     }
   );
+
+  // 为了温附二的特殊需求 要求前两个节点标题展示不一样
+  const getNodeTitle = (item) => {
+    console.log(2222,item)
+      const gStores = new GStores();
+  // 如果 susCode 是 1001067，则修改前两个节点的标题
+  if ( gStores.globalStore.sysCode === '1001067') {
+    if (item.title === '门诊取号') return '挂号信息'; // 第一个节点改为“挂号信息”
+    if (item.title === '诊区签到') return '门诊取号'; // 第二个节点改为“门诊取号”
+  }
+  return item.title; // 其他情况保持原样
+};
 
   const isActive = (item) => {
     return item.completionStatus === 0;
@@ -468,6 +480,10 @@
       key: 'itemAddress',
     },
     {
+      label: '签到号码',
+      key: 'no',
+    },
+    {
       label: '注意事项',
       key: 'remark',
     },
@@ -493,6 +509,14 @@
     {
       label: '医生',
       key: 'docName',
+    },
+    {
+      label: '预计等待时间',
+      key: 'remainTime',
+    },
+    {
+      label: '就诊状态',
+      key: 'statusName',
     },
     {
       label: '就诊地点',

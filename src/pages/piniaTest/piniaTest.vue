@@ -25,21 +25,28 @@
   const gStores = new GStores();
   const { source } = gStores.globalStore.browser;
 
+  const a: TBannerHomeMenuConfig = {
+    type: 'h5',
+    path: 'https://renxv8.zchospital.com/clinical_trialapp',
+    addition: {
+      openId: 'key',
+      token: 'token',
+    },
+    _type: 'useTBanner',
+  };
+
   // 电子发票
-  const eletronicInvoice = {
+  const eletronicInvoice: TBannerHomeMenuConfig = {
+    _type: 'useTBanner',
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesA/eletronicInvoice/eletronicInvoice',
-    text: '电子发票',
-    extraData: {
-      sysCode: globalGl.SYS_CODE,
-    },
     addition: {
       token: 'token',
       herenId: 'herenId',
     },
     isLocal: '1',
-  } as TBannerConfig;
+  };
 
   // 用药管家
   const yonyao = {
@@ -219,7 +226,7 @@
     type: 'self',
     path: 'pagesC/medRecordApply/recordApply',
     _type: 'useTBanner',
-    _tip: '<div>我是提示233</div>'
+    _tip: '<div>我是提示233</div>',
   };
 
   const 绍兴检查预约 = {
@@ -733,10 +740,9 @@
   const init = async () => {
     // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
-    // useTBanner(肿瘤住院管家);
+    useTBanner(肿瘤住院管家);
     // useTBanner(电子导诊单);
     // useTBanner(肿瘤云影响);
-    useTBanner(ziXun);
     // patientUtils.faceVerify({
     //   name: '陈钦川',
     //   idCardNumber: '330326199908286713',
