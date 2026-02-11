@@ -237,8 +237,20 @@ export const miniProgramConfig: {
                 'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe',
               orgCodg: 'H32028200358',
               bizType: '04107',
-              orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
+              orgAppId: '1GDAN3EEO0123F60C80A000061B81AB7',
             },
+
+            // zs
+            // pathExtraData: {
+            //   openType: 'getAuthCode',
+            //   cityCode: '320200',
+            //   channel: 'AAGDjhBtPzo4LJTh9gCenRkB',
+            //   orgChnlCrtfCodg:
+            //     'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe',
+            //   orgCodg: 'H32028200358',
+            //   bizType: '04107',
+            //   orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
+            // },
             pathExtraDataConfig: {
               // 虚拟id
               virtualHosId: {
