@@ -265,6 +265,16 @@
         sort: 2,
       },
       {
+        label: 'home-tabbar:图文咨询',
+       icon: global.BASE_IMG + 'oral-mall-home-icon.png',
+        iconActive: `/static/image/oral-mall-home-icon-active${
+          gStores.globalStore.isTcmStyle ? '-tcm' : ''
+        }.png`,
+        url: '/pagesC/commonHosNet/commonHosNet?returnUrl=pages%2Fv3%2FsearchDoc%2FsearchDoc%3FhosId%3D529%26receptionMode%3D1%26pageType%3D1%26freeClinicDeptId%3D',
+        loginInterception: '0',
+        sort: 2,
+      },
+      {
         label: 'home-tabbar:云诊室',
         icon: '/static/image/wlyy.png',
         iconActive: `/static/image/wlyy_active${
@@ -369,6 +379,10 @@
       //东总煞笔需求
       tabList.push('home-tabbar:便民');
       tabList.push('home-tabbar:科普');
+    }
+     if (global.SYS_CODE === '1001054') {
+      //东总煞笔需求
+      tabList.push('home-tabbar:图文咨询');
     }
 
     const {

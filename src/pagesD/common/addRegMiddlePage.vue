@@ -89,10 +89,8 @@
   const handleData = async (pat) => {
     const { patientId, cardNumber } = pat!;
     const args = {
-      hosorderId: pageProps.value.hosorderId,
-      numId: pageProps.value.numId,
       patientId,
-      cardNumber,
+      ...pageProps.value,
     };
     const {
       result: { orderId },

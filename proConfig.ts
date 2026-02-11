@@ -314,10 +314,12 @@ export const miniProgramConfig: {
     alipayPid: 'ze2exd3di9dbye6cc+hfia==',
     isOpenOcr: true,
     sConfig: {
+      homeTopBanner: { topShow: true },
+      isOpenHelpOld: '1',
+      isOpenPopularSci: '1',
       homeNavTitleLogo:
         'https://phsdevoss.eheren.com/pcloud/phs3.0/xianyannavtitle.png',
       isOpenHomeTabBarNetWorkBtn: '1',
-      isHideHomeSearch: '1',
       isOpenWechatSI: true,
       medicalMHelp: {
         isOpenPatToMedicalPat: {},

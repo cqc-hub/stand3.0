@@ -43,6 +43,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
   import { GStores, ServerStaticData } from '@/utils';
+  import { useViewerStore } from '@/stores/modules/viewer';
   export default defineComponent({
     emits: ['open-old'],
 
@@ -56,12 +57,16 @@
     setup(props, ctx) {
       const refOldDialog = ref();
       const gStores = new GStores();
+      const viewerStore = useViewerStore();
 
-      const switchModeOld = () => {
+      const switchModeOld = async () => {
         gStores.globalStore.setModeOld(!gStores.globalStore.modeOld);
+        await viewerStore.clearStore();
+        await viewerStore.getVersion();
+
         uni.removeStorageSync('viewConfig');
         //重新请求首页配置
-        ServerStaticData.getHomeConfig();
+        // ServerStaticData.getHomeConfig();
         refOldDialog.value.hide();
 
         //   ctx.emit("choose-pat", e);

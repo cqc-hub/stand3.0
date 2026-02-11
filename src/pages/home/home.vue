@@ -63,7 +63,10 @@
               />
             </view>
 
-            <view class="card mb24">
+            <view
+              class="card mb24"
+              :class="getSysCode() == '1001054' ? 'cardNoMargin' : ''"
+            >
               <view
                 v-if="isHomeStyle1"
                 class="mb24 bg-white rounded-xl pt16 pb16 pr24 pl24"
@@ -577,8 +580,9 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
-    healthCounselConfig.value =
-      await ServerStaticData.getSystemConfig('HEALTH_COUNSEL');
+    healthCounselConfig.value = await ServerStaticData.getSystemConfig(
+      'HEALTH_COUNSEL'
+    );
 
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');
@@ -1168,5 +1172,10 @@
     border-radius: 50%;
     padding: 6px;
     font-size: 56rpx !important;
+  }
+  .cardNoMargin {
+    .top-card {
+      margin: 0 0 !important;
+    }
   }
 </style>
