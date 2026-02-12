@@ -394,7 +394,6 @@ export const miniProgramConfig: {
     h5Appid: 'wx69bb1d0f7210807b',
     name: '西安市红会互联网医院',
     isSearchInHos: true,
-    isStartComeTest: true,
     isOpenOcr: false,
     isOpenHealthCard: {
       healthCardText: '陕西省卫生健康委员会',

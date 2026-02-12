@@ -224,9 +224,10 @@
 
   const 病案复印: TBannerHomeMenuConfig = {
     type: 'self',
+    _disabled: '1',
     path: 'pagesC/medRecordApply/recordApply',
     _type: 'useTBanner',
-    _tip: '<div>我是提示233</div>',
+    _tip: '<p>新年将至，由于顺丰快递运送时间限制，<span style="color:red;">我院微信小程序将于2026年02月11日12：00 开始，暂时停止病历复印订单接收，春节假期之后将会立即恢复（注：02月11日提交的病历复印申请，我们最晚会在02月13日安排顺丰快递寄出）。</span>感谢您的理解，请大家相互转告！提前预祝各位患者及家属们新春快乐，平安喜乐！</p><div>通知时间：2025-02-09</div>',
   };
 
   const 绍兴检查预约 = {
