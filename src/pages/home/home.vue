@@ -53,7 +53,10 @@
             }"
           >
             <view class="safe-height" />
-            <home1 @open-mode-old="openModeOld" />
+            <home1
+              @open-mode-old="openModeOld"
+              @wx-show-translate-tip="wxTranslateShow"
+            />
 
             <view v-if="$global.sConfig?.homeTopBanner?.topShow" class="mb24">
               <homeBanner
@@ -414,6 +417,8 @@
       @close-pop-click="closePopClick"
     />
 
+    <homeTranslateWx ref="refWxTranslate" />
+
     <homeTabbar :systemModeOld="gStores.globalStore.modeOld" />
   </view>
 </template>
@@ -465,6 +470,7 @@
   import assistMessage from './componetns/assistMessage.vue';
   import homeLogin from './componetns/home-login.vue';
   import home1 from './componetns/home-1.vue';
+  import homeTranslateWx from './componetns/homeTranslateWx.vue';
 
   const props = ref({
     code: '',
@@ -580,9 +586,8 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
-    healthCounselConfig.value = await ServerStaticData.getSystemConfig(
-      'HEALTH_COUNSEL'
-    );
+    healthCounselConfig.value =
+      await ServerStaticData.getSystemConfig('HEALTH_COUNSEL');
 
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');
@@ -786,6 +791,11 @@
     if (refOldDialog.value) {
       refOldDialog.value.show();
     }
+  };
+
+  const refWxTranslate = ref('' as any);
+  const wxTranslateShow = () => {
+    refWxTranslate.value.show();
   };
 
   const onAgree = () => {
