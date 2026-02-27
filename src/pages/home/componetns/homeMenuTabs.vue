@@ -14,12 +14,12 @@
         class="v-tabs__container"
         :style="{
           display: scroll ? 'inline-flex' : 'flex',
-          whiteSpace: scroll ? 'nowrap' : 'normal',
           background: bgColor,
           height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           padding,
         }"
       >
+        <!-- -->
         <view
           class="v-tabs__container-item flex justify-center items-center f32 relative z-1"
           v-for="(v, i) in tabs"
@@ -115,7 +115,7 @@
             left: lineLeft + 'px',
             transform: `translateX(-${lineWidth / 2}px)`,
             width: '30' + 'px',
-            height: '4px'
+            height: '4px',
           }"
         />
         <image
@@ -488,7 +488,7 @@
       position: relative;
       display: inline-flex;
       align-items: center;
-      white-space: nowrap;
+      // white-space: nowrap;
 
       .v-tabs__container-item {
         height: 100%;
@@ -496,10 +496,7 @@
         z-index: 10;
         padding: 0 11px;
         transition: all 0.2s;
-        white-space: nowrap;
-        view {
-          width: max-content;
-        }
+        // white-space: nowrap;
       }
 
       .v-tabs__container-line {

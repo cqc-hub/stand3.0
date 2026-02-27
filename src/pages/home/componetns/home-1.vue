@@ -28,8 +28,22 @@
       </view>
 
       <!-- #ifdef MP-WEIXIN -->
-      <view v-if="globalGl.sConfig.isWxShowToggleEcZh === '1'" class="mr12">
-        <!-- <img :src="`${ globalGl.BASE_IMG}stand3-home-en-zh-translate.png`" /> -->
+      <view
+        v-if="globalGl.sConfig.isWxShowToggleEcZh === '1'"
+        :style="{
+          'border-radius': '100px',
+          padding: '6px',
+        }"
+        @click="emits('wx-show-translate-tip')"
+        class="mr12 flex items-center justify-center bg-white g-border"
+      >
+        <img
+          :style="{
+            width: '42rpx',
+            height: '42rpx',
+          }"
+          :src="`${globalGl.BASE_IMG}stand3-home-en-zh-translate.png`"
+        />
       </view>
       <!-- #endif -->
 
@@ -72,7 +86,7 @@
 
   const gStores = new GStores();
   const viewerStore = useViewerStore();
-  const emits = defineEmits(['open-mode-old', 'open-share']);
+  const emits = defineEmits(['open-mode-old', 'wx-show-translate-tip', 'open-share']);
 
   const isHomeStyle1 = computed(() => {
     return globalGl.sConfig.homeStyle === '1';

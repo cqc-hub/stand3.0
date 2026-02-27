@@ -237,8 +237,20 @@ export const miniProgramConfig: {
                 'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe',
               orgCodg: 'H32028200358',
               bizType: '04107',
-              orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
+              orgAppId: '1GDAN3EEO0123F60C80A000061B81AB7',
             },
+
+            // zs
+            // pathExtraData: {
+            //   openType: 'getAuthCode',
+            //   cityCode: '320200',
+            //   channel: 'AAGDjhBtPzo4LJTh9gCenRkB',
+            //   orgChnlCrtfCodg:
+            //     'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe',
+            //   orgCodg: 'H32028200358',
+            //   bizType: '04107',
+            //   orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
+            // },
             pathExtraDataConfig: {
               // 虚拟id
               virtualHosId: {
@@ -382,7 +394,6 @@ export const miniProgramConfig: {
     h5Appid: 'wx69bb1d0f7210807b',
     name: '西安市红会互联网医院',
     isSearchInHos: true,
-    isStartComeTest: true,
     isOpenOcr: false,
     isOpenHealthCard: {
       healthCardText: '陕西省卫生健康委员会',

@@ -73,7 +73,7 @@
               :class="{
                 f32: type === 1,
               }"
-              class="grid-label text-no-wrap"
+              class="grid-label text-center"
             >
               {{ getShowTitle(item, type) }}
             </view>
@@ -138,20 +138,6 @@
 
   const emit = defineEmits(['gridClick']);
   const gStores = new GStores();
-  // const getShowTitle = (item: IRoute) => {
-  //   const { engDetail, otherDetail, title } = item;
-  //   const { type } = props;
-
-  //   if ([2, 3].includes(type)) {
-  //     if (gStores.globalStore.lang === 'en' && engDetail) {
-  //       return engDetail;
-  //     } else if (gStores.globalStore.lang === 'uygur' && otherDetail) {
-  //       return otherDetail;
-  //     }
-  //   }
-
-  //   return `${title}`;
-  // };
 
   const isImg = (src?: string) => {
     if (src) {

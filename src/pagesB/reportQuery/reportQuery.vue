@@ -352,7 +352,7 @@
       let params = encodeURIComponent(
         encryptedAes(gStores.userStore.patChoose.cardNumber, '2e9e#0!76@b88e32')
       );
-      const path = joinQuery('https://jiaxingey.huihaohealth.com/patient/#/report-detail', {
+      const path = joinQuery('https://jiaxingey.huihaohealth.com/hj/redirect', {
         patient_id: params,
       });
 
