@@ -6,8 +6,8 @@ export const _goElectronicMedicalCard = (type: 'bySelf' | 'byMedical') => {
     if (gStores.globalStore.ev === 'wx') {
       useTBanner({
         type: 'otherProgram',
-        appId: 'wx81ce904580cc0ff1',
-        path: '/views/home/index',
+        appId: 'wx7ec43a6a6c80544d',
+        path: '/pages/nhsa-code/index/index',
       });
     }
 

@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx2e06292a91e9f162",
+    "appid": "wx8c42096613665ada",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -66,16 +66,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      },
-      "crossProgramPlugins": {
-        "version": "latest",
-        "provider": "wx12cec70855c0cacf"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -83,14 +74,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003104628364",
+    "appid": "2021003120612222",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -142,7 +128,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "浙江省肿瘤医院",
+  "name": "东部战区总医院",
   "h5": {
     "optimization": {
       "treeShaking": {

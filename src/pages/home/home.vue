@@ -53,7 +53,7 @@
             }"
           >
             <view class="safe-height" />
-            <home1 @open-mode-old="openModeOld" />
+            <home1 @open-mode-old="openModeOld" @open-share="openShare" />
 
             <view v-if="$global.sConfig?.homeTopBanner?.topShow" class="mb24">
               <homeBanner

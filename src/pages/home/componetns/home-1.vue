@@ -5,6 +5,13 @@
       v-if="globalGl.sConfig.isHideHomeSearch != '1'"
     >
       <!-- 在有搜索框的前提下 是否开启助老版本 -->
+      <view
+        class="notice-button g-bold"
+        v-if="gStores.globalStore.sysCode === '1001036'"
+        @click="showQR1001036"
+      >
+        关注联勤集结号
+      </view>
       <view class="w-full" @click.prevent="goSearch">
         <!-- :placeholder="viewerStore.homeSearchPlaceholder" -->
         <view class="my-disabled mr12">
@@ -58,18 +65,34 @@
   import { computed, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, ServerStaticData } from '@/utils';
+  import { GStores, ServerStaticData, useTBanner } from '@/utils';
   import globalGl from '@/config/global';
   import { useViewerStore } from '@/stores/modules/viewer';
   import chooseLang from './chooseLang.vue';
 
   const gStores = new GStores();
   const viewerStore = useViewerStore();
-  const emits = defineEmits(['open-mode-old']);
+  const emits = defineEmits(['open-mode-old', 'open-share']);
 
   const isHomeStyle1 = computed(() => {
     return globalGl.sConfig.homeStyle === '1';
   });
+
+  const showQR1001036 = () => {
+    console.log(9999);
+    emits(
+      'open-share',
+      {
+        imageCode: 'dongzong_gzhCode.jpg',
+        title: '欢迎关注',
+        subTitle: '长按识别二维码，关注公众号',
+        isHideInfo: true,
+        theme: '公众号',
+        name: '联勤集结号',
+      },
+      'showCareModel'
+    );
+  };
 
   const goSearch = async () => {
     const pageConfig = await ServerStaticData.getSystemConfig(
@@ -116,5 +139,18 @@
       height: 52rpx;
       // top: -2rpx;
     }
+  }
+  .notice-button {
+    background-color: var(--hr-brand-color-6);
+    display: inline-block;
+    line-height: 60rpx;
+    border-radius: 32rpx;
+    color: #fff;
+    font-size: var(--hr-font-size-xs);
+    width: 310rpx;
+    position: relative;
+    text-align: center;
+    padding: 5rpx 10rpx 6rpx;
+    margin-right: 10rpx;
   }
 </style>

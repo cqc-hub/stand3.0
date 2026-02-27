@@ -19,10 +19,15 @@
       />
       <!-- 2种党员样式 -->
       <image
-        v-if="isPliticalDoc"
+        v-if="isPliticalDoc && pageConfig.isPartyMemberStyle === '1'"
         class="CPC-icon1"
         :src="globalGl.BASE_IMG + 'is_party_member.png'"
-      />
+      ></image>
+      <image
+        v-if="isPliticalDoc && pageConfig.isPartyMemberStyle !== '1'"
+        class="CPC-icon"
+        :src="globalGl.BASE_IMG + 'CPC-icon2.png'"
+      ></image>
 
       <!-- </g-login> -->
 

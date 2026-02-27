@@ -570,8 +570,8 @@ export class RegDetailUtil {
 
   async getDataDetail(): Promise<IRegInfo> {
     const { orderId, hosOrderId, _type } = this.prop.value;
-    console.log(9999,this.prop.value);
-    
+    console.log(9999, this.prop.value);
+
     if (orderId) {
       this.orderRegInfo = await this.getDetailDataClassic();
     } else if (hosOrderId && this.getSourceInHos()) {
@@ -943,7 +943,7 @@ export const useRegBtnShows = () => {
     if (typeId === '3' || isAllOrder1001094 === '1') {
       return false;
     }
-    return canUpdateStatus === '0';
+    return canUpdateStatus === '1';
   };
 
   /** 去报销 */
