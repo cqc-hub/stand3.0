@@ -110,11 +110,22 @@
       </view>
 
       <view
+        v-if="item.materialValue && item.materialValue.length"
+        class="container-card-row flex-normal"
+      >
+        <view class="label">复印材料</view>
+
+        <view class="content">
+          {{ item.materialValue.join('、') }}
+        </view>
+      </view>
+
+      <view
         v-if="isAddCount"
         :class="{
           mt24: !(isEdit && item.isOneself === '0'),
         }"
-        class="g-border-top flex-between mb24 pt24"
+        class="g-border-top flex-between pt24"
       >
         <view class="color-444 f28">选择复印份数</view>
         <view class="content">
@@ -124,6 +135,19 @@
             :max="max"
             @change="boxChange(item, $event)"
             inputDisabled
+          />
+        </view>
+      </view>
+
+      <view v-if="materiaInRecord" class="g-border-top mb24 pt24">
+        <view class="color-444 f28 mb12">选择复印材料</view>
+        <view class="content bg-white p24 rounded">
+          <g-select-flatten
+            v-model:value="item.materialValue"
+            :selectLength="pageConfig.selMaterialLen || 3"
+            :list="materialList"
+            :multiple="pageConfig.selMaterialLen !== 1"
+            :column="2"
           />
         </view>
       </view>
@@ -150,6 +174,7 @@
   import { CaseCopeItemDetail } from '../utils/recordApply';
   import dayjs from 'dayjs';
   import { NotNullable } from '@/typeUtils';
+  import { ISystemConfig } from '@/types';
 
   type TList = NotNullable<CaseCopeItemDetail['_outInfo']>;
   defineProps<{
@@ -157,6 +182,9 @@
     isAddCount?: boolean;
     isEdit?: boolean;
     max: number;
+    materialList: string[];
+    materiaInRecord: boolean;
+    pageConfig: ISystemConfig['medRecord'][number];
   }>();
 
   const emits = defineEmits(['click-edit', 'click-del', 'change-count']);

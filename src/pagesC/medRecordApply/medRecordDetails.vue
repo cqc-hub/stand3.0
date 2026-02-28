@@ -358,7 +358,10 @@
               <Record-Card
                 :list="recordRows"
                 :isAddCount="isSelPurposeCountInRecord"
+                :materialList="materialList"
+                :materiaInRecord="materiaInRecord"
                 :max="pageConfig.maxNum || 99"
+                :pageConfig="pageConfig"
                 @click-edit="editRecord"
                 @click-del="delRecord"
                 @change-count="changeCount"
@@ -422,7 +425,7 @@
           <view
             id="_materia"
             class="container-box g-border mb16 box-padding"
-            v-if="materialList && materialList.length"
+            v-if="materiaInOutSide"
           >
             <view class="f36">
               <text class="mr12 g-bold">请选择复印材料</text>
@@ -499,6 +502,7 @@
         :title="addDialogTitle"
         :isShowAddRecord="isToggleHos"
         :systemModeOld="gStores.globalStore.modeOld"
+        :pageConfig="pageConfig"
         @submit="recordSubmit"
         @hos-change="hosChange"
         ref="refAddDialog"
@@ -681,6 +685,13 @@
   ]);
 
   const materialList = ref<any[]>([]);
+  // 目的跟着住院记录走
+  const materiaInRecord = computed(
+    () => pageConfig.value.materialInRecord === '1'
+  );
+  const materiaInOutSide = computed(() => {
+    return materialList.value.length && !materiaInRecord.value;
+  });
 
   const props = defineProps<{
     hosId: string;
@@ -1081,6 +1092,7 @@
 
   const recordSubmit = (data: TRecordRows) => {
     data.isOneself = '0';
+    data.materialValue = data.materialValue || [];
 
     if (isAddDialogEdit.value) {
       recordRows.value[_editRowIndex] = data;
@@ -1410,14 +1422,24 @@
       }
     }
 
-    if (
-      materialList.value &&
-      materialList.value.length &&
-      !materialValue.value.length
-    ) {
-      scrollTo.value = '_materia';
-      showMessage('请先选择 复印材料', 3000);
-      return;
+    if (materialList.value && materialList.value.length) {
+      if (materiaInRecord.value) {
+        const isMateriaEmpty = recordRows.value.some(
+          (o) => !o.materialValue.length
+        );
+
+        if (isMateriaEmpty) {
+          scrollTo.value = '_record';
+          showMessage('请先选择 复印材料', 3000);
+          return;
+        }
+      }
+
+      if (materiaInOutSide.value && !materialValue.value.length) {
+        scrollTo.value = '_materia';
+        showMessage('请先选择 复印材料', 3000);
+        return;
+      }
     }
 
     if (isPurposeRadio === '1') {
@@ -1759,10 +1781,18 @@
   };
 
   let _firstLoaded = true;
+  const initRecordRows = () => {
+    recordRows.value.map((o) => {
+      if (!o.materialValue) {
+        o.materialValue = [];
+      }
+    });
+  };
   onShow(async () => {
     const selRecords = getLocalStorage(CACHE_KEY);
     if (selRecords && selRecords.length && _firstLoaded) {
       recordRows.value = JSON.parse(selRecords);
+      initRecordRows();
     }
 
     const _backFromAddress = uni.getStorageSync('back-address');
@@ -1791,6 +1821,8 @@
         try {
           const selRecords = JSON.parse(decodeURIComponent(opt.selRecords));
           recordRows.value = selRecords;
+
+          initRecordRows();
         } catch (error) {
           console.error(error);
         }

@@ -1070,6 +1070,10 @@ export const miniProgramConfig: {
             },
           },
         },
+
+        alipay: {
+          medicalNation: {}
+        }
       },
     },
   },

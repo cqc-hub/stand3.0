@@ -446,6 +446,8 @@ export interface ISystemConfig_ {
     material?: string[];
     /** 可选择的复印材料数量 默认 3 */
     selMaterialLen?: number;
+    /** 复印材料跟着住院记录走 */
+    materialInRecord?: '1';
 
     /** 收钱方式 0 预收 1 按项目、目的(tollMode) 2    */
     isItemCount?: '0' | '1'; // 优先级更高
@@ -460,14 +462,16 @@ export interface ISystemConfig_ {
 
     /** 是否支持自定义住院记录 */
     isCustomPatRecord?: '1';
+    /** 手动添加记录里面是否可以切换院区 */
+    isToggleHos?: '1';
+    /** 手动添加记录(出入院日期)自定义截止日期 YYYY-MM-DD */
+    isCustomPatRecordEndDate?: string;
     /* 是否下载委托书 */
     isMandateUrl?: string;
     /** 支持住院记录中选择目的的份数? */
     selPurposeInRecord?: '1';
     /** 复印最大份数 */
     maxNum?: number;
-    /** 手动添加记录里面是否可以切换院区 */
-    isToggleHos?: '1';
 
     /** 快递公司(新增病案时候的快递公司选择) */
     company?: (IOptions & {
