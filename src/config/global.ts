@@ -31,6 +31,13 @@ if (env === 'prod') {
 
 const systemInfo: ISystemGlobalItem = systemConfig.sysConfig[SYS_CODE];
 
+/**
+ * 互联网需要添加的白名单路径
+ * https://phsdevoss.eheren.com
+ * https://interhos.eheren.com
+ * https://testwechatnethos.eheren.com
+ *
+ */
 const netUrl =
   env === 'prod'
     ? `https://interhos.eheren.com/static/nhs/`

@@ -502,6 +502,7 @@
         :title="addDialogTitle"
         :isShowAddRecord="isToggleHos"
         :systemModeOld="gStores.globalStore.modeOld"
+        :pageConfig="pageConfig"
         @submit="recordSubmit"
         @hos-change="hosChange"
         ref="refAddDialog"

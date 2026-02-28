@@ -34,7 +34,7 @@
       <uni-datetime-picker
         :modelValue="dateValue"
         :type="'date'"
-        :end="timeNow"
+        :end="timeEnd"
         @change="dateChange"
         ref="datePickerRef"
         hideFooter
@@ -65,7 +65,7 @@
 <script lang="ts" setup>
   import { computed, ref, nextTick } from 'vue';
   import type { TInstance } from '@/components/g-form/index';
-  import { ServerStaticData, type IHosInfo } from '@/utils';
+  import { ISystemConfig, ServerStaticData, type IHosInfo } from '@/utils';
   import dayjs from 'dayjs';
 
   const timeNow = dayjs().format('YYYY-MM-DD');
@@ -76,12 +76,16 @@
     title: string;
     isShowAddRecord: boolean; // 可以切换院区?
     systemModeOld: boolean;
+    pageConfig: ISystemConfig['medRecord'][number];
   }>();
   const emits = defineEmits(['update:value', 'submit', 'hos-change']);
   const isAlipay = ref(false);
   // #ifdef MP-ALIPAY
   // isAlipay.value = true
   // #endif
+  const timeEnd = computed(() => {
+    return props.pageConfig.isCustomPatRecordEndDate || timeNow;
+  });
 
   const datePickerRef = ref<any>('');
   const dataPickerRef = ref<any>('');
@@ -99,6 +103,10 @@
       if (_firstIn) {
         datePickerRef.value.clear();
         _firstIn = false;
+
+        if (props.pageConfig.isCustomPatRecordEndDate) {
+          dateValue.value = props.pageConfig.isCustomPatRecordEndDate;
+        }
       }
       datePickerRef.value.show();
     } else if (field === 'select') {
