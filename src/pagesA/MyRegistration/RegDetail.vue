@@ -954,7 +954,9 @@
     result._category = result.schQukCategor || result.categorName;
     orderRegInfo.value = result;
     qrCodeOpt.value.code = result[qrCode];
-
+    if (getSysCode() === '1001036') {
+      qrCodeOpt.value.code = `${result.hosOrderId}|${result.cardNumber}`;
+    }
     showConsultationDialog();
     await wait(0);
     isFirstIn.value = false;

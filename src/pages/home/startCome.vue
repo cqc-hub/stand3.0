@@ -27,7 +27,7 @@
     //温附二 第三方获取openId
     src.value =
       'https://wx.wzhealth.com/FeyMobileWeb/Common/Redirect?redirectUrl=common/GetOpenIdRedirect/xcxxxts';
-  } else if (global.SYS_CODE === '1001083') {
+  } else if (global.SYS_CODE === '10010831') {
     src.value = `https://chagine.wzsrmyy.com/weixin-code/get-weixin-code.html?appid=${appId}&scope=snsapi_base&state=123&redirect_uri=${encodeURIComponent(
       baseUrl + '/h5/index.html'
     )}&timeSamp=${new Date().getTime()}`;
