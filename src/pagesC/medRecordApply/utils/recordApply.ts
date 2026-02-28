@@ -212,7 +212,9 @@ export type CaseCopeItemDetail = Flatten<
     id: string;
     printCount?: { purpose: string; count: number }[];
     expressStatus: string;
-    _outInfo?: TOutInfo[];
+    _outInfo?: (TOutInfo & {
+      materialValue: string[];
+    })[];
     commentResultList?: {
       createName: string;
       createTime: string;

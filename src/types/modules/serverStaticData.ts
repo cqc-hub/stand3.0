@@ -446,6 +446,8 @@ export interface ISystemConfig_ {
     material?: string[];
     /** 可选择的复印材料数量 默认 3 */
     selMaterialLen?: number;
+    /** 复印材料跟着住院记录走 */
+    materialInRecord?: '1';
 
     /** 收钱方式 0 预收 1 按项目、目的(tollMode) 2    */
     isItemCount?: '0' | '1'; // 优先级更高
