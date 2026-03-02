@@ -389,7 +389,8 @@
     }
 
     formData.value = formatterSubPatientData(formData.value);
-    const { isVerifyIdCardLastFourNumber } = pageConfig.value;
+    const { isVerifyIdCardLastFourNumber, isPayWithoutSecretAuth } =
+      pageConfig.value;
 
     // const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
 
@@ -610,12 +611,13 @@
           .addPatient(requestArg)
           .catch((err) => {
             dealNetError(err, requestArg);
-            throw new Error(err);
           });
 
         newPat.value = { patientId };
 
-        await goPaySign(patientId);
+        if (isPayWithoutSecretAuth === '1') {
+          await goPaySign(patientId);
+        }
       }
 
       // 切换默认就诊人
@@ -750,7 +752,7 @@
   const dealNetError = async (err = {} as any, data) => {
     const { isCanChangeHosPhone, isGuardianWithIdCard } = pageConfig.value;
 
-    const { idType, idCard } = formData.value;
+    const { idType } = formData.value;
 
     const { respCode } = err;
     if (respCode === 999301) {
@@ -765,6 +767,7 @@
           });
         },
       });
+      throw new Error(err);
     } else if (
       respCode === 884801 &&
       idType === '01' &&
@@ -794,6 +797,8 @@
       if (confirm) {
         await editPhone(data, 'changeWithAdd');
       }
+
+      throw new Error(err);
     } else if (err?.respCode === 999001) {
       // await patientUtils.getPatCardList();
     }

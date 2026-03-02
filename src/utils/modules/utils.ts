@@ -155,7 +155,7 @@ export const debounce = function <T = any>(
   wait: number,
   immediate = true
 ): T {
-  let timer: null | number = null;
+  let timer: any = null;
 
   // @ts-expect-error
   return function (...args) {
@@ -243,6 +243,19 @@ export const routerJump = async (url?: `/${string}`, type?: string) => {
   const gStores = new GStores();
 
   const routerStore = useRouterStore();
+  const fail = () => {
+    gStores.messageStore.showMessage(
+      `指定路径跳转失败, 重新指定首页跳转 ${url}`,
+      1500,
+      {
+        closeCallBack() {
+          uni.reLaunch({
+            url: '/pages/home/home',
+          });
+        },
+      }
+    );
+  };
 
   if (routerStore.isWork) {
     const _p = routerStore._p;
@@ -261,6 +274,7 @@ export const routerJump = async (url?: `/${string}`, type?: string) => {
       } else {
         uni.reLaunch({
           url: routerStore.fullUrl,
+          fail,
         });
       }
     }
@@ -269,6 +283,7 @@ export const routerJump = async (url?: `/${string}`, type?: string) => {
     url &&
       uni.reLaunch({
         url,
+        fail,
       });
   }
 };

@@ -110,7 +110,7 @@
       </view>
 
       <view
-        v-if="item.materialValue && item.materialValue.length"
+        v-if="!isEdit && item.materialValue && item.materialValue.length"
         class="container-card-row flex-normal"
       >
         <view class="label">复印材料</view>

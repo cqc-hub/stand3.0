@@ -229,6 +229,7 @@ export const miniProgramConfig: {
           medicalNation: {
             appId: 'wxe183cd55df4b4369',
             path: 'auth/pages/bindcard/auth/index',
+            // cs
             pathExtraData: {
               openType: 'getAuthCode',
               cityCode: '320200',
@@ -267,7 +268,11 @@ export const miniProgramConfig: {
             },
             dongRuanMedicalInfo: {
               h5BaseUrl:
-                'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui/#/pay-loading',
+                // zs
+                // 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui/#/pay-loading',
+
+                // cs
+                'https://ybj.jszwfw.gov.cn/mmc/hsa-mms-ui/#/pay-loading',
             },
           },
           isMedicalOrder: '1',
@@ -556,6 +561,7 @@ export const miniProgramConfig: {
             },
             cardType: '01',
           },
+          medicalFiling: '1',
         },
       },
     },
@@ -1072,8 +1078,8 @@ export const miniProgramConfig: {
         },
 
         alipay: {
-          medicalNation: {}
-        }
+          medicalNation: {},
+        },
       },
     },
   },
