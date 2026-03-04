@@ -1,11 +1,20 @@
 {
   "sysCode": "1001040",
   "sysConfig": {
+<<<<<<< HEAD
     "wxAppid": "wxfa6c5f0835eedf08",
     "alipayAppid": "2021002143620963",
     "h5Appid": "wx32db6c8548b011c9",
     "isvAlipayAppid": "2021002147662292",
     "name": "湖州市第三人民医院",
+=======
+    "wxAppid": "wx2e06292a91e9f162",
+    "alipayAppid": "2021003104628364",
+    "isvAlipayAppid": "",
+    "name": "浙江省肿瘤医院",
+    "isStartComeTest": false,
+    "isOpenOcr": false,
+>>>>>>> d5dbc2eb8d691a524fbde5275364f19776b5c5f5
     "isSearchInHos": true,
     "isStartComeTest": true,
     "isOpenOcr": false,

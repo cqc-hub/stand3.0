@@ -1212,15 +1212,18 @@ export const manifestFileDataObj: any = {
       targetSdkVersion: 10,
       signingConfigs: {
         default: {
-          certpath: '/Users/ddd/Documents/harmony/ddDev/ddDev.cer',
-          keyAlias: 'ddDevAlias',
+          certpath:
+            '/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1772441480205.cer',
+          keyAlias: 'debugKey',
           keyPassword:
-            '0000001D077DADAA60B9CFFDE7D388BB1C4FD5099C122B2E7B365345B29D2EA24475C728D02B12727CCBEDB571',
-          profile: '/Users/ddd/Documents/harmony/ddDev/ddDevProFileDebug.p7b',
+            '0000001BFC8B5B3C076B42F630A5A14F2F64D2C3E01545CA5B8EB12247500BC58C076E3B13A01357CDAF53',
+          profile:
+            '/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1772441480205.p7b',
           signAlg: 'SHA256withECDSA',
-          storeFile: '/Users/ddd/Documents/harmony/ddDev/ddDev.p12',
+          storeFile:
+            '/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1763103743000.p12',
           storePassword:
-            '0000001D3D4D515D310910C57ED041A219E20544F6936BDBB3475D8F17B8F2D132424FB6B03E177FA9DBDA020C',
+            '0000001BFC8B5B3C076B42F630A5A14F2F64D2C3E01545CA5B8EB12247500BC58C076E3B13A01357CDAF53',
         },
         release: {
           certpath: '/Users/ddd/Documents/harmony/dddProd/ddProd.cer',

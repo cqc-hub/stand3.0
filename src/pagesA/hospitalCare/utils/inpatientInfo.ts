@@ -259,9 +259,14 @@ export const useHosPayPage = () => {
       gStores.messageStore.showMessage('请输入正确金额');
       return;
     }
+    const feeNum = fee * 1;
 
-    if (!(fee * 1)) {
+    if (!feeNum) {
       gStores.messageStore.showMessage('请输入金额');
+      return;
+    }
+    if (feeNum <= 1) {
+      gStores.messageStore.showMessage('充值金额需要大于1元, 请输入其它金额');
       return;
     }
     const isDigitalPay = getIsDigitalPay(pageConfig.value);
@@ -287,10 +292,10 @@ export const useHosPayPage = () => {
       ];
     }
 
-    if (fee && fee == '0') {
-      gStores.messageStore.showMessage('不支持充值0元，请输入其它金额！', 3000);
-      return;
-    }
+    // if (fee && fee == '0') {
+    //   gStores.messageStore.showMessage('不支持充值0元，请输入其它金额！', 3000);
+    //   return;
+    // }
     await wait(200);
     refPay.value.show();
   };

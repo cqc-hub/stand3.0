@@ -831,6 +831,7 @@
       addition: {
         token: 'token',
         herenId: 'herenId',
+        patientId: '_patientId',
       },
       // isLocal: '1',
     };
