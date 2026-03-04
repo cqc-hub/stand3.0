@@ -48,6 +48,7 @@ export const miniProgramConfig: {
       homeNavTitleLogo:
         'https://phsdevoss.eheren.com/pcloud/phs3.0/jiangsushengzhonnavtitle.png',
       isOpenMessageAuth: '1',
+      isOpenAssistMessage:'1',
       isMessageBtnShowNew: '1',
       isOpenPopularSci: { wx: '1' },
       isOpenWechatSI: true,

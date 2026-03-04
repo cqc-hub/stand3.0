@@ -133,11 +133,17 @@
                 @click="photoModeSelRef.show"
                 class="g-bold f36 flex-between"
               >
-                <text>{{ photoModeLabel }}</text>
-                <text class="iconfont size-icon">&#xe66b;</text>
+                <text v-if="photoModeLabel">{{ photoModeLabel }}</text>
+                <view class="flex" v-else>
+                  <text class="mr12">请选择办理类型</text>
+                  <text class="iconfont size-icon">&#xe6c4;</text>
+                </view>
               </view>
 
-              <view class="mt24 flex-between id-card-container">
+              <view
+                class="mt24 flex-between id-card-container"
+                v-if="photoList.length"
+              >
                 <view
                   v-for="item in photoList"
                   :key="item.value"
@@ -170,6 +176,18 @@
                     </view>
                   </view>
                 </view>
+              </view>
+              <view
+                v-if="
+                  isMandateUrl &&
+                  photoList.length &&
+                  photoList.find((item) => item.value === '14')
+                "
+                @click="getMandateUrl"
+                class="add-btn color-blue g-flex-rc-cc"
+              >
+                <view class="icon-font ico_download-blue"></view>
+                <view class="f28 g-bold">下载委托书模板</view>
               </view>
             </template>
 
@@ -570,6 +588,21 @@
         aaa
       />
     </Order-Reg-Confirm>
+    <Order-Reg-Confirm
+      :title="flagTitle1289"
+      @confirm="handleConfirm"
+      ref="mandateDialog"
+      :isShowCloseIcon="true"
+      confirmText="立即下载"
+    >
+      <g-flag
+        v-model:title="flagTitle1289"
+        typeFg="1289"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
+    </Order-Reg-Confirm>
     <g-message />
   </view>
 </template>
@@ -588,6 +621,7 @@
     useOcr,
     base64Src,
     LoginUtils,
+    downFile,
     isTypeofIdCard,
   } from '@/utils';
   import { getSrc } from '@/pagesC/medicationAssistant/utils';
@@ -624,7 +658,8 @@
       },
     });
   };
-
+  const flagTitle1289 = ref('');
+  const mandateDialog = ref<any>('');
   const fg1020 = ref('');
   const fg1021 = ref('');
   const email = ref('');
@@ -1177,7 +1212,7 @@
     } = pageConfig.value;
 
     if (photoConfig) {
-      photoMode.value = photoConfig.modes[0]?.value;
+      // photoMode.value = photoConfig.modes[0]?.value;
     }
 
     if (company && company.length === 1) {
@@ -1366,7 +1401,11 @@
         message: '户口本单页',
       },
     };
-
+    if (!photoModeLabel.value && photoModeList.value.length) {
+      showMessage('请先选择办理类型', 3000);
+      scrollTo.value = '_express';
+      return;
+    }
     isRequireSfz.map((key) => {
       const keys = key.split('|');
 
@@ -1729,6 +1768,35 @@
     _expressCompany && (expressCompany.value = _expressCompany + '');
   };
 
+  //委托书下载
+  const isMandateUrl = computed(() => {
+    return pageConfig.value.isMandateUrl;
+  });
+
+  const handleConfirm = () => {
+    resolve();
+  };
+
+  const getMandateUrl = async () => {
+    new Promise((rl, rj) => {
+      resolve = rl;
+      mandateDialog.value.show();
+    }).then(async (res) => {
+      const filePath = await downFile(isMandateUrl.value || '');
+      uni.openDocument({
+        filePath,
+        fileType: 'docx',
+        showMenu: true,
+        complete(e) {
+          console.log('预览文件--', filePath);
+        },
+        fail(e) {
+          console.log('prev fail', e);
+        },
+      });
+    });
+  };
+
   const hosChange = () => {
     _hosId.value = addDialogValue.value.hosId;
     getConfig();
@@ -1957,5 +2025,9 @@
   }
   .center {
     padding: 0 20rpx;
+  }
+  .ico_download-blue {
+    width: var(--hr-font-size-xxl);
+    height: var(--hr-font-size-xxl);
   }
 </style>
