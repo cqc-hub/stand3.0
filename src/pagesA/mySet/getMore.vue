@@ -40,13 +40,17 @@
       </view>
     </view>
     <view class="footer">浙江和仁科技股份有限公司&copy;技术支持</view>
+
+    <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+  import { ref } from 'vue';
   import { joinQueryForUrl, getLocalStorage } from '@/common';
-  import { useCacheStore } from '@/stores';
+  import { GStores } from '@/utils';
+
+  const gStores = new GStores();
 
   const policyList = ref([
     {

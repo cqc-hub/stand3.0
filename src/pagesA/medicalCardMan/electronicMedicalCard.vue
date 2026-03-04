@@ -33,13 +33,13 @@
       </view>
 
       <view class="m32c rounded-xl bg-blue container">
-        <view class="f28 p32c pt24 color-fff pb24">
+        <!-- <view class="f28 p32c pt24 color-fff pb24">
           <text class="mr32">
             {{ gStores.userStore.clickPat.patientNameEncry }}
           </text>
 
           <text>{{ options.code }}</text>
-        </view>
+        </view> -->
 
         <view
           class="bg-white rounded-xl p32 flex flex-col items-center justify-center relative transition"

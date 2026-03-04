@@ -265,8 +265,8 @@ export const useHosPayPage = () => {
       gStores.messageStore.showMessage('请输入金额');
       return;
     }
-    if (feeNum < 1) {
-      gStores.messageStore.showMessage('充值至少1元, 请输入其它金额');
+    if (feeNum <= 1) {
+      gStores.messageStore.showMessage('充值金额需要大于1元, 请输入其它金额');
       return;
     }
     const isDigitalPay = getIsDigitalPay(pageConfig.value);

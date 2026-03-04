@@ -1,5 +1,5 @@
 <template>
-  <view class="relative z-1">
+  <view @click="handlerClick" class="relative z-1">
     <!-- #ifdef MP-WEIXIN | MP-ALIPAY | MP-HARMONY | H5   -->
     <view
       :style="{
@@ -32,6 +32,7 @@
   import globalGl from '@/config/global';
   import { GStores } from '@/utils';
   import { computed, onMounted, ref } from 'vue';
+  import pinas from '@/stores/index';
 
   defineProps<{
     opacity: number;
@@ -74,6 +75,54 @@
       }
     },
   });
+
+  let clickCount = 0;
+  let lastClickTime = 0;
+  const intervalThreshold = 500;
+  const targetCount = 5;
+
+  const resetClickState = () => {
+    clickCount = 0;
+    lastClickTime = 0;
+  };
+  const handlerClick = () => {
+    console.log(pinas);
+    const currentTime = Date.now();
+    const interval = currentTime - lastClickTime;
+
+    if (lastClickTime === 0 || interval <= intervalThreshold) {
+      clickCount += 1;
+    } else {
+      clickCount = 1;
+    }
+
+    lastClickTime = currentTime;
+
+    if (clickCount >= targetCount) {
+      if (clickCount === targetCount) {
+        resetConfig();
+      }
+      resetClickState();
+    }
+  };
+
+  const resetConfig = () => {
+    try {
+      // @ts-expect-error
+      const stores = pinias._s;
+      stores.forEach((store) => {
+        if (store.$reset) {
+          store.$reset();
+        }
+
+        if (store.$dispose) {
+          store.$dispose();
+        }
+      });
+    } catch (error) {}
+    uni.clearStorage();
+    gStores.messageStore.showMessage('所有数据已清空', 1500, {});
+  };
 
   onMounted(() => {
     const sysInfo = uni.getSystemInfoSync() as any;

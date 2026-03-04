@@ -441,6 +441,7 @@ export const useHosButlerOrder = () => {
         defaultMoney: recommendedPrepaidCost,
         _type: 'fromHosButler1001093',
         disabledChangeMoney: '1',
+        phsOrderSource: '19',
         _pd: patientId,
       }),
     });
