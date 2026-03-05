@@ -16,6 +16,7 @@ export const sysConfigEnv = <const>{
  * 容器为 Trial 环境(体验版)下 替换 sysConfig
  */
 export const sysConfigTrial = <const>{
+  // 'person.isSmsVerify': '1',
   'pay.medical': {
     isMedicalOrder: '1',
     isMedicalPay: '1',

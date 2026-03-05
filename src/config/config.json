@@ -1,36 +1,50 @@
 {
-  "sysCode": "1001093",
+  "sysCode": "1001035",
   "sysConfig": {
-    "wxAppid": "wxfa6c5f0835eedf08",
-    "alipayAppid": "2021002143620963",
-    "h5Appid": "wx32db6c8548b011c9",
-    "isvAlipayAppid": "2021002147662292",
-    "name": "湖州市第三人民医院",
+    "wxAppid": "wxacb96ee66c3dee84",
+    "h5Appid": "wxa5cb8c1829e5603e",
+    "alipayAppid": "2021003104670597",
+    "isvAlipayAppid": "2021003104670597",
+    "toutiaoAppid": "tt00a7761a9facebee01",
+    "harmonyBundleName": "com.atomicservice.6917564602329951506",
+    "name": "江苏省中医院",
+    "isOpenOcr": false,
     "isSearchInHos": true,
     "sConfig": {
-      "homeStyle": "1",
-      "isOpenHelpOld": "1",
-      "login": {
-        "isAliAuthBase": "1",
-        "isSkipPerfect": "1"
+      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/jiangsushengzhonnavtitle.png",
+      "isOpenMessageAuth": "1",
+      "isOpenAssistMessage": "1",
+      "isMessageBtnShowNew": "1",
+      "isOpenPopularSci": {
+        "wx": "1"
       },
       "isOpenWechatSI": true,
-      "isWxShowToggleEcZh": "1",
+      "isOpenHelpOld": "1",
       "homeTopBanner": {
-        "topShow": true,
-        "bannerHeight": 230
+        "topShow": true
       },
       "medicalMHelp": {
-        "isOpenPatToMedicalPat": {},
         "wx": {
-          "medicalPlugin": "1"
-        },
-        "alipay": {
-          "medicalPlugin": {
-            "orgId": {
-              "13152": "H33010500310"
+          "isMedicalOrder": "1",
+          "isGbFamilyPayment": "1",
+          "medical1001035": {
+            "auth": {
+              "appId": "wxfde9fffbfa82be54",
+              "path": "pages/allOutPayCashier/authUniPro/authUni",
+              "extraData": {
+                "appid": "96391c9afe2c46b3bba52436351dd418"
+              }
             },
-            "cardType": "01"
+            "pay": {
+              "appId": "wxfde9fffbfa82be54",
+              "path": "pages/allOutPayCashier/cashierUniPro/cashierUni",
+              "extraData": {
+                "appid": "96391c9afe2c46b3bba52436351dd418",
+                "channel_code": "b756bf71948144f993bcc768fe7b0910",
+                "fixmedinsCode": "H32010400468",
+                "fixmedinsName": "江苏省中医院"
+              }
+            }
           }
         }
       }
