@@ -939,7 +939,10 @@
     }
 
     if (totalCost) {
-      result._totalCost = totalCost + '元';
+      result._totalCost =
+        totalCost && !(totalCost === '0.00' && getSysCode() === '1001083')
+          ? totalCost + '元'
+          : '-';
     }
 
     if (hosAccountOffsetFee) {

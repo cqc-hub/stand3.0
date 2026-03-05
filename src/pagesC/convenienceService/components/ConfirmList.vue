@@ -27,7 +27,12 @@
                 <text v-else class="iconfont color-888">&#xe6c5;</text>
               </view>
             </view>
-            <view class="fee mt8 f32 g-bold" v-if="item.fee">
+            <view
+              class="fee mt8 f32 g-bold"
+              v-if="
+                item.fee && item.fee !== '0.00' && getSysCode() === '1001083'
+              "
+            >
               {{ (item.fee as any) * item.num }}元
             </view>
           </view>
@@ -39,6 +44,7 @@
 
 <script lang="ts" setup>
   import { ref, getCurrentInstance } from 'vue';
+  import { getSysCode } from '@/common';
   import { type IConfirmList } from '../utils/index';
 
   const props = defineProps<{

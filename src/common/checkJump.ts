@@ -7,6 +7,7 @@ import {
   LoginUtils,
   getLocation,
   TBannerHomeMenuConfig,
+  getMiniProgramEnv,
 } from '@/utils';
 import { useRouterStore } from '@/stores';
 import { joinQuery } from '@/common';
@@ -207,6 +208,9 @@ export const useCommonTo = async (item, payload: IPayLoad = {}) => {
 export const isSubscribeWx = async () => {
   const gStores = new GStores();
   if (!gStores.globalStore.h5OpenId && globalGl.h5AppId) {
+    if ((await getMiniProgramEnv()) === 'develop' && globalGl.env !== 'prod') {
+      return;
+    }
     uni.reLaunch({
       url: '/pages/home/startCome',
     });

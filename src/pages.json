@@ -892,15 +892,6 @@
           "style": {
             "navigationBarTitleText": "医院主页"
           }
-        },
-        {
-          "path": "medicalAsistant/medicalAsistant",
-          "extend": {
-            "patient": true
-          },
-          "style": {
-            "navigationBarTitleText": "智能陪诊"
-          }
         }
       ],
       "plugins":  {}

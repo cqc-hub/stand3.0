@@ -2,6 +2,7 @@ import PAGE_DATA from '@/pages.json';
 import globalGl from '@/config/global';
 import { useGlobalStore, useUserStore } from '@/stores';
 import { joinQuery, getQueryUrl } from '@/common';
+import { getMiniProgramEnv } from '@/utils';
 
 const pageAdmin = new Map();
 const routerPages = [...PAGE_DATA.pages];
@@ -147,6 +148,12 @@ export const beforeEach = async (
     ].includes(url)
   ) {
     if (!globalStore.h5OpenId && globalGl.h5AppId) {
+      if (
+        (await getMiniProgramEnv()) === 'develop' &&
+        globalGl.env !== 'prod'
+      ) {
+        return;
+      }
       uni.reLaunch({
         url: '/pages/home/startCome',
       });

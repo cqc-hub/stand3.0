@@ -35,7 +35,7 @@
           id: 141546,
           detail: '',
           selectPatientPage: '0',
-          title: '医院指南',
+          title: '医院介绍',
           patientInterception: '0',
           loginInterception: '0',
           terminalType: 'my',

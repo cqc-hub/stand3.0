@@ -63,7 +63,13 @@
                       >
                         {{ _item.schQukCategor || _item.categorName || '' }}
                       </text>
-                      <text v-if="_item.fee" class="text-no-wrap">
+                      <text
+                        v-if="
+                          _item.fee &&
+                          !(_item.fee === '0.00' && getSysCode() === '1001083')
+                        "
+                        class="text-no-wrap"
+                      >
                         {{ _item.fee }}元
                       </text>
                     </view>
@@ -129,7 +135,17 @@
                   }}
                 </text>
 
-                <text class="text-no-wrap">{{ selectSchInfo.fee }}元</text>
+                <text
+                  class="text-no-wrap"
+                  v-if="
+                    selectSchInfo.fee &&
+                    !(
+                      selectSchInfo.fee === '0.00' && getSysCode() === '1001083'
+                    )
+                  "
+                >
+                  {{ selectSchInfo.fee }}元
+                </text>
               </view>
             </view>
 
@@ -188,6 +204,7 @@
     dealNumberSourceList,
   } from '../../utils/index';
   import { GStores, ServerStaticData, type ISystemConfig, wait } from '@/utils';
+  import { getSysCode } from '@/common';
 
   import orderSelectSourceList from './OrderSourceList.vue';
   import api from '@/service/api';
@@ -318,7 +335,7 @@
         dealNumberSourceList(result || []);
         collapseOrderSourceList.value[listKey] = result || [];
         // #ifdef MP-TOUTIAN
-        await wait(1500)
+        await wait(1500);
         // #endif
         refCollapseNow.init();
       }

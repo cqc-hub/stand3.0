@@ -51,8 +51,8 @@
     </view>
 
     <view v-if="!isPreConfirm" class="row">
-      <view class="title text-no-wrap">挂号金额</view>
-      <view class="mr12">{{ myProps.fee }}元</view>
+      <view class="title text-no-wrap" v-if="myProps.fee">挂号金额</view>
+      <view class="mr12" v-if="myProps.fee">{{ myProps.fee }}元</view>
       <view v-if="myProps.categorName">{{ myProps.categorName }}</view>
     </view>
 

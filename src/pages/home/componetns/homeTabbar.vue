@@ -78,7 +78,7 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue';
 
-  import { setLocalStorage, getLocalStorage } from '@/common';
+  import { setLocalStorage, getLocalStorage, getSysCode } from '@/common';
 
   import {
     useTBanner,
@@ -199,6 +199,15 @@
           url: item.url,
         });
       } else {
+        if (
+          getSysCode() === '1001036' &&
+          ['home-tabbar:便民', 'home-tabbar:科普'].includes(item.label)
+        ) {
+          uni.navigateTo({
+            url: item.url,
+          });
+          return;
+        }
         uni.reLaunch({
           url: item.url,
         });
@@ -266,7 +275,7 @@
       },
       {
         label: 'home-tabbar:图文咨询',
-       icon: global.BASE_IMG + 'oral-mall-home-icon.png',
+        icon: global.BASE_IMG + 'oral-mall-home-icon.png',
         iconActive: `/static/image/oral-mall-home-icon-active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
         }.png`,
@@ -380,8 +389,7 @@
       tabList.push('home-tabbar:便民');
       tabList.push('home-tabbar:科普');
     }
-     if (global.SYS_CODE === '1001054') {
-      //东总煞笔需求
+    if (global.SYS_CODE === '1001054') {
       tabList.push('home-tabbar:图文咨询');
     }
 

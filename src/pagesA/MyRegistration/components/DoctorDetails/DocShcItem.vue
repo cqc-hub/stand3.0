@@ -40,7 +40,12 @@
 
           <text class="">
             <text class="mr16 g-bold text-no-wrap">{{ item.ampmName }}</text>
-            <text v-if="item.fee" class="ampm-fee mr16 g-bold">
+            <text
+              v-if="
+                item.fee && !(item.fee=== '0.00' && getSysCode() === '1001083')
+              "
+              class="ampm-fee mr16 g-bold"
+            >
               {{ item.fee }}元
             </text>
             <text
@@ -149,6 +154,7 @@
 
   import { type ISystemConfig, GStores } from '@/utils';
   import dayjs from 'dayjs';
+  import { getSysCode } from '@/common';
 
   const props = defineProps<{
     item: TSchInfo;
