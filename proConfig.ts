@@ -9,7 +9,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '2021003154665105',
     h5Appid: 'wx8e5a08ccb011d26c',
     name: '台州市第一人民医院',
-    isStartComeTest: false,
+
     isSearchInHos: true,
     isOpenOcr: true,
     sConfig: {
@@ -41,7 +41,7 @@ export const miniProgramConfig: {
     toutiaoAppid: 'tt00a7761a9facebee01',
     harmonyBundleName: 'com.atomicservice.6917564602329951506',
     name: '江苏省中医院',
-    isStartComeTest: false,
+
     isOpenOcr: false,
     isSearchInHos: true,
     sConfig: {
@@ -85,7 +85,7 @@ export const miniProgramConfig: {
     alipayAppid: '2021003120612222',
     isvAlipayAppid: '2021003120637143',
     name: '东部战区总医院',
-    isStartComeTest: false,
+
     isOpenOcr: false,
     isSearchInHos: true,
     sConfig: {
@@ -102,7 +102,7 @@ export const miniProgramConfig: {
     h5Appid: 'wx65a04aa1dc7776d8',
     name: '嘉兴市第二医院',
     isSearchInHos: true,
-    isStartComeTest: false,
+
     isOpenOcr: true,
     sConfig: {
       isMessageBtnShowNew: '1',
@@ -123,7 +123,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '2021002147662292',
     name: '湖州市第三人民医院',
     isSearchInHos: true,
-    isStartComeTest: true,
+
     isOpenOcr: false,
     sConfig: {
       isOpenHomeTabBarNetWorkBtn: '1',
@@ -144,7 +144,7 @@ export const miniProgramConfig: {
     h5Appid: '',
     name: '大医二院普湾院区',
     isSearchInHos: false,
-    isStartComeTest: false,
+
     isOpenOcr: false,
     sConfig: { isOpenHomeTabBarMessageBtn: '1' },
   },
@@ -155,7 +155,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '2021003164621092',
     name: '安康市中医医院',
     isSearchInHos: false,
-    isStartComeTest: false,
+
     isOpenOcr: false,
     sConfig: {
       homeNavTitleLogo:
@@ -178,7 +178,7 @@ export const miniProgramConfig: {
     h5Appid: 'wxed31a7829838f998',
     name: '郸城县人民医院',
     isSearchInHos: false,
-    isStartComeTest: false,
+
     isOpenOcr: false,
     sConfig: {
       medicalMHelp: { alipay: { medicalDefault: '1', medicalNation: {} } },
@@ -190,7 +190,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '2021003116641812',
     h5Appid: 'wx1be541208ab16799',
     name: '绍兴市人民医院',
-    isStartComeTest: true,
+
     isSearchInHos: true,
     isOpenOcr: true,
     sConfig: {
@@ -221,7 +221,7 @@ export const miniProgramConfig: {
     alipayAppid: '2021003144603328',
     name: '宜兴市人民医院',
     isSearchInHos: true,
-    // isStartComeTest: true,
+    //
     isOpenOcr: true,
     sConfig: {
       isOpenHelpOld: '1',
@@ -327,7 +327,7 @@ export const miniProgramConfig: {
       healthCardText: '陕西省卫生健康委员会',
       hospitalId: '37133',
     },
-    isStartComeTest: true,
+
     isSearchInHos: true,
     alipayPid: 'ze2exd3di9dbye6cc+hfia==',
     isOpenOcr: true,
@@ -360,7 +360,7 @@ export const miniProgramConfig: {
       healthCardText: '陕西省卫生健康委员会',
       hospitalId: '37139',
     },
-    isStartComeTest: false,
+
     isSearchInHos: false,
     alipayPid: 'dl5dt/lx8x6q93cionolzw==',
     isOpenOcr: false,
@@ -373,7 +373,7 @@ export const miniProgramConfig: {
     h5Appid: 'wxe8692caf9ede57e1',
     name: '中国人民解放军新疆军区总医院',
     isSearchInHos: false,
-    isStartComeTest: true,
+
     isOpenOcr: false,
     isOpenHealthCard: {
       healthCardText: '新疆维吾尔自治区卫生健康委员会',
@@ -438,7 +438,7 @@ export const miniProgramConfig: {
     name: '濮阳市人民医院',
     isSearchInHos: true,
     isOpenOcr: false,
-    isStartComeTest: false,
+
     sConfig: {
       isOpenWechatSI: true,
       login: { isAliAuthBase: '1' },
@@ -478,7 +478,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '2021004105619008',
     name: '绍兴第二医院',
     h5Appid: 'wx13e186671d763023',
-    isStartComeTest: false,
+
     isSearchInHos: true,
     isOpenOcr: false,
     sConfig: {
@@ -496,7 +496,7 @@ export const miniProgramConfig: {
     h5Appid: '',
     name: '大医二院普湾院区',
     isSearchInHos: false,
-    isStartComeTest: false,
+
     isOpenOcr: false,
     _des: '这个老版本, 不知道啥用',
   },
@@ -507,7 +507,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '2021004134663007',
     name: '杭州口腔医院',
     isSearchInHos: false,
-    isStartComeTest: false,
+
     isOpenOcr: false,
     sConfig: {
       login: { isSkipPerfect: '1', isAliAuthBase: '1' },
@@ -521,7 +521,7 @@ export const miniProgramConfig: {
     h5Appid: '',
     name: '浙江省肿瘤医院国际保健中心',
     isSearchInHos: false,
-    isStartComeTest: true,
+
     isOpenOcr: false,
     sConfig: { login: { isSkipPerfect: '1' } },
   },
@@ -532,7 +532,7 @@ export const miniProgramConfig: {
     h5Appid: '',
     name: '宁波口腔医院',
     isSearchInHos: false,
-    isStartComeTest: true,
+
     isOpenOcr: false,
     sConfig: {
       isOpenWechatSI: true,
@@ -574,7 +574,7 @@ export const miniProgramConfig: {
     h5Appid: '',
     name: '宁波耳鼻喉医院',
     isSearchInHos: false,
-    isStartComeTest: true,
+
     isOpenOcr: false,
     sConfig: { isOpenWechatSI: true },
   },
@@ -584,7 +584,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '2021003104624121',
     h5Appid: '',
     name: '浙江省人民医院毕节医院',
-    isStartComeTest: true,
+
     isSearchInHos: false,
     isOpenOcr: false,
     sConfig: {
@@ -609,7 +609,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '',
     name: '益阳医专附属口腔医院',
     isSearchInHos: false,
-    isStartComeTest: true,
+
     isOpenOcr: false,
   },
   '1001071': {
@@ -618,7 +618,7 @@ export const miniProgramConfig: {
     h5Appid: '',
     name: '杭州口腔医院集团滨江门诊部',
     isSearchInHos: false,
-    isStartComeTest: false,
+
     isOpenOcr: false,
     sConfig: {},
   },
@@ -627,7 +627,7 @@ export const miniProgramConfig: {
     h5Appid: '',
     name: '温医附二院就医助手',
     isSearchInHos: false,
-    isStartComeTest: false,
+
     isOpenOcr: false,
     _des: '过渡板小程序引导跳转',
   },
@@ -638,7 +638,7 @@ export const miniProgramConfig: {
     h5Appid: 'wxbba52ad9743cf8fe',
     name: '天水市第一人民医院',
     isSearchInHos: true,
-    isStartComeTest: false,
+
     isOpenOcr: false,
     isOpenHealthCard: {
       healthCardText: '甘肃省卫生健康委员会',
@@ -670,7 +670,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '2021004134663007',
     name: '昆明口腔医院',
     isSearchInHos: false,
-    isStartComeTest: false,
+
     isOpenOcr: false,
     sConfig: { login: { isSkipPerfect: '1' } },
   },
@@ -680,7 +680,7 @@ export const miniProgramConfig: {
     alipayAppid: '2021005131642589',
     isvAlipayAppid: '2021005131668685',
     name: '陕西省中医医院',
-    isStartComeTest: false,
+
     isOpenOcr: false,
     _des: '陕西省中医医院',
     sConfig: {
@@ -705,7 +705,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '',
     name: '南京金陵口腔医院',
     isSearchInHos: false,
-    isStartComeTest: false,
+
     isOpenOcr: false,
     sConfig: { login: { isSkipPerfect: '1' } },
   },
@@ -715,7 +715,7 @@ export const miniProgramConfig: {
     h5Appid: '',
     name: '和仁智领医院',
     isSearchInHos: true,
-    isStartComeTest: true,
+
     isOpenOcr: false,
     sConfig: {
       login: { isSkipPerfect: '1', isAliAuthBase: '1', isLoginByOpenId: '1' },
@@ -731,7 +731,7 @@ export const miniProgramConfig: {
     alipayAppid: '',
     isvAlipayAppid: '',
     name: '浙江省健康人才发展协会',
-    isStartComeTest: false,
+
     isOpenOcr: false,
     sConfig: {
       login: { isSkipPerfect: '1', isAliAuthBase: '1', isLoginByOpenId: '1' },
@@ -743,7 +743,7 @@ export const miniProgramConfig: {
     alipayAppid: '',
     isvAlipayAppid: '',
     name: '健康温州',
-    isStartComeTest: false,
+
     isOpenOcr: false,
     sConfig: {
       isOpenPopularSci: '1',
@@ -757,7 +757,7 @@ export const miniProgramConfig: {
     alipayAppid: '2021005172668444',
     isvAlipayAppid: '2021005178602372',
     name: '温州市人民医院',
-    isStartComeTest: false,
+
     isSearchInHos: true,
     isOpenOcr: false,
     sConfig: {
@@ -788,7 +788,7 @@ export const miniProgramConfig: {
     alipayAppid: '2021005176652664',
     isvAlipayAppid: '2021005178607990',
     name: '溧阳市人民医院',
-    isStartComeTest: false,
+
     isOpenOcr: false,
     isSearchInHos: true,
     sConfig: {
@@ -824,7 +824,7 @@ export const miniProgramConfig: {
     alipayAppid: '2021006124681484',
     isvAlipayAppid: '',
     name: '温州市中西医结合医院',
-    isStartComeTest: false,
+
     isOpenOcr: false,
     isSearchInHos: true,
     sConfig: { login: { isSkipPerfect: '1', isAliAuthBase: '1' } },
@@ -833,7 +833,7 @@ export const miniProgramConfig: {
     wxAppid: 'wxa4a2728d9d7598f1',
     h5Appid: '',
     name: '新疆维吾尔自治区中医医院',
-    isStartComeTest: false,
+
     isOpenOcr: false,
     isSearchInHos: true,
     isOpenHealthCard: {
@@ -853,7 +853,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '',
     name: '益阳口腔医院康富院区',
     isSearchInHos: false,
-    isStartComeTest: false,
+
     isOpenOcr: false,
   },
   '1001088': {
@@ -863,7 +863,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '',
     name: '沅江口腔医院',
     isSearchInHos: false,
-    isStartComeTest: false,
+
     isOpenOcr: false,
   },
   '1001092': {
@@ -872,7 +872,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '2021005194657067',
     h5Appid: '',
     name: '延安市人民医院',
-    isStartComeTest: false,
+
     isOpenOcr: false,
     isSearchInHos: true,
     sConfig: {
@@ -907,7 +907,7 @@ export const miniProgramConfig: {
     h5Appid: 'wx425067e6f6726598',
     isvAlipayAppid: '',
     name: '浙江省肿瘤医院',
-    isStartComeTest: false,
+
     isOpenOcr: false,
     isSearchInHos: true,
     sConfig: {
@@ -945,7 +945,7 @@ export const miniProgramConfig: {
     wxAppid: 'wx081a6fb9ee8778e4',
     h5Appid: 'wx082515d97bb4b974',
     name: '新疆维吾尔自治区中医医院',
-    isStartComeTest: false,
+
     isOpenOcr: false,
     isSearchInHos: true,
     isOpenHealthCard: {
@@ -1013,7 +1013,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '',
     h5Appid: 'wxe815b1a8cf9e5067',
     name: '义乌市中心医院',
-    isStartComeTest: false,
+
     isOpenOcr: false,
     isSearchInHos: true,
     sConfig: {
@@ -1029,7 +1029,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '',
     name: '舟山市普陀区人民医院',
     h5AppidDisabledInTest: true,
-    isStartComeTest: false,
+
     isSearchInHos: true,
     isOpenOcr: false,
     sConfig: { isDrugDelivery: '1', isOpenHelpOld: '1' },
@@ -1041,7 +1041,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '',
     name: '桂中医赛院附属中医门诊部',
     h5AppidDisabledInTest: true,
-    isStartComeTest: false,
+
     isSearchInHos: false,
     isOpenOcr: false,
     sConfig: { isOpenHelpOld: '1' },
@@ -1051,7 +1051,7 @@ export const miniProgramConfig: {
     h5Appid: 'wx00cb6182a8c21b09',
     alipayAppid: '2021002133687534',
     name: '郑州市中医院',
-    isStartComeTest: false,
+
     isSearchInHos: true,
     isOpenOcr: false,
     sConfig: {
@@ -1109,7 +1109,7 @@ export const miniProgramConfig: {
     alipayAppid: '2021002133632822',
     h5Appid: 'wx12f8b744255a6f5d',
     name: '健康金湖',
-    isStartComeTest: true,
+
     isSearchInHos: false,
     isOpenOcr: false,
   },

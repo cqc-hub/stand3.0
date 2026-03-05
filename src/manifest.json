@@ -41,7 +41,11 @@
   },
   "quickapp": {},
   "mp-weixin": {
+<<<<<<< HEAD
     "appid": "wxfa6c5f0835eedf08",
+=======
+    "appid": "wxc3ee6623e27269a7",
+>>>>>>> 908fa0da (feat: 配置调整)
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -67,9 +71,15 @@
     ],
     "usingComponents": true,
     "plugins": {
+<<<<<<< HEAD
       "SIPlugin": {
         "version": "0.3.6",
         "provider": "wx069ba97219f66d99"
+=======
+      "crossProgramPlugins": {
+        "version": "latest",
+        "provider": "wx12cec70855c0cacf"
+>>>>>>> 908fa0da (feat: 配置调整)
       }
     },
     "mergeVirtualHostAttributes": true,
@@ -86,7 +96,11 @@
       }
     },
     "mergeVirtualHostAttributes": true,
+<<<<<<< HEAD
     "appid": "2021002143620963",
+=======
+    "appid": "2021005172668444",
+>>>>>>> 908fa0da (feat: 配置调整)
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -138,7 +152,11 @@
     "enable": false
   },
   "vueVersion": "3",
+<<<<<<< HEAD
   "name": "湖州市第三人民医院",
+=======
+  "name": "温州市人民医院",
+>>>>>>> 908fa0da (feat: 配置调整)
   "h5": {
     "optimization": {
       "treeShaking": {
