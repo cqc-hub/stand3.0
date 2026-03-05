@@ -120,7 +120,7 @@ export type TSchInfo = {
 
   empNo: string;
   // 挂号费
-  fee: string;
+  fee: number;
   // 号源总数
   numCount: string;
   // 已预约数

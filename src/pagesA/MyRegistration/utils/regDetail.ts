@@ -431,6 +431,7 @@ export interface IRegInfo {
   hosDocId: string;
   hosDeptId: string;
   hosOrderId: string;
+  hosData?: string;
   orderId: string;
   docName: string;
   categorName: string;
@@ -734,9 +735,10 @@ export class RegDetailUtil {
         errMsg = '用户点击取消';
         throw new Error(errMsg);
       }
-
-      // return
-      if (this.gStores.globalStore.sysCode === '1001094' && typeId === '1') {
+      if (
+        (this.gStores.globalStore.sysCode === '1001094' && typeId === '1') ||
+        this.orderRegInfo.hosData
+      ) {
         await api.refundHosReg({
           ...this.orderRegInfo,
           ...args,
@@ -761,6 +763,12 @@ export class RegDetailUtil {
         throw new Error(errMsg);
       }
       return await this.cancelReg(opt);
+    }
+
+    if (opt.returnUrl) {
+      uni.reLaunch({
+        url: opt.returnUrl,
+      });
     }
   }
 

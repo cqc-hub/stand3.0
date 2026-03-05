@@ -79,12 +79,7 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "appid": "2021005172668444",
     "window": {
@@ -132,7 +127,8 @@
     "usingComponents": true
   },
   "mp-toutiao": {
-    "usingComponents": true
+    "usingComponents": true,
+    "appid": "tt00a7761a9facebee01"
   },
   "uniStatistics": {
     "enable": false
