@@ -39,10 +39,12 @@
           </text>
 
           <text class="">
-            <text class="mr16 g-bold text-no-wrap">{{ item.ampmName }}</text>
+            <text class="mr16 g-bold text-no-wrap">
+              {{ item.ampmName.replace(/^[^;]*;/, '') }}
+            </text>
             <text
               v-if="
-                item.fee && !(item.fee=== '0.00' && getSysCode() === '1001083')
+                item.fee && !(item.fee === '0.00' && getSysCode() === '1001083')
               "
               class="ampm-fee mr16 g-bold"
             >

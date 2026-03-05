@@ -15,10 +15,10 @@
           <view>
             <g-tabs
               v-model:value="tabCurrent"
-              :tabs="selectSchInfos"
+              :tabs="selectSchInfoWithRightAmpmName"
               :scroll="false"
               @change="tabChange"
-              field="ampmName"
+              field="ampmName1"
               style="width: 100%"
             />
           </view>
@@ -231,6 +231,19 @@
     } else {
       return {} as TSchInfoWhole;
     }
+  });
+
+  const selectSchInfoWithRightAmpmName = computed(() => {
+    let schInfo = props.selectSchInfos;
+    if (props.selectSchInfos?.length) {
+      schInfo = props.selectSchInfos.map((item) => {
+        return {
+          ...item,
+          ampmName1: item.ampmName.replace(/^[^;]*;/, ''),
+        };
+      });
+    }
+    return schInfo;
   });
 
   const fgTitle1202 = ref('');

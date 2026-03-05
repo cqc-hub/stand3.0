@@ -937,22 +937,25 @@
       timeTravel.value.downTime = 100;
       clearInterval(_timeTravel);
     }
-
-    if (totalCost) {
-      result._totalCost =
-        totalCost && !(totalCost === '0.00' && getSysCode() === '1001083')
-          ? totalCost + '元'
-          : '-';
+    if (totalCost && !(totalCost == '0' && getSysCode() === '1001083')) {
+      result._totalCost = totalCost + '元';
     }
 
     if (hosAccountOffsetFee) {
       result._hosAccountOffsetFee = hosAccountOffsetFee + '元';
     }
 
-    result._appointmentDate = [appointmentDate, ampmName, appointmentTime]
+    result._appointmentDate = [
+      appointmentDate,
+      ampmName.replace(/^[^;]*;/, ''),
+      appointmentTime,
+    ]
       .filter((o) => o)
       .join(' ');
-    if (result.fee || result.totalCost) {
+    if (
+      (result.fee || result.totalCost) &&
+      !(result.totalCost == '0' && getSysCode() === '1001083')
+    ) {
       result._fee = (result.fee || result.totalCost) + '元';
     }
     result._category = result.schQukCategor || result.categorName;

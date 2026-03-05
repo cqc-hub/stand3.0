@@ -13,7 +13,7 @@
       <view class="row-title-bold">
         <text class="row-title-mr">{{ myProps.schDate }}</text>
         <text class="row-title-mr">
-          <text v-if="myProps.ampmName">{{ myProps.ampmName }}</text>
+          <text v-if="myProps.ampmName">{{ myProps.ampmName.replace(/^[^;]*;/, '') }}</text>
           <text v-if="myProps.timeDesc">{{ myProps.timeDesc }}</text>
         </text>
         <!-- <text>{{ myProps.disNo }}号</text> -->
@@ -52,7 +52,14 @@
 
     <view v-if="!isPreConfirm" class="row">
       <view class="title text-no-wrap" v-if="myProps.fee">挂号金额</view>
-      <view class="mr12" v-if="myProps.fee">{{ myProps.fee }}元</view>
+      <view
+        class="mr12"
+        v-if="
+          myProps.fee && !(myProps.fee === '0.00' && getSysCode() === '1001083')
+        "
+      >
+        {{ myProps.fee }}元
+      </view>
       <view v-if="myProps.categorName">{{ myProps.categorName }}</view>
     </view>
 
@@ -82,6 +89,7 @@
   import { ref, onMounted } from 'vue';
   import { GStores, ServerStaticData, wait } from '@/utils';
   import { IPageProps } from '../../utils/regConfirm';
+  import { getSysCode } from '@/common';
 
   const props = withDefaults(
     defineProps<{

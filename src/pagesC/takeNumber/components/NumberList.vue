@@ -23,7 +23,7 @@
 
       <view class="color-444 f28 mb32">
         <text class="mr8">{{ item.visitDate }}</text>
-        <text>{{ item.ampmName }}</text>
+        <text>{{ item.ampmName.replace(/^[^;]*;/, '') }}</text>
         <text class="mr8">{{ item.timeDesc }}</text>
         <text v-if="item.queueNum">第{{ item.queueNum }}号</text>
       </view>
