@@ -3,9 +3,11 @@
     class="scroll-view"
     :scroll-x="true"
     v-if="messList && messList.length"
+    :class="messList.length > 1 ? '' : 'w100'"
   >
     <view
       class="flex scroll-view1"
+      :class="messList.length > 1 ? '' : 'w100'"
       :style="{
         width: `calc(${
           messList.length * 90 + (messList.length > 1 ? 0 : 15) + 'vw'
@@ -66,7 +68,7 @@
                     width:
                       list[
                         getFourItemsSmart(
-                          statusList,
+                          messData.statusList,
                           messData.orderStatus
                         ).findIndex(
                           (item) => item.value == messData.orderStatus
@@ -81,7 +83,7 @@
                       active: item.value * 1 <= messData.orderStatus * 1,
                     }"
                     v-for="item in getFourItemsSmart(
-                      statusList,
+                      messData.statusList,
                       messData.orderStatus
                     )"
                     :key="item.value + 'name'"
@@ -92,7 +94,7 @@
                     class="name text-ellipsis"
                     :class="{ active: item.value === messData.orderStatus }"
                     v-for="item in getFourItemsSmart(
-                      statusList,
+                      messData.statusList,
                       messData.orderStatus
                     )"
                     :key="item.value + 'name'"
@@ -145,24 +147,21 @@
   });
   const messList = ref([] as any[]);
   const list = ref([10, 36.4, 63.4, 90] as any[]);
-  const statusList = ref([
-    { label: '挂号', value: '1' },
-    { label: '取号', value: '2' },
-    { label: '签到', value: '3' },
-    { label: '候诊', value: '4' },
-    { label: '接诊', value: '5' },
-  ]);
   const reLoad = async () => {
     const { result } = await api.hpCalendar({});
     messList.value = result;
-    if (gStores.globalStore.sysCode === '1001035') {
-      statusList.value = [
-        { label: '挂号', value: '1' },
-        { label: '签到', value: '3' },
-        { label: '候诊', value: '4' },
-        { label: '接诊', value: '5' },
-      ];
-    }
+    messList.value.map((item) => {
+      item.statusList = [];
+      if (item.process) {
+        const [listStr, orderStatus] = item.process.split(',');
+        item.orderStatus = orderStatus;
+        const statusArray = listStr.split('/');
+        item.statusList = statusArray.map((status) => ({
+          label: status,
+          value: status,
+        }));
+      }
+    });
   };
 
   const gotoHisMess = async () => {};
@@ -389,6 +388,9 @@
   }
   .w90 {
     width: 90vw;
+  }
+  .w100 {
+    width: 100vw !important;
   }
   .marquee-seamless {
     width: 100%;

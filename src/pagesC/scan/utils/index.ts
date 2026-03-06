@@ -149,6 +149,8 @@ export const useScan = () => {
       k: outTime,
       l: hospitalWard,
       n: hosId,
+      m: attendingDoctor,
+      o: admissionTime,
     } = pageProps.value;
 
     const addition: any = {
@@ -179,6 +181,8 @@ export const useScan = () => {
         inHospitalNo,
         patientPhone,
         hosName,
+        attendingDoctor,
+        admissionTime,
       },
       addition,
     });

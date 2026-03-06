@@ -937,8 +937,6 @@
       timeTravel.value.downTime = 100;
       clearInterval(_timeTravel);
     }
-    console.log(999999);
-    
     if (totalCost && !(Number(totalCost) == 0 && getSysCode() === '1001083')) {
       result._totalCost = totalCost + '元';
     }
