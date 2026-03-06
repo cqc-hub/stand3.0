@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxc3ee6623e27269a7",
+    "appid": "wxacb96ee66c3dee84",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -60,16 +60,12 @@
         "desc": "你的位置信息将用于小程序位置接口的效果展示"
       }
     },
-    "requiredPrivateInfos": [
-      "chooseLocation",
-      "getLocation",
-      "chooseAddress"
-    ],
+    "requiredPrivateInfos": ["chooseLocation", "getLocation", "chooseAddress"],
     "usingComponents": true,
     "plugins": {
-      "crossProgramPlugins": {
-        "version": "latest",
-        "provider": "wx12cec70855c0cacf"
+      "SIPlugin": {
+        "version": "0.3.6",
+        "provider": "wx069ba97219f66d99"
       }
     },
     "mergeVirtualHostAttributes": true,
@@ -79,14 +75,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021005172668444",
+    "appid": "2021003104670597",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -104,7 +95,7 @@
   "mp-harmony": {
     "distribute": {
       "compileSdkVersion": 10,
-      "targetSdkVersion": 10,
+      "targetSdkVersion": 11,
       "signingConfigs": {
         "default": {
           "certpath": "/Users/chaoqincai/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1772441480205.cer",
@@ -116,13 +107,13 @@
           "storePassword": "0000001BFC8B5B3C076B42F630A5A14F2F64D2C3E01545CA5B8EB12247500BC58C076E3B13A01357CDAF53"
         },
         "release": {
-          "certpath": "/Users/ddd/Documents/harmony/dddProd/ddProd.cer",
-          "keyAlias": "dddProdAlias",
-          "keyPassword": "0000001D8097C06E383AF488D3204C218D0E1F7AA6770B0AE0410088FEF8BC806E43A8D1C7CDA9F47FC59DC3DA",
-          "profile": "/Users/ddd/Documents/harmony/dddProd/dddProdProfileRelease.p7b",
+          "storeFile": "/Users/chaoqincai/Documents/resource/WorkSource/1001035/harmony/prod1001035.jks",
+          "storePassword": "000000303200C7034FC0C003C2FCD10FE23A171296A1A0E5C0D40F99FB97C96C719F6AA10CA5DBBE2D711B75F11A6CB33EF361D3C9702C30C1FC657C4C26C7F2",
+          "keyAlias": "prodalias1001035",
+          "keyPassword": "00000030C7051F0929775DD81700DAF49DAF8A4B55B34451379F13369EA7A014B8D5782515A2579423C8ECF1656EBBB20B16729AFC52E3F74031E89A3BE91CC1",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "/Users/ddd/Documents/harmony/dddProd/dddProd.p12",
-          "storePassword": "0000001DE9E9A56D8EC74C70E40508CE453D70077DA6C6A89609C2B5AC81A58B21030914AED626902C4C9039B7"
+          "profile": "/Users/chaoqincai/Documents/resource/WorkSource/1001035/harmony/prod1001035Release.p7b",
+          "certpath": "/Users/chaoqincai/Documents/resource/WorkSource/1001035/harmony/prod1001035.cer"
         }
       },
       "bundleName": "com.atomicservice.6917564602329951506"
@@ -132,13 +123,14 @@
     "usingComponents": true
   },
   "mp-toutiao": {
-    "usingComponents": true
+    "usingComponents": true,
+    "appid": "tt00a7761a9facebee01"
   },
   "uniStatistics": {
     "enable": false
   },
   "vueVersion": "3",
-  "name": "温州市人民医院",
+  "name": "江苏省中医院",
   "h5": {
     "optimization": {
       "treeShaking": {
