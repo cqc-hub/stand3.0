@@ -51,7 +51,7 @@
     </view>
 
     <view v-if="!isPreConfirm" class="row">
-      <view class="title text-no-wrap" v-if="myProps.fee">挂号金额</view>
+      <view class="title text-no-wrap" v-if="myProps.fee&& !(myProps.fee === '0.00' && getSysCode() === '1001083')">挂号金额</view>
       <view
         class="mr12"
         v-if="

@@ -937,7 +937,9 @@
       timeTravel.value.downTime = 100;
       clearInterval(_timeTravel);
     }
-    if (totalCost && !(totalCost == '0' && getSysCode() === '1001083')) {
+    console.log(999999);
+    
+    if (totalCost && !(Number(totalCost) == 0 && getSysCode() === '1001083')) {
       result._totalCost = totalCost + '元';
     }
 
@@ -954,7 +956,10 @@
       .join(' ');
     if (
       (result.fee || result.totalCost) &&
-      !(result.totalCost == '0' && getSysCode() === '1001083')
+      !(
+        (Number(result.totalCost) == 0 || Number(result.fee) == 0) &&
+        getSysCode() === '1001083'
+      )
     ) {
       result._fee = (result.fee || result.totalCost) + '元';
     }

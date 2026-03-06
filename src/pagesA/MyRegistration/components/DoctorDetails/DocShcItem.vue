@@ -75,7 +75,10 @@
           </button> -->
 
           <button
-            v-if="!outHosSch || (outHosSch && pageConfig.handlerOutHosSchClick)"
+            v-if="
+              (!outHosSch || (outHosSch && pageConfig.handlerOutHosSchClick)) &&
+              !(pageConfig.isOpenAddedNum && isExistOrderWait)
+            "
             :class="{
               'btn-old': systemModeOld,
               'disabled-btn': item.schState in warnSchStateMap,
@@ -94,9 +97,18 @@
             :class="{
               'btn-old': systemModeOld,
             }"
-            class="btn btn-primary btn-reg"
+            class="btn btn-primary btn-reg "
           >
             候补
+          </button>
+          <button
+            v-if="isExistOrderWait && pageConfig.isOpenAddedNum"
+            :class="{
+              'btn-old': systemModeOld,
+            }"
+            class="btn btn-primary btn-reg border-left"
+          >
+            加号
           </button>
         </view>
       </view>
@@ -282,9 +294,12 @@
         display: flex;
         align-items: center;
         padding: 0 24rpx;
-
+        
         &.btn-old {
           padding: 30rpx;
+        }
+        &.border-left{
+          border-left: 1rpx solid #999;
         }
       }
 
