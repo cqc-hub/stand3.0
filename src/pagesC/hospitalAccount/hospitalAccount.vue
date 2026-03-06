@@ -247,6 +247,7 @@
 
   interface IPageProps {
     hosId: string;
+    // 可以退费
     isCash?: any;
     type?: 'fromSelDepartment';
   }
