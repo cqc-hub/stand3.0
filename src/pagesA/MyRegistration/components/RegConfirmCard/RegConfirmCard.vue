@@ -13,7 +13,7 @@
       <view class="row-title-bold">
         <text class="row-title-mr">{{ myProps.schDate }}</text>
         <text class="row-title-mr">
-          <text v-if="myProps.ampmName">{{ myProps.ampmName.replace(/^[^;]*;/, '') }}</text>
+          <text v-if="myProps.ampmName">{{ myProps.ampmName?.replace(/^[^;]*;/, '') }}</text>
           <text v-if="myProps.timeDesc">{{ myProps.timeDesc }}</text>
         </text>
         <!-- <text>{{ myProps.disNo }}号</text> -->

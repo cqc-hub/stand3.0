@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxacb96ee66c3dee84",
+    "appid": "wx3a24f824ca86d6dc",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -60,14 +60,13 @@
         "desc": "你的位置信息将用于小程序位置接口的效果展示"
       }
     },
-    "requiredPrivateInfos": ["chooseLocation", "getLocation", "chooseAddress"],
+    "requiredPrivateInfos": [
+      "chooseLocation",
+      "getLocation",
+      "chooseAddress"
+    ],
     "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -77,7 +76,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003104670597",
+    "appid": "2021006124681484",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -123,14 +122,13 @@
     "usingComponents": true
   },
   "mp-toutiao": {
-    "usingComponents": true,
-    "appid": "tt00a7761a9facebee01"
+    "usingComponents": true
   },
   "uniStatistics": {
     "enable": false
   },
   "vueVersion": "3",
-  "name": "江苏省中医院",
+  "name": "温州市中西医结合医院",
   "h5": {
     "optimization": {
       "treeShaking": {

@@ -239,7 +239,7 @@
       schInfo = props.selectSchInfos.map((item) => {
         return {
           ...item,
-          ampmName1: item.ampmName.replace(/^[^;]*;/, ''),
+          ampmName1: item.ampmName?.replace(/^[^;]*;/, ''),
         };
       });
     }

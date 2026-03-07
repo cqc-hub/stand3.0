@@ -947,7 +947,7 @@
 
     result._appointmentDate = [
       appointmentDate,
-      ampmName.replace(/^[^;]*;/, ''),
+      ampmName?.replace(/^[^;]*;/, ''),
       appointmentTime,
     ]
       .filter((o) => o)

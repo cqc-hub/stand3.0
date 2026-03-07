@@ -135,13 +135,14 @@
 <script setup lang="ts">
   import api from '@/service/api';
   import dayjs from 'dayjs';
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, defineExpose } from 'vue';
   import { GStores } from '@/utils';
   import { joinQuery } from '@/common';
   const messData = ref<any>({});
   const gStores = new GStores();
   onMounted(() => {
     // #ifndef MP-TOUTIAO
+    
     reLoad();
     // #endif
   });
@@ -256,6 +257,7 @@
       return arr.slice(targetIndex - 2, targetIndex + 2);
     }
   };
+  defineExpose({ reLoad });
 </script>
 
 <style lang="scss" scoped>

@@ -569,6 +569,8 @@
         intelMedicalAssistConfig?.distinctiveImage?.imageList[0];
     }
     // #ifndef MP-TOUTIAO
+    console.log(7777777777,assistMessageRef.value);
+    
     if (
       globalGl.sConfig?.isOpenAssistMessage &&
       globalStore.isLogin &&

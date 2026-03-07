@@ -43,7 +43,7 @@
           <view class="label color-888">时间</view>
           <view class="body">
             <text class="mr12">{{ item.appointmentDate }}</text>
-            <text class="mr12">{{ item.ampmName.replace(/^[^;]*;/, '') }}</text>
+            <text class="mr12">{{ item.ampmName?.replace(/^[^;]*;/, '') }}</text>
             <text class="mr12">{{ item.appointmentTime }}</text>
             <view class="flex-normal text-no-wrap">
               <text v-if="item.appointmentNumber" class="text-no-wrap">

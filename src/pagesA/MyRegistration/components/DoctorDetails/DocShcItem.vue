@@ -40,7 +40,7 @@
 
           <text class="">
             <text class="mr16 g-bold text-no-wrap">
-              {{ item.ampmName.replace(/^[^;]*;/, '') }}
+              {{ item.ampmName?.replace(/^[^;]*;/, '') }}
             </text>
             <text
               v-if="

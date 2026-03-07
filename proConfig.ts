@@ -819,7 +819,7 @@ export const miniProgramConfig: {
   },
   '1001085': {
     wxAppid: 'wx3a24f824ca86d6dc',
-    h5Appid1: '',
+    h5Appid: 'wxfca4d96e3a9edf91',
     alipayAppid: '2021006124681484',
     isvAlipayAppid: '',
     name: '温州市中西医结合医院',
