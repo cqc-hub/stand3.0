@@ -250,7 +250,7 @@ export class LoginUtils extends GStores {
         await api.patSync({
           source: this.globalStore.browser.source,
           type: 1,
-          wxOpenId: openId,
+          wxOpenId: this.globalStore.h5OpenId,
         });
       }
       //通过微信h5OpenId去同步 type传1 ，复用老公众号则取用h5OpenId，
