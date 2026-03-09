@@ -1004,7 +1004,7 @@ export const miniProgramConfig: {
                 openType: 'getAuthCode',
                 bizType: '04107',
                 cityCode: '650100',
-                channel: 'AAFnB6FxCsnf4D2WcS3JifN8',
+                channel: 'AAEZDc60WgTiVxo5xtoqTx-g',
                 orgChnlCrtfCodg:
                   'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtvSq+Y54oo16Lhwmw3TH2y',
                 orgCodg: 'H65010200368',
