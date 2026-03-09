@@ -1,6 +1,13 @@
 {
-  "sysCode": "1001085",
+  "sysCode": "1001035",
   "sysConfig": {
+    "wxAppid": "wxacb96ee66c3dee84",
+    "h5Appid": "wxa5cb8c1829e5603e",
+    "alipayAppid": "2021003104670597",
+    "isvAlipayAppid": "2021003104670597",
+    "toutiaoAppid": "tt00a7761a9facebee01",
+    "harmonyBundleName": "com.atomicservice.6917564602329951506",
+    "name": "江苏省中医院",
     "wxAppid": "wx3a24f824ca86d6dc",
     "h5Appid1": "wxfca4d96e3a9edf91",
     "alipayAppid": "2021006124681484",
@@ -9,9 +16,42 @@
     "isOpenOcr": false,
     "isSearchInHos": true,
     "sConfig": {
-      "login": {
-        "isSkipPerfect": "1",
-        "isAliAuthBase": "1"
+      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/jiangsushengzhonnavtitle.png",
+      "isOpenMessageAuth": "1",
+      "isOpenAssistMessage": "1",
+      "isMessageBtnShowNew": "1",
+      "isOpenPopularSci": {
+        "wx": "1"
+      },
+      "isOpenWechatSI": true,
+      "isOpenHelpOld": "1",
+      "homeTopBanner": {
+        "topShow": true
+      },
+      "medicalMHelp": {
+        "wx": {
+          "isMedicalOrder": "1",
+          "isGbFamilyPayment": "1",
+          "medical1001035": {
+            "auth": {
+              "appId": "wxfde9fffbfa82be54",
+              "path": "pages/allOutPayCashier/authUniPro/authUni",
+              "extraData": {
+                "appid": "96391c9afe2c46b3bba52436351dd418"
+              }
+            },
+            "pay": {
+              "appId": "wxfde9fffbfa82be54",
+              "path": "pages/allOutPayCashier/cashierUniPro/cashierUni",
+              "extraData": {
+                "appid": "96391c9afe2c46b3bba52436351dd418",
+                "channel_code": "b756bf71948144f993bcc768fe7b0910",
+                "fixmedinsCode": "H32010400468",
+                "fixmedinsName": "江苏省中医院"
+              }
+            }
+          }
+        }
       }
     }
   }

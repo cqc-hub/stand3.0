@@ -150,7 +150,7 @@
       >
         <text class="color-444 f28 mr8">合计</text>
         <text class="f36 g-bold color-error">
-          {{ feeDetail.totalCost ? `${feeDetail.totalCost}元` : '0元' }}
+          {{ `${feeDetail.totalCost || 0}元` }}
         </text>
       </view>
       <button
@@ -187,7 +187,6 @@
   } from '@/utils';
   import { getSrc } from './utils';
   import { useCacheStore } from '@/stores';
-  import { getShowDrugName } from '@/pagesB/medicationAssistant/utils/medicalHelp';
   import {
     aliPayOldSystemPayType,
     payMoneyOnline,
@@ -260,10 +259,11 @@
   const boxChange = async (count: number) => {
     iceBagNum.value = count;
     if (gStores.globalStore.sysCode === '1001035') {
-      const aim = aimList.value.find(
-        (item) => item.value === aimValue.value[0]
-      );
-      aim?.value == '2' && (iceBagStep.value = 1);
+      // const aim = aimList.value.find(
+      //   (item) => item.value === aimValue.value[0]
+      // );
+      // aim?.value == '2' && (iceBagStep.value = 1);
+      iceBagStep.value = 2;
     }
     getIceFee();
   };
@@ -366,11 +366,12 @@
       }
 
       if (gStores.globalStore.sysCode === '1001035') {
-        const aim = aimList.value.find(
-          (item) => item.value === aimValue.value[0]
-        );
-        iceBagNum.value = 0;
-        aim?.value == '2' ? (iceBagStep.value = 1) : (iceBagStep.value = 2);
+        // const aim = aimList.value.find(
+        //   (item) => item.value === aimValue.value[0]
+        // );
+        // iceBagNum.value = 0;
+        // aim?.value == '2' ? (iceBagStep.value = 1) : (iceBagStep.value = 2);
+        iceBagStep.value = 2;
       }
       getIceFee();
     } catch (e) {
@@ -427,6 +428,23 @@
       scrollTo.value = '_express';
       return;
     }
+
+    const getShowDrugName = (item) => {
+      const { drugTypeName } = item;
+
+      if (isChineseMedical(item) && gStores.globalStore.sysCode !== '1001035') {
+        if (isToBeFriedAndDelivery(item)) {
+          return drugTypeName + `(代煎外配)`;
+        } else if (
+          item.tcmDecoctionIndicator === '1' &&
+          item.drugIsDelivery === '0'
+        ) {
+          return drugTypeName + `(代煎)`;
+        }
+      }
+
+      return drugTypeName;
+    };
 
     const findItem = cacheStore.medicalHelpSelList.find((o) =>
       getShowDrugName(o).includes('代煎外配')
@@ -505,7 +523,7 @@
       ? uni.reLaunch({
           url: '/pages/home/home',
         })
-      : uni.navigateBack()
+      : uni.navigateBack();
   };
 
   const gotoExpressPay = async (args) => {
