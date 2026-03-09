@@ -77,7 +77,7 @@
           <button
             v-if="
               (!outHosSch || (outHosSch && pageConfig.handlerOutHosSchClick)) &&
-              !(pageConfig.isOpenAddedNum && isExistOrderWait)
+              !(pageConfig.isOpenAddedNum === '1' && isExistOrderWait)
             "
             :class="{
               'btn-old': systemModeOld,
@@ -97,12 +97,12 @@
             :class="{
               'btn-old': systemModeOld,
             }"
-            class="btn btn-primary btn-reg "
+            class="btn btn-primary btn-reg"
           >
             候补
           </button>
           <button
-            v-if="isExistOrderWait && pageConfig.isOpenAddedNum"
+            v-if="isExistOrderWait && pageConfig.isOpenAddedNum === '1'"
             :class="{
               'btn-old': systemModeOld,
             }"
@@ -294,11 +294,11 @@
         display: flex;
         align-items: center;
         padding: 0 24rpx;
-        
+
         &.btn-old {
           padding: 30rpx;
         }
-        &.border-left{
+        &.border-left {
           border-left: 1rpx solid #999;
         }
       }
