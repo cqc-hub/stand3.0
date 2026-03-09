@@ -474,9 +474,11 @@
     const actionApi = sign ? api.getScanDrugDelivery : api.getDrugDelivery;
     pageProps.value.deParams = sign ? {} : undefined;
 
-    const { result = {} } = await actionApi(args).finally(() => {
+    let { result = {} } = await actionApi(args).finally(() => {
       isComplete.value[takenDrug] = true;
     });
+
+    // result = {"patientName":"张晶晶","patientId":"1008188655","takenDrug":"0","drugIsDelivery":"1","drugList":[{"hosId":"12675","hosName":"本部院区","drugTypeCode":"1","drugTypeName":"中药","deliveryType":"1","prescTime":"2026-03-09 09:38:10","prescId":"20260309000000007837","prescNo":"2026030900216826","takenDrugType":"0","tcmDecoctionIndicator":"1","prescVisitType":"0"}]}
 
     if (sign && result.drugList && result.drugList.length) {
       pageProps.value.deParams = {
