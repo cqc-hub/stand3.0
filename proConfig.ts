@@ -827,23 +827,6 @@ export const miniProgramConfig: {
     isSearchInHos: true,
     sConfig: { login: { isSkipPerfect: '1', isAliAuthBase: '1' } },
   },
-  '1001086': {
-    wxAppid: 'wxa4a2728d9d7598f1',
-    h5Appid: '',
-    name: '新疆维吾尔自治区中医医院',
-
-    isOpenOcr: false,
-    isSearchInHos: true,
-    isOpenHealthCard: {
-      healthCardText: '新疆维吾尔自治区卫生健康委员会',
-      hospitalId: '35088',
-    },
-    _des: '过渡',
-    sConfig: {
-      homeNavTitleLogo:
-        'https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png',
-    },
-  },
   '1001087': {
     wxAppid: 'wxe48cc8a9a8ec915f',
     alipayAppid: '',

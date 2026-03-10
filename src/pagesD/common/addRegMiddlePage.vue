@@ -68,7 +68,7 @@
     if (!pat) {
       gStores.messageStore.showMessage(
         `当前账户未绑定就诊号为${pageProps.value.cardNumber}的患者，请先绑定`,
-        3000,
+        1500,
         {
           closeCallBack: () => {
             uni.reLaunch({
@@ -82,7 +82,7 @@
       );
       return;
     }
-    gStores.messageStore.showMessage('正在加号请稍等...', 3000);
+    gStores.messageStore.showMessage('正在加号请稍等...', 1500);
     await handleData(pat);
   });
 
@@ -95,7 +95,7 @@
     const {
       result: { orderId },
     } = await api.netAddHosSch(args);
-    gStores.messageStore.showMessage('加号成功', 3000, {
+    gStores.messageStore.showMessage('加号成功', 1500, {
       closeCallBack: () => {
         uni.reLaunch({
           url: joinQuery('/pagesA/MyRegistration/RegDetail', {
