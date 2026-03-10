@@ -176,7 +176,7 @@
 
 <style lang="scss" scoped>
   .img-width {
-    width: 70%;
+    width: max(70%, 328rpx);
   }
   .container {
     width: 80%;
