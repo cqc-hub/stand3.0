@@ -98,7 +98,7 @@
     gStores.messageStore.showMessage('加号成功', 3000, {
       closeCallBack: () => {
         uni.reLaunch({
-          url: joinQuery('pagesA/MyRegistration/RegDetail', {
+          url: joinQuery('/pagesA/MyRegistration/RegDetail', {
             orderId,
           }),
         });

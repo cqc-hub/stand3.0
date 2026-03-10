@@ -999,6 +999,17 @@ export const miniProgramConfig: {
                 orgAppId: '1ISCR539P0048D430B0A000030129568',
                 sourceapp: 'wx081a6fb9ee8778e4',
               },
+              '1314303': {
+                openType: 'getAuthCode',
+                bizType: '04107',
+                cityCode: '650100',
+                channel: 'AAEZDc60WgTiVxo5xtoqTx-g',
+                orgChnlCrtfCodg:
+                  'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtvSq+Y54oo16Lhwmw3TH2y',
+                orgCodg: 'H65010200368',
+                orgAppId: '1H16HC3ND00I3F60C80A0000EEF6825C',
+                sourceapp: 'wx081a6fb9ee8778e4',
+              },
             },
           },
         },

@@ -458,6 +458,9 @@ export const tempList: TInstance[] = [
   },
 ];
 
+
+
+
 export const pickTempItem = function <T = TFormKeys>(
   keys: TFormKeys[]
 ): TInstance[] {
@@ -652,11 +655,17 @@ export const getDefaultFormData = async (
       const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
       data[formKey.patientPhone] = wxPhone;
     }
-  } else if (ev === 'alipay') {
+  } else {
     const patList = gStores.userStore.patList;
 
     if (!patList.length) {
-      const { userName, mobile, certNo } = gStores.userStore.cacheUser;
+      const {
+        userName,
+        mobile: mobileAli,
+        certNo,
+      } = gStores.userStore.cacheUser;
+      const { dePhone } = gStores.userStore;
+      const mobile = dePhone || mobileAli || '';
       if (userName) {
         data[formKey.patientName] = userName;
       }

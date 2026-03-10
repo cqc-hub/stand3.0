@@ -87,6 +87,7 @@ export interface ISwitchInstance extends IBaseInstance {
 /**
  * 一组最多一个验证码
  *
+ * beforeVerify 验证前的回调，返回 Promise，resolve 继续执行，reject 终止
  * verifySecond  倒计时 s
  * submitVerify 自定义发送短信
  */
@@ -95,6 +96,7 @@ export interface IInputVerifyInstance extends Omit<IInputInstance, 'field'> {
   verifyBtnText: string;
   verifySecond: number;
   submitVerify?: (phone: string) => Promise<any>;
+  beforeVerify?: (phone: string) => Promise<any>;
   phoneKey: string;
 }
 

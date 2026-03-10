@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxacb96ee66c3dee84",
+    "appid": "wx64d48b1de1c41cb8",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -81,7 +81,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003104670597",
+    "appid": "2021002133687534",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -127,14 +127,13 @@
     "usingComponents": true
   },
   "mp-toutiao": {
-    "usingComponents": true,
-    "appid": "tt00a7761a9facebee01"
+    "usingComponents": true
   },
   "uniStatistics": {
     "enable": false
   },
   "vueVersion": "3",
-  "name": "江苏省中医院",
+  "name": "郑州市中医院",
   "h5": {
     "optimization": {
       "treeShaking": {

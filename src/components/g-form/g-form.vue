@@ -554,6 +554,9 @@
       if (phoneItem) {
         const phone = props.value[phoneItem.key];
         await validatorItem(phoneItem, phone);
+        if (item.beforeVerify) {
+          await item.beforeVerify(phone);
+        }
         const { isSmsVerifyWithImgCode } =
           await ServerStaticData.getSystemConfig('person');
 
