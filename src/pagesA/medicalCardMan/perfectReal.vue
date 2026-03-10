@@ -176,7 +176,13 @@
 
 <script lang="ts" setup>
   import { ref, onMounted, computed, type Ref } from 'vue';
-  import { deQueryForUrl, joinQueryForUrl } from '@/common';
+  import {
+    deQueryForUrl,
+    getLocalStorage,
+    joinQueryForUrl,
+    removeLocation,
+    setLocalStorage,
+  } from '@/common';
   import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
   import {
     IPat,
@@ -389,6 +395,7 @@
 
       return;
     }
+    removeLocation('perfectRealFormData');
 
     formData.value = formatterSubPatientData(formData.value);
     const { isVerifyIdCardLastFourNumber, isPayWithoutSecretAuth } =
@@ -890,6 +897,10 @@
         assignValue: false,
       });
     }
+
+    setLocalStorage({
+      perfectRealFormData: formData.value,
+    });
   };
 
   const btnDisabled = computed(() => {
@@ -1052,9 +1063,24 @@
     formList = pickTempItem(formListKeys);
 
     if (assignValue) {
-      const defaultValue = await getDefaultFormData(
+      const perfectRealFormData = await getLocalStorage('perfectRealFormData');
+
+      let defaultValue: any = {};
+      defaultValue = await getDefaultFormData(
         pageProps.value.pageType || 'addPatient'
       );
+
+      const { confirm } = await apiAsync(uni.showModal, {
+        content: '您上次没填写完毕，是否继续填写',
+        cancelText: '否',
+        confirmText: '是',
+      });
+      if (confirm) {
+        defaultValue = perfectRealFormData;
+      }
+
+      removeLocation('perfectRealFormData');
+
       Object.assign(formData.value, defaultValue);
     }
 
@@ -1125,7 +1151,10 @@
         o.labelWidth = undefined;
       }
 
-      if (formData.value[key] && key !== formKey.defaultFalg) {
+      if (
+        formData.value[key] &&
+        !['defaultFalg', 'patientPhone'].includes(key)
+      ) {
         o.disabled = true;
       }
 
