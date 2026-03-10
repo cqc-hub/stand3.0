@@ -1,43 +1,17 @@
 {
-  "sysCode": "1001099",
+  "sysCode": "1001085",
   "sysConfig": {
-    "wxAppid": "wxacb96ee66c3dee84",
-    "h5Appid": "wxa5cb8c1829e5603e",
-    "alipayAppid": "2021003104670597",
-    "isvAlipayAppid": "2021003104670597",
-    "toutiaoAppid": "tt00a7761a9facebee01",
-    "harmonyBundleName": "com.atomicservice.6917564602329951506",
-    "name": "江苏省中医院",
+    "wxAppid": "wx3a24f824ca86d6dc",
+    "h5Appid1": "wxfca4d96e3a9edf91",
+    "alipayAppid": "2021006124681484",
+    "isvAlipayAppid": "",
+    "name": "温州市中西医结合医院",
     "isOpenOcr": false,
     "isSearchInHos": true,
-    "isOpenOcr": false,
     "sConfig": {
-      "isOpenHelpOld": "1",
-      "isOpenWechatSI": true,
       "login": {
-        "isSkipPerfect": "1"
-      },
-      "medicalMHelp": {
-        "wx": {
-          "isMedicalOrder": "1",
-          "isGbFamilyPayment": "1",
-          "medicalNation": {
-            "appId": "wxe183cd55df4b4369",
-            "path": "auth/pages/bindcard/auth/index",
-            "pathExtraData": {
-              "openType": "getAuthCode",
-              "bizType": "04107",
-              "cityCode": "410101",
-              "channel": "AAG05QdjP5yQIRc05wpvThnI",
-              "orgChnlCrtfCodg": "BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtqg5V3ila4Zg8ONhjCsZO5",
-              "orgCodg": "H41010200019",
-              "orgAppId": "1JFFNJORA0BQ8D430B0A0000DFBC6F57"
-            }
-          }
-        },
-        "alipay": {
-          "medicalNation": {}
-        }
+        "isSkipPerfect": "1",
+        "isAliAuthBase": "1"
       }
     }
   }

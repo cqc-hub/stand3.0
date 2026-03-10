@@ -1,8 +1,19 @@
 <template>
   <view class="">
+    <view class="my-display-none">
+      <uv-qrcode
+        v-if="code"
+        :value="code"
+        @complete="qrComplete"
+        ref="refQrCode1"
+        size="380rpx"
+      />
+    </view>
     <view class="mb24 flex flex-col items-center justify-center">
       <!-- <w-barcode ref="refBar" :options="barOpt" /> -->
-      <uv-qrcode :value="code" :loading="loading" size="380rpx" auto start />
+      <img :src="qrImg" mode="widthFix" class="qrcode-img pb32" />
+
+      <!-- <uv-qrcode :value="code" :loading="loading" size="380rpx" auto start /> -->
     </view>
     <view class="flex justify-center f28">
       <view class="pr12 mr12 g-split-line">
@@ -51,6 +62,19 @@
     };
   });
 
+  const refQrCode1 = ref('' as any);
+  const qrImg = ref('');
+  const qrComplete = (e) => {
+    const { success } = e;
+    if (success) {
+      refQrCode1.value.toTempFilePath({
+        success({ tempFilePath }) {
+          qrImg.value = tempFilePath;
+        },
+      });
+    }
+  };
+
   const init = async () => {
     if (loading.value) {
       return;
@@ -88,4 +112,8 @@
   });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .qrcode-img {
+    width: 320rpx;
+  }
+</style>

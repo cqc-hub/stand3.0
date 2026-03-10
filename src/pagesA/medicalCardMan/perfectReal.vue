@@ -1070,16 +1070,18 @@
         pageProps.value.pageType || 'addPatient'
       );
 
-      const { confirm } = await apiAsync(uni.showModal, {
-        content: '您上次没填写完毕，是否继续填写',
-        cancelText: '否',
-        confirmText: '是',
-      });
-      if (confirm) {
-        defaultValue = perfectRealFormData;
-      }
+      if (perfectRealFormData) {
+        const { confirm } = await apiAsync(uni.showModal, {
+          content: '您上次没填写完毕，是否继续填写',
+          cancelText: '否',
+          confirmText: '是',
+        });
+        if (confirm) {
+          defaultValue = perfectRealFormData;
+        }
 
-      removeLocation('perfectRealFormData');
+        removeLocation('perfectRealFormData');
+      }
 
       Object.assign(formData.value, defaultValue);
     }
@@ -1155,7 +1157,7 @@
         formData.value[key] &&
         !['defaultFalg', 'patientPhone'].includes(key)
       ) {
-        o.disabled = true;
+        // o.disabled = true;
       }
 
       // 额外信息存在证件类型与证件号时，默认值未存在身份证或者未通过身份证校验时，可编辑

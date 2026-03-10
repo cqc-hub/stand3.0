@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx64d48b1de1c41cb8",
+    "appid": "wx3a24f824ca86d6dc",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -66,12 +66,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -81,7 +76,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002133687534",
+    "appid": "2021006124681484",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -133,7 +128,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "郑州市中医院",
+  "name": "温州市中西医结合医院",
   "h5": {
     "optimization": {
       "treeShaking": {

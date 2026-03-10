@@ -44,8 +44,14 @@
         <view
           class="bg-white rounded-xl p32 flex flex-col items-center justify-center relative transition"
         >
-          <img :src="barImg" mode="widthFix" class="bar-img mb32" />
-          <img :src="qrImg" mode="widthFix" class="qrcode-img pb32" />
+          <view class="pt32 mb12" v-if="isShowRefreshQrCode">
+            <refreshQrcode :patientId="clickPat.patientId" />
+          </view>
+
+          <view v-else>
+            <img :src="barImg" mode="widthFix" class="bar-img mb32" />
+            <img :src="qrImg" mode="widthFix" class="qrcode-img pb32" />
+          </view>
 
           <view
             :class="{
@@ -454,7 +460,6 @@
   });
 
   const qrComplete = (e) => {
-    console.log('qrComplete', e);
     const { success } = e;
     if (success && pageStyle.value === '2') {
       refQrCode1.value.toTempFilePath({
@@ -579,7 +584,7 @@
 
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    if (gStores.globalStore.sysCode === '1001093') {
+    if (['1001093', '1001085'].includes(gStores.globalStore.sysCode)) {
       pageStyle.value = '2';
     }
   });
