@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { IPat } from '@/stores/type';
 import globalGl from '@/config/global';
 import { useGlobalStore } from '@/stores';
+import { decryptDes } from '@/common';
 
 const userStore = defineStore('user', {
   persist: {
@@ -19,6 +20,7 @@ const userStore = defineStore('user', {
       'clickPat',
       'authPhoneVerify',
       'prevPatientId',
+      'dePhone',
     ],
   },
 
@@ -30,6 +32,7 @@ const userStore = defineStore('user', {
       idNo: '',
       cellPhoneNum: '',
       phoneNum: '', // 加密的手机号(微信才有)
+      dePhone: '',
       patientId: '',
       patList: <IPat[]>[],
       patChoose: <IPat>{},
@@ -68,6 +71,10 @@ const userStore = defineStore('user', {
     updatePhone(data: { phone: string; phoneNum: string }) {
       this.cellPhoneNum = data.phone;
       this.phoneNum = data.phoneNum;
+    },
+
+    updatePhoneDecrypt(mobilePhoneEn: string) {
+      this.dePhone = decryptDes(mobilePhoneEn, 'N1@ae^T:phone');
     },
 
     updateCacheUser(

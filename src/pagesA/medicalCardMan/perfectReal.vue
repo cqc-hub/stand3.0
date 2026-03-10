@@ -6,6 +6,7 @@
     class="page"
   >
     <view class="container" scroll-y>
+      <!-- {{ formData }} -->
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
@@ -198,6 +199,7 @@
     idValidator,
     idCardConvert,
     apiAsync,
+    verifyPhone,
   } from '@/utils';
 
   import {
@@ -804,8 +806,78 @@
     }
   };
 
-  const formChange = async ({ item, value }) => {
+  const verifyItemInsert = () => {
+    const { isSmsVerify } = pageConfig.value;
+    if (
+      isSmsVerify !== '1' ||
+      pageProps.value.pageType === 'perfectReal' ||
+      (formData.value.patientPhone === gStores.userStore.dePhone &&
+        !gStores.userStore.patList.length)
+    ) {
+      return;
+    }
+
+    const keys = formList.map((o) => o.key);
+    const idx = keys.findIndex((o) => o === 'verifyCode');
+    if (idx === -1) {
+      const verifyItem = pickTempItem(['verifyCode'])[0];
+      const phoneIdx = keys.findIndex((o) => o === 'patientPhone');
+      if (verifyItem) {
+        // @ts-expect-error
+        verifyItem.beforeVerify = async () => {
+          if (keys.includes('idCard') && !formData.value.idCard) {
+            gStores.messageStore.showMessage('请先填写证件号码', 1500);
+            return Promise.reject();
+          }
+        };
+        if (phoneIdx > -1) {
+          formList.splice(phoneIdx + 1, 0, verifyItem);
+        } else {
+          formList.push(verifyItem);
+        }
+      }
+    }
+    const newKeys = formList.map((o) => o.key);
+    if (newKeys.join(',') !== keys.join(',')) {
+      reLoadForm();
+    }
+  };
+  const verifyItemRemove = () => {
+    const keys = formList.map((o) => o.key);
+    const idx = keys.findIndex((o) => o === 'verifyCode');
+    if (idx > -1) {
+      formData.value[formKey.verifyCode] = '';
+      formList.splice(idx, 1);
+    }
+
+    const newKeys = formList.map((o) => o.key);
+    if (newKeys.join(',') !== keys.join(',')) {
+      reLoadForm();
+    }
+  };
+  const reLoadForm = () => {
+    gform.value.setList(formList);
+  };
+
+  const formChange = async ({ item, value, oldValue }) => {
     const { key } = item;
+
+    if (key === 'patientPhone') {
+      if (value) {
+        if (value.length === 11 && !verifyPhone(value)) {
+          formData.value.patientPhone = oldValue || '';
+        } else if (value.includes('*')) {
+          formData.value.patientPhone = '';
+          item.inputMask = undefined;
+        }
+        await wait(0);
+        if (value === gStores.userStore.dePhone) {
+          verifyItemRemove();
+        } else {
+          verifyItemInsert();
+        }
+      }
+    }
 
     if (key === 'patientType') {
       // 新生儿无证件
@@ -894,8 +966,8 @@
       }
 
       if (keys.includes('patientPhone') && key === formKey.patientPhone) {
-        o.disabled = disabled;
-
+        // 手机号可以修改
+        o.disabled = false;
         o.inputMask = phoneConvert;
       }
       if (keys.includes('idCard') && key === formKey.idCard) {
@@ -914,7 +986,10 @@
     }
   ) => {
     const { assignValue } = opt;
-    const { mobile } = gStores.userStore.cacheUser;
+    const { mobile: mobileAli } = gStores.userStore.cacheUser;
+    const { dePhone } = gStores.userStore;
+    const mobile = dePhone || mobileAli || '';
+
     let { formExtraKeys = [], formExtraKeysInQuickAddPatPage = [] } =
       pageConfig.value;
     formExtraKeys = formExtraKeys.filter(
@@ -964,15 +1039,6 @@
       // #endif
     }
 
-    // 关闭手机验证码
-    if (
-      isSmsVerify !== '1' ||
-      pageProps.value.pageType === 'perfectReal' ||
-      isFilterSmsVerify
-    ) {
-      formListKeys = formListKeys.filter((key) => key !== 'verifyCode');
-    }
-
     insertSortFormExtraKey(sortFormExtraKeys, formListKeys);
     insertSortFormExtraKey(formExtraKeysInQuickAddPatPage, formListKeys);
     console.log(formListKeys, formExtraKeysInQuickAddPatPage);
@@ -1006,7 +1072,7 @@
       const { patientPhone, patientName } = pageProps.value;
 
       if (patientPhone || patientName) {
-        if (patientPhone) {
+        if (!formData.value.patientPhone && patientPhone) {
           formData.value.patientPhone = patientPhone;
           maskInfo(formList, {
             keys: ['patientPhone'],
@@ -1014,7 +1080,7 @@
           });
         }
 
-        if (patientName) {
+        if (!formData.value.patientName && patientName) {
           formData.value.patientName = patientName;
           maskInfo(formList, {
             keys: ['patientName'],
@@ -1022,34 +1088,32 @@
           });
         }
       } else {
-        if (gStores.globalStore.ev === 'alipay') {
-          // 支付宝第一个就诊人自动带入信息并加密(新增就诊人)
-          if (!patList.length && mobile) {
-            const maskKeys: any[] = [];
-            const { userName, mobile, certNo } = gStores.userStore.cacheUser;
+        // 支付宝第一个就诊人自动带入信息并加密(新增就诊人)
+        if (!patList.length && mobile) {
+          const maskKeys: any[] = [];
+          const { userName, certNo } = gStores.userStore.cacheUser;
 
-            if (userName) {
-              maskKeys.push('patientName');
-            }
-
-            if (mobile) {
-              maskKeys.push('patientPhone');
-            }
-
-            if (
-              certNo &&
-              formExtraKeysInQuickAddPatPage.find((f) => f.key === 'idCard') &&
-              formData.value['idCard'] &&
-              idValidator.checkIdCardNo(formData.value['idCard'])
-            ) {
-              maskKeys.push('idCard');
-            }
-
-            maskInfo(formList, {
-              keys: maskKeys,
-              // disabled: true,
-            });
+          if (userName) {
+            maskKeys.push('patientName');
           }
+
+          if (mobile) {
+            maskKeys.push('patientPhone');
+          }
+
+          if (
+            certNo &&
+            formExtraKeysInQuickAddPatPage.find((f) => f.key === 'idCard') &&
+            formData.value['idCard'] &&
+            idValidator.checkIdCardNo(formData.value['idCard'])
+          ) {
+            maskKeys.push('idCard');
+          }
+
+          maskInfo(formList, {
+            keys: maskKeys,
+            // disabled: true,
+          });
         }
       }
     }
@@ -1074,6 +1138,16 @@
         o.disabled = false;
       }
     });
+
+    // 关闭手机验证码
+    if (
+      isSmsVerify !== '1' ||
+      isFilterSmsVerify ||
+      pageProps.value.pageType === 'perfectReal' ||
+      formData.value.patientPhone === gStores.userStore.dePhone
+    ) {
+      formList = formList.filter((o) => o.key !== 'verifyCode');
+    }
 
     _formList.value = formList;
     gform.value.setList(formList);

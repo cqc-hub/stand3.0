@@ -1,56 +1,38 @@
 {
-  "sysCode": "1001035",
+  "sysCode": "1001099",
   "sysConfig": {
-    "wxAppid": "wxacb96ee66c3dee84",
-    "h5Appid": "wxa5cb8c1829e5603e",
-    "alipayAppid": "2021003104670597",
-    "isvAlipayAppid": "2021003104670597",
-    "toutiaoAppid": "tt00a7761a9facebee01",
-    "harmonyBundleName": "com.atomicservice.6917564602329951506",
-    "name": "江苏省中医院",
-    "wxAppid": "wx3a24f824ca86d6dc",
-    "h5Appid1": "wxfca4d96e3a9edf91",
-    "alipayAppid": "2021006124681484",
-    "isvAlipayAppid": "",
-    "name": "温州市中西医结合医院",
-    "isOpenOcr": false,
+    "wxAppid": "wx64d48b1de1c41cb8",
+    "h5Appid1": "wx00cb6182a8c21b09",
+    "alipayAppid": "2021002133687534",
+    "name": "郑州市中医院",
     "isSearchInHos": true,
+    "isOpenOcr": false,
     "sConfig": {
-      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/jiangsushengzhonnavtitle.png",
-      "isOpenMessageAuth": "1",
-      "isOpenAssistMessage": "1",
-      "isMessageBtnShowNew": "1",
-      "isOpenPopularSci": {
-        "wx": "1"
-      },
-      "isOpenWechatSI": true,
       "isOpenHelpOld": "1",
-      "homeTopBanner": {
-        "topShow": true
+      "isOpenWechatSI": true,
+      "login": {
+        "isSkipPerfect": "1"
       },
       "medicalMHelp": {
         "wx": {
           "isMedicalOrder": "1",
           "isGbFamilyPayment": "1",
-          "medical1001035": {
-            "auth": {
-              "appId": "wxfde9fffbfa82be54",
-              "path": "pages/allOutPayCashier/authUniPro/authUni",
-              "extraData": {
-                "appid": "96391c9afe2c46b3bba52436351dd418"
-              }
-            },
-            "pay": {
-              "appId": "wxfde9fffbfa82be54",
-              "path": "pages/allOutPayCashier/cashierUniPro/cashierUni",
-              "extraData": {
-                "appid": "96391c9afe2c46b3bba52436351dd418",
-                "channel_code": "b756bf71948144f993bcc768fe7b0910",
-                "fixmedinsCode": "H32010400468",
-                "fixmedinsName": "江苏省中医院"
-              }
+          "medicalNation": {
+            "appId": "wxe183cd55df4b4369",
+            "path": "auth/pages/bindcard/auth/index",
+            "pathExtraData": {
+              "openType": "getAuthCode",
+              "bizType": "04107",
+              "cityCode": "410101",
+              "channel": "AAG05QdjP5yQIRc05wpvThnI",
+              "orgChnlCrtfCodg": "BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtqg5V3ila4Zg8ONhjCsZO5",
+              "orgCodg": "H41010200019",
+              "orgAppId": "1JFFNJORA0BQ8D430B0A0000DFBC6F57"
             }
           }
+        },
+        "alipay": {
+          "medicalNation": {}
         }
       }
     }

@@ -68,9 +68,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+  import { onMounted } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, LoginUtils, PatientUtils, wait } from '@/utils';
+  import { GStores, PatientUtils, wait } from '@/utils';
   import globalGl from '@/config/global';
   import { setLocalStorage } from '@/common/useToken';
 
