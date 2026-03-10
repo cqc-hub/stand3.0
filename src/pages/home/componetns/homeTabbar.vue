@@ -27,6 +27,7 @@
             <view
               :class="{
                 'center-code': isCenterCode(item),
+                [style1001054()]: 1,
               }"
               class="pt20 h-full flex-1 flex flex-col items-center justify-end"
             >
@@ -134,6 +135,14 @@
 
   const isIos = ref(false);
   const unreadMes = ref(false);
+
+  const style1001054 = () => {
+    let className = '';
+    if (getSysCode() === '1001054') {
+      className = 'center-code-1001054';
+    }
+    return className;
+  };
 
   const changeTab = async (item) => {
     const url = item.url;
@@ -562,5 +571,17 @@
     top: -15px;
     left: 50%;
     pointer-events: none;
+  }
+  .center-code-1001054 {
+    .center-code-ico {
+      background: linear-gradient(
+        0deg,
+        var(--hr-success-color-7),
+        var(--hr-success-color-7) 100%
+      ) !important;
+    }
+    .color-blue {
+      color: var(--hr-success-color-7) !important;
+    }
   }
 </style>

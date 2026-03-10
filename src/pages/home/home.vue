@@ -53,7 +53,11 @@
             }"
           >
             <view class="safe-height" />
-            <home1 @open-mode-old="openModeOld"  @wx-show-translate-tip="wxTranslateShow"  @open-share="openShare"/>
+            <home1
+              @open-mode-old="openModeOld"
+              @wx-show-translate-tip="wxTranslateShow"
+              @open-share="openShare"
+            />
 
             <view v-if="$global.sConfig?.homeTopBanner?.topShow" class="mb24">
               <homeBanner
@@ -63,10 +67,7 @@
               />
             </view>
 
-            <view
-              class="card mb24"
-              :class="getSysCode() == '1001054' ? 'cardNoMargin' : ''"
-            >
+            <view class="card mb24" :class="{ [style1001054(1)]: 1 }">
               <view
                 v-if="isHomeStyle1"
                 class="mb24 bg-white rounded-xl pt16 pb16 pr24 pl24"
@@ -163,6 +164,7 @@
                 :class="{
                   'top-menu-style1': isHomeStyle1,
                   'top-menu-normal': !isHomeStyle1,
+                  [style1001054(2)]: 1,
                 }"
                 class="top-menu"
               >
@@ -222,7 +224,7 @@
                 </view>
               </view>
             </view>
-
+            <compBySysCode />
             <view v-if="!$global.sConfig?.homeTopBanner?.topShow" class="mb24">
               <homeBanner
                 :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
@@ -325,6 +327,7 @@
                 <!-- 未登录 -->
                 <view
                   class="top-card-old flex-normal-between animate__animated animate__fadeIn"
+                  :class="style1001054(1)"
                 >
                   <view class="no-login">
                     <text>{{ getLangLabel('home:请登录') }}</text>
@@ -468,6 +471,7 @@
   import homeLogin from './componetns/home-login.vue';
   import home1 from './componetns/home-1.vue';
   import homeTranslateWx from './componetns/homeTranslateWx.vue';
+  import compBySysCode from './componetns/compBySysCode.vue';
 
   const props = ref({
     code: '',
@@ -569,8 +573,8 @@
         intelMedicalAssistConfig?.distinctiveImage?.imageList[0];
     }
     // #ifndef MP-TOUTIAO
-    console.log(7777777777,assistMessageRef.value);
-    
+    console.log(7777777777, assistMessageRef.value);
+
     if (
       globalGl.sConfig?.isOpenAssistMessage &&
       globalStore.isLogin &&
@@ -585,8 +589,9 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
-    healthCounselConfig.value =
-      await ServerStaticData.getSystemConfig('HEALTH_COUNSEL');
+    healthCounselConfig.value = await ServerStaticData.getSystemConfig(
+      'HEALTH_COUNSEL'
+    );
 
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');
@@ -653,6 +658,25 @@
         authorization();
     }
   });
+
+  const style1001054 = (type?: number) => {
+    let className = '';
+    if (getSysCode() === '1001054') {
+      switch (type) {
+        case 1:
+          className = 'card-1001054';
+          break;
+
+        case 2:
+          className = 'top-menu-norma-1001054';
+          break;
+
+        default:
+          break;
+      }
+    }
+    return className;
+  };
 
   const getDocRecommendList = async () => {
     const { result = [] } = await api.getPopularDoctors({});
@@ -1182,9 +1206,21 @@
     padding: 6px;
     font-size: 56rpx !important;
   }
-  .cardNoMargin {
+
+  .top-menu-norma-1001054 {
+    background-color: #f4fffc !important;
+  }
+  .card-1001054 {
     .top-card {
+      // background-color: #00b39e !important;
       margin: 0 0 !important;
+      .switchPatient,
+      .login-btn {
+        color: #00b39e !important;
+      }
+      &::after {
+        background-color: #00b39e !important;
+      }
     }
   }
 </style>

@@ -4,6 +4,11 @@
     :scroll-x="true"
     v-if="messList && messList.length"
     :class="messList.length > 1 ? '' : 'w100'"
+    @scroll="handleScroll"
+    @touchend="handleTouchend"
+    @touchstart="handleTouch"
+    :scroll-with-animation="true"
+    :scroll-into-view="targetId"
   >
     <view
       class="flex scroll-view1"
@@ -20,6 +25,7 @@
         v-for="(messData, index) in messList"
         :class="messList.length > 1 ? 'mr24 w90' : ''"
         @click="gotoGuide(messData)"
+        :id="`scroll-view-targetId-` + index"
       >
         <view class="assist-card animate__animated animate__fadeIn">
           <view class="flex-normal-between">
@@ -71,7 +77,7 @@
                           messData.statusList,
                           messData.orderStatus
                         ).findIndex(
-                          (item) => item.value == messData.orderStatus
+                          (item) => item.label == messData.orderStatus
                         )
                       ] + '%',
                   }"
@@ -80,7 +86,7 @@
                   <view
                     class="dot"
                     :class="{
-                      active: item.value * 1 <= messData.orderStatus * 1,
+                      active: item.value * 1 <= messData.activeStausIndex * 1,
                     }"
                     v-for="item in getFourItemsSmart(
                       messData.statusList,
@@ -91,8 +97,8 @@
                 </view>
                 <view class="dots-name color-888 f28 g-bold">
                   <view
-                    class="name text-ellipsis"
-                    :class="{ active: item.value === messData.orderStatus }"
+                    class="name"
+                    :class="{ active: item.label === messData.orderStatus }"
                     v-for="item in getFourItemsSmart(
                       messData.statusList,
                       messData.orderStatus
@@ -135,19 +141,22 @@
 <script setup lang="ts">
   import api from '@/service/api';
   import dayjs from 'dayjs';
-  import { ref, onMounted, defineExpose } from 'vue';
-  import { GStores } from '@/utils';
+  import { ref, onMounted, nextTick } from 'vue';
+  import { GStores, debounce } from '@/utils';
   import { joinQuery } from '@/common';
-  const messData = ref<any>({});
   const gStores = new GStores();
   onMounted(() => {
     // #ifndef MP-TOUTIAO
-    
+
     reLoad();
     // #endif
   });
   const messList = ref([] as any[]);
   const list = ref([10, 36.4, 63.4, 90] as any[]);
+  const targetId = ref(<string>'scroll-view-targetId-0');
+  const isFinishTouch = ref(<number>0);
+  const srcollDetail = ref(<any>{});
+
   const reLoad = async () => {
     const { result } = await api.hpCalendar({});
     messList.value = result;
@@ -157,12 +166,19 @@
         const [listStr, orderStatus] = item.process.split(',');
         item.orderStatus = orderStatus;
         const statusArray = listStr.split('/');
-        item.statusList = statusArray.map((status) => ({
+        item.statusList = statusArray.map((status, index) => ({
           label: status,
-          value: status,
+          value: index,
         }));
+        item.activeStausIndex = 0;
+        item.statusList.forEach((element, index) => {
+          if (element.label === orderStatus) {
+            item.activeStausIndex = index;
+          }
+        });
       }
     });
+    console.log('messList.value', messList.value);
   };
 
   const gotoHisMess = async () => {};
@@ -227,6 +243,7 @@
     // 是否取绝对值
     return absolute ? Math.abs(result) : result;
   };
+
   const getFourItemsSmart = (arr, targetValue) => {
     if (!Array.isArray(arr) || arr.length === 0) {
       return [];
@@ -238,24 +255,50 @@
     }
 
     // 查找目标值在数组中的索引
-    const targetIndex = arr.findIndex((item) => item.value === targetValue);
+    const isFinishTouch = arr.findIndex((item) => item.value === targetValue);
 
     // 如果找不到目标值，从头开始取4个
-    if (targetIndex === -1) {
+    if (isFinishTouch === -1) {
       return arr.slice(0, 4);
     }
 
     // 根据目标值的位置决定如何截取
-    if (targetIndex < 2) {
+    if (isFinishTouch < 2) {
       // 目标值在前两个位置，从开头取
       return arr.slice(0, 4);
-    } else if (targetIndex > arr.length - 3) {
+    } else if (isFinishTouch > arr.length - 3) {
       // 目标值在倒数三个位置，从末尾取
       return arr.slice(arr.length - 4, arr.length);
     } else {
       // 目标值在中间位置，尽量让它作为第三项
-      return arr.slice(targetIndex - 2, targetIndex + 2);
+      return arr.slice(isFinishTouch - 2, isFinishTouch + 2);
     }
+  };
+
+  let handleChangeisFinishTouch = (index) => {
+    if (isFinishTouch.value) {
+      targetId.value = '';
+      nextTick(() => {
+        targetId.value = `scroll-view-targetId-${index}`;
+      });
+    }
+  };
+  handleChangeisFinishTouch = debounce(handleChangeisFinishTouch, 200, false);
+
+  const handleTouchend = () => {
+    isFinishTouch.value = 1;
+    handleScroll(srcollDetail.value);
+  };
+
+  const handleTouch = () => {
+    isFinishTouch.value = 0;
+  };
+
+  const handleScroll = ({ detail }) => {
+    const { scrollLeft, scrollWidth } = detail;
+    let spinWith = scrollWidth / messList.value.length;
+    srcollDetail.value = { detail };
+    handleChangeisFinishTouch(Math.round(scrollLeft / spinWith));
   };
   defineExpose({ reLoad });
 </script>
@@ -343,6 +386,7 @@
           .name {
             position: absolute;
             transform: translate(-30%, 20rpx);
+            max-width: 80rpx;
           }
 
           .active {

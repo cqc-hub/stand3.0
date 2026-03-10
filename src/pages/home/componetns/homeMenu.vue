@@ -1,5 +1,5 @@
 <template>
-  <view class="menu-list menu-style">
+  <view class="menu-list menu-style" :class="style1001054()">
     <view
       :class="{
         'pr0 pl0 pt0': isTabStyle1,
@@ -121,6 +121,14 @@
     props.tabIndex && (tabIndex1.value = props.tabIndex);
   });
 
+  const style1001054 = () => {
+    let className = '';
+    if (getSysCode() === '1001054') {
+      className = 'menu-list-1001054';
+    }
+    return className;
+  };
+
   const activeMenu = (index) => {
     tabIndex1.value = index;
   };
@@ -227,5 +235,12 @@
       padding-top: 24rpx;
       //  border-radius: 16rpx;
     }
+  }
+  .menu-list-1001054 {
+    background: linear-gradient(
+      360deg,
+      rgba(238, 243, 255, 0) 50%,
+      var(--hr-success-color-1) 100%
+    ) !important;
   }
 </style>

@@ -332,7 +332,6 @@ export const miniProgramConfig: {
     alipayPid: 'ze2exd3di9dbye6cc+hfia==',
     isOpenOcr: true,
     sConfig: {
-      homeTopBanner: { topShow: true },
       isOpenHelpOld: '1',
       isOpenPopularSci: '1',
       homeNavTitleLogo:
