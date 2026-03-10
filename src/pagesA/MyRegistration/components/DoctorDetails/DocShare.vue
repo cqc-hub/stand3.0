@@ -3,7 +3,7 @@
     <uni-popup ref="popup" :isMaskClick="false" @change="change">
       <view>
         <view class="g-flex-rc-cc">
-          <view class="my-display-none">
+          <view class="my-display-none" v-if="options.code">
             <uv-qrcode
               :options="options"
               :value="options.code"
@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { getCurrentInstance, ref } from 'vue';
+  import { getCurrentInstance, ref, onMounted, nextTick } from 'vue';
   import {
     downFile,
     wait,
@@ -94,6 +94,12 @@
     pageProp: IProps;
     pageConfig: ISystemConfig['order'];
   }>();
+
+  onMounted(() => {
+    nextTick(() => {
+      options.value.code = '';
+    });
+  });
 
   const change = ({ show }) => {};
 
@@ -124,6 +130,7 @@
     // #endif
 
     // #ifndef H5
+    console.log(props.pageProp, props.pageProp);
     options.value.code = joinQuery(shareUrl, {
       ...props.pageProp,
       deptName: undefined,
@@ -144,6 +151,7 @@
   };
 
   const close = () => {
+    options.value.code = '';
     isShow.value = false;
     popupBottom.value.close();
     popup.value.close();
@@ -399,8 +407,10 @@
       gStores.globalStore.isTcmStyle ? '-tcm' : ''
     }.png`;
 
-   let cpc_img = props.pageConfig.isPartyMemberStyle === '1' ? `${globalGl.BASE_IMG}is_party_member.png` : `${globalGl.BASE_IMG}CPC-icon2.png`;
-
+    let cpc_img =
+      props.pageConfig.isPartyMemberStyle === '1'
+        ? `${globalGl.BASE_IMG}is_party_member.png`
+        : `${globalGl.BASE_IMG}CPC-icon2.png`;
 
     // #ifdef MP-TOUTIAO
     avatar_img = `${globalGl.BASE_IMG}order-doctor-avatar.png`;
@@ -495,7 +505,7 @@
 
     ctx.restore();
 
-     if (_cpc_img && props.pageConfig.isPartyMemberStyle === '1') {
+    if (_cpc_img && props.pageConfig.isPartyMemberStyle === '1') {
       ctx.drawImage(
         _cpc_img,
         avatarBox.left + 10,
