@@ -38,7 +38,7 @@
 
                 <img
                   :src="`${globalGl.BASE_IMG}stand3-wx-home-navmunu-translate1.png`"
-                  class="w-full"
+                  class="img-width"
                   mode="widthFix"
                 />
               </view>
@@ -58,7 +58,7 @@
                 <img
                   :src="`${globalGl.BASE_IMG}stand3-wx-home-navmunu-translate2.png`"
                   mode="widthFix"
-                  class="w-full"
+                  class="img-width"
                 />
               </view>
             </view>
@@ -76,7 +76,7 @@
 
                 <img
                   :src="`${globalGl.BASE_IMG}stand3-wx-home-navmunu-translate3.png`"
-                  class="w-full"
+                  class="img-width"
                   mode="widthFix"
                 />
               </view>
@@ -117,7 +117,7 @@
 
                 <img
                   :src="`${globalGl.BASE_IMG}stand3-wx-home-navmunu-translate4.png`"
-                  class="w-full"
+                  class="img-width"
                   mode="widthFix"
                 />
               </view>
@@ -175,6 +175,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .img-width {
+    width: 70%;
+  }
   .container {
     width: 80%;
 
