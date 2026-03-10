@@ -1760,6 +1760,9 @@
 
     aimValue.value = copyAim.split('、');
     materialValue.value = copyData.split('、');
+    if (gStores.globalStore.sysCode === '1001093') {
+      materialValue.value = [];
+    }
 
     recordRows.value = JSON.parse(outInfo);
 
