@@ -460,7 +460,7 @@
                 verifyType: '1&bk',
                 cellPhoneNumber,
                 idCardEncry,
-                sex: (patientSex && (patientSex === '男' ? '1' : '2')) || '',
+                sex: patientSex,
                 birthday,
               });
 
