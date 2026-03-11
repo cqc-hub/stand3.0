@@ -850,6 +850,9 @@
     }
   };
   const verifyItemRemove = () => {
+    if (gStores.userStore.patList.length) {
+      return;
+    }
     const keys = formList.map((o) => o.key);
     const idx = keys.findIndex((o) => o === 'verifyCode');
     if (idx > -1) {
