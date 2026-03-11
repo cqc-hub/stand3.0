@@ -888,15 +888,17 @@
       }
       await wait(0);
 
-      if (gStores.userStore.patList.length) {
-        if (isSmsVerify === '1') {
-          verifyItemInsert();
-        }
-      } else {
-        if (formData.value.patientPhone === gStores.userStore.dePhone) {
-          verifyItemRemove();
-        } else if (pageProps.value.pageType === 'addPatient') {
-          verifyItemInsert();
+      if (isSmsVerify === '1') {
+        if (gStores.userStore.patList.length) {
+          if (pageProps.value.pageType === 'addPatient') {
+            verifyItemInsert();
+          }
+        } else {
+          if (formData.value.patientPhone === gStores.userStore.dePhone) {
+            verifyItemRemove();
+          } else if (pageProps.value.pageType === 'addPatient') {
+            verifyItemInsert();
+          }
         }
       }
     }
