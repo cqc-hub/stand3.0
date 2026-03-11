@@ -385,8 +385,9 @@
         .dots-name {
           .name {
             position: absolute;
-            transform: translate(-30%, 20rpx);
-            max-width: 80rpx;
+            transform: translate(-50%, 20rpx);
+            width: 115rpx;
+            text-align: center;
           }
 
           .active {
