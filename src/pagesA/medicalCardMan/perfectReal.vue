@@ -814,16 +814,6 @@
   };
 
   const verifyItemInsert = () => {
-    const { isSmsVerify } = pageConfig.value;
-    if (
-      isSmsVerify !== '1' ||
-      pageProps.value.pageType === 'perfectReal' ||
-      (formData.value.patientPhone === gStores.userStore.dePhone &&
-        !gStores.userStore.patList.length)
-    ) {
-      return;
-    }
-
     const keys = formList.map((o) => o.key);
     const idx = keys.findIndex((o) => o === 'verifyCode');
     if (idx === -1) {
@@ -871,6 +861,7 @@
 
   const formChange = async ({ item, value, oldValue }) => {
     const { key } = item;
+    const { isSmsVerify } = pageConfig.value;
 
     if (key === 'patientPhone') {
       if (value) {
@@ -881,10 +872,18 @@
           item.inputMask = undefined;
         }
         await wait(0);
-        if (value === gStores.userStore.dePhone) {
+        if (
+          value === gStores.userStore.dePhone &&
+          !gStores.userStore.patList.length
+        ) {
           verifyItemRemove();
         } else {
-          verifyItemInsert();
+          if (
+            isSmsVerify === '1' &&
+            pageProps.value.pageType === 'addPatient'
+          ) {
+            verifyItemInsert();
+          }
         }
       }
     }
@@ -1021,7 +1020,7 @@
       'patientType',
       'patientName',
       'patientPhone',
-      'verifyCode',
+      // 'verifyCode',
       'isUserInfoShareAgree',
       ...defaultFormExtraKeys,
       'defaultFalg',
@@ -1185,6 +1184,17 @@
 
     _formList.value = formList;
     gform.value.setList(formList);
+    await wait(0);
+
+    if (isSmsVerify === '1') {
+      if (
+        !isFilterSmsVerify &&
+        pageProps.value.pageType === 'addPatient' &&
+        formData.value.patientPhone !== gStores.userStore.dePhone
+      ) {
+        verifyItemInsert();
+      }
+    }
 
     //是否医保建档
     const medicalMHelp = globalGl.sConfig.medicalMHelp!;
