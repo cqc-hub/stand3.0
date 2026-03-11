@@ -813,6 +813,16 @@
     }
   };
 
+  const customFormItem = (o: TInstance) => {
+    const { key } = o;
+
+    if (key !== formKey.defaultFalg) {
+      o.labelWidth = undefined;
+    }
+
+    o.showRequireIcon = true;
+  };
+
   const verifyItemInsert = () => {
     const keys = formList.map((o) => o.key);
     const idx = keys.findIndex((o) => o === 'verifyCode');
@@ -820,8 +830,14 @@
       const verifyItem = pickTempItem(['verifyCode'])[0];
       const phoneIdx = keys.findIndex((o) => o === 'patientPhone');
       if (verifyItem) {
+        customFormItem(verifyItem);
         // @ts-expect-error
         verifyItem.beforeVerify = async () => {
+          if (keys.includes('patientName') && !formData.value.patientName) {
+            gStores.messageStore.showMessage('请先填写真实姓名', 1500);
+            return Promise.reject();
+          }
+
           if (keys.includes('idCard') && !formData.value.idCard) {
             gStores.messageStore.showMessage('请先填写证件号码', 1500);
             return Promise.reject();
@@ -872,16 +888,15 @@
           item.inputMask = undefined;
         }
         await wait(0);
-        if (
-          value === gStores.userStore.dePhone &&
-          !gStores.userStore.patList.length
-        ) {
-          verifyItemRemove();
+
+        if (gStores.userStore.patList.length) {
+          if (isSmsVerify === '1') {
+            verifyItemInsert();
+          }
         } else {
-          if (
-            isSmsVerify === '1' &&
-            pageProps.value.pageType === 'addPatient'
-          ) {
+          if (formData.value.patientPhone === gStores.userStore.dePhone) {
+            verifyItemRemove();
+          } else if (pageProps.value.pageType === 'addPatient') {
             verifyItemInsert();
           }
         }
@@ -1150,10 +1165,7 @@
 
     formList.map((o) => {
       const { key } = o;
-
-      if (key !== formKey.defaultFalg) {
-        o.labelWidth = undefined;
-      }
+      customFormItem(o);
 
       if (
         formData.value[key] &&
