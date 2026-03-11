@@ -875,30 +875,28 @@
     gform.value.setList(formList);
   };
 
-  const formChange = async ({ item, value, oldValue }) => {
+  const formChange = async ({ item, value = '', oldValue, type }) => {
     const { key } = item;
     const { isSmsVerify } = pageConfig.value;
 
     if (key === 'patientPhone') {
-      if (value) {
-        if (value.length === 11 && !verifyPhone(value)) {
-          formData.value.patientPhone = oldValue || '';
-        } else if (value.includes('*')) {
-          formData.value.patientPhone = '';
-          item.inputMask = undefined;
-        }
-        await wait(0);
+      if (value.length === 11 && !verifyPhone(value)) {
+        formData.value.patientPhone = oldValue || '';
+      } else if (value.includes('*')) {
+        formData.value.patientPhone = '';
+        item.inputMask = undefined;
+      }
+      await wait(0);
 
-        if (gStores.userStore.patList.length) {
-          if (isSmsVerify === '1') {
-            verifyItemInsert();
-          }
-        } else {
-          if (formData.value.patientPhone === gStores.userStore.dePhone) {
-            verifyItemRemove();
-          } else if (pageProps.value.pageType === 'addPatient') {
-            verifyItemInsert();
-          }
+      if (gStores.userStore.patList.length) {
+        if (isSmsVerify === '1') {
+          verifyItemInsert();
+        }
+      } else {
+        if (formData.value.patientPhone === gStores.userStore.dePhone) {
+          verifyItemRemove();
+        } else if (pageProps.value.pageType === 'addPatient') {
+          verifyItemInsert();
         }
       }
     }
@@ -915,9 +913,11 @@
       });
     }
 
-    setLocalStorage({
-      perfectRealFormData: formData.value,
-    });
+    if (type !== 'init') {
+      setLocalStorage({
+        perfectRealFormData: formData.value,
+      });
+    }
   };
 
   const btnDisabled = computed(() => {
@@ -1198,14 +1198,14 @@
     gform.value.setList(formList);
     await wait(0);
 
-    if (isSmsVerify === '1') {
-      if (
-        !isFilterSmsVerify &&
-        pageProps.value.pageType === 'addPatient' &&
-        formData.value.patientPhone !== gStores.userStore.dePhone
-      ) {
-        verifyItemInsert();
-      }
+    const phoneItem = formList.find((o) => o.key === 'patientPhone');
+    if (phoneItem) {
+      formChange({
+        item: phoneItem,
+        value: formData.value.patientPhone,
+        oldValue: '',
+        type: 'init',
+      });
     }
 
     //是否医保建档
