@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx081a6fb9ee8778e4",
+    "appid": "wx3a24f824ca86d6dc",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -66,12 +66,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -81,6 +76,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
+    "appid": "2021006124681484",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -120,7 +116,19 @@
         }
       },
       "bundleName": "com.atomicservice.6917564602329951506"
-    }
+    },
+    "domainList": [
+      {
+        "domain": "testphs.eheren.com",
+        "type": "business",
+        "description": "接口请求域名"
+      },
+      {
+        "domain": "netphs.eheren.com",
+        "type": "business",
+        "description": "接口请求域名"
+      }
+    ]
   },
   "mp-baidu": {
     "usingComponents": true
@@ -132,7 +140,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "新疆维吾尔自治区中医医院",
+  "name": "温州市中西医结合医院",
   "h5": {
     "optimization": {
       "treeShaking": {

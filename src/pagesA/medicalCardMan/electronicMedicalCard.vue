@@ -283,6 +283,7 @@
     {} as {
       showNavBar?: '1';
       dp?: '1'; // 更新 clickPat 为 patChoose
+      tab?: number;
       _showId?: '';
       patientName?: '';
     }
@@ -557,9 +558,13 @@
   };
 
   onMounted(async () => {
-    const { dp } = pageProps.value;
+    const { dp, tab } = pageProps.value;
     if (!clickPat.value.patientName || dp === '1') {
       gStores.userStore.updatePatClick(gStores.userStore.patChoose);
+    }
+
+    if (tab) {
+      tabCurrent.value = tab * 1;
     }
 
     pageConfig.value = await ServerStaticData.getSystemConfig('person');

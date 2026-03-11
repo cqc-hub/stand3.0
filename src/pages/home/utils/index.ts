@@ -1,3 +1,4 @@
+import { joinQuery } from '@/common';
 import { GStores, ServerStaticData, apiAsync, useTBanner } from '@/utils';
 
 export const _goElectronicMedicalCard = (type: 'bySelf' | 'byMedical') => {
@@ -18,7 +19,10 @@ export const _goElectronicMedicalCard = (type: 'bySelf' | 'byMedical') => {
     }
   } else {
     uni.navigateTo({
-      url: '/pagesA/medicalCardMan/electronicMedicalCard?dp=1',
+      url: joinQuery('/pagesA/medicalCardMan/electronicMedicalCard', {
+        dp: 1,
+        tab: 1,
+      }),
     });
   }
 };

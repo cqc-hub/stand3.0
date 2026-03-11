@@ -1234,18 +1234,18 @@ export const manifestFileDataObj: any = {
       },
       bundleName: 'com.atomicservice.6917564602329951506',
     },
-    // domainList: [
-    //   {
-    //     domain: 'testphs.eheren.com', // 目标接口域名（如 https://api.xxx.com 则填 xxx.com）
-    //     type: 'business',
-    //     description: '接口请求域名',
-    //   },
-    //   {
-    //     domain: 'netphs.eheren.com', // 目标接口域名（如 https://api.xxx.com 则填 xxx.com）
-    //     type: 'business',
-    //     description: '接口请求域名',
-    //   },
-    // ],
+    domainList: [
+      {
+        domain: 'testphs.eheren.com', // 目标接口域名（如 https://api.xxx.com 则填 xxx.com）
+        type: 'business',
+        description: '接口请求域名',
+      },
+      {
+        domain: 'netphs.eheren.com', // 目标接口域名（如 https://api.xxx.com 则填 xxx.com）
+        type: 'business',
+        description: '接口请求域名',
+      },
+    ],
   },
   'mp-baidu': {
     usingComponents: true,
