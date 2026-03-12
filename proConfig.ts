@@ -336,7 +336,7 @@ export const miniProgramConfig: {
       isOpenPopularSci: '1',
       homeNavTitleLogo:
         'https://phsdevoss.eheren.com/pcloud/phs3.0/xianyannavtitle.png',
-      isOpenHomeTabBarNetWorkBtn: '1',
+      // isOpenHomeTabBarNetWorkBtn: '1',
       isOpenWechatSI: true,
       medicalMHelp: {
         isOpenPatToMedicalPat: {},

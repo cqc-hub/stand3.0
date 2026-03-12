@@ -24,9 +24,15 @@
   import { onMounted, ref, computed } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, getSysCode } from '@/common';
   import { TInstance } from '@/components/g-form';
-  import { GStores, ISystemConfig, ServerStaticData, apiAsync, rulePhone } from '@/utils';
+  import {
+    GStores,
+    ISystemConfig,
+    ServerStaticData,
+    apiAsync,
+    rulePhone,
+  } from '@/utils';
 
   import dayjs from 'dayjs';
   import api from '@/service/api';
@@ -317,6 +323,44 @@
     //  // @ts-expect-error
     // jobItem && (jobItem.options = jobList);
     // }
+    if (getSysCode() === '1001036') {
+      renderListDetail.push({
+        labelWidth,
+        label: '床位类型',
+        field: 'select',
+        placeholder: '请选择床位类型',
+        key: 'bedType',
+        required: true,
+        options: [
+          {
+            label: '单人间',
+            value: '1',
+          },
+          {
+            label: '双人间',
+            value: '2',
+          },
+          {
+            label: '三人间',
+            value: '3',
+          },
+          {
+            label: '四人间',
+            value: '4',
+          },
+
+          {
+            label: '五人间 ',
+            value: '6',
+          },
+          {
+            label: '六人间',
+            value: '5',
+          },
+        ],
+        showSuffixArrowIcon: true,
+      });
+    }
 
     const rList = [
       ...renderListBase,

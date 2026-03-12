@@ -1208,7 +1208,7 @@
   }
 
   .top-menu-norma-1001054 {
-    background-color: #f4fffc !important;
+    background-color: var(--hr-brand-color-8-light) !important;
   }
   .card-1001054 {
     .top-card {
@@ -1216,11 +1216,14 @@
       margin: 0 0 !important;
       .switchPatient,
       .login-btn {
-        color: #00b39e !important;
+        color: var(--hr-brand-color-8) !important;
       }
       &::after {
-        background-color: #00b39e !important;
+        background-color: var(--hr-brand-color-8) !important;
       }
+    }
+    .top-menu-normal {
+      border: 2rpx solid var(--hr-brand-color-8) !important;
     }
   }
 </style>

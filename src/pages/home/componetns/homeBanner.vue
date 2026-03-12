@@ -114,7 +114,9 @@
           <block v-else>
             <block v-for="(item, i) in props.functionList" :key="i">
               <view
-                :class="`view${i + 2} banner-back${i + 1} banner-common`"
+                :class="`view${i + 2} banner-back${i + 1} banner-common ${
+                  getSysCode() === '1001054' && 'banner-common-1001054'
+                }`"
                 :style="
                   props.leftFunctionList.length == 1 &&
                   props.functionList.length == 2
@@ -154,6 +156,7 @@
     isSubscribeWx,
   } from '@/common/checkJump';
   import { GStores } from '@/utils';
+  import { getSysCode } from '@/common';
 
   // 2/3
   // const type = ref(2);
@@ -273,6 +276,19 @@
           color: var(--hr-neutral-color-7);
           line-height: 34rpx;
         }
+      }
+    }
+    .banner-common-1001054 {
+      background: var(--hr-banner-color-2) !important;
+      border: 2rpx solid var(--h-color-border-1) !important;
+      .icon-size1,
+      .icon-size3 {
+        color: var(--hr-success-color-6) !important;
+      }
+
+      .icon-size-back1,
+      .icon-size-back3 {
+        color: var(--hr-success-color-6) !important;
       }
     }
     // 蓝色

@@ -135,9 +135,11 @@
               >
                 <text v-if="photoModeLabel">{{ photoModeLabel }}</text>
                 <view class="flex" v-else>
+                  <text class="icon-font ico_switch icon-size" />
                   <text class="mr12">请选择办理类型</text>
-                  <text class="iconfont size-icon">&#xe6c4;</text>
+                  <!-- <text class="iconfont size-icon">&#xe6c4;</text> -->
                 </view>
+                <text class="iconfont size-icon">&#xe66b;</text>
               </view>
 
               <view
@@ -2032,5 +2034,11 @@
   .ico_download-blue {
     width: var(--hr-font-size-xxl);
     height: var(--hr-font-size-xxl);
+  }
+  .icon-size {
+    width: 46rpx;
+    height: 46rpx;
+
+    margin-right: 10rpx;
   }
 </style>

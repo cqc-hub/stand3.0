@@ -19,7 +19,11 @@
           pillsColor="#fff"
           bgColor="#fff0"
           color="#24314D"
-          activeColor="var(--hr-brand-color-6)"
+          :activeColor="
+            getSysCode() === '1001054'
+              ? `var(--hr-brand-color-8)`
+              : `var(--hr-brand-color-6)`
+          "
           pillsBorderRadius="42rpx 42rpx 0 0"
           paddingItem="0"
           height="88"

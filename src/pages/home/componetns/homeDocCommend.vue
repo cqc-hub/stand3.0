@@ -10,6 +10,7 @@
     }"
     :class="{
       'container-doc': !is1001035,
+      'container-1001054': getSysCode() === '1001054',
     }"
     class="bg flex flex-col"
   >
@@ -151,7 +152,7 @@
   import { computed, ref } from 'vue';
 
   import globalGl from '@/config/global';
-  import { joinQueryForUrl } from '@/common';
+  import { getSysCode, joinQueryForUrl } from '@/common';
   import { GStores } from '@/utils';
 
   defineProps<{
@@ -194,6 +195,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .container-1001054 {
+    background-image: url('https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-home-doc-recommend-bg-1001054.png') !important;
+  }
   .container-doc {
     height: 428rpx;
   }

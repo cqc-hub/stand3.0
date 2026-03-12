@@ -87,6 +87,9 @@
                     class="dot"
                     :class="{
                       active: item.value * 1 <= messData.activeStausIndex * 1,
+                      [`active-${
+                        messData.activeStausIndex * 1 - item.value * 1
+                      }`]: true,
                     }"
                     v-for="item in getFourItemsSmart(
                       messData.statusList,
@@ -201,7 +204,7 @@
   const getDaysFromTodayEnhanced = (date, options = {}) => {
     const {
       absolute = false,
-      includeToday = false,
+      includeToday = true,
       unit = 'day',
       precision = 0,
     } = options as any;
@@ -359,16 +362,30 @@
         .dots {
           view {
             position: absolute;
-            width: 8rpx;
-            height: 8rpx;
-            background-color: var(--hr-brand-color-6);
+            width: 10rpx;
+            height: 10rpx;
+            background-color: var(--hr-brand-color-6-light-4);
             border-radius: 50%;
           }
           .active {
-            background-color: #ffffff !important;
-            border: 4rpx solid var(--h-qrcode-1) !important;
+            width: 8rpx !important;
+            height: 8rpx !important;
+            border: 4rpx solid var(--h-qrcode-1);
             top: -4rpx;
           }
+          .active-0 {
+            border: 4rpx solid var(--h-qrcode-1) !important;
+          }
+          .active-1 {
+            border: 4rpx solid rgb(175, 94, 69) !important;
+          }
+          .active-2 {
+            border: 4rpx solid rgb(206, 113, 77) !important;
+          }
+          .active-3 {
+            border: 4rpx solid rgb(237, 131, 85) !important;
+          }
+
           :nth-child(1) {
             left: 10%;
           }

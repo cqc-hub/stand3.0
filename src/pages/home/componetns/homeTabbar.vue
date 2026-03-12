@@ -293,6 +293,26 @@
         sort: 2,
       },
       {
+        label: 'home-tabbar:在线复诊',
+        icon: global.BASE_IMG + 'oral-mall-home-icon.png',
+        iconActive: `/static/image/oral-mall-home-icon-active${
+          gStores.globalStore.isTcmStyle ? '-tcm' : ''
+        }.png`,
+        url: '/pagesC/commonHosNet/commonHosNet?returnUrl=pages%2Fv3%2FsearchDoc%2FsearchDoc%3FhosId%3D529%26receptionMode%3D8%26pageType%3D1%26freeClinicDeptId%3D',
+        loginInterception: '0',
+        sort: 2,
+      },
+       {
+        label: 'home-tabbar:特色中医',
+        icon: global.BASE_IMG + 'oral-mall-home-icon.png',
+        iconActive: `/static/image/oral-mall-home-icon-active${
+          gStores.globalStore.isTcmStyle ? '-tcm' : ''
+        }.png`,
+        url: '/pagesC/commonHosNet/commonHosNet?returnUrl=pages%2Fv3%2FspecialPrescription%2Findex',
+        loginInterception: '0',
+        sort: 3,
+      },
+      {
         label: 'home-tabbar:云诊室',
         icon: '/static/image/wlyy.png',
         iconActive: `/static/image/wlyy_active${
@@ -399,7 +419,8 @@
       tabList.push('home-tabbar:科普');
     }
     if (global.SYS_CODE === '1001054') {
-      tabList.push('home-tabbar:图文咨询');
+      tabList.push('home-tabbar:在线复诊');
+      tabList.push('home-tabbar:特色中医');
     }
 
     const {

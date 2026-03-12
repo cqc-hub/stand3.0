@@ -183,7 +183,7 @@
           selectPatientPage: '0',
           title: '一体机平台',
           terminalType: 'my',
-          gridLabel: '3',
+          gridLabel: '0',
           path: '/pagesC/commonHosNet/commonHosNet?returnUrl=pages%2Fv3%2FallInOnePlatform%2Findex',
           appId: '',
           id: 141555,
