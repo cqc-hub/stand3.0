@@ -453,11 +453,15 @@
   };
 
   const qrOptions2 = computed(() => {
-    return {
-      foregroundImageSrc: showHealthCode.value
-        ? globalGl.BASE_IMG + 'health-card-logo.png'
-        : globalGl.BASE_IMG + 'stand3-patcarddetail-qrcode-img.png',
-    };
+    const opt: any = {};
+
+    // #ifndef MP-HARMONY
+    opt.foregroundImageSrc = showHealthCode.value
+      ? globalGl.BASE_IMG + 'health-card-logo.png'
+      : globalGl.BASE_IMG + 'stand3-patcarddetail-qrcode-img.png';
+    // #endif
+
+    return opt;
   });
 
   const qrComplete = (e) => {

@@ -56,16 +56,17 @@ export default defineConfig(({ command, mode }) => {
 
     define: {
       // h5UrlLocal: JSON.stringify(`http://${netIp}:8888/#/`),
-       h5UrlLocal: JSON.stringify(`http://localhost:8889/#/`),
+      h5UrlLocal: JSON.stringify(`http://localhost:8889/#/`),
     },
 
-    // build: {
-    //   minify: 'terser',
-    //   terserOptions: {
-    //     compress: {
-    //       drop_console: true,
-    //     },
-    //   },
-    // },
+    build: {
+      assetsDir: 'static',
+      // minify: 'terser',
+      // terserOptions: {
+      //   compress: {
+      //     drop_console: true,
+      //   },
+      // },
+    },
   };
 });
