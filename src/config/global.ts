@@ -20,7 +20,7 @@ let authUrl = 'https://yyldevwwz.eheren.com/allinone-auth';
 
 // @ts-ignore
 if (process.env.NODE_ENV === 'production') {
-  // #ifndef H5
+  // #ifndef H5 | MP-HARMONY
   env = 'prod';
   // #endif
 }

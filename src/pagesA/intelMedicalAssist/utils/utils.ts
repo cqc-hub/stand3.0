@@ -392,7 +392,14 @@ export const recommendMenuList = [
  * @param answertype 回答模式：0普通；1常见问答
  * @returns
  */
-export const sendMsg = async (str: string, answertype?: 1 | 0) => {
+export const sendMsg = async (
+  str: string,
+  answertype?: 1 | 0,
+  opt = {} as {
+    req?: BaseObject; // 补充到接口
+    hideQuestion?: '1'; // 不显示问的内容
+  }
+) => {
   // #ifdef  MP-ALIPAY
   if (msgList.value.length == 0) {
     styleConfig.value.showHeader = false;
@@ -698,9 +705,14 @@ export const onBlur = (value) => {
 };
 
 export const handleGuess = (item) => {
+  const { zntPath, hideQuestion } = item;
   msgState.value.lastChatId = '';
   msgState.value.requestId = '';
-  sendMsg(item.value, 1);
+
+  // const
+  sendMsg(item.value, 1, {
+    hideQuestion,
+  });
 };
 
 export const handleServer = async (

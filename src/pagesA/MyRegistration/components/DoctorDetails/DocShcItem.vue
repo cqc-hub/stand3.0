@@ -42,12 +42,7 @@
             <text class="mr16 g-bold text-no-wrap">
               {{ item.ampmName?.replace(/^[^;]*;/, '') }}
             </text>
-            <text
-              v-if="
-                item.fee && !(item.fee === '0.00' && getSysCode() === '1001083')
-              "
-              class="ampm-fee mr16 g-bold"
-            >
+            <text v-if="isShowFee" class="ampm-fee mr16 g-bold">
               {{ item.fee }}元
             </text>
             <text
@@ -253,6 +248,15 @@
       item.schState === '2' &&
       pageConfig.isOpenOrderWaiting === '1'
     );
+  });
+  const isShowFee = computed(() => {
+    const fee = props.item.fee;
+
+    if (props.gStores.globalStore.sysCode === '1001083') {
+      return fee && fee * 1;
+    }
+
+    return fee;
   });
 
   const regClick = (scheme: TSchInfo) => {
