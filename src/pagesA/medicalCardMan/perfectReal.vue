@@ -895,8 +895,10 @@
         formData.value.patientPhone = oldValue || '';
       } else if (value.includes('*')) {
         formData.value.patientPhone = '';
+        formData.value._phoneMask = '0';
         item.inputMask = undefined;
       }
+
       await wait(0);
 
       if (isSmsVerify === '1') {
@@ -1022,7 +1024,9 @@
       if (keys.includes('patientPhone') && key === formKey.patientPhone) {
         // 手机号可以修改
         o.disabled = false;
-        o.inputMask = phoneConvert;
+        if (formData.value._phoneMask !== '0') {
+          o.inputMask = phoneConvert;
+        }
       }
       if (keys.includes('idCard') && key === formKey.idCard) {
         o.disabled = disabled;
