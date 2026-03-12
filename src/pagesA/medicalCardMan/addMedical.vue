@@ -189,6 +189,8 @@
     apiAsync,
     wait,
     ISystemConfig,
+    phoneConvert,
+    idCardConvert,
   } from '@/utils';
 
   import {
@@ -248,6 +250,8 @@
     _isOutLogin?: '1';
     _pageInfo?: '1' | '2';
     _directUrl?: string;
+    // 手机号脱敏展示
+    _phoneMask?: '1';
 
     //健康卡
     _healthType?: 'addPat';
@@ -940,7 +944,7 @@
       formKey.defaultFalg,
       // formKey.referenceId,
     ];
-    if (!pageProps.value.verifyCode) {
+    if (!pageProps.value.verifyCode && pageProps.value.verifyType !== '1&bk') {
       // 插入验证码(框)
       if (isSmsVerify === '1' && pageProps.value.pageType !== 'perfectReal') {
         let isFilterSmsVerify = false;
@@ -1139,6 +1143,12 @@
           o.disabled = true;
         }
       } else {
+        if (iValue && key === formKey.patientPhone) {
+          o.disabled = true;
+          if (!patList.length || pageProps.value._phoneMask === '1') {
+            o.inputMask = phoneConvert;
+          }
+        }
         // #ifdef MP-ALIPAY
         // 支付宝第一个就诊人自动带入信息并加密(新增就诊人)
         if (!patList.length && iValue) {
@@ -1152,27 +1162,7 @@
           if (key === formKey.idCard) {
             o.disabled = true;
 
-            o.inputMask = (v, item) => {
-              if (v) {
-                const idReg = /(\d{4})\d*(\d{4})/;
-                return v.replace(idReg, '$1***********$2');
-              } else {
-                return '';
-              }
-            };
-          }
-
-          if (key === formKey.patientPhone) {
-            o.disabled = true;
-
-            o.inputMask = (v, item) => {
-              if (v) {
-                const idReg = /(\d{3})\d*(\d{4})/;
-                return v.replace(idReg, '$1******$2');
-              }
-
-              return '';
-            };
+            o.inputMask = idCardConvert;
           }
 
           if ([formKey.patientType, formKey.idType].includes(key as any)) {

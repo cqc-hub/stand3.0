@@ -475,16 +475,7 @@
             dialogContent.value = jumpMsg;
             // dialogShow.value = true;
             dialogConfirm = () => {
-              uni.navigateTo({
-                url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
-                  ...data,
-                  pageType: pageProps.value.pageType,
-                  _directUrl: pageProps.value._directUrl,
-                  defaultFalg: formData.value[formKey.defaultFalg]
-                    ? 'true'
-                    : 'false',
-                }),
-              });
+              goAddPatDetail(data);
             };
 
             dialogConfirm();
@@ -500,16 +491,7 @@
             dialogContent.value = message;
             // dialogShow.value = true;
             dialogConfirm = () => {
-              uni.navigateTo({
-                url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
-                  ...data,
-                  pageType: pageProps.value.pageType,
-                  _directUrl: pageProps.value._directUrl,
-                  defaultFalg: formData.value[formKey.defaultFalg]
-                    ? 'true'
-                    : 'false',
-                }),
-              });
+              goAddPatDetail(data);
             };
 
             dialogConfirm();
@@ -539,17 +521,10 @@
             if (respCode === 999301) {
               messageStore.showMessage(err.message, 3000, {
                 closeCallBack() {
-                  uni.navigateTo({
-                    url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
-                      ...data,
-                      _healthType: pageProps.value._healthType,
-                      authCode: pageProps.value.authCode,
-                      pageType: pageProps.value.pageType,
-                      _directUrl: pageProps.value._directUrl,
-                      defaultFalg: formData.value[formKey.defaultFalg]
-                        ? 'true'
-                        : 'false',
-                    }),
+                  goAddPatDetail({
+                    ...data,
+                    _healthType: pageProps.value._healthType,
+                    authCode: pageProps.value.authCode,
                   });
                 },
               });
@@ -775,16 +750,7 @@
     if (respCode === 999301) {
       messageStore.showMessage(err.message, 3000, {
         closeCallBack() {
-          uni.navigateTo({
-            url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
-              ...data,
-              pageType: pageProps.value.pageType,
-              _directUrl: pageProps.value._directUrl,
-              defaultFalg: formData.value[formKey.defaultFalg]
-                ? 'true'
-                : 'false',
-            }),
-          });
+          goAddPatDetail(data);
         },
       });
       throw new Error(err);
@@ -822,6 +788,21 @@
     } else if (err?.respCode === 999001) {
       // await patientUtils.getPatCardList();
     }
+  };
+
+  const goAddPatDetail = (data: BaseObject = {}) => {
+    const phoneItem = formList.find((o) => o.key === 'patientPhone');
+
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
+        ...data,
+        pageType: pageProps.value.pageType,
+        _directUrl: pageProps.value._directUrl,
+        verifyType: '1&bk',
+        defaultFalg: formData.value[formKey.defaultFalg] ? 'true' : 'false',
+        _phoneMask: phoneItem?.inputMask ? '1' : '0',
+      }),
+    });
   };
 
   const customFormItem = (o: TInstance) => {

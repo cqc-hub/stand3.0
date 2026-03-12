@@ -1066,7 +1066,7 @@ export const miniProgramConfig: {
               orgChnlCrtfCodg:
                 'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtqg5V3ila4Zg8ONhjCsZO5',
               orgCodg: 'H41010200019',
-              orgAppId: '1JBJL87EA1684460C80A000078F00A4C',
+              orgAppId: '1JBCC0LUB14U4460C80A0000C7255DC3',
             },
 
             // zs
@@ -1235,6 +1235,7 @@ export const manifestFileDataObj: any = {
     distribute: {
       compileSdkVersion: 10,
       targetSdkVersion: 11,
+      label: '江苏省中医院',
       signingConfigs: {
         default: {
           certpath:
@@ -1282,6 +1283,11 @@ export const manifestFileDataObj: any = {
 
     appConfig: {
       icon: '$media:form_icon_512',
+      bundleName: 'com.atomicservice.6917564602329951506',
+      vendor: '和仁科技',
+      versionCode: 1000000,
+      versionName: '1.0.0',
+      label: '江苏省中医院',
     },
 
     resources: {
