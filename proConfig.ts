@@ -1076,6 +1076,26 @@ export const miniProgramConfig: {
       },
     },
   },
+  '1001101': {
+    wxAppid: 'wxb0cb07afbebac462',
+    alipayAppid: '2021003154666616',
+    name: '湖州市中心医院',
+    isSearchInHos: true,
+    isOpenOcr: false,
+    sConfig: {
+      login: { isSkipPerfect: '1' },
+    },
+  },
+  '1001102': {
+    wxAppid: 'wxf343a92ddd77b40b',
+    name: '绍兴市中医院',
+
+    isSearchInHos: true,
+    isOpenOcr: false,
+    sConfig: {
+      login: { isSkipPerfect: '1' },
+    },
+  },
   '2001004': {
     wxAppid: 'wx101158c57640d854',
     alipayAppid: '',
@@ -1246,6 +1266,23 @@ export const manifestFileDataObj: any = {
         description: '接口请求域名',
       },
     ],
+
+    appConfig: {
+      icon: '$media:form_icon_512',
+    },
+
+    resources: {
+      media: [
+        {
+          name: 'form_icon_512',
+          path: 'static/harmony/appicon.png',
+        },
+        {
+          name: 'form_icon_bg_512',
+          path: 'static/harmony/appicon.png',
+        },
+      ],
+    },
   },
   'mp-baidu': {
     usingComponents: true,
