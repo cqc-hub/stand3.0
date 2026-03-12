@@ -6,7 +6,6 @@
     class="page"
   >
     <view class="container" scroll-y>
-      <!-- {{ formData }} -->
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
@@ -481,6 +480,9 @@
                   ...data,
                   pageType: pageProps.value.pageType,
                   _directUrl: pageProps.value._directUrl,
+                  defaultFalg: formData.value[formKey.defaultFalg]
+                    ? 'true'
+                    : 'false',
                 }),
               });
             };
@@ -503,6 +505,9 @@
                   ...data,
                   pageType: pageProps.value.pageType,
                   _directUrl: pageProps.value._directUrl,
+                  defaultFalg: formData.value[formKey.defaultFalg]
+                    ? 'true'
+                    : 'false',
                 }),
               });
             };
@@ -541,6 +546,9 @@
                       authCode: pageProps.value.authCode,
                       pageType: pageProps.value.pageType,
                       _directUrl: pageProps.value._directUrl,
+                      defaultFalg: formData.value[formKey.defaultFalg]
+                        ? 'true'
+                        : 'false',
                     }),
                   });
                 },
@@ -772,6 +780,9 @@
               ...data,
               pageType: pageProps.value.pageType,
               _directUrl: pageProps.value._directUrl,
+              defaultFalg: formData.value[formKey.defaultFalg]
+                ? 'true'
+                : 'false',
             }),
           });
         },
@@ -875,7 +886,7 @@
     gform.value.setList(formList);
   };
 
-  const formChange = async ({ item, value = '', oldValue, type }) => {
+  const formChange = async ({ item, value = '', oldValue, type = '' }) => {
     const { key } = item;
     const { isSmsVerify } = pageConfig.value;
 
@@ -1032,6 +1043,7 @@
     const { mobile: mobileAli } = gStores.userStore.cacheUser;
     const { dePhone } = gStores.userStore;
     const mobile = dePhone || mobileAli || '';
+    const perfectRealFormData = await getLocalStorage('perfectRealFormData');
 
     let { formExtraKeys = [], formExtraKeysInQuickAddPatPage = [] } =
       pageConfig.value;
@@ -1084,19 +1096,10 @@
 
     insertSortFormExtraKey(sortFormExtraKeys, formListKeys);
     insertSortFormExtraKey(formExtraKeysInQuickAddPatPage, formListKeys);
-    console.log(formListKeys, formExtraKeysInQuickAddPatPage);
-
-    if (formData.value.patientType === '0') {
-      formListKeys = formListKeys.filter(
-        (key) => !['idType', 'idCard'].includes(key)
-      );
-    }
 
     formList = pickTempItem(formListKeys);
 
     if (assignValue) {
-      const perfectRealFormData = await getLocalStorage('perfectRealFormData');
-
       let defaultValue: any = {};
       defaultValue = await getDefaultFormData(
         pageProps.value.pageType || 'addPatient'
@@ -1116,6 +1119,10 @@
       }
 
       Object.assign(formData.value, defaultValue);
+    }
+
+    if (formData.value.patientType === '0') {
+      formList = formList.filter((o) => !['idType', 'idCard'].includes(o.key));
     }
 
     if (pageProps.value.pageType === 'perfectReal') {
@@ -1215,7 +1222,7 @@
 
     const phoneItem = formList.find((o) => o.key === 'patientPhone');
     if (phoneItem) {
-      formChange({
+      await formChange({
         item: phoneItem,
         value: formData.value.patientPhone,
         oldValue: '',
@@ -1231,6 +1238,7 @@
     // #ifdef MP-ALIPAY
     isMedicalFiling.value = medicalMHelp?.alipay?.medicalFiling === '1';
     // #endif
+
     console.log('formData.value', formData.value);
   };
 
