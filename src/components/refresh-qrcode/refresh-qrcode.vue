@@ -4,6 +4,7 @@
       <uv-qrcode
         v-if="code"
         :value="code"
+        :options="qrOptions2"
         @complete="qrComplete"
         ref="refQrCode1"
         size="380rpx"
@@ -31,6 +32,7 @@
 
 <script lang="ts" setup>
   import { getLocalStorage } from '@/common';
+  import globalGl from '@/config/global';
   import api from '@/service/api';
   import { GStores } from '@/utils';
   import { watch, ref, computed } from 'vue';
@@ -51,6 +53,12 @@
   const gStores = new GStores();
   const code = ref('');
   const loading = ref(false);
+  const qrOptions2 = computed(() => {
+    return {
+      foregroundImageSrc:
+        globalGl.BASE_IMG + 'stand3-patcarddetail-qrcode-img.png',
+    };
+  });
   const refBar = ref('' as any);
 
   const barOpt = computed(() => {
@@ -82,7 +90,7 @@
     loading.value = true;
     const { result } = await api
       .patDynamicCode({
-        patientId: !props.cardData && props.patientId || undefined,
+        patientId: (!props.cardData && props.patientId) || undefined,
         cardData: props.cardData,
         source: gStores.globalStore.browser.source,
       })

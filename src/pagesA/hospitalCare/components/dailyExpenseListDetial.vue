@@ -63,6 +63,13 @@
             </view>
           </view>
 
+          <view v-if="costDay" class="item">
+            <view class="item-title">费用日期</view>
+            <view class="item-content">
+              {{ costDay }}
+            </view>
+          </view>
+
           <view class="item">
             <view class="item-title">费用总额</view>
             <view class="item-content-money">

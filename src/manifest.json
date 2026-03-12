@@ -66,12 +66,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -126,7 +121,19 @@
         }
       },
       "bundleName": "com.atomicservice.6917564602329951506"
-    }
+    },
+    "domainList": [
+      {
+        "domain": "testphs.eheren.com",
+        "type": "business",
+        "description": "接口请求域名"
+      },
+      {
+        "domain": "netphs.eheren.com",
+        "type": "business",
+        "description": "接口请求域名"
+      }
+    ]
   },
   "mp-baidu": {
     "usingComponents": true

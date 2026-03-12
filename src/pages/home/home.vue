@@ -5,6 +5,7 @@
     }"
     class="g-page"
   >
+
     <view class="absolute home-nav z-999">
       <!-- #ifndef MP-TOUTIAO -->
       <home-Nav v-model:height="navHeight" :opacity="navOpacity" />
