@@ -5,7 +5,8 @@ dist/
 .DS_Store
 DS_Store
 dynamicUtil.ts
-src/config/config.json
-src/manifest.json
+/src/config/config.json
+/src/manifest.json
+/src/pages.json
 tsconfig.json
 harmony-mp-configs
