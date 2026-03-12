@@ -400,6 +400,7 @@ export const sendMsg = async (
     hideQuestion?: '1'; // 不显示问的内容
   }
 ) => {
+  const { req = {}, hideQuestion } = opt;
   // #ifdef  MP-ALIPAY
   if (msgList.value.length == 0) {
     styleConfig.value.showHeader = false;
@@ -419,16 +420,19 @@ export const sendMsg = async (
 
   chunkStatus.value?.isTyping && stopChunkRequest();
 
-  msgList.value.push({
-    my: true,
-    msg: value,
-    type: 1,
-  });
+  if (hideQuestion !== '1') {
+    msgList.value.push({
+      my: true,
+      msg: value,
+      type: 1,
+    });
+    scrollToNewMsg();
+  }
   msgState.value.msgLoad = true;
-  scrollToNewMsg();
   // #ifdef  MP-WEIXIN
   if (chunkStatus.value?.isWXStreamApi) {
-    typeInAsk(value, answertype || 0);
+
+    typeInAsk(value, answertype || 0, opt);
     return;
   }
   // #endif
@@ -444,6 +448,7 @@ export const sendMsg = async (
     result: { showType, list, requestId, chatId, tips },
   } = await api
     .customerAIask({
+      ...req,
       content: value,
       sysCode: globalGl.SYS_CODE,
       source,
@@ -712,6 +717,9 @@ export const handleGuess = (item) => {
   // const
   sendMsg(item.value, 1, {
     hideQuestion,
+    req: {
+      zntPath,
+    },
   });
 };
 
@@ -1190,7 +1198,12 @@ const processChunks = (chunkTemp: string, typeInIndex: number) => {
 let requestTask: any = null;
 let taskQueue = new TaskQueue();
 
-const typeInAsk = async (value, answertype) => {
+const typeInAsk = async (value, answertype,   opt = {} as {
+    req?: BaseObject; // 补充到接口
+    hideQuestion?: '1'; // 不显示问的内容
+  }) => {
+  const { req = {}, hideQuestion } = opt;
+
   const gStores = new GStores();
   let baseApi = `https://${
     globalGl.env === 'prod' ? 'net' : 'test'
@@ -1207,6 +1220,7 @@ const typeInAsk = async (value, answertype) => {
     },
     data: JSON.stringify({
       args: {
+        ...req,
         content: value,
         sysCode: gStores.globalStore.sysCode,
         source: gStores.globalStore.browser.source == 19 ? 1 : 2,
@@ -1265,8 +1279,8 @@ const typeInAsk = async (value, answertype) => {
         scrollToNewMsg();
       }
     },
-    complete: () => {
-      console.log('调用完成');
+    complete: (e) => {
+      console.log('调用完成', e);
       // 延迟一小段时间确保所有数据块都已处理完毕
       setTimeout(() => {
         msgState.value.msgLoad = false;

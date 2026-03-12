@@ -1057,6 +1057,7 @@ export const miniProgramConfig: {
           medicalNation: {
             appId: 'wxe183cd55df4b4369',
             path: 'auth/pages/bindcard/auth/index',
+            // cs
             pathExtraData: {
               openType: 'getAuthCode',
               bizType: '04107',
@@ -1065,8 +1066,20 @@ export const miniProgramConfig: {
               orgChnlCrtfCodg:
                 'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtqg5V3ila4Zg8ONhjCsZO5',
               orgCodg: 'H41010200019',
-              orgAppId: '1JFFNJORA0BQ8D430B0A0000DFBC6F57',
+              orgAppId: '1JBJL87EA1684460C80A000078F00A4C',
             },
+
+            // zs
+            // pathExtraData: {
+            //   openType: 'getAuthCode',
+            //   bizType: '04107',
+            //   cityCode: '410101',
+            //   channel: 'AAG05QdjP5yQIRc05wpvThnI',
+            //   orgChnlCrtfCodg:
+            //     'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtqg5V3ila4Zg8ONhjCsZO5',
+            //   orgCodg: 'H41010200019',
+            //   orgAppId: '1JFFNJORA0BQ8D430B0A0000DFBC6F57',
+            // },
           },
         },
 

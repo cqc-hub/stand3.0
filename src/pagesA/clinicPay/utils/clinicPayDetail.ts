@@ -391,7 +391,13 @@ export const getMedicalAuthCode = async (
 
       await new Promise((success, j) => {
         let envVersion: any = globalGl.env === 'prod' ? 'release' : 'trial';
-        if (['1001092', '1001099'].includes(sysCode)) {
+        if (
+          [
+            '1001092',
+
+            // '1001099'
+          ].includes(sysCode)
+        ) {
           envVersion = 'release';
         }
         console.warn(
