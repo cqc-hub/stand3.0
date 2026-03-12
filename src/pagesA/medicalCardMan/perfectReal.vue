@@ -1178,7 +1178,9 @@
         formData.value[key] &&
         !['defaultFalg', 'patientPhone'].includes(key)
       ) {
-        // o.disabled = true;
+        // #ifdef MP-ALIPAY
+        o.disabled = true;
+        // #endif
       }
 
       // 额外信息存在证件类型与证件号时，默认值未存在身份证或者未通过身份证校验时，可编辑
