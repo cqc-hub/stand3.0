@@ -916,9 +916,22 @@
     }
 
     if (type !== 'init') {
-      setLocalStorage({
-        perfectRealFormData: formData.value,
+      const isCache = Object.keys(formData.value).some((key) => {
+        const v = formData.value[key];
+        if (v && !['defaultFalg', 'idType', 'patientType'].includes(key)) {
+          return true;
+        }
+
+        return false;
       });
+
+      if (isCache) {
+        setLocalStorage({
+          perfectRealFormData: formData.value,
+        });
+      } else {
+        removeLocation('perfectRealFormData');
+      }
     }
   };
 
