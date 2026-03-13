@@ -298,7 +298,7 @@
         iconActive: `/static/image/oral-mall-home-icon-active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
         }.png`,
-        url: '/pagesC/commonHosNet/commonHosNet?returnUrl=pages%2Fv3%2FsearchDoc%2FsearchDoc%3FhosId%3D529%26receptionMode%3D8%26pageType%3D1%26freeClinicDeptId%3D',
+        url: '/pagesC/commonHosNet/commonHosNet?returnUrl=pages%2Fv3%2Fhome%2FdefaultHome%3Fis_receptionMode_8%3D1',
         loginInterception: '0',
         sort: 2,
       },
