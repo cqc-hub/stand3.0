@@ -251,7 +251,7 @@
     _pageInfo?: '1' | '2';
     _directUrl?: string;
     // 手机号脱敏展示
-    _phoneMask?: '1';
+    _phoneMask?: '0' | '1';
 
     //健康卡
     _healthType?: 'addPat';
@@ -1145,7 +1145,7 @@
       } else {
         if (iValue && key === formKey.patientPhone) {
           o.disabled = true;
-          if (!patList.length || pageProps.value._phoneMask === '1') {
+          if (!patList.length && pageProps.value._phoneMask !== '0') {
             o.inputMask = phoneConvert;
           }
         }
