@@ -65,7 +65,7 @@
             </text>
             <image
               v-if="item.isPartySpecialization"
-              class="party_specialization g-tag text-no-wrap f28 ml12"
+              class="party_specialization text-no-wrap f28 ml12"
               :src="`${globalGl.BASE_IMG}party_specialization.png`"
             />
           </view>

@@ -39,7 +39,7 @@ export interface IDeptLv3 {
   hosId?: string;
   deptName: string;
   freeClinicId: string; // 义诊
-
+  isPartySpecialization?: boolean; //党建专科
   hosDeptId: string;
   promptMessage: string;
   recommendation: string;
