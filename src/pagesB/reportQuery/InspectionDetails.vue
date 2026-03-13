@@ -735,7 +735,7 @@
       let params: any = {
         type: 'cache',
       };
-      if (['1001083', '1001095'].includes(gStores.globalStore.sysCode)) {
+      if (['1001083',"1001085", '1001095'].includes(gStores.globalStore.sysCode)) {
         params = {
           type: 'base64',
           url: encodeURIComponent(
