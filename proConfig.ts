@@ -1235,7 +1235,7 @@ export const manifestFileDataObj: any = {
     distribute: {
       compileSdkVersion: 10,
       targetSdkVersion: 11,
-      label: '江苏省中医院',
+      label: '$string:EntryAbility_label',
       signingConfigs: {
         default: {
           certpath:
@@ -1281,6 +1281,12 @@ export const manifestFileDataObj: any = {
       },
     ],
 
+    abilities: [
+      {
+        label: '$string:EntryAbility_label',
+      },
+    ],
+
     appConfig: {
       icon: '$media:form_icon_512',
       bundleName: 'com.atomicservice.6917564602329951506',
@@ -1290,15 +1296,35 @@ export const manifestFileDataObj: any = {
       label: '江苏省中医院',
     },
 
+    metaService: {
+      id: '461323198428875122',
+      label: '江苏省中医院',
+      icon: {
+        small: '/static/harmony/appicon.png', // 卡片小图标（48×48）
+        large: '/static/harmony/appicon.png', // 卡片大图标（192×192）
+        standard: '/static/harmony/appicon.png', // 入口图标（108×108）
+      },
+    },
+
     resources: {
       media: [
         {
           name: 'form_icon_512',
-          path: 'static/harmony/appicon.png',
+          path: '/static/harmony/appicon.png',
         },
         {
           name: 'form_icon_bg_512',
-          path: 'static/harmony/appicon.png',
+          path: '/static/harmony/appicon.png',
+        },
+      ],
+      string: [
+        {
+          name: 'EntryAbility_label',
+          value: '江苏省中医院',
+        },
+        {
+          name: 'app_name',
+          value: '江苏省中医院',
         },
       ],
     },
