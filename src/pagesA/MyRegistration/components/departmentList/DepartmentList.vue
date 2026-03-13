@@ -63,6 +63,11 @@
                 </text>
               </text>
             </text>
+            <image
+              v-if="item.isPartySpecialization"
+              class="party_specialization g-tag text-no-wrap f28 ml12"
+              :src="`${globalGl.BASE_IMG}party_specialization.png`"
+            />
           </view>
         </view>
       </view>
@@ -98,7 +103,7 @@
   import { watch, ref, computed, getCurrentInstance, nextTick } from 'vue';
   import { isLev1, IDeptLv1, IDeptLv2, IDeptLv3 } from '@/stores';
   import { wait, throttle } from '@/utils';
-
+  import globalGl from '@/config/global';
   import DeptCollapse from '../dept-collapse/dept-collapse.vue';
   import DepartmentListLv1 from './DepartmentListLv1.vue';
 
@@ -391,5 +396,10 @@
     100% {
       border-top-right-radius: 20rpx 30rpx;
     }
+  }
+  .party_specialization {
+    width: 36rpx;
+    height: 36rpx;
+    position: relative;
   }
 </style>

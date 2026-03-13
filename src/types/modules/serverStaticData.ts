@@ -55,6 +55,8 @@ export interface ISystemConfig_ {
     /** 科室列表页面 pagesA/MyRegistration/selDepartment */
     // 选科室上面 banner
     bannerOrder?: TBannerConfig | TBannerConfig[];
+     //党建专科
+    partySpecialization?:string[];
     //选科室上面 banner-支付宝
     bannerOrderAlipay?: TBannerConfig | TBannerConfig[];
     //跳转名医名科模式,若开启则会请求医院参数CELEBRATED_DEPT

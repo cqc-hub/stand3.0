@@ -309,7 +309,37 @@
     if (!deptListLevel) {
       deptListLevel = '3';
     }
+    const { partySpecialization } = orderConfig.value;
 
+    if (partySpecialization) {
+      firstDeptList = result.firstDeptList.map((firstDept) => {
+        if (partySpecialization.includes(firstDept.firstHosDeptId)) {
+          firstDept.isPartySpecialization = true;
+        }
+
+        firstDept.secondDeptList &&
+          (firstDept.secondDeptList = firstDept.secondDeptList.map(
+            (secondeDept) => {
+              if (partySpecialization.includes(secondeDept.secondHosDeptId)) {
+                secondeDept.isPartySpecialization = true;
+              }
+              secondeDept.thirdDeptList &&
+                (secondeDept.thirdDeptList = secondeDept.thirdDeptList.map(
+                  (thirdDept) => {
+                    if (partySpecialization.includes(thirdDept.hosDeptId)) {
+                      thirdDept.isPartySpecialization = true;
+                    }
+                    return thirdDept;
+                  }
+                ));
+              return secondeDept;
+            }
+          ));
+
+        return firstDept;
+      });
+    }
+    console.log('result', partySpecialization, firstDeptList);
     if (firstDeptList && firstDeptList.length) {
       loopDeptList(firstDeptList, deptListLevel);
       _loopDeptList(firstDeptList);

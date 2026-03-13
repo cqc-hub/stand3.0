@@ -3,6 +3,7 @@ export interface IDeptLv1 extends IDeptLv3 {
   hosId?: string;
   firstDefaultShowDept?: '1'; // 默认展示科室
   freeClinicId: string; // 义诊
+  isPartySpecialization?: boolean; //党建专科
   firstDeptName: string;
   firstHosDeptId: string;
   firstRecommendation: string; // 科室推介信息
@@ -19,7 +20,7 @@ export interface IDeptLv2 extends IDeptLv3 {
   hosId?: string;
   open?: boolean;
   freeClinicId: string; // 义诊
-
+  isPartySpecialization?: boolean; //党建专科
   promptMessage: string; // 就诊提示
   remark: string;
   secondDeptName: string;

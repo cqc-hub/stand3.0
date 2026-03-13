@@ -32,6 +32,11 @@
             义诊
           </text>
         </text>
+        <image
+          v-if="item.isPartySpecialization"
+          class="party_specialization g-tag text-no-wrap f28 ml12"
+          :src="`${globalGl.BASE_IMG}party_specialization.png`"
+        />
       </view>
       <view
         :class="{
@@ -69,6 +74,11 @@
               义诊
             </text>
           </text>
+          <image
+            v-if="_item.isPartySpecialization"
+            class="party_specialization g-tag text-no-wrap f28 ml12"
+            :src="`${globalGl.BASE_IMG}party_specialization.png`"
+          />
         </view>
       </view>
     </view>
@@ -78,7 +88,7 @@
 <script lang="ts" setup>
   import { ref, onMounted, getCurrentInstance, nextTick } from 'vue';
   import { IDeptLv2, IDeptLv3 } from '@/stores';
-
+  import globalGl from '@/config/global';
   const props = withDefaults(
     defineProps<{
       item: IDeptLv2;
@@ -99,7 +109,7 @@
       offsetContentHeight?: number;
     }>(),
     {
-      item: () => ({}) as IDeptLv2,
+      item: () => ({} as IDeptLv2),
       title: '标题',
       content: '内容',
       fontSize: '28',
@@ -267,5 +277,12 @@
 
   .icon-hide {
     opacity: 0 !important;
+  }
+
+  .party_specialization {
+    width: 36rpx;
+    height: 36rpx;
+    position: relative;
+    top: 10rpx;
   }
 </style>
