@@ -1338,6 +1338,11 @@
       pageProps.value.pageType || 'addPatient',
       formData.value
     );
+    Object.keys(defaultValue).forEach((key) => {
+      if (formData.value[key]) {
+        delete defaultValue[key];
+      }
+    });
     Object.assign(formData.value, defaultValue);
 
     //暂时注释 这个值是undifined
