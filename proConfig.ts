@@ -1090,7 +1090,7 @@ export const miniProgramConfig: {
     },
   },
   '1001101': {
-    wxAppid: 'wxb0cb07afbebac462',
+    wxAppid: 'wxeccca51d0d27a12f',
     alipayAppid: '2021003154666616',
     name: '湖州市中心医院',
     isSearchInHos: true,
@@ -1232,10 +1232,6 @@ export const manifestFileDataObj: any = {
     },
   },
   'mp-harmony': {
-    template: {
-      path: '/harmony-mp-configs',
-      merge: true,
-    },
     distribute: {
       compileSdkVersion: 10,
       targetSdkVersion: 11,
