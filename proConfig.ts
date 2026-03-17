@@ -1109,6 +1109,15 @@ export const miniProgramConfig: {
       login: { isSkipPerfect: '1' },
     },
   },
+  '1001103': {
+    wxAppid: 'wxf82fb22d5a87e9af',
+    name: '上海儿童医学中心贵州医院',
+    isSearchInHos: true,
+    isOpenOcr: false,
+    sConfig: {
+      login: { isSkipPerfect: '1' },
+    },
+  },
   '2001004': {
     wxAppid: 'wx101158c57640d854',
     alipayAppid: '',
