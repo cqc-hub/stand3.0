@@ -23,7 +23,10 @@
           @handler-next="changeTab(item)"
           :disabled="item.loginInterception === '0'"
         >
-          <view class="w100p h100p flex items-end" @click="changeTab(item)">
+          <view
+            class="w100p h100p flex items-end relative"
+            @click="changeTab(item)"
+          >
             <view
               :class="{
                 'center-code': isCenterCode(item),
@@ -302,7 +305,7 @@
         loginInterception: '0',
         sort: 2,
       },
-       {
+      {
         label: 'home-tabbar:特色中医',
         icon: global.BASE_IMG + 'oral-mall-home-icon.png',
         iconActive: `/static/image/oral-mall-home-icon-active${
@@ -458,7 +461,7 @@
     }
   };
 
-  const isCenterCode = (item) => item.label === 'home-tabbar:就诊码/医保码';
+  const isCenterCode = (item) => item.label.includes('home-tabbar:就诊码');
   // 提取路径部分的函数
   const getPath = (url: string) => {
     return url.split('?')[0];
