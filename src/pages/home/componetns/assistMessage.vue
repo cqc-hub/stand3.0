@@ -41,24 +41,24 @@
           </view>
           <view class="info-area">
             <view class="p24 f28 flex-normal-between">
-              <view class="flex text-ellipsis">
-                <text class="name pr24" v-if="messData.patientName">
+              <view class="flex ">
+                <text class="name pr12" v-if="messData.patientName">
                   {{ messData.patientName }}
                 </text>
-                <text class="date pr24" v-if="messData.appointmentDate">
+                <text class="date pr12" v-if="messData.appointmentDate">
                   {{ dayjs(messData.appointmentDate).format('MM-DD') }}
                 </text>
-                <text class="time pr24" v-if="messData.timeDesc">
+                <text class="time pr12" v-if="messData.timeDesc">
                   {{ messData.timeDesc }}
                 </text>
-                <text class="number pr24" v-if="messData.disNo">
+                <text class="number pr12" v-if="messData.disNo">
                   {{ messData.disNo }}号
                 </text>
               </view>
-              <view class="tag f24 text-ellipsis">
+              <view class="tag f24 ">
                 {{
                   getDaysFromTodayEnhanced(messData?.appointmentDate) == 0
-                    ? '当日'
+                    ? '今日'
                     : getDaysFromTodayEnhanced(messData?.appointmentDate, {
                         includeToday: true,
                       }) + '日后'
@@ -146,7 +146,7 @@
   import dayjs from 'dayjs';
   import { ref, onMounted, nextTick } from 'vue';
   import { GStores, debounce } from '@/utils';
-  import { joinQuery } from '@/common';
+  import { joinQuery, setLocalStorage, getLocalStorage } from '@/common';
   const gStores = new GStores();
   onMounted(() => {
     // #ifndef MP-TOUTIAO
@@ -161,8 +161,22 @@
   const srcollDetail = ref(<any>{});
 
   const reLoad = async () => {
-    const { result } = await api.hpCalendar({});
-    messList.value = result;
+    //非要加个时间限制缓存，直接写进缓存
+
+    if (
+      getLocalStorage('assistMessageTime') &&
+      Math.abs(Date.now() - +getLocalStorage('assistMessageTime')) <= 300000
+    ) {
+      messList.value = getLocalStorage('assistMessageData');
+    } else {
+      const { result } = await api.hpCalendar({});
+      setLocalStorage({
+        assistMessageData: result,
+        assistMessageTime: new Date().getTime(),
+      });
+      messList.value = result;
+    }
+
     messList.value.map((item) => {
       item.statusList = [];
       if (item.process) {
@@ -181,7 +195,6 @@
         });
       }
     });
-    console.log('messList.value', messList.value);
   };
 
   const gotoHisMess = async () => {};

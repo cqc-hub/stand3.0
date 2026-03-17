@@ -475,6 +475,7 @@
             if (reportHosNameResults && reportHosNameResults.length) {
               reportHosNameResults.map((p) => {
                 const { hosName, reportList } = p;
+                console.log('hosName', hosName, reportList);
 
                 if (reportList && reportList.length) {
                   reportList.map((item) => {
@@ -493,6 +494,16 @@
                             } else {
                               fHItem.reportList = [item];
                             }
+                          } else {
+                            willChangeList.push({
+                              date,
+                              reportHosNameResults: [
+                                {
+                                  hosName,
+                                  reportList,
+                                },
+                              ],
+                            });
                           }
                         });
                       }
