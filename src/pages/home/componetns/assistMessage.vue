@@ -30,18 +30,18 @@
         <view class="assist-card animate__animated animate__fadeIn">
           <view class="flex-normal-between">
             <view class="flex p24v f32">
-              <text class="iconfont icon-location ml24 f40">&#xe6d7;</text>
-              <view class="hos p12c">{{ messData.hosName }}</view>
-              <view class="dept p12c">{{ messData.deptName }}</view>
+              <text class="iconfont icon-location ml12 f40">&#xe6d7;</text>
+              <view class="hos pr12">{{ messData.hosName }}</view>
+              <view class="dept pl12">{{ messData.deptName }}</view>
             </view>
-            <view class="color-666 flex pr24 more">
+            <view class="color-666 flex pr12 more">
               <text class="f28">详情</text>
               <text class="iconfont f48">&#xe66b;</text>
             </view>
           </view>
           <view class="info-area">
             <view class="p24 f28 flex-normal-between">
-              <view class="flex ">
+              <view class="flex">
                 <text class="name pr12" v-if="messData.patientName">
                   {{ messData.patientName }}
                 </text>
@@ -55,7 +55,7 @@
                   {{ messData.disNo }}号
                 </text>
               </view>
-              <view class="tag f24 ">
+              <view class="tag f24">
                 {{
                   getDaysFromTodayEnhanced(messData?.appointmentDate) == 0
                     ? '今日'
@@ -120,7 +120,7 @@
             >
               <view class="title f24 flex ellipsis-line-clamp2">
                 <view class="wxts flex">
-                  <text class="iconfont color-warn mr12">&#xe6d1;</text>
+                  <text class="iconfont color-warn mr12 f26">&#xe6d1;</text>
                   <text class="color-warn f26 mr12 text-ellipsis">
                     就诊提示 :
                   </text>
@@ -128,7 +128,9 @@
                 <view class="content color-888 f26 marquee-container">
                   <view class="marquee-seamless">
                     <view class="marquee-content">
-                      <span class="marquee-text">{{ messData.notice }}</span>
+                      <span class="marquee-text assist-text">
+                        {{ messData.notice }}
+                      </span>
                       <span class="marquee-text">{{ messData.notice }}</span>
                     </view>
                   </view>
@@ -330,6 +332,9 @@
     border-radius: 24rpx;
     .icon-location {
       color: var(--hr-brand-color-6);
+      /* #ifdef MP-ALIPAY */
+      transform: translate(0, -5rpx);
+      /* #endif */
     }
     .hos {
       color: var(--hr-brand-color-6);
@@ -459,6 +464,7 @@
   .box {
     max-width: 92vw;
     width: 100%;
+    height: min-content;
   }
   .scroll-view1 {
     width: 100%;
@@ -490,6 +496,11 @@
     display: inline-block;
     padding: 0 100rpx;
     letter-spacing: 2rpx;
+  }
+  .assist-text {
+    /* #ifdef MP-ALIPAY */
+    transform: translate(0, -10rpx);
+    /* #endif */
   }
 
   /* 使用两个相同内容实现无缝循环 */

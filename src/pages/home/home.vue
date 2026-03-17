@@ -254,7 +254,7 @@
               <lifestyle :sceneId="globalGl.sConfig.isOpenAlipayFollow" />
             </view>
             <!-- #endif -->
-            <view class="mt32" v-if="viewerStore.homeMenuList.length">
+            <view class="mt24" v-if="viewerStore.homeMenuList.length">
               <!--  :homeTabStyle="
                   gStores.globalStore.sysCode === '1001093' ? '1' : undefined
                 " -->
