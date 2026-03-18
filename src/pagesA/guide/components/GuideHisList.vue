@@ -14,16 +14,16 @@
                   `${dayjs(item.disposeTime).format('MM-DD')} ${item.deptName}`
                 }}
               </view>
-                <view class="flex-1"></view>
-                 <view class="mr60 absolute tag-status">
-                  <!-- 仅展示未完成标识 -->
-                    <Tag-Status
-                    v-if="item.completionStatus === 0"
-                      color="#ffb5a5"
-                      text-color="#d23028"
-                      text="未完成"
-                    />
-                  </view>
+              <view class="flex-1"></view>
+              <view class="mr60 absolute tag-status">
+                <!-- 仅展示未完成标识 -->
+                <Tag-Status
+                  v-if="item.completionStatus === 0"
+                  color="#ffb5a5"
+                  text-color="#d23028"
+                  text="未完成"
+                />
+              </view>
             </view>
 
             <text

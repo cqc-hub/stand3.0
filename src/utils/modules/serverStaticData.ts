@@ -36,6 +36,7 @@ import type {
   IHosInfo,
   TButtonConfig,
 } from '@/types';
+import { useViewerStore } from '@/stores/modules/viewer';
 
 const _cacheMap = new WeakMap();
 
@@ -799,6 +800,7 @@ export const getSystemConfig = ServerStaticData.getSystemConfig;
 export const cacheUtil = new (class {
   wakeMap = new WeakMap();
   env: '' | 'develop' | 'trial' | 'release' = '';
+  version = '';
 
   /**
    *  获取系统参数
@@ -830,6 +832,11 @@ export const cacheUtil = new (class {
       if (!this.env) {
         this.env = await getMiniProgramEnv();
       }
+      const viewerStore = useViewerStore();
+      if (!this.version && this.version !== viewerStore.version) {
+        this.wakeMap = new WeakMap();
+      }
+      this.version = viewerStore.version;
 
       const paramCodeArr = paramCode.split(',');
 
