@@ -48,7 +48,10 @@
             <refreshQrcode :patientId="clickPat.patientId" />
           </view>
 
-          <view v-else>
+          <view
+            v-else
+            class="flex justify-center items-center flex-col relative"
+          >
             <img :src="barImg" mode="widthFix" class="bar-img mb32" />
             <img :src="qrImg" mode="widthFix" class="qrcode-img pb32" />
           </view>
@@ -68,7 +71,7 @@
                   'mask-show': tabCurrentKey === '0',
                 }"
                 @click="_goElectronicMedicalCard('byMedical')"
-                class="absolute z-999 f36 btn btn-primary pr64 pl64 transition"
+                class="absolute z-999 f36 btn btn-primary pr64 pl64 transition btn-cneter"
               >
                 点击出示医保码
               </view>
@@ -593,9 +596,9 @@
 
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    if (['1001093', '1001085'].includes(gStores.globalStore.sysCode)) {
-      pageStyle.value = '2';
-    }
+    // if (['1001093', '1001085'].includes(gStores.globalStore.sysCode)) {
+    pageStyle.value = '2';
+    // }
   });
 </script>
 
@@ -610,8 +613,7 @@
     width: 100%;
     position: absolute;
 
-    background:
-      linear-gradient(
+    background: linear-gradient(
         160deg,
         var(--hr-brand-color-6-light),
         var(--hr-brand-color-6-light),
@@ -847,4 +849,10 @@
     top: 0;
     bottom: 0;
   }
+
+  // .btn-cneter {
+  //   left: 50%;
+  //   top: 50%;
+  //   transform: translate(-50%, -50%);
+  // }
 </style>

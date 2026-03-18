@@ -33,33 +33,33 @@ export const goElectronicMedicalCard = async () => {
 
   let type: 'bySelf' | 'byMedical' = 'bySelf';
 
-  if (isMedicalQrChoose === '1') {
-    const gStores = new GStores();
+  // if (isMedicalQrChoose === '1') {
+  //   const gStores = new GStores();
 
-    const { title, content } = await gStores.getSysAppMore('1201');
-    const { confirm, maskClose } = await new Promise<any>((closeCallBack) => {
-      gStores.messageStore.showMessage(content, 0, {
-        useDialog: true,
-        dialogOpt: {
-          isShowCancel: true,
-          title,
-          cancelColor: '#333',
-          cancelText: '自费扫码',
-          confirmColor: '#333',
-          confirmText: '医保扫码',
-        },
-        closeCallBack,
-      });
-    });
+  //   const { title, content } = await gStores.getSysAppMore('1201');
+  //   const { confirm, maskClose } = await new Promise<any>((closeCallBack) => {
+  //     gStores.messageStore.showMessage(content, 0, {
+  //       useDialog: true,
+  //       dialogOpt: {
+  //         isShowCancel: true,
+  //         title,
+  //         cancelColor: '#333',
+  //         cancelText: '自费扫码',
+  //         confirmColor: '#333',
+  //         confirmText: '医保扫码',
+  //       },
+  //       closeCallBack,
+  //     });
+  //   });
 
-    if (maskClose) {
-      return;
-    }
+  //   if (maskClose) {
+  //     return;
+  //   }
 
-    if (confirm) {
-      type = 'byMedical';
-    }
-  }
+  //   if (confirm) {
+  //     type = 'byMedical';
+  //   }
+  // }
 
   _goElectronicMedicalCard(type);
 };
