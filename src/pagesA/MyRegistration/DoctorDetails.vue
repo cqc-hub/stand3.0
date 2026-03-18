@@ -1022,7 +1022,7 @@
     const args = {
       hosDocId,
       hosId: netHosId,
-      funcode: 'service-base-platform/rest/doctor/hos-doc-id',
+      funcode: 'service-base-platform/rest/doctor/hos-doc-id2',
     };
 
     const { data } = await api.sendNetHos(args);
