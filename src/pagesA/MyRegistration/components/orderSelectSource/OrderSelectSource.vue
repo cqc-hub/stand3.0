@@ -343,13 +343,16 @@
         ) {
           actionApi = api.getNumberSource1001035;
         }
-
         const { result } = await actionApi<IOrderSource[]>(args);
         dealNumberSourceList(result || []);
         collapseOrderSourceList.value[listKey] = result || [];
-        // #ifdef MP-TOUTIAN | MP-HARMONY
-        await wait(1500);
-        // #endif
+        if (['harmony', 'tt'].includes(gStores.globalStore.ev)) {
+          let _t = 1500;
+          if (gStores.globalStore.ev === 'harmony') {
+            _t = 500;
+          }
+          await wait(_t);
+        }
         refCollapseNow.init();
       }
     }

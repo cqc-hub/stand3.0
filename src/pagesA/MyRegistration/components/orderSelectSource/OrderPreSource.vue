@@ -40,23 +40,21 @@
   import { watch, ref } from 'vue';
   import { IQueryRegNum } from '../../utils/index';
 
-  import { 
-    type ISystemConfig,
-  } from '@/utils';
+  import { type ISystemConfig } from '@/utils';
 
   const emits = defineEmits(['update:show', 'item-click']);
   const popup = ref<any>('');
   const props = defineProps<{
     show: boolean;
     list: IQueryRegNum[];
-    pageConfig:ISystemConfig['order']
+    pageConfig: ISystemConfig['order'];
   }>();
 
   const hide = () => {
     emits('update:show', false);
   };
 
-  const show = () => {
+  const show1 = () => {
     popup.value.show();
   };
 
@@ -68,7 +66,7 @@
   watch(
     () => props.show,
     (v) => {
-      v && show();
+      v && show1();
     }
   );
 </script>
