@@ -9,6 +9,7 @@
       :maxHeight="maxHeight"
       :type="type"
       :title="title"
+      @get-ctx="getCtx"
       @hide="hide"
     >
       <template v-if="$slots.header" #header>
@@ -75,7 +76,7 @@
     const field = props.field;
 
     let label = props.value;
-    props.option.map((item) => {
+    (props.option || []).forEach((item) => {
       const v = field ? item[field.value] : item;
 
       v === label && (label = field ? item[field.label] : item);
@@ -116,12 +117,32 @@
   });
 
   const close = () => {
-    popup.value?.hide();
+    if (selectCtx.value.hide) {
+      selectCtx.value.hide();
+    } else {
+      popup.value?.hide();
+    }
+  };
+
+  const selectCtx = ref(
+    {} as {
+      show?: () => any;
+      hide?: () => any;
+      close?: () => any;
+    }
+  );
+  const getCtx = (ctx) => {
+    selectCtx.value = ctx;
   };
 
   const _show = () => {
     uni.$emit('_CloseGlobalSelector', _id);
-    popup.value?.show();
+
+    if (selectCtx.value.show) {
+      selectCtx.value.show();
+    } else {
+      popup.value?.show();
+    }
   };
 
   watch(
