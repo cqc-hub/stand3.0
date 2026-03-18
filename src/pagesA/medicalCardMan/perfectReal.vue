@@ -920,8 +920,14 @@
       });
 
       if (isCache) {
+        const disabledKeys = formList
+          .filter((o) => o.disabled)
+          .map((o) => o.key);
         setLocalStorage({
-          perfectRealFormData: formData.value,
+          perfectRealFormData: {
+            value: formData.value,
+            disabledKeys,
+          },
         });
       } else {
         removeLocation('perfectRealFormData');
@@ -1097,7 +1103,7 @@
           confirmText: '是',
         });
         if (confirm) {
-          defaultValue = perfectRealFormData;
+          defaultValue = perfectRealFormData.value;
         }
 
         removeLocation('perfectRealFormData');
@@ -1174,7 +1180,13 @@
       const { key } = o;
       customFormItem(o);
 
-      if (
+      if (perfectRealFormData) {
+        const disabledKeys: string[] = perfectRealFormData.disabledKeys;
+
+        if (disabledKeys.includes(key)) {
+          o.disabled = true;
+        }
+      } else if (
         formData.value[key] &&
         !['defaultFalg', 'patientPhone'].includes(key)
       ) {

@@ -120,7 +120,7 @@ export type TSchInfo = {
 
   empNo: string;
   // 挂号费
-  fee: number;
+  fee: any;
   // 号源总数
   numCount: string;
   // 已预约数
@@ -597,6 +597,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     if (gStores.globalStore.sysCode === '1001035' && globalGl.env === 'prod') {
       actionApi = api.getNumberSource1001035;
     }
+
 
     let { result } = await actionApi<IOrderSource[]>(arg).finally(() => {
       isComplete.value = true;

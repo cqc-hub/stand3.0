@@ -48,7 +48,10 @@
 
     <view
       class="content-box"
-      :style="{ height: isShow ? contentHeight + 'px' : '0' ,transitionDuration:isHideTransition? '0s':'0.4s'}"
+      :style="{
+        height: isShow ? contentHeight + 'px' : '0',
+        transitionDuration: isHideTransition ? '0s' : '0.4s',
+      }"
     >
       <view id="content" class="content">
         <slot>{{ content }}</slot>
@@ -197,8 +200,8 @@
       // 查询内容高度
       queryRect() {
         this.$nextTick(() => {
-          setTimeout(() => { 
-            let query = uni.createSelectorQuery(); 
+          setTimeout(() => {
+            let query = uni.createSelectorQuery();
             // #ifndef MP-TOUTIAO
             query = query.in(this);
             // #endif
@@ -206,7 +209,7 @@
               .select('#content')
               .boundingClientRect((res) => {
                 this.contentHeight = res.height + this.offsetContentHeight;
-                 this.$emit('change', this.isShow);
+                this.$emit('change', this.isShow);
               })
               .exec();
           }, this.delay);
@@ -285,7 +288,6 @@
   .content-box {
     transition: 0.4s all;
     overflow: hidden;
-
   }
 
   .title-stick {

@@ -1138,7 +1138,7 @@ class PassWordHandler extends LoginUtils implements LoginHandler {
 
 class HarmonyHandler extends LoginUtils implements LoginHandler {
   async handler(payload: any = {}): Promise<void> {
-    const code = payload.target?.code;
+    const { code, errMsg } = payload.target;
 
     if (code) {
       const { result } = await api.allinoneAuthApi(
@@ -1172,6 +1172,9 @@ class HarmonyHandler extends LoginUtils implements LoginHandler {
       });
 
       await this.getUerInfo();
+    } else {
+      this.messageStore.showMessage(errMsg, 1500);
+      throw new Error(errMsg);
     }
   }
 }

@@ -150,7 +150,7 @@
                       <button
                         v-if="
                           gStores.globalStore.ev &&
-                          ['wx', 'web'].includes(gStores.globalStore.ev)
+                          ['wx', 'web', 'harmony'].includes(gStores.globalStore.ev)
                         "
                         class="login-btn"
                       >

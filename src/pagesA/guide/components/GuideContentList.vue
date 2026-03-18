@@ -38,7 +38,7 @@
                 class="pl24 pr24 pt32 pb32 bg-white animate__animated relative collapse-header"
               >
                 <view class="flex items-center">
-                  <view class="f40">{{ getNodeTitle(item)}}</view>
+                  <view class="f40">{{ getNodeTitle(item) }}</view>
                   <view class="flex-1"></view>
                   <!-- v-if="item.completionStatus === 1" -->
                   <!-- v-if="item.title !== '门诊缴费'" -->
@@ -245,7 +245,7 @@
                       :cols="reportJcCol"
                       :lab="lab"
                       @go-address-map="handlerAddressMap"
-                    /> 
+                    />
 
                     <view
                       v-if="p !== item.others.length - 1"
@@ -307,9 +307,7 @@
                 />
               </view>
 
-              <view v-else-if="item.title === '复诊签到'">
-               
-              </view>
+              <view v-else-if="item.title === '复诊签到'"></view>
 
               <view v-else-if="item.title === '就诊完成'">
                 <GuideContentListCol
@@ -317,16 +315,14 @@
                   :lab="item"
                   @click-row="(v) => colRowClick(item, v)"
                 />
-                  <GuideBtns
+                <GuideBtns
                   :item="item"
                   :btns="jzwcBtns"
                   @btn-click="(v) => emits('btn-click', v)"
                 />
               </view>
 
-              <view v-else>
-                暂未实现
-              </view>
+              <view v-else>暂未实现</view>
             </view>
           </g-collapse>
         </view>
@@ -358,15 +354,15 @@
 
   // 为了温附二的特殊需求 要求前两个节点标题展示不一样
   const getNodeTitle = (item) => {
-    console.log(2222,item)
-      const gStores = new GStores();
-  // 如果 susCode 是 1001067，则修改前两个节点的标题
-  if ( gStores.globalStore.sysCode === '1001067') {
-    if (item.title === '门诊取号') return '挂号信息'; // 第一个节点改为“挂号信息”
-    if (item.title === '诊区签到') return '门诊取号'; // 第二个节点改为“门诊取号”
-  }
-  return item.title; // 其他情况保持原样
-};
+    console.log(2222, item);
+    const gStores = new GStores();
+    // 如果 susCode 是 1001067，则修改前两个节点的标题
+    if (gStores.globalStore.sysCode === '1001067') {
+      if (item.title === '门诊取号') return '挂号信息'; // 第一个节点改为“挂号信息”
+      if (item.title === '诊区签到') return '门诊取号'; // 第二个节点改为“门诊取号”
+    }
+    return item.title; // 其他情况保持原样
+  };
 
   const isActive = (item) => {
     return item.completionStatus === 0;
@@ -390,7 +386,6 @@
     return props.config.zqqdBtns || [];
   });
 
-
   // 门诊取药下面按钮
   const takeDrugBtns = computed(() => {
     return props.config.takeDrugBtns || [];
@@ -401,12 +396,11 @@
     return props.config.mzjfBtns || [];
     // return [] as TGuideButtonConfig[];
   });
-    // 就诊完成下面按钮
+  // 就诊完成下面按钮
   const jzwcBtns = computed(() => {
     return props.config.jzwcBtns || [];
     // return [] as TGuideButtonConfig[];
   });
-  
 
   const drugCol = ref([
     // {

@@ -53,102 +53,75 @@
   </view>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, reactive } from 'vue';
+<script lang="ts" setup>
+  import { ref } from 'vue';
   import wybPopup from '@/components/wyb-popup/wyb-popup.vue';
 
-  export default defineComponent({
-    components: {
-      wybPopup,
-    },
+  const props = withDefaults(
+    defineProps<{
+      maxHeight?: string;
+      disabled?: boolean;
+      isHideNav?: boolean;
+      type?: string;
+      maskClickClose?: boolean;
+      title?: string;
+      subTitle?: string;
+      duration?: number;
+      maskAlpha?: number;
+      zIndex?: string | number;
+    }>(),
+    {
+      maxHeight: 'var(--h-popup-max-height);',
+      disabled: false,
+      isHideNav: false,
+      type: 'bottom',
+      maskClickClose: true,
+      title: '',
+      subTitle: '',
+      duration: 100,
+      maskAlpha: 0.5,
+      zIndex: 10076,
+    }
+  );
 
-    props: {
-      maxHeight: {
-        type: String,
-        default: 'var(--h-popup-max-height);',
-      },
+  const emit = defineEmits(['show', 'hide', 'get-ctx']);
 
-      disabled: {
-        type: Boolean,
-        default: false,
-      },
+  const popup = ref<any>('');
 
-      isHideNav: {
-        type: Boolean,
-        default: false,
-      },
+  const onActionSheetShow = () => {
+    emit('show');
+  };
 
-      type: {
-        type: String,
-        default: 'bottom',
-      },
+  const onActionSheetHide = () => {
+    emit('hide');
+  };
 
-      maskClickClose: {
-        type: Boolean,
-        default: true,
-      },
+  const show = () => {
+    console.log('我执行了----', popup.value);
+    if (!props.disabled) {
+      popup.value.show();
+    }
+  };
 
-      title: {
-        type: String,
-        default: '',
-      },
+  const hide = () => {
+    popup.value.close();
+  };
 
-      subTitle: {
-        type: String,
-        default: '',
-      },
+  // mask false 时候调这个
+  const close = () => {
+    popup.value.hide();
+  };
 
-      duration: {
-        type: Number,
-        default: 100,
-      },
+  defineExpose({
+    show,
+    hide,
+    close,
+  });
 
-      maskAlpha: {
-        type: Number,
-        default: 0.5,
-      },
-
-      zIndex: {
-        type: [String, Number],
-        default: 10076,
-      },
-    },
-
-    setup(props, { emit }) {
-      const popup = ref<any>('');
-
-      const onActionSheetShow = () => {
-        emit('show');
-      };
-
-      const onActionSheetHide = () => {
-        emit('hide');
-      };
-
-      const show = () => {
-        if (!props.disabled) {
-          popup.value.show();
-        }
-      };
-
-      const hide = () => {
-        popup.value.close();
-      };
-
-      // mask false 时候调这个
-      const close = () => {
-        popup.value.hide();
-      };
-
-      return {
-        onActionSheetShow,
-        onActionSheetHide,
-        show,
-        popup,
-        hide,
-        close,
-      };
-    },
+  emit('get-ctx', {
+    show,
+    hide,
+    close,
   });
 </script>
 
