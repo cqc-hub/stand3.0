@@ -1,5 +1,9 @@
 <template>
-  <view class="g-page page-bg">
+  <view
+    :class="{
+    }"
+    class="g-page page-bg"
+  >
     <g-flag isShowFg typeFg="1221" />
 
     <view class="bg-white">

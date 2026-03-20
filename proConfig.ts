@@ -231,18 +231,6 @@ export const miniProgramConfig: {
             appId: 'wxe183cd55df4b4369',
             path: 'auth/pages/bindcard/auth/index',
             // cs
-            pathExtraData: {
-              openType: 'getAuthCode',
-              cityCode: '320200',
-              channel: 'AAGDjhBtPzo4LJTh9gCenRkB',
-              orgChnlCrtfCodg:
-                'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe',
-              orgCodg: 'H32028200358',
-              bizType: '04107',
-              orgAppId: '1GDAN3EEO0123F60C80A000061B81AB7',
-            },
-
-            // zs
             // pathExtraData: {
             //   openType: 'getAuthCode',
             //   cityCode: '320200',
@@ -251,10 +239,23 @@ export const miniProgramConfig: {
             //     'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe',
             //   orgCodg: 'H32028200358',
             //   bizType: '04107',
-            //   orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
+            //   orgAppId: '1GDAN3EEO0123F60C80A000061B81AB7',
             // },
+
+            // zs
+            pathExtraData: {
+              openType: 'getAuthCode',
+              cityCode: '320200',
+              channel: 'AAGDjhBtPzo4LJTh9gCenRkB',
+              orgChnlCrtfCodg:
+                'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe',
+              orgCodg: 'H32028200358',
+              bizType: '04107',
+              orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
+            },
             pathExtraDataConfig: {
-              // 虚拟id
+              // 虚拟id 互联网医院处方外配
+              // zs
               virtualHosId: {
                 openType: 'getAuthCode',
                 cityCode: '320200',
@@ -266,6 +267,18 @@ export const miniProgramConfig: {
                 orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
                 sourceapp: 'wx8358079c24acea42-1',
               },
+              // cs
+              // virtualHosId: {
+              //   openType: 'getAuthCode',
+              //   cityCode: '320200',
+              //   channel: 'AAFEEOdTYZNbEzD1gmhG9skn',
+              //   orgChnlCrtfCodg:
+              //     'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe',
+              //   orgCodg: 'H32028200358',
+              //   bizType: '04104',
+              //   orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
+              //   sourceapp: 'wx8358079c24acea42-1',
+              // },
             },
             dongRuanMedicalInfo: {
               h5BaseUrl:
@@ -1116,6 +1129,7 @@ export const miniProgramConfig: {
     isOpenOcr: false,
     sConfig: {
       login: { isSkipPerfect: '1' },
+      homeNavTitleLogo: 'https://phsdevoss.eheren.com/pcloud/phs3.0/1001103-home-nav-title.png',
     },
   },
   '2001004': {
@@ -1278,12 +1292,17 @@ export const manifestFileDataObj: any = {
     },
     domainList: [
       {
-        domain: 'testphs.eheren.com', // 目标接口域名（如 https://api.xxx.com 则填 xxx.com）
+        domain: 'phs.jshtcm.com',
         type: 'business',
         description: '接口请求域名',
       },
       {
-        domain: 'netphs.eheren.com', // 目标接口域名（如 https://api.xxx.com 则填 xxx.com）
+        domain: 'testphs.eheren.com',
+        type: 'business',
+        description: '接口请求域名',
+      },
+      {
+        domain: 'netphs.eheren.com',
         type: 'business',
         description: '接口请求域名',
       },
