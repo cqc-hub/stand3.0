@@ -915,6 +915,12 @@
           }
         },
         {
+          "path": "pay/pay",
+          "style": {
+            "navigationBarTitleText": " "
+          }
+        },
+        {
           "path": "1001093/hosButlerOrderAfter",
           "style": {
             "navigationBarTitleText": " "
