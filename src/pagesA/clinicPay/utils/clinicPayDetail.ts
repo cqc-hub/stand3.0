@@ -1703,6 +1703,9 @@ export const usePayPage = () => {
   // 引导先缴自费
   const handleGuideSelfPayFirst = async () => {
     if (selUnPayList.value.length !== unPayList.value.length) {
+      const { isForceSelfPayFirst } = pageConfig.value;
+      const isForceSelfPay = isForceSelfPayFirst === '1';
+
       const selKeys = selUnPayList.value.map((o) => o.childOrder);
       const hasMedicalItem = selUnPayList.value.some(
         (o) => o.costTypeCode === '2'
@@ -1710,7 +1713,7 @@ export const usePayPage = () => {
       const restUnPayList = unPayList.value.filter(
         (o) => !selKeys.includes(o.childOrder)
       );
-      const hasSelfPayItem = restUnPayList.some((o) => o.costTypeCode !== '2');
+      const hasSelfPayItem = restUnPayList.some((o) => o.costTypeCode === '1');
 
       if (hasMedicalItem && hasSelfPayItem) {
         const { title, content } = await gStores.getSysAppMore('1267');
@@ -1719,15 +1722,21 @@ export const usePayPage = () => {
             useDialog: true,
             dialogOpt: {
               title,
-              isShowCancel: true,
+              isShowCancel: !isForceSelfPay,
               cancelText: '继续缴费',
               confirmText: '重新选择',
+              isMaskClick: false,
             },
             closeCallBack: r,
           });
         });
 
         if (confirm) {
+          if (isForceSelfPay) {
+            selUnPayList.value = unPayList.value.filter(
+              (o) => o.costTypeCode === '1'
+            );
+          }
           throw new Error('重新选择');
         }
       }

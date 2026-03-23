@@ -231,6 +231,8 @@ export interface ISystemConfig_ {
      * 待缴费选择选择医保或者慢特病点击支付存在自费项目时候， 引导先自费（可以继续缴费医保或者慢特病）
      */
     isGuideSelfPayFirst?: '1';
+    /** isGuideSelfPayFirst === '1' 的情况下， 强制先自费， 默认勾选所有自费 */
+    isForceSelfPayFirst?: '1';
 
     /** 门诊类型  网络医院/线下门诊 (是否展示) */
     isListShowClinicType?: '1';
