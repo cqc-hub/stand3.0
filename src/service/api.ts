@@ -1156,6 +1156,8 @@ const userApi = {
   //身份证OCR识别
   ocrIdCard: <T>(data) =>
     service.post<T>('/phs-user/authUser/ocrIdCard', parm(data)),
+  wxFace: <T = any>(data) =>
+    service.post<T>('/phs-user/authUser/wxFace', parm(data)),
 
   alipayFace: <T = any>(data) =>
     service.post<T>('/phs-user/authUser/alipayFace', parm(data)),
