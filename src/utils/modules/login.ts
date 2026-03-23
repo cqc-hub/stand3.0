@@ -384,18 +384,24 @@ export class LoginUtils extends GStores {
       return new Promise<{ verifyResult: string }>((resolve, reject) => {
         wx.checkIsSupportFacialRecognition({
           checkAliveType: 2,
-          success() {
+          success: () => {
             wx.requestFacialVerify({
               // checkAliveType: 2,
               // name,
               // idCardNumber,
               verifyId,
-              success(e) {
+              success: async (e) => {
                 //识别成功
                 console.warn('识别成功', e);
+                // 识别失败微信仍然报成功 走接口认证下
+                const { pData } = await this.getPData({
+                  verifyResult,
+                  idCard: idCardNumber,
+                });
                 resolve({
                   ...e,
                   verifyResult,
+                  pData,
                 });
               },
               fail(err) {
@@ -478,28 +484,46 @@ export class LoginUtils extends GStores {
   }
 
   async faceVerifyAndPData({ name, idCardNumber }) {
-    const {
-      browser: { source },
-      aliFaceType,
-    } = this.globalStore;
-    const { verifyResult } = await this.faceVerify({ name, idCardNumber });
+    let { verifyResult, pData } = await this.faceVerify({
+      name,
+      idCardNumber,
+    });
 
+    if (!pData) {
+      const r = await this.getPData({
+        verifyResult,
+        idCard: idCardNumber,
+      });
+      pData = r.pData;
+    }
+
+    return {
+      pData,
+      idCard: idCardNumber,
+      name,
+    };
+  }
+
+  async getPData({ verifyResult, idCard }) {
     const actionApi = this.globalStore.isLogin
       ? api.faceResultAuth
       : api.faceResultAuthPC;
     const {
-      result: { pdata },
+      browser: { source },
+      aliFaceType,
+    } = this.globalStore;
+
+    const {
+      result: { pdata: pData },
     } = await actionApi({
       verifyResult,
-      idCard: idCardNumber,
+      idCard,
       type: aliFaceType,
       source,
     });
 
     return {
-      pData: pdata,
-      idCard: idCardNumber,
-      name,
+      pData,
     };
   }
 
