@@ -390,10 +390,11 @@
       if (node8Index !== -1) {
         rList.splice(node8Index, 0, reviewSignNode);
       } else {
-        // 如果找不到门诊缴费节点，则添加到末尾
         rList.push(reviewSignNode);
       }
     }
+
+    console.log(rList);
     visitInfoList.value = rList.reverse();
   };
 

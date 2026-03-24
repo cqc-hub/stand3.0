@@ -199,7 +199,7 @@
       {
         thRegisterId?: string;
         allPData?: '1';
-        type?: 'waitReg' | 'forwardReg'; // 候补预约
+        type?: 'waitReg' | 'forwardReg'; // waitReg 候补预约 forwardReg 远期预约
         tabIndex?: '0' | '1' | '2';
         hideTab?: '1';
         typeId?: number;
