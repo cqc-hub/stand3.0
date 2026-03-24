@@ -59,41 +59,41 @@ export const miniProgramConfig: {
           isMedicalOrder: '1',
           isGbFamilyPayment: '1',
           // cs
-          medical1001035: {
-            auth: {
-              appId: 'wxfde9fffbfa82be54',
-              path: 'pages/allOutPayCashier/authUniPro/authUni',
-              extraData: { appid: 'c4097ed72fc64e71818e6990dc6f9512' },
-            },
-            pay: {
-              appId: 'wxfde9fffbfa82be54',
-              path: 'pages/allOutPayCashier/cashierUniPro/cashierUni',
-              extraData: {
-                appid: 'c4097ed72fc64e71818e6990dc6f9512',
-                channel_code: 'f6cd425b461444f3907808719fd30011',
-                fixmedinsCode: 'H32010400468',
-                fixmedinsName: '江苏省中医院',
-              },
-            },
-          },
-          // zs
           // medical1001035: {
           //   auth: {
           //     appId: 'wxfde9fffbfa82be54',
           //     path: 'pages/allOutPayCashier/authUniPro/authUni',
-          //     extraData: { appid: '96391c9afe2c46b3bba52436351dd418' },
+          //     extraData: { appid: 'c4097ed72fc64e71818e6990dc6f9512' },
           //   },
           //   pay: {
           //     appId: 'wxfde9fffbfa82be54',
           //     path: 'pages/allOutPayCashier/cashierUniPro/cashierUni',
           //     extraData: {
-          //       appid: '96391c9afe2c46b3bba52436351dd418',
-          //       channel_code: 'b756bf71948144f993bcc768fe7b0910',
+          //       appid: 'c4097ed72fc64e71818e6990dc6f9512',
+          //       channel_code: 'f6cd425b461444f3907808719fd30011',
           //       fixmedinsCode: 'H32010400468',
           //       fixmedinsName: '江苏省中医院',
           //     },
           //   },
           // },
+          // zs
+          medical1001035: {
+            auth: {
+              appId: 'wxfde9fffbfa82be54',
+              path: 'pages/allOutPayCashier/authUniPro/authUni',
+              extraData: { appid: '96391c9afe2c46b3bba52436351dd418' },
+            },
+            pay: {
+              appId: 'wxfde9fffbfa82be54',
+              path: 'pages/allOutPayCashier/cashierUniPro/cashierUni',
+              extraData: {
+                appid: '96391c9afe2c46b3bba52436351dd418',
+                channel_code: 'b756bf71948144f993bcc768fe7b0910',
+                fixmedinsCode: 'H32010400468',
+                fixmedinsName: '江苏省中医院',
+              },
+            },
+          },
         },
       },
     },

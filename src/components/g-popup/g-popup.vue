@@ -6,6 +6,7 @@
       :mask-click-close="maskClickClose"
       @show="onActionSheetShow"
       @hide="onActionSheetHide"
+      @get-ctx="getCtx"
       :type="type"
       :duration="duration"
       :maskAlpha="maskAlpha"
@@ -96,19 +97,43 @@
     emit('hide');
   };
 
+  const selectCtx = ref(
+    {} as {
+      show?: () => any;
+      hide?: () => any;
+      close?: () => any;
+    }
+  );
+
+  const getCtx = (ctx) => {
+    selectCtx.value = ctx;
+  };
+
   const show = () => {
     if (!props.disabled) {
-      popup.value.show();
+      if (selectCtx.value.show) {
+        selectCtx.value.show();
+      } else {
+        popup.value.show();
+      }
     }
   };
 
   const hide = () => {
-    popup.value.close();
+    if (selectCtx.value.close) {
+      selectCtx.value.close();
+    } else {
+      popup.value.close();
+    }
   };
 
   // mask false 时候调这个
   const close = () => {
-    popup.value.hide();
+    if (selectCtx.value.hide) {
+      selectCtx.value.hide();
+    } else {
+      popup.value.hide();
+    }
   };
 
   defineExpose({

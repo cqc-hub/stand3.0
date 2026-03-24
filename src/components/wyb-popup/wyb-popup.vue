@@ -104,348 +104,288 @@
   </view>
 </template>
 
-<script>
-  export default {
-    data() {
-      return {
-        w: uni.getSystemInfoSync().screenWidth,
-        h: uni.getSystemInfoSync().screenHeight,
-        isShow: false,
-        winReBottom: '',
-        winReTop: '10%',
-        sizeChange: false,
-        contentOpacity: null,
-        contentTransform: null,
-        maskOpacity: 0,
-        myAutoHeight: 0,
-      };
-    },
-    computed: {
-      autoCenterTop() {
-        const { statusBarHeight, windowHeight } = uni.getSystemInfoSync();
-        let popupHeight = this.rpxToPx(this.height);
+<script lang="ts" setup>
+  import { ref, computed, onMounted, nextTick } from 'vue';
 
-        let result = `${
-          (windowHeight -
-            (popupHeight !== popupHeight ? this.myAutoHeight : popupHeight)) /
-            2 -
-          this.negativeTop
-        }px`;
+  interface PopupProps {
+    type?: string; // 'center' | 'bottom' | 'top' | 'left' | 'right';
+    mode?: 'size-fixed' | 'size-auto';
+    height?: string | number;
+    width?: string | number;
+    radius?: string | number;
+    zIndex?: string | number;
+    maskClickClose?: boolean;
+    maskAlpha?: number;
+    duration?: number;
+    showCloseIcon?: boolean;
+    scrollY?: boolean;
+    scrollX?: boolean;
+    closeIconPos?: string;
+    closeIcon?: string;
+    closeIconSize?: string | number;
+    vertOffset?: string | number;
+    horiOffset?: string | number;
+    centerAnim?: 'zoom-lessen' | 'slide-up' | 'slide-down' | 'fade';
+    bgColor?: string;
+    zoomLessenMulti?: number;
+    slideMulti?: number;
+    negativeTop?: number;
+  }
 
-        return result;
-      },
-      autoTransform() {
-        let result = '';
-        switch (this.type) {
-          case 'center':
-            if (this.centerAnim === 'zoom-lessen') {
-              result = `scale(${this.zoomLessenMulti})`;
-            } else if (this.centerAnim === 'slide-up') {
-              result = `translateY(${100 * this.slideMulti}%)`;
-            } else if (this.centerAnim === 'slide-down') {
-              result = `translateY(${-100 * this.slideMulti}%)`;
-            } else if (this.centerAnim === 'fade') {
-              result = 'auto';
-            }
-            break;
-          case 'bottom':
-            result = 'translateY(100%)';
-            break;
-          case 'top':
-            result = 'translateY(-100%)';
-            break;
-          case 'left':
-            result = 'translateX(-100%)';
-            break;
-          case 'right':
-            result = 'translateX(100%)';
-            break;
-        }
-        return result;
-      },
-      autoWidth() {
-        if (this.type === 'center') {
-          return `${this.width}rpx`;
-        } else {
-          if (this.mode === 'size-fixed') {
-            if (this.type === 'top' || this.type === 'bottom') {
-              return '100%';
-            } else {
-              return `${this.width}rpx`;
-            }
-          } else {
-            if (this.type === 'top' || this.type === 'bottom') {
-              return '100%';
-            } else {
-              return 'auto';
-            }
-          }
-        }
-      },
-      autoHeight() {
-        if (this.type === 'center') {
-          return `${this.height}rpx`;
-        } else {
-          if (this.mode === 'size-fixed') {
-            if (this.type === 'left' || this.type === 'right') {
-              return '100%';
-            } else {
-              return `${this.height}rpx`;
-            }
-          } else {
-            if (this.type === 'left' || this.type === 'right') {
-              return '100%';
-            } else {
-              return 'auto';
-            }
-          }
-        }
-      },
-      autoTop() {
-        if (this.type === 'center') {
-          return this.autoCenterTop;
-        } else if (this.type === 'bottom') {
+  const props = withDefaults(defineProps<PopupProps>(), {
+    type: 'bottom',
+    mode: 'size-auto',
+    height: 400,
+    width: 500,
+    radius: 0,
+    zIndex: 10076,
+    maskClickClose: true,
+    maskAlpha: 0.5,
+    duration: 400,
+    showCloseIcon: false,
+    scrollY: false,
+    scrollX: false,
+    closeIconPos: 'top-right',
+    closeIcon: '',
+    closeIconSize: '20',
+    vertOffset: '22',
+    horiOffset: '22',
+    centerAnim: 'zoom-lessen',
+    bgColor: '#ffffff',
+    zoomLessenMulti: 1.15,
+    slideMulti: 1,
+    negativeTop: 0,
+  });
+
+  const emit = defineEmits<{
+    (event: 'show', payload: { pageScroll: boolean; overflow: string }): void;
+    (event: 'hide', payload: { pageScroll: boolean; overflow: string }): void;
+    (
+      event: 'get-ctx',
+      payload: {
+        show?: () => any;
+        hide?: () => any;
+        close?: () => any;
+      }
+    ): void;
+  }>();
+
+  const w = ref(uni.getSystemInfoSync().screenWidth);
+  const h = ref(uni.getSystemInfoSync().screenHeight);
+  const isShow = ref(false);
+  const winReBottom = ref('');
+  const winReTop = ref('10%');
+  const sizeChange = ref(false);
+  const contentOpacity = ref<number | null>(null);
+  const contentTransform = ref<string | null>(null);
+  const maskOpacity = ref<number>(0);
+  const myAutoHeight = ref<number>(0);
+
+  const rpxToPx = (rpx: number | string) => {
+    const value = Number(rpx);
+    return (value / 750) * w.value;
+  };
+
+  const autoCenterTop = computed(() => {
+    const { windowHeight } = uni.getSystemInfoSync();
+    const popupHeight = rpxToPx(props.height ?? 0);
+    const heightValue = Number.isNaN(popupHeight)
+      ? myAutoHeight.value
+      : popupHeight;
+    return `${(windowHeight - heightValue) / 2 - (props.negativeTop ?? 0)}px`;
+  });
+
+  const autoTransform = computed(() => {
+    if (props.type === 'center') {
+      switch (props.centerAnim) {
+        case 'zoom-lessen':
+          return `scale(${props.zoomLessenMulti})`;
+        case 'slide-up':
+          return `translateY(${100 * (props.slideMulti ?? 1)}%)`;
+        case 'slide-down':
+          return `translateY(${-100 * (props.slideMulti ?? 1)}%)`;
+        case 'fade':
           return 'auto';
-        } else {
-          return 0;
+      }
+      return '';
+    }
+    if (props.type === 'bottom') return 'translateY(100%)';
+    if (props.type === 'top') return 'translateY(-100%)';
+    if (props.type === 'left') return 'translateX(-100%)';
+    if (props.type === 'right') return 'translateX(100%)';
+    return '';
+  });
+
+  const autoWidth = computed(() => {
+    if (props.type === 'center') {
+      return `${props.width}rpx`;
+    }
+    if (props.mode === 'size-fixed') {
+      if (props.type === 'top' || props.type === 'bottom') return '100%';
+      return `${props.width}rpx`;
+    }
+    if (props.type === 'top' || props.type === 'bottom') return '100%';
+    return 'auto';
+  });
+
+  const autoHeight = computed(() => {
+    if (props.type === 'center') {
+      return `${props.height}rpx`;
+    }
+    if (props.mode === 'size-fixed') {
+      if (props.type === 'left' || props.type === 'right') return '100%';
+      return `${props.height}rpx`;
+    }
+    if (props.type === 'left' || props.type === 'right') return '100%';
+    return 'auto';
+  });
+
+  const autoTop = computed(() => {
+    if (props.type === 'center') return autoCenterTop.value;
+    if (props.type === 'bottom') return 'auto';
+    return 0;
+  });
+
+  const autoBottom = computed(() => {
+    if (props.type === 'center' || props.type === 'top') return 'auto';
+    return 0;
+  });
+
+  const autoLeft = computed(() => {
+    if (props.type === 'center') {
+      return `${(w.value - rpxToPx(props.width ?? 0)) / 2}px`;
+    }
+    if (props.type === 'right') return 'auto';
+    return 0;
+  });
+
+  const autoRight = computed(() => {
+    if (props.type === 'center' || props.type === 'left') return 'auto';
+    return 0;
+  });
+
+  const zIndex = computed(() => Number(props.zIndex ?? 0));
+
+  const wait = (time: number) =>
+    new Promise<void>((resolve) => setTimeout(resolve, time));
+
+  const contentIn = () => {
+    switch (props.type) {
+      case 'center':
+        if (props.centerAnim === 'zoom-lessen') {
+          contentOpacity.value = 1;
+          contentTransform.value = 'scale(1)';
+        } else if (
+          props.centerAnim === 'slide-up' ||
+          props.centerAnim === 'slide-down'
+        ) {
+          contentOpacity.value = 1;
+          contentTransform.value = 'translateY(0)';
+        } else if (props.centerAnim === 'fade') {
+          contentOpacity.value = 1;
         }
-      },
-      autoBottom() {
-        if (this.type === 'center' || this.type === 'top') {
-          return 'auto';
-        } else {
-          return 0;
-        }
-      },
-      autoLeft() {
-        if (this.type === 'center') {
-          return `${(this.w - this.rpxToPx(this.width)) / 2}px`;
-        } else if (this.type === 'right') {
-          return 'auto';
-        } else {
-          return 0;
-        }
-      },
-      autoRight() {
-        if (this.type === 'center' || this.type === 'left') {
-          return 'auto';
-        } else {
-          return 0;
-        }
-      },
-    },
-    props: {
-      type: {
-        type: String,
-        default: 'bottom',
-      },
-      mode: {
-        type: String,
-        default: 'size-auto',
-      },
-      height: {
-        type: [String, Number],
-        default: 400,
-      },
-      width: {
-        type: [String, Number],
-        default: 500,
-      },
-      radius: {
-        type: [String, Number],
-        default: 0,
-      },
-      zIndex: {
-        type: [String, Number],
-        default: 10076,
-      },
-      maskClickClose: {
-        type: Boolean,
-        default: true,
-      },
-      maskAlpha: {
-        type: Number,
-        default: 0.5,
-      },
-      duration: {
-        type: Number,
-        default: 400,
-      },
-      showCloseIcon: {
-        type: Boolean,
-        default: false,
-      },
-      scrollY: {
-        type: Boolean,
-        default: false,
-      },
-      scrollX: {
-        type: Boolean,
-        default: false,
-      },
-      closeIconPos: {
-        type: String,
-        default: 'top-right',
-      },
-      closeIcon: {
-        type: String,
-        default: '',
-      },
-      closeIconSize: {
-        type: [String, Number],
-        default: '20',
-      },
-      vertOffset: {
-        type: [String, Number],
-        default: '22',
-      },
-      horiOffset: {
-        type: [String, Number],
-        default: '22',
-      },
-      centerAnim: {
-        type: String,
-        default: 'zoom-lessen',
-      },
-      bgColor: {
-        type: String,
-        default: '#ffffff',
-      },
-      zoomLessenMulti: {
-        type: Number,
-        default: 1.15,
-      },
-      slideMulti: {
-        type: Number,
-        default: 1,
-      },
-      negativeTop: {
-        type: Number,
-        default: 0,
-      },
-    },
-    mounted() {
-      // #ifdef H5
-      let winHeight = uni.getSystemInfoSync().windowHeight;
-      uni.onWindowResize((res) => {
-        this.sizeChange = true;
-        if (this.type === 'bottom') {
-          this.winReBottom = winHeight - res.size.windowHeight + 'px';
-        } else if (this.type === 'center') {
-          this.winReTop =
-            (res.size.windowHeight - this.rpxToPx(this.height)) / 2 -
-            this.negativeTop +
-            'px';
+        break;
+      case 'bottom':
+      case 'top':
+        contentTransform.value = 'translateY(0)';
+        break;
+      case 'left':
+      case 'right':
+        contentTransform.value = 'translateX(0)';
+        break;
+    }
+  };
+
+  const contentOut = () => {
+    contentOpacity.value = null;
+    contentTransform.value = null;
+  };
+
+  const maskIn = () => {
+    maskOpacity.value = 1;
+  };
+
+  const maskOut = () => {
+    maskOpacity.value = 0;
+  };
+
+  const close = () => {
+    if (props.maskClickClose) {
+      hide();
+    }
+  };
+
+  const hide = () => {
+    if (!isShow.value) return;
+    contentOut();
+    maskOut();
+    wait(props.duration + 1).then(() => {
+      isShow.value = false;
+      emit('hide', { pageScroll: true, overflow: 'scroll' });
+    });
+  };
+
+  const show = () => {
+    isShow.value = true;
+    // #ifndef H5
+    nextTick(() => {
+      maskIn();
+      contentIn();
+      wait(props.duration + 1).then(() => {
+        emit('show', { pageScroll: false, overflow: 'hidden' });
+        if (props.height === 'auto') {
+          let query = uni.createSelectorQuery();
+          // #ifndef MP-TOUTIAO
+          query = query.in({});
+          // #endif
+          query
+            .select('.wyb-popup-slot')
+            .boundingClientRect((res: any) => {
+              myAutoHeight.value = res.height;
+            })
+            .exec();
         }
       });
-      // #endif
-    },
-    methods: {
-      close() {
-        this.maskClickClose && this.hide();
-      },
-      show() {
-        this.isShow = true;
-        // #ifndef H5
-        this.$nextTick(() => {
-          this.maskIn();
-          this.contentIn();
-          this.wait(this.duration + 1).then(() => {
-            this.$emit('show', {
-              pageScroll: false,
-              overflow: 'hidden',
-            });
-
-            if (this.height === 'auto') {
-              let query = uni.createSelectorQuery(); 
-              // #ifndef MP-TOUTIAO
-              query = query.in(this);
-              // #endif
-              query
-                .select('.wyb-popup-slot')
-                .boundingClientRect((res) => {
-                  this.myAutoHeight = res.height;
-                })
-                .exec();
-            }
-          });
-        });
-        // #endif
-        // #ifdef H5
-        this.wait(10).then(() => {
-          this.maskIn();
-          this.contentIn();
-          this.wait(this.duration + 1).then(() => {
-            this.$emit('show', {
-              pageScroll: false,
-              overflow: 'hidden',
-            });
-          });
-        });
-        // #endif
-      },
-      hide() {
-        if (this.isShow === false) {
-          return;
-        }
-        this.contentOut();
-        this.maskOut();
-        this.wait(this.duration + 1).then(() => {
-          this.isShow = false;
-          this.$emit('hide', {
-            pageScroll: true,
-            overflow: 'scroll',
-          });
-        });
-      },
-      contentIn() {
-        switch (this.type) {
-          case 'center':
-            if (this.centerAnim === 'zoom-lessen') {
-              this.contentOpacity = 1;
-              this.contentTransform = 'scale(1)';
-            } else if (
-              this.centerAnim === 'slide-up' ||
-              this.centerAnim === 'slide-down'
-            ) {
-              this.contentOpacity = 1;
-              this.contentTransform = 'translateY(0)';
-            } else if (this.centerAnim === 'fade') {
-              this.contentOpacity = 1;
-            }
-            break;
-          case 'bottom':
-          case 'top':
-            this.contentTransform = 'translateY(0)';
-            break;
-          case 'left':
-          case 'right':
-            this.contentTransform = 'translateX(0)';
-            break;
-        }
-      },
-      contentOut() {
-        this.contentOpacity = null;
-        this.contentTransform = null;
-      },
-      maskIn() {
-        this.maskOpacity = 1;
-      },
-      maskOut() {
-        this.maskOpacity = 0;
-      },
-      rpxToPx(rpx) {
-        return (rpx / 750) * this.w;
-      },
-      wait(time) {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve();
-          }, time);
-        });
-      },
-    },
+    });
+    // #endif
+    // #ifdef H5
+    wait(10).then(() => {
+      maskIn();
+      contentIn();
+      wait(props.duration + 1).then(() => {
+        emit('show', { pageScroll: false, overflow: 'hidden' });
+      });
+    });
+    // #endif
   };
+
+  onMounted(() => {
+    // #ifdef H5
+    const winHeight = uni.getSystemInfoSync().windowHeight;
+    uni.onWindowResize((res: any) => {
+      sizeChange.value = true;
+      if (props.type === 'bottom') {
+        winReBottom.value = winHeight - res.size.windowHeight + 'px';
+      } else if (props.type === 'center') {
+        winReTop.value =
+          (res.size.windowHeight - rpxToPx(props.height ?? 0)) / 2 -
+          (props.negativeTop ?? 0) +
+          'px';
+      }
+    });
+    // #endif
+  });
+
+  emit('get-ctx', {
+    show,
+    hide,
+    close,
+  });
+  defineExpose({
+    show,
+    hide,
+    close,
+  });
 </script>
 
 <style>
