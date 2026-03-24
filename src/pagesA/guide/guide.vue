@@ -1,9 +1,5 @@
 <template>
-  <view
-    :class="{
-    }"
-    class="g-page page-bg"
-  >
+  <view :class="{}" class="g-page page-bg">
     <g-flag isShowFg typeFg="1221" />
 
     <view class="bg-white">
@@ -381,8 +377,10 @@
     const hasNode5To7 = !!(node5Info || node6Info || node7Info);
 
     if (hasNode5To7) {
-      // 如果存在5、6、7中任意一个节点，则添加"复诊签到"节点
+      //
+      // 如果存在5、6、7中任意一个节点，则添加"复诊签到"节点, 内容同步"诊区签到"
       const reviewSignNode = {
+        ...(node2Info || {}),
         title: '复诊签到',
         completionStatus: node8Info ? 1 : 0, // 如果有node8则表示已完成，否则未完成
       };

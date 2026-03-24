@@ -242,7 +242,7 @@ export class LoginUtils extends GStores {
       }
 
       //通过手机号同步
-      if (['1001095'].includes(sysCode)) {
+      if (['1001092', '1001095'].includes(sysCode)) {
         await api.patSync({ source: this.globalStore.browser.source });
       }
       // //通过微信openId去同步 type传1 ，复用老小程序则取用openId，

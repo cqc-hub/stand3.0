@@ -307,7 +307,13 @@
                 />
               </view>
 
-              <view v-else-if="item.title === '复诊签到'"></view>
+              <view v-else-if="item.title === '复诊签到'">
+                <GuideContentListCol
+                  :cols="mzqhCol"
+                  :lab="item"
+                  @click-row="(v) => colRowClick(item, v)"
+                />
+              </view>
 
               <view v-else-if="item.title === '就诊完成'">
                 <GuideContentListCol
@@ -354,7 +360,6 @@
 
   // 为了温附二的特殊需求 要求前两个节点标题展示不一样
   const getNodeTitle = (item) => {
-    console.log(2222, item);
     const gStores = new GStores();
     // 如果 susCode 是 1001067，则修改前两个节点的标题
     if (gStores.globalStore.sysCode === '1001067') {
@@ -488,6 +493,10 @@
   ]);
 
   const mzjzCol = ref([
+    {
+      label: '午别',
+      key: 'ampm',
+    },
     {
       label: '我的序号',
       key: 'no',

@@ -904,7 +904,6 @@
         patientId,
       });
       loading.value = false;
-      console.log(2222, result);
       if (result) {
         uni.navigateTo({
           url: `/pagesA/webView/webView?https=${encodeURIComponent(result)}`,
