@@ -97,7 +97,6 @@
   };
 
   const show = () => {
-    console.log('我执行了----', popup.value);
     if (!props.disabled) {
       popup.value.show();
     }

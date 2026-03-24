@@ -369,20 +369,34 @@ export class LoginUtils extends GStores {
   }
 
   async faceVerify({ name, idCardNumber }) {
-    // https://developers.weixin.qq.com/community/business/doc/000442d352c1202bd498ecb105c00d
+    // https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/cityservice/FacialRecognitionVerify.html
     if (this.globalStore.ev === 'wx') {
+      const {
+        result: { certifyId: verifyId, verifyResult },
+      } = await api.wxFace({
+        idType: '01', // 01身份证 02居民户口簿 03护照  031中国籍普通护照 032外国籍护照 04军官证 05驾驶证 06港澳居民来往内地通行证 07台湾居民来往内地通行证 99其他法定有效证件
+        idCard: idCardNumber,
+        patientName: name,
+        source: this.globalStore.browser.source,
+        openId: this.globalStore.openId,
+      });
+
       return new Promise<{ verifyResult: string }>((resolve, reject) => {
         wx.checkIsSupportFacialRecognition({
           checkAliveType: 2,
           success() {
-            wx.startFacialRecognitionVerify({
-              checkAliveType: 2,
-              name,
-              idCardNumber,
+            wx.requestFacialVerify({
+              // checkAliveType: 2,
+              // name,
+              // idCardNumber,
+              verifyId,
               success(e) {
                 //识别成功
                 console.warn('识别成功', e);
-                resolve(e);
+                resolve({
+                  ...e,
+                  verifyResult,
+                });
               },
               fail(err) {
                 //识别失败

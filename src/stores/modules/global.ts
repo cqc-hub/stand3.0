@@ -148,13 +148,15 @@ const globalStore = defineStore('global', {
      * 实名认证模式 1 身份认证 2 人脸认证. (都属于人脸, 俩种模式, 1 是老的人脸  2 新对接的人脸)
      */
     aliFaceType() {
-      // #ifdef MP-ALIPAY
-      if (['1001035'].includes(this.sysCode)) {
-        return '2'; // 人脸认证
-      }
-      // #endif
+      return '2'; // 人脸认证
 
-      return '1';
+      // // #ifdef MP-ALIPAY
+      // if (['1001035'].includes(this.sysCode)) {
+      //   return '2'; // 人脸认证
+      // }
+      // // #endif
+
+      // return '1';
     },
 
     selectLangs() {

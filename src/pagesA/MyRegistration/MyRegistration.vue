@@ -345,6 +345,13 @@
       type = 2;
     }
 
+    if (
+      gStores.globalStore.sysCode === '1001035' &&
+      tabCurrentDetail.value?.typeId === 1
+    ) {
+      type = 1;
+    }
+
     const { result } = await listApi
       .value<IRegistrationCardItem[]>({
         source: gStores.globalStore.browser.source,
@@ -632,13 +639,13 @@
         headerName: '全部挂号',
       });
 
-    if (gStores.globalStore.sysCode === '1001035') {
-      tabs.value.push({
-        typeId: 3,
-        headerName: '老版挂号',
-        searchType: '1',
-      });
-    }
+    // if (gStores.globalStore.sysCode === '1001035') {
+    //   tabs.value.push({
+    //     typeId: 3,
+    //     headerName: '老版挂号',
+    //     searchType: '1',
+    //   });
+    // }
     if (gStores.globalStore.sysCode === '1001036') {
       tabs.value.push({
         typeId: 4,
