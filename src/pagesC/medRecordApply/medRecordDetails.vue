@@ -675,6 +675,9 @@
   const chooseImg = (): Promise<TChoose> => {
     return new Promise((resolve) => {
       uni.chooseImage({
+        sourceType: pageConfig.value.photoChooseWay
+          ? [pageConfig.value.photoChooseWay]
+          : ['album', 'camera'],
         count: 1,
         sizeType: 'compressed',
         async success(e) {

@@ -55,8 +55,8 @@ export interface ISystemConfig_ {
     /** 科室列表页面 pagesA/MyRegistration/selDepartment */
     // 选科室上面 banner
     bannerOrder?: TBannerConfig | TBannerConfig[];
-     //党建专科
-    partySpecialization?:string[];
+    //党建专科
+    partySpecialization?: string[];
     //选科室上面 banner-支付宝
     bannerOrderAlipay?: TBannerConfig | TBannerConfig[];
     //跳转名医名科模式,若开启则会请求医院参数CELEBRATED_DEPT
@@ -432,6 +432,8 @@ export interface ISystemConfig_ {
     photoConfig?: {
       modes: IMedicalPhotoMode[];
     };
+    /** 选择上传图片的方式，默认支持相册与相机 */
+    photoChooseWay?: 'album' | 'camera';
 
     // 病案代理申请(选择家属代办)
     patProxy?: '1';
