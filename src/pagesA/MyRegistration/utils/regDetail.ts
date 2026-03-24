@@ -187,6 +187,14 @@ export const orderStatusMap = {
     title: '已预约',
     cardColor: 'var(--hr-brand-color-6)',
   },
+  '1': {
+    headerClass: 'header-blue',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '已预约',
+    cardColor: 'var(--hr-brand-color-6)',
+  },
   '3': {
     headerClass: 'header-dark',
     color: '#fff',
@@ -462,6 +470,7 @@ export interface IRegInfo {
   schId?: string;
   extend?: string;
   visitingArea?: string;
+  addAlternate?:string;
 }
 
 export const getStatusConfig = (status: string, isWaitReg: boolean) => {
@@ -508,17 +517,21 @@ const getWaitRegStatusConfig = (status: string) => {
 };
 
 export const getOrderStatusTitle = (
-  status: string,
+  orderInfo: IRegistrationCardItem,
   isOrderPay,
   isWaitReg: boolean
 ): string => {
   if (isWaitReg) {
-    return getWaitRegStatusConfig(status).title;
+    let statusName = getWaitRegStatusConfig(orderInfo.orderStatus).title;
+    orderInfo.orderStatus === '1' &&
+      orderInfo?.addAlternate &&
+      (statusName = '候补且加号中');
+    return statusName;
   }
-  if (isOrderPay === '1' && status === '0') {
+  if (isOrderPay === '1' && orderInfo.orderStatus === '0') {
     return '已挂号';
   } else {
-    return getStatusConfig(status, isWaitReg).title;
+    return getStatusConfig(orderInfo.orderStatus, isWaitReg).title;
   }
 };
 

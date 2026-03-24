@@ -361,7 +361,7 @@
         // o.orderStatus = '70';
         const { schDate, appointmentDate, appointmentTime } = o;
         o._statusLabel = getOrderStatusTitle(
-          o.orderStatus,
+          o,
           pageConfig.value.isOrderPay,
           isWaitReg.value || tabCurrentDetail.value?.typeId === 2
         );

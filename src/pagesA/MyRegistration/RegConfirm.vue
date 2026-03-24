@@ -976,7 +976,7 @@
     waitRegSchSecondResultList.value = schSecondResultList;
 
     if (schSecondResultList && schSecondResultList.length) {
-      selWaitRegSch.value=props.value.ampm
+      selWaitRegSch.value = props.value.ampm;
 
       // isShowSelWaitRegSch.value = true;
 
@@ -1013,6 +1013,7 @@
             patientId: gStores.userStore.patChoose.patientId,
             source: gStores.globalStore.browser.source,
             addFlag,
+            addType: addedNum ? '1' : '0',
           });
         }
       }
@@ -1024,6 +1025,7 @@
           patientId: gStores.userStore.patChoose.patientId,
           source: gStores.globalStore.browser.source,
           addFlag,
+          addType: addedNum ? '1' : '0',
         })
         .catch(async (e) => {
           if (e) {

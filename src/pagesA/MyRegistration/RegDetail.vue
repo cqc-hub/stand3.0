@@ -54,7 +54,7 @@
             <view class="reg-header-label">
               {{
                 getOrderStatusTitle(
-                  orderRegInfo.orderStatus,
+                  orderRegInfo as any,
                   orderConfig.isOrderPay,
                   isWaitReg
                 )

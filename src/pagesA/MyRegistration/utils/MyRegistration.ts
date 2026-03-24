@@ -46,6 +46,7 @@ export type IRegistrationCardItem = {
   _statusLabel: string;
   regWay?: string; // 挂号途径 小程序、自助机、诊间预约等
   extend?: string;
+  addAlternate?: string;
 };
 
 //多院区院内导航 根据hosId
@@ -82,7 +83,7 @@ export const HosNavData = {
         hisName: item.hosDeptId,
       }),
     };
-      return {
+    return {
       appId: 'wx0815c00f0b4bd7c3',
       path: 'pages/index/index',
       text: '院内导航',

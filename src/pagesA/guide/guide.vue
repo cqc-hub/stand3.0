@@ -645,7 +645,7 @@
 
     orderList.value.map((o) => {
       o._statusLabel = getOrderStatusTitle(
-        o.orderStatus,
+        o,
         orderConfig.value.isOrderPay,
         false
       );
