@@ -34,8 +34,8 @@
         </text>
         <image
           v-if="item.isPartySpecialization"
-          class="party_specialization  text-no-wrap f28 ml12"
-          :src="`${globalGl.BASE_IMG}party_specialization.png`"
+          class="party_specialization2 text-no-wrap f28 ml12"
+          :src="`${globalGl.BASE_IMG}party_specialization2.png`"
         />
       </view>
       <view
@@ -76,8 +76,8 @@
           </text>
           <image
             v-if="_item.isPartySpecialization"
-            class="party_specialization  text-no-wrap f28 ml12"
-            :src="`${globalGl.BASE_IMG}party_specialization.png`"
+            class="party_specialization2 text-no-wrap f28 ml12"
+            :src="`${globalGl.BASE_IMG}party_specialization2.png`"
           />
         </view>
       </view>
@@ -243,11 +243,12 @@
   }
 
   .my-row {
-    padding: 19rpx 32rpx;
+    position: relative;
+    padding: 19rpx 96rpx 19rpx 32rpx;
     // padding: 24rpx 32rpx;
 
     // #ifdef  MP-WEIXIN
-    padding: 22rpx 32rpx;
+    padding: 22rpx 96rpx 22rpx 32rpx;
     // #endif
     font-size: var(--hr-font-size-base);
 
@@ -279,10 +280,10 @@
     opacity: 0 !important;
   }
 
-  .party_specialization {
-    width: 36rpx;
+  .party_specialization2 {
+    width: 120rpx;
     height: 36rpx;
-    position: relative;
-    top: 10rpx;
+    position: absolute;
+    transform: translate(0,5rpx);
   }
 </style>

@@ -43,31 +43,36 @@
             @click="itemClickLv1(item)"
             class="item-lv1 g-flex-rc-cc f32"
           >
-            <text>
-              <text
-                :class="{
-                  pl24: level === '1',
-                }"
-              >
-                <text>
+            <view
+              class="lv1-text"
+              :class="{ 'lv1-min-width': item.isPartySpecialization }"
+            >
+              <text>
+                <text
+                  :class="{
+                    pl24: level === '1',
+                  }"
+                >
                   <text>
-                    {{ item.deptName }}
-                  </text>
+                    <text>
+                      {{ item.deptName }}
+                    </text>
 
-                  <text
-                    v-if="item.freeClinicId === '1'"
-                    class="g-tag tag-danger text-no-wrap f28 ml12"
-                  >
-                    义诊
+                    <text
+                      v-if="item.freeClinicId === '1'"
+                      class="g-tag tag-danger text-no-wrap f28 ml12"
+                    >
+                      义诊
+                    </text>
                   </text>
                 </text>
               </text>
-            </text>
-            <image
-              v-if="item.isPartySpecialization"
-              class="party_specialization text-no-wrap f28 ml12"
-              :src="`${globalGl.BASE_IMG}party_specialization.png`"
-            />
+              <image
+                v-if="item.isPartySpecialization"
+                class="party_specialization2 text-no-wrap f28 ml12"
+                :src="`${globalGl.BASE_IMG}party_specialization2.png`"
+              />
+            </view>
           </view>
         </view>
       </view>
@@ -313,11 +318,13 @@
   .item-lv1 {
     padding: 28rpx 32rpx;
     padding-right: 40rpx;
-
     justify-content: flex-start;
     color: var(--hr-neutral-color-9);
     position: relative;
     background-color: var(--hr-neutral-color-1);
+    .lv1-text {
+      width: fit-content;
+    }
 
     &.item-lv1-active-corner-bottom {
       animation: animate-corner-bottom 0.1s ease-in-out both 0s;
@@ -397,9 +404,15 @@
       border-top-right-radius: 20rpx 30rpx;
     }
   }
-  .party_specialization {
-    width: 36rpx;
+  .party_specialization2 {
+    width: 120rpx;
     height: 36rpx;
-    position: relative;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    z-index: 9999;
+  }
+  .lv1-min-width {
+    padding-right: 90rpx;
   }
 </style>

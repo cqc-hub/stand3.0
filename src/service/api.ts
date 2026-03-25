@@ -679,6 +679,10 @@ const regApi = {
     service.post('/phs-reg/reg/freeRegPay', parm(data), {
       hideLoading: false,
     }),
+    GetBiosampleConsentRecord: (data: any) =>
+    service.post('/phs-reg/reg/GetBiosampleConsentRecord', parm(data), {
+      hideLoading: false,
+    }),
   reappoint: <T = any>(data: any) =>
     service.post<T>('/phs-reg/reg/reappoint', parm(data)),
 

@@ -620,10 +620,19 @@
     pageConfig.value?.isOrderBlur === '1' && (requestArg.disNo = disNo);
 
     //提示知情同意书
-    if (isConfirmOrderWithApplyBook === '1') {
-      flagTitle1288.value = (await gStores.getSysAppMore(1288)).title;
-      regDialogConfirmBookFlag.value.show();
+    if (isConfirmOrderWithApplyBook) {
       try {
+        if (isConfirmOrderWithApplyBook == '2') {
+          const { result: isNeedPop } = await api.GetBiosampleConsentRecord({
+            cardNumber: gStores.userStore.patChoose.cardNumber,
+            deptId: hosDeptId,
+          });
+          if (!isNeedPop) {
+            throw new Error('无需弹窗');
+          }
+        }
+        flagTitle1288.value = (await gStores.getSysAppMore(1288)).title;
+        regDialogConfirmBookFlag.value.show();
         await new Promise((r, j) => {
           resolve = r;
           reject = j;

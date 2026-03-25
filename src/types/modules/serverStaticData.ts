@@ -135,7 +135,7 @@ export interface ISystemConfig_ {
     /** 挂号确认页面点击我已阅读时候需要弹窗 */
     isConfirmOrderWithConfirmDialog?: '1';
     /** 挂号确认页面是否弹框提示知情同意书 */
-    isConfirmOrderWithApplyBook?: '1';
+    isConfirmOrderWithApplyBook?: '1' | '2'; //1、所有挂号订单都弹。2、调用接口判断是否弹窗
     /** 重复选择科室页面的提示 */
     isConfirmOrderOrderTipRepeat?: '1';
     /** 挂号确认页面 去预约变成去支付&跳到详情后自动拉起支付 */
