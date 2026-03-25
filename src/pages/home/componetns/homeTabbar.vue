@@ -575,7 +575,7 @@
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      box-shadow: 0px -4px 4px 0px rgba(0, 0, 0, 0.04);
+      // box-shadow: 0px -4px 4px 0px rgba(0, 0, 0, 0.04);
       background: linear-gradient(
         0deg,
         var(--h-qrcode-1),

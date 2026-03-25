@@ -470,7 +470,7 @@ export interface IRegInfo {
   schId?: string;
   extend?: string;
   visitingArea?: string;
-  addAlternate?:string;
+  addAlternate?: string;
 }
 
 export const getStatusConfig = (status: string, isWaitReg: boolean) => {
@@ -523,9 +523,10 @@ export const getOrderStatusTitle = (
 ): string => {
   if (isWaitReg) {
     let statusName = getWaitRegStatusConfig(orderInfo.orderStatus).title;
-    orderInfo.orderStatus === '1' &&
-      orderInfo?.addAlternate &&
-      (statusName = '候补且加号中');
+
+    if (orderInfo.orderStatus === '1' && orderInfo.addAlternate === '1') {
+      statusName = '候补且加号中';
+    }
     return statusName;
   }
   if (isOrderPay === '1' && orderInfo.orderStatus === '0') {

@@ -927,7 +927,7 @@
             herenId: 'herenId',
           },
         });
-        j('f');
+        j('去填写病情');
       };
       waitChooseDialog.value = true;
     });
