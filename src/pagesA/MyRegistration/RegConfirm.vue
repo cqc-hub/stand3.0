@@ -622,12 +622,12 @@
     //提示知情同意书
     if (isConfirmOrderWithApplyBook) {
       try {
-        if (isConfirmOrderWithApplyBook == '2') {
+        if (isConfirmOrderWithApplyBook === '2') {
           const { result: isNeedPop } = await api.GetBiosampleConsentRecord({
             cardNumber: gStores.userStore.patChoose.cardNumber,
             deptId: hosDeptId,
           });
-          if (!isNeedPop) {
+          if (isNeedPop === '1') {
             throw new Error('无需弹窗');
           }
         }

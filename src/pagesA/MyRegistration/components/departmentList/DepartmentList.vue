@@ -407,6 +407,8 @@
   .party_specialization2 {
     width: 120rpx;
     height: 36rpx;
+    // position: relative;
+    // top: 10rpx;
     position: absolute;
     top: 50%;
     transform: translate(0, -50%);

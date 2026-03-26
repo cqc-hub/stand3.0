@@ -244,11 +244,11 @@
 
   .my-row {
     position: relative;
-    padding: 19rpx 96rpx 19rpx 32rpx;
+    padding: 19rpx 32rpx;
     // padding: 24rpx 32rpx;
 
     // #ifdef  MP-WEIXIN
-    padding: 22rpx 96rpx 22rpx 32rpx;
+    padding: 22rpx 32rpx;
     // #endif
     font-size: var(--hr-font-size-base);
 
@@ -283,7 +283,9 @@
   .party_specialization2 {
     width: 120rpx;
     height: 36rpx;
-    position: absolute;
-    transform: translate(0,5rpx);
+    // position: absolute;
+    // transform: translate(0,5rpx);
+    position: relative;
+    top: 5rpx;
   }
 </style>
