@@ -9,7 +9,7 @@
       })`,
     }"
     :class="{
-      'container-doc': !is1001035,
+      'container-doc': !isShowMore,
       'container-1001054': getSysCode() === '1001054',
     }"
     class="bg flex flex-col"
@@ -28,17 +28,17 @@
           lazy-load
         />
 
-        <text v-if="is1001035" class="f36 font-semibold">名医推荐</text>
+        <text v-if="isShowMore" class="f36 font-semibold">名医推荐</text>
         <text v-else class="f36 font-semibold">热门医生推荐</text>
       </view>
 
-      <view v-if="is1001035" @click="goDocList" class="color-666 f28 pr32">
+      <view v-if="isShowMore" @click="goDocList" class="color-666 f28 pr32">
         <text>查看全部</text>
         <text class="iconfont">&#xe66b;</text>
       </view>
     </view>
 
-    <scroll-view v-if="is1001035" scroll-x class="">
+    <scroll-view v-if="isShowMore" scroll-x class="">
       <view class="flex pb32">
         <view
           v-for="(item, index) in list"
@@ -162,7 +162,9 @@
   const current = ref(0);
   const swiperDotIndex = ref(0);
   const gStores = new GStores();
-  const is1001035 = computed(() => gStores.globalStore.sysCode === '1001035');
+  const isShowMore = computed(() =>
+    [`1001035`, '1001054', '1001098'].includes(gStores.globalStore.sysCode)
+  );
 
   const change = (e) => {
     current.value = e;
@@ -197,6 +199,10 @@
 <style lang="scss" scoped>
   .container-1001054 {
     background-image: url('https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-home-doc-recommend-bg-1001054.png') !important;
+    .doc-title-name-1 {
+      color: var(--hr-success-color-7) !important ;
+      border: 0.5px solid var(--hr-success-color-7);
+    }
   }
   .container-doc {
     height: 428rpx;

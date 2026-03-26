@@ -623,11 +623,13 @@
     if (isConfirmOrderWithApplyBook) {
       try {
         if (isConfirmOrderWithApplyBook === '2') {
-          const { result: isNeedPop } = await api.GetBiosampleConsentRecord({
+          const {
+            result: { ApplyBookFlag },
+          } = await api.GetBiosampleConsentRecord({
             cardNumber: gStores.userStore.patChoose.cardNumber,
             deptId: hosDeptId,
           });
-          if (isNeedPop === '1') {
+          if (ApplyBookFlag === '1') {
             throw new Error('无需弹窗');
           }
         }

@@ -71,7 +71,7 @@
       });
       if (confirm) {
         uni.navigateTo({
-          url: `/pagesC/serviceCenter/serviceComplaint?isAnonymous=1&selectType=${
+          url: `/pagesC/serviceCenter/serviceComplaint?isAnonymous=1&selectRecords=${_props.value?.selectRecords}&selectType=${
             _props.value?.selectRecords && _props.value?.selectRecords != '0'
               ? 1
               : 0

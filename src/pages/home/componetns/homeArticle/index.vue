@@ -10,6 +10,11 @@
           v-model:value="tabCurrentTop"
           :tabs="compConfig.listTopTab"
           :line-scale="0.5"
+          :lineColor="
+            getSysCode() === '1001054'
+              ? 'linear-gradient(180deg,var(--hr-success-color-3),var(--hr-success-color-6) 80%)'
+              : 'linear-gradient(180deg,var(--hr-brand-color-3),var(--hr-brand-color-6) 80%)'
+          "
           @change="tabTopChange"
           blod
         />
@@ -24,27 +29,30 @@
       </view> -->
     </view>
     <view class="tab-box fade-in" v-show="!isSearch">
-    <view class="tab-content">
-    <g-tabs
-        v-if="tabs && tabs.length"
-        v-model:value="tabCurrent"
-        :tabs="tabs"
-        :height="(isShowTopTab && '55rpx') || '88rpx'"
-        :lineColor="isShowTopTab && '#fff' || undefined"
-        :fontSize="
-          isShowTopTab ? 'var(--hr-font-size-s)' : 'var(--hr-font-size-base)'
-        "
-        @change="tabChange"
-        field="typeName"
-        blod
-        class="tabs-flex"
-      />
-      <view v-if="tabs && tabs.length" class="more-btn" @click="readMore('all')">
-      <text class="f28 color-666 mr6">查看全部</text>
-       <text class="iconfont icon-size">&#xe66b;</text>
+      <view class="tab-content">
+        <g-tabs
+          v-if="tabs && tabs.length"
+          v-model:value="tabCurrent"
+          :tabs="tabs"
+          :height="(isShowTopTab && '55rpx') || '88rpx'"
+          :lineColor="(isShowTopTab && '#fff') || undefined"
+          :fontSize="
+            isShowTopTab ? 'var(--hr-font-size-s)' : 'var(--hr-font-size-base)'
+          "
+          @change="tabChange"
+          field="typeName"
+          blod
+          class="tabs-flex"
+        />
+        <view
+          v-if="tabs && tabs.length"
+          class="more-btn"
+          @click="readMore('all')"
+        >
+          <text class="f28 color-666 mr6">查看全部</text>
+          <text class="iconfont icon-size">&#xe66b;</text>
+        </view>
       </view>
-    </view>
-
     </view>
     <swiper
       :current="tabCurrent"
@@ -87,7 +95,7 @@
         </scroll-view>
       </swiper-item>
     </swiper>
-    <view v-show="isSearch" class="container" >
+    <view v-show="isSearch" class="container">
       <view class="container-scroll fade-in" :id="`Advisory-search-Item`">
         <Advisory-Item
           v-for="(item, index) in searchList"
@@ -120,6 +128,7 @@
   import { ITab, ICms } from './types';
   import GTabs from '@/components/g-tabs/g-tabs.vue';
   import AdvisoryItem from './components/advisoryItem.vue';
+  import { getSysCode } from '@/common';
 
   const inst = getCurrentInstance();
   const tabCurrentMap = new Map<number, number>();
@@ -310,7 +319,7 @@
         isSelfH5: '1',
         path: `pagesA/healthAdvisory/healthAdvisotySearch?searchValue=${searchValue.value}`,
       });
-    }else if(type === 'all'){
+    } else if (type === 'all') {
       useTBanner({
         type: 'h5',
         isSelfH5: '1',

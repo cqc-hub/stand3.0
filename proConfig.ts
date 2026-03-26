@@ -304,8 +304,8 @@ export const miniProgramConfig: {
                 // zs
                 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui/#/pay-loading',
 
-                // cs
-                // 'https://ybj.jszwfw.gov.cn/mmc/hsa-mms-ui/#/pay-loading',
+              // cs
+              // 'https://ybj.jszwfw.gov.cn/mmc/hsa-mms-ui/#/pay-loading',
             },
           },
           isMedicalOrder: '1',
@@ -359,11 +359,11 @@ export const miniProgramConfig: {
       healthCardText: '陕西省卫生健康委员会',
       hospitalId: '37133',
     },
-
     isSearchInHos: true,
     alipayPid: 'ze2exd3di9dbye6cc+hfia==',
     isOpenOcr: true,
     sConfig: {
+      homeTopBanner: { topShow: false, bannerHeight: 140 },
       isOpenHelpOld: '1',
       isOpenPopularSci: '1',
       homeNavTitleLogo:
@@ -1148,7 +1148,8 @@ export const miniProgramConfig: {
     isOpenOcr: false,
     sConfig: {
       login: { isSkipPerfect: '1' },
-      homeNavTitleLogo: 'https://phsdevoss.eheren.com/pcloud/phs3.0/1001103-home-nav-title.png',
+      homeNavTitleLogo:
+        'https://phsdevoss.eheren.com/pcloud/phs3.0/1001103-home-nav-title.png',
     },
   },
   '2001004': {

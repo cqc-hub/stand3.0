@@ -674,7 +674,6 @@
   });
 
   onLoad(async (opt) => {
-    console.log('complaint onLoad', opt);
     if (opt?.selectRecords) {
       options.value = deQueryForUrl(deQueryForUrl(opt));
     } else if (opt?.isAnonymous) {

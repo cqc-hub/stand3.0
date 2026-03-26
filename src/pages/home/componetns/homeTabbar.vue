@@ -306,7 +306,7 @@
         sort: 2,
       },
       {
-        label: 'home-tabbar:特色中医',
+        label: 'home-tabbar:线上商城',
         icon: global.BASE_IMG + 'oral-mall-home-icon.png',
         iconActive: `/static/image/oral-mall-home-icon-active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
@@ -423,7 +423,7 @@
     }
     if (global.SYS_CODE === '1001054') {
       tabList.push('home-tabbar:在线复诊');
-      tabList.push('home-tabbar:特色中医');
+      tabList.push('home-tabbar:线上商城');
     }
 
     const {
