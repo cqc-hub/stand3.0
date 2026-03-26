@@ -29,7 +29,7 @@
       >
         <view class="assist-card animate__animated animate__fadeIn">
           <view class="flex-normal-between">
-            <view class="flex p24v f32">
+            <view @click.stop="guideToHos(messData)" class="flex p24v f32">
               <text class="iconfont icon-location ml12 f40">&#xe6d7;</text>
               <view class="hos pr12">{{ messData.hosName }}</view>
               <view class="dept pl12">{{ messData.deptName }}</view>
@@ -47,6 +47,9 @@
                 </text>
                 <text class="date pr12" v-if="messData.appointmentDate">
                   {{ dayjs(messData.appointmentDate).format('MM-DD') }}
+                </text>
+                <text class="time pr12" v-if="messData.ampmName">
+                  {{ messData.ampmName }}
                 </text>
                 <text class="time pr12" v-if="messData.timeDesc">
                   {{ messData.timeDesc }}
@@ -147,7 +150,7 @@
   import api from '@/service/api';
   import dayjs from 'dayjs';
   import { ref, onMounted, nextTick } from 'vue';
-  import { GStores, debounce } from '@/utils';
+  import { GStores, ServerStaticData, debounce, guideHos } from '@/utils';
   import { joinQuery, setLocalStorage, getLocalStorage } from '@/common';
   const gStores = new GStores();
   onMounted(() => {
@@ -200,6 +203,21 @@
   };
 
   const gotoHisMess = async () => {};
+
+  const guideToHos = async (messData) => {
+    const { hosId } = messData;
+
+    if (!hosId) {
+      return;
+    }
+
+    const hosList = await ServerStaticData.getHosList();
+    const hosItem = hosList.find((o) => o.hosId === hosId);
+
+    if (hosItem) {
+      guideHos(hosItem);
+    }
+  };
 
   const gotoGuide = async (messData) => {
     const args: any = {};

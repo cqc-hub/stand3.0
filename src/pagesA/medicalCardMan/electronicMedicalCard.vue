@@ -597,8 +597,11 @@
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     // if (['1001093', '1001085'].includes(gStores.globalStore.sysCode)) {
-    pageStyle.value = '2';
+    // pageStyle.value = '2';
     // }
+    if (!['1001035'].includes(gStores.globalStore.sysCode)) {
+      pageStyle.value = '2';
+    }
   });
 </script>
 
@@ -613,7 +616,8 @@
     width: 100%;
     position: absolute;
 
-    background: linear-gradient(
+    background:
+      linear-gradient(
         160deg,
         var(--hr-brand-color-6-light),
         var(--hr-brand-color-6-light),

@@ -82,8 +82,6 @@
         id: info.id,
         ctx: that,
       };
-      console.log('bar-code-----');
-      console.log(parameter);
       BarCode(parameter, (res) => {
         emits('generate', res);
       });

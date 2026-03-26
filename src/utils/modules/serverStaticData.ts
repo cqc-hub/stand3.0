@@ -19,6 +19,7 @@ import {
   ApiParamsConfig,
   addHosIdForSelfH5Path,
   calculateDistance,
+  openLocation,
 } from '@/utils';
 import {
   sysConfigEnv,
@@ -180,6 +181,7 @@ export const useTBanner = async (
     source,
     openId,
     token: token?.accessToken,
+    timestamp: (new Date() as any) * 1,
     ...gStores.userStore.patChoose,
     ...additionData,
   };
@@ -351,6 +353,22 @@ export const useTBanner = async (
     });
   }
 };
+
+export const guideHos = (item: IHosInfo) => {
+  const gStores = new GStores();
+  const { gisLat, gisLng, hosName, address } = item;
+
+  if (gisLat) {
+    openLocation([gisLat!, gisLng!], {
+      name: hosName,
+      address,
+    });
+  } else {
+    gStores.messageStore.showMessage('暂不支持导航(无该医院位置信息)', 3000);
+    throw new Error('暂不支持导航 无该医院位置信息');
+  }
+};
+
 export class ServerStaticData {
   /**
    * 医院列表
