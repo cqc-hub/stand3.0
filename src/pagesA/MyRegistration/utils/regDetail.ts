@@ -945,7 +945,7 @@ export const useRegBtnShows = () => {
   const isShowRegPay = (item) => {
     const { orderStatus, typeId, isAllOrder1001094 } = item;
 
-    if ((typeId && typeId !== '0') || isAllOrder1001094 === '1') {
+    if ((typeId && !['0', '2'].includes(typeId)) || isAllOrder1001094 === '1') {
       return false;
     }
 
