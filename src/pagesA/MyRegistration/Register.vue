@@ -58,7 +58,7 @@
         :list="__hosList"
         :login="isNeedsLogin"
         @img-click="imgClick"
-        @location-click="locationClick"
+        @location-click="guideHos"
         @item-click="itemClick"
         @intro-click="introClick"
       />
@@ -177,6 +177,7 @@
     GStores,
     ISystemConfig,
     useTBanner,
+    guideHos,
   } from '@/utils';
   import { joinQuery, deQueryForUrl } from '@/common';
   import { HosNavData } from './utils/MyRegistration';
@@ -455,19 +456,6 @@
     }
   };
 
-  const locationClick = (item: IHosInfo) => {
-    const { gisLat, gisLng, hosName, address } = item;
-
-    if (gisLat) {
-      openLocation([gisLat!, gisLng!], {
-        name: hosName,
-        address,
-      });
-    } else {
-      gStores.messageStore.showMessage('暂不支持导航(无该医院位置信息)', 3000);
-    }
-  };
-
   const hosSortChange = ({ item }) => {
     if (item === '按距离排序') {
       if (!isAuthLocation.value) {
@@ -515,9 +503,8 @@
     }
     if (getTypeNow.value === '病案复印') {
       isMedCopy.value = true;
-      medCopyConfigList.value = await ServerStaticData.getSystemConfig(
-        'medRecord'
-      );
+      medCopyConfigList.value =
+        await ServerStaticData.getSystemConfig('medRecord');
     }
 
     if (isRequestApi) {
@@ -680,9 +667,8 @@
     }
 
     if (_type === '2' || _url.includes('/pagesC/selfService/nucleicBilling')) {
-      selfBillingConfig.value = await ServerStaticData.getSystemConfig(
-        'selfBilling'
-      );
+      selfBillingConfig.value =
+        await ServerStaticData.getSystemConfig('selfBilling');
     }
     if (_type === '4') {
       uni.setNavigationBarTitle({

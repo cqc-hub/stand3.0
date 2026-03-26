@@ -282,10 +282,24 @@
                     </view>
                   </view>
                   <view
+                    v-else-if="item.key === '_fee'"
+                    class="color-blue flex-normal doc-name"
+                  >
+                    <view class="doc-name-value">
+                      {{ value }}
+                    </view>
+
+                    <view
+                      v-if="orderRegInfo.refundNeedAuth === '0'"
+                      class="ml12"
+                    >
+                      医保挂号
+                    </view>
+                  </view>
+                  <view
                     v-else
                     :class="{
                       'color-blue': [
-                        '_fee',
                         '_hosAccountOffsetFee',
                         '_totalCost',
                         'visitingArea',
