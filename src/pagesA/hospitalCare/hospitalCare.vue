@@ -34,6 +34,7 @@
           :pageProps="pageProps"
         />
       </template>
+      <!-- 带时间的日费用 -->
       <dailyExpenseList
         ref="dailyExpenseListRef"
         v-if="getValue('1')"
@@ -41,6 +42,7 @@
         :tabCurrent="tabCurrent"
         :pageProps="pageProps"
       ></dailyExpenseList>
+      <!-- 总计清单 -->
       <totalList
         ref="totalListRef"
         v-if="getValue('2')"
@@ -48,6 +50,7 @@
         :tabCurrent="tabCurrent"
         :pageProps="pageProps"
       ></totalList>
+
       <totalList
         ref="totalListRef3"
         v-if="getValue('3')"
@@ -79,7 +82,7 @@
       ctype?: '1';
 
       //
-      tab?: string; //指定某个tab(不显示其他tab)
+      tab?: '1' | '2' | '3'; //指定某个tab(不显示其他tab)
       // 捆绑某条住院记录查询
       visitNo?: string;
       patientName?: string;
@@ -176,7 +179,7 @@
             value: '2',
             label: '总计清单',
           },
-        ];
+        ] as const;
 
         resultHos.value.tab = tabTemp.filter((o) => tabs.includes(o.value));
       }

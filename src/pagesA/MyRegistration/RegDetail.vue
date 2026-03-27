@@ -365,7 +365,7 @@
       </button>
 
       <button
-        v-if="isShowRegRefound(_d)"
+        v-if="isShowRegRefound(_d, pageProps)"
         @click="refoundOrder"
         class="btn btn-plain btn-error g-border"
       >
@@ -574,7 +574,7 @@
       isShowRegComment(_d.value) ||
       isShowRegCommentViews(_d.value) ||
       isShowRegCancel(_d.value) ||
-      isShowRegRefound(_d.value) ||
+      isShowRegRefound(_d.value, pageProps.value) ||
       isShowRegReorder(_d.value)
     );
   });
@@ -1637,6 +1637,13 @@
       'pagesA/medicalCardMan/electronicMedicalCard'
     );
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+    if (pageProps.value._disabled) {
+      try {
+        // @ts-expect-error
+        pageProps.value._disabled = JSON.parse(pageProps.value._disabled);
+      } catch (error) {}
+    }
+    console.log('获取到页面参数-----', pageProps.value);
     const { patientId } = pageProps.value;
     isRender.value = true;
     uni.setNavigationBarTitle({

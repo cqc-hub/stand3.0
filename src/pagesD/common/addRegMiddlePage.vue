@@ -95,14 +95,10 @@
     const {
       result: { orderId },
     } = await api.netAddHosSch(args);
-    gStores.messageStore.showMessage('加号成功', 1500, {
-      closeCallBack: () => {
-        uni.reLaunch({
-          url: joinQuery('/pagesA/MyRegistration/RegDetail', {
-            orderId,
-          }),
-        });
-      },
+    uni.reLaunch({
+      url: joinQuery('/pagesA/MyRegistration/RegDetail', {
+        orderId,
+      }),
     });
   };
 </script>

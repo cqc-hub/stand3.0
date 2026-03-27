@@ -2,6 +2,8 @@ export type TVisitRecord = {
   date: string;
   deptName: string;
   visitNo: string;
+  regWay: '云门诊' | '图文问诊' | '普通预约';
+  areaName: string; // 互联网医院类型的值为 "网络就诊"
 };
 
 export const titleMap = {
@@ -30,6 +32,8 @@ export type TVisitInfo = {
   hosId: string;
   hosName: string;
   reportPlace: string;
+  /** 1 小程序挂号  2  其他渠道 */
+  _regWay: '';
 
   /** 门诊取药 */
   drugs: {
@@ -57,4 +61,3 @@ export type TVisitInfo = {
   /** 其他 */
   others: TVisitInfo['labs'];
 };
-
