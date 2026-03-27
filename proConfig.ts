@@ -883,7 +883,7 @@ export const miniProgramConfig: {
     wxAppid: 'wxbf7aab8afef3603a',
     alipayAppid: '2021005190632301',
     isvAlipayAppid: '2021005194657067',
-    h5Appid: '',
+    h5Appid: 'wxe8e295d7903d57d1',
     name: '延安市人民医院',
 
     isOpenOcr: false,
