@@ -36,8 +36,7 @@
     </view>
 
     <scroll-view class="g-container" scroll-y>
-      <view class="safe-height" />
-      <view v-if="isComplete || isRefresh" class="content">
+      <view v-if="isComplete || isRefresh" class="pr24 pl24">
         <view v-if="list.length">
           <Number-List
             :list="list"
@@ -51,6 +50,9 @@
             @sign-in="signIn"
             @pay-page="goPayPage"
           />
+
+          <view class="safe-height"></view>
+          <view class="safe-height"></view>
         </view>
 
         <view v-else class="empty-list">
@@ -255,7 +257,7 @@
       hosId,
       extend,
       type,
-      deptName
+      deptName,
     };
     isFgShow451.value = false;
 
@@ -609,8 +611,8 @@
       title: isOnlineSign.value
         ? '在线签到'
         : isPharmacy.value
-        ? '药房签到'
-        : '门诊取号',
+          ? '药房签到'
+          : '门诊取号',
     });
 
     if (isBloodSign.value) {
@@ -632,10 +634,6 @@
 <style lang="scss" scoped>
   .g-page {
     background: var(--hr-neutral-color-1);
-  }
-
-  .content {
-    padding: 0 32rpx;
   }
 
   .pat-box {
