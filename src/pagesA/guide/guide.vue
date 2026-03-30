@@ -301,7 +301,7 @@
   const visitInfoList = ref(<TVisitInfo[]>[]);
   const visitItemClick = async (item: TVisitRecord) => {
     const { patientId } = gStores.userStore.patChoose;
-    const { visitNo, regWay = '' } = item;
+    const { visitNo, areaName = '' } = item;
 
     visitItemSel.value = item;
     visitInfoList.value = [];
@@ -329,7 +329,7 @@
 
     let isBreak = false;
     isComplete.value = true;
-    const _regWay = regWay === '普通预约' ? '1' : '2';
+    const _regWay = areaName === '网络就诊' ? '1' : areaName;
     // 8个node必定存在
     let rList: any[] = [
       node1Info,
