@@ -104,6 +104,7 @@ export const patientTempList: TInstance[] = [
   {
     label: '就诊号',
     field: 'input-text',
+    // 会重新取挂号详情接口的 qrCode 值
     key: 'patientId',
   },
   {

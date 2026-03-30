@@ -109,7 +109,6 @@
         goLogin(e);
       }
     } else if (_env.value === 'harmony') {
-      console.log('-----haramoamaomaoma');
       goLogin(e);
     }
   };

@@ -121,9 +121,16 @@ interface ILoginBack {
   _p?: string; // viewConfig 对应 id
   _url?: string;
   _query?: string; // 额外参数(待定)
-  _type?: '1' | '2'; // 1主体 2 h5 (没用上， 待定)
+  _type?: '1' | '2' | 'useTBanner'; // 1主体 2 h5 (没用上， 待定)
   _isOutLogin?: '1'; // 1 过期
   _pageInfo?: '1' | '2'; // 1 需要完善 2就诊人 (没用上， 待定)
+
+  // TBannerConfigBase
+  type?: 'h5' | 'self' | 'netHospital' | 'otherProgram';
+  path?: string;
+  addition?: any;
+  extraData?: any;
+  immed?: '1';
 }
 
 interface IAddress {

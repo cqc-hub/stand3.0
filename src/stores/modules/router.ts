@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import { joinQuery } from '@/common';
 import { useGlobalStore, useUserStore } from '@/stores';
+import { TBannerConfig } from '@/types';
+import { routerJump } from '@/utils';
 
 const spliceUrl = (prop: Required<Pick<ILoginBack, '_url' | '_query'>>) => {
   const { _url, _query } = prop;
@@ -19,7 +21,7 @@ const spliceUrl = (prop: Required<Pick<ILoginBack, '_url' | '_query'>>) => {
 const routerStore = defineStore('router', {
   persist: {
     key: '__ROUTER',
-    paths: ['_id', 'fullUrl', 'backRoute', '_p', '_url'],
+    paths: ['_id', 'fullUrl', 'backRoute', '_p', '_url', 'tbConfig'],
   },
 
   state: () => {
@@ -29,6 +31,7 @@ const routerStore = defineStore('router', {
       _url: '',
       fullUrl: '',
 
+      tbConfig: <TBannerConfig>{},
       backRoute: <ILoginBack>{},
     };
   },
@@ -58,16 +61,53 @@ const routerStore = defineStore('router', {
       this.fullUrl = url;
     },
 
-    receiveQuery(prop: ILoginBack) {
-      if (!(prop._p || prop._url)) return;
+    receiveQuery(prop = {} as ILoginBack) {
+      prop = {
+        ...prop,
+      };
+      const {
+        _url,
+        _query,
+        _p,
+        _isOutLogin,
+        _type,
+        extraData,
+        addition,
+        immed,
+      } = prop;
 
-      if (prop._isOutLogin) {
+      if (_isOutLogin) {
         useGlobalStore().clearStore();
         useUserStore().clearStore();
       }
 
-      if (prop._url) {
-        const { _url, _query } = prop;
+      // TBanner
+      if (_type === 'useTBanner') {
+        if (extraData) {
+          try {
+            prop.extraData = JSON.parse(extraData);
+          } catch (error) {
+            console.log('extraData 序列化失败----', extraData);
+          }
+        }
+
+        if (addition) {
+          try {
+            prop.addition = JSON.parse(addition);
+          } catch (error) {
+            console.log('addition 序列化失败----', addition);
+          }
+        }
+
+        this.tbConfig = prop as any;
+        if (immed === '1') {
+          routerJump();
+        }
+      }
+
+      if (!(_p || _url)) return;
+
+      if (_url) {
         if (
           [
             '/pagesA/medicalCardMan/addMedical',
@@ -105,7 +145,11 @@ const routerStore = defineStore('router', {
 
   getters: {
     isWork(): boolean {
-      return !!(this.backRoute._p || this.backRoute._url);
+      return !!(
+        this.backRoute._p ||
+        this.backRoute._url ||
+        Object.keys(this.tbConfig).length
+      );
     },
   },
 });
