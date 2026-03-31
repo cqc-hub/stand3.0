@@ -18,10 +18,7 @@
       <view class="flex items-center">
         <image
           :src="
-            globalGl.BASE_IMG +
-            `stand3-home-doc-recommend-icon-bg${
-              gStores.globalStore.isTcmStyle ? '-tcm' : ''
-            }.png`
+           logoIconUrl
           "
           mode="scaleToFill"
           class="icon-bg mr12"
@@ -165,6 +162,19 @@
   const isShowMore = computed(() =>
     [`1001035`, '1001054', '1001098'].includes(gStores.globalStore.sysCode)
   );
+
+  const logoIconUrl = computed(() => {
+    if (gStores.globalStore.sysCode === '1001054') {
+      return globalGl.BASE_IMG + 'stand3-home-doc-recommend-icon-bg-1001054.png';
+    }
+
+    return (
+      globalGl.BASE_IMG +
+      `stand3-home-doc-recommend-icon-bg${
+        gStores.globalStore.isTcmStyle ? '-tcm' : ''
+      }.png`
+    );
+  });
 
   const change = (e) => {
     current.value = e;

@@ -158,7 +158,7 @@
           // @ts-expect-error
           const { height: _height } = data;
 
-          height.value = _height < 260 ? 260 : _height;
+          height.value = _height < 175 ? 175 : _height;
         }
       })
       .exec();

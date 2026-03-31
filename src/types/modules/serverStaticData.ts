@@ -30,7 +30,8 @@ export interface ISystemConfig_ {
      */
     // 医生推荐banner区
     isOpenHomeDoctorBanner?: '1';
-
+    // 首页渲染时就加载获取医生推荐
+    getDoctorBannerOnShow: '1';
     /**
      * pagesA/MyRegistration/RegSearch
      */

@@ -361,6 +361,16 @@
   padding: 40rpx !important;
 }
 
+.p40v {
+  padding-top: 40rpx !important;
+  padding-bottom: 40rpx !important;
+}
+
+.p40c {
+  padding-right: 40rpx !important;
+  padding-left: 40rpx !important;
+}
+
 // ==================== Components ====================
 .g-tag {
   border-radius: 2px;
@@ -423,7 +433,7 @@
 .g-split-line,
 .g-split-line1 {
   &::after {
-    content: "|";
+    content: '|';
     position: relative;
     left: 12rpx;
     font-size: 24rpx;
@@ -455,7 +465,7 @@
 
 .safe-height {
   &::before {
-    content: "";
+    content: '';
     display: block;
     height: 40rpx;
     width: 1rpx;

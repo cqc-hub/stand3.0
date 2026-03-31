@@ -2851,8 +2851,8 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
       authCode,
       // 机构ID
       orgId,
-      anotherIdNo,
-      anotherName,
+      // anotherIdNo,
+      // anotherName,
     });
 
     if (type === 'first') {

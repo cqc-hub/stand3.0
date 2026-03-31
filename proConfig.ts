@@ -240,7 +240,6 @@ export const miniProgramConfig: {
     alipayAppid: '2021003144603328',
     name: '宜兴市人民医院',
     isSearchInHos: true,
-    //
     isOpenOcr: true,
     sConfig: {
       isOpenHelpOld: '1',
@@ -791,6 +790,8 @@ export const miniProgramConfig: {
     isSearchInHos: true,
     isOpenOcr: false,
     sConfig: {
+      homeNavTitleLogo:
+        'https://phsdevoss.eheren.com/pcloud/image/1001083logo1.png',
       login: { isSkipPerfect: '1' },
       medicalMHelp: {
         wx: {
@@ -857,7 +858,19 @@ export const miniProgramConfig: {
 
     isOpenOcr: false,
     isSearchInHos: true,
-    sConfig: { login: { isSkipPerfect: '1', isAliAuthBase: '1' } },
+    sConfig: {
+      login: { isSkipPerfect: '1', isAliAuthBase: '1' },
+      medicalMHelp: {
+        alipay: {
+          medicalPlugin: {
+            orgId: { '13142': 'H33030200022' },
+            cardType: '01',
+          },
+          medicalFiling: '1',
+          // isFamilyPayment: '1',
+        },
+      },
+    },
   },
   '1001087': {
     wxAppid: 'wxe48cc8a9a8ec915f',

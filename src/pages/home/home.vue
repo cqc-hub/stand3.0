@@ -5,7 +5,6 @@
     }"
     class="g-page"
   >
-
     <view class="absolute home-nav z-999">
       <!-- #ifndef MP-TOUTIAO -->
       <home-Nav v-model:height="navHeight" :opacity="navOpacity" />
@@ -150,7 +149,9 @@
                       <button
                         v-if="
                           gStores.globalStore.ev &&
-                          ['wx', 'web', 'harmony'].includes(gStores.globalStore.ev)
+                          ['wx', 'web', 'harmony'].includes(
+                            gStores.globalStore.ev
+                          )
                         "
                         class="login-btn"
                       >
@@ -582,6 +583,7 @@
     ) {
       assistMessageRef.value?.reLoad();
     }
+   
     // #endif
   });
 
@@ -656,6 +658,10 @@
         globalStore.isLogin &&
         !uni.getStorageSync('hospital_order') &&
         authorization();
+    }
+
+     if (orderConfig.value.getDoctorBannerOnShow === '1') {
+      getDocRecommendList();
     }
   });
 

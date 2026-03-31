@@ -232,7 +232,41 @@
         />
       </scroll-view>
     </xy-dialog>
+    <xy-dialog
+      :title="'请如实填写病情'"
+      :show="isItemShowPop"
+      :isShowCancel="false"
+      :maxHeight="2000"
+      @confirmButton="confirmAsync"
+      confirmText="确认"
+    >
+      <view class="dialog-content">
+        <view
+          class="qs-line flex p40c p24v"
+          v-for="(item, index) in dialogQs"
+          :key="`qs${index}`"
+        >
+          <view class="title flex1">{{ item.label }}:</view>
+          <view class="field flex2" @click="pickerShow(item)">
+            <uni-easyinput
+              :placeholder="`请选择${item.label}`"
+              :inputBorder="false"
+              :clearable="false"
+              :value="item.field1"
+              :placeholderStyle="`font-size: var(--hr-font-size-base)`"
+              class="form-input"
+            />
+          </view>
+        </view>
+      </view>
+    </xy-dialog>
     <g-message />
+    <uv-picker
+      ref="picker"
+      :columns="pickerData.columns"
+      @confirm="pickerConfirm"
+      @change="pickerChange"
+    ></uv-picker>
   </view>
   <homeH5SharePopup
     ref="homeH5SharePopupRef"
@@ -290,6 +324,10 @@
   const selList = ref<INucle[]>([]);
   const gStores = new GStores();
   const pageLoading = ref(false);
+  const isItemShowPop = ref(false);
+  const dialogQs = ref(<any[]>[{}]);
+  const pickerData = ref(<any>{});
+  const picker = ref(<any>null);
 
   const isWeiJingKaiDan1001067 = computed(() => {
     return (
@@ -330,6 +368,25 @@
 
     // await gStores.userStore.getPatList();
   });
+
+  let resolve: (...any) => any = () => {};
+
+  const confirmAsync = () => {
+    resolve();
+  };
+
+  const pickerShow = (item) => {
+    pickerData.value = item;
+    picker.value.open();
+  };
+
+  const pickerChange = (e) => {
+    const { columnIndex, index } = e;
+    if (pickerData.value.columnData && columnIndex === 0) {
+      picker.value.setColumnValues(1, pickerData.value.columnData[index]);
+    }
+  };
+  const pickerConfirm = (item) => {};
 
   const judgeCodeShow = async () => {
     h5QrCodeData.value = {
@@ -494,17 +551,18 @@
 
       return;
     }
-    if (tips && extend) {
+    if (extend) {
       try {
         let extend = JSON.parse(item?.extend || '');
         if (extend?.extendShowMaxAge) {
-          const patientAge = (gStores.userStore.patChoose?.patientAge as any || 0)*1;
+          const patientAge =
+            ((gStores.userStore.patChoose?.patientAge as any) || 0) * 1;
           if (patientAge > extend.extendShowMaxAge) {
             throw new Error('超出年龄无需填写问卷');
           }
         }
-        extend?.showCareModel == '1' &&
-          (await new Promise<{ confirm: boolean }>((r) => {
+        if (extend?.showCareModel === '1') {
+          await new Promise<{ confirm: boolean }>((r) => {
             gStores.messageStore.showMessage(tips, 0, {
               useDialog: true,
               dialogOpt: {
@@ -515,7 +573,17 @@
               },
               closeCallBack: r,
             });
-          }));
+          });
+        }
+        if (extend?.showPop === '1' && extend?.question?.length) {
+          console.log(99999999, extend);
+          dialogQs.value = extend.question;
+          await new Promise((rl) => {
+            isItemShowPop.value = true;
+            resolve = rl;
+          });
+          dialogQs.value = [];
+        }
       } catch (e) {
         console.error('extend序列表失败', item.extend, e);
       }
@@ -603,7 +671,8 @@
       try {
         const extend = JSON.parse(selList.value[0].extend);
         if (extend?.extendShowMaxAge) {
-          const patientAge =  (gStores.userStore.patChoose?.patientAge as any || 0)*1;;
+          const patientAge =
+            ((gStores.userStore.patChoose?.patientAge as any) || 0) * 1;
           if (patientAge > extend.extendShowMaxAge) {
             throw new Error('超出年龄无需填写问卷');
           }
@@ -856,5 +925,19 @@
 
   .ico-checkbox {
     color: var(--hr-brand-color-6);
+  }
+  .dialog-content {
+    .qs-line {
+      justify-content: flex-start;
+      .title {
+        border-bottom: 3rpx solid var(--hr-neutral-color-11);
+      }
+      .field {
+        border-bottom: 3rpx solid var(--hr-neutral-color-11);
+        .form-input {
+          pointer-events: none !important;
+        }
+      }
+    }
   }
 </style>
