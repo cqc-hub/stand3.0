@@ -279,7 +279,9 @@
         });
       }
     } else {
-      await api.getCheckIn(args).catch(async (err) => {
+      const {
+        result: { result, resultMessage },
+      } = await api.getCheckIn(args).catch(async (err) => {
         if (err?.respCode === 999229) {
           const { title, content } = await gStores.getSysAppMore('1207');
           if (title) {
@@ -350,6 +352,14 @@
 
         throw new Error(err);
       });
+
+      if (result === '0' && resultMessage) {
+        await new Promise((closeCallBack) => {
+          gStores.messageStore.showMessage(resultMessage, 3000, {
+            closeCallBack,
+          });
+        });
+      }
     }
 
     await getList();
