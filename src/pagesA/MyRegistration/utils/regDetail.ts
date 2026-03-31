@@ -36,6 +36,11 @@ export interface IPageProps {
   searchType?: '1'; // 省中区别app挂号  不传为查询3.0接口  传1  查询2.0接口
   typeId?: '1' | '2' | '3'; // 3 app挂号
   inquiriesBack?: '1'; // 预问诊返回
+  /**
+   * 不展示底部按钮
+   * - refound 退号
+   */
+  _disabled?: 'refound'[];
 }
 
 /**
@@ -99,6 +104,7 @@ export const patientTempList: TInstance[] = [
   {
     label: '就诊号',
     field: 'input-text',
+    // 会重新取挂号详情接口的 qrCode 值
     key: 'patientId',
   },
   {
@@ -884,10 +890,17 @@ export const useRegBtnShows = () => {
     return false;
   };
 
-  /** 退号 */
-  const isShowRegRefound = (item) => {
+  /** 退号
+   *
+   */
+  const isShowRegRefound = (item, opt = {} as BaseObject & IPageProps) => {
     const { orderStatus, typeId, orderId, isAllOrder1001094 } = item;
     const { isOrderPay } = orderConfig.value;
+    const { _disabled = [] } = opt;
+
+    if (_disabled.includes('refound')) {
+      return false;
+    }
     if ((typeId && !['0', '1'].includes(typeId)) || isAllOrder1001094 === '1') {
       return false;
     }
@@ -945,7 +958,7 @@ export const useRegBtnShows = () => {
   const isShowRegPay = (item) => {
     const { orderStatus, typeId, isAllOrder1001094 } = item;
 
-    if ((typeId && typeId !== '0') || isAllOrder1001094 === '1') {
+    if ((typeId && !['0', '2'].includes(typeId)) || isAllOrder1001094 === '1') {
       return false;
     }
 

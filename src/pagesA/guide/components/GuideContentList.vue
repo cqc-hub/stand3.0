@@ -272,6 +272,12 @@
               <view v-else-if="item.title === '门诊就诊'">
                 <GuideContentListCol :cols="mzjzCol" :lab="item" />
 
+                <GuideBtns
+                  :item="item"
+                  :btns="mzjzBtns"
+                  @btn-click="(v) => emits('btn-click', v)"
+                />
+
                 <view
                   class="btn btn-border color-111 btn-default btn-round f28 mt24"
                   @click="goTakeNumber(item)"
@@ -379,6 +385,11 @@
 
   const jcBtns = computed(() => {
     return props.config.jcBtns || [];
+  });
+
+  // 门诊就诊下面的按钮
+  const mzjzBtns = computed(() => {
+    return props.config.mzjzBtns || [];
   });
 
   // 门诊取号下面的按钮

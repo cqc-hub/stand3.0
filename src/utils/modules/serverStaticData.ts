@@ -20,6 +20,7 @@ import {
   addHosIdForSelfH5Path,
   calculateDistance,
   openLocation,
+  apiAsync,
 } from '@/utils';
 import {
   sysConfigEnv,
@@ -204,7 +205,7 @@ export const useTBanner = async (
       isPatient = true;
     }
 
-    if (token) {
+    if (token || openId) {
       isLogin = true;
     }
 
@@ -344,13 +345,29 @@ export const useTBanner = async (
       extraData,
       envVersion
     );
-    uni.navigateToMiniProgram({
+
+    const opts = {
       ...(config.deepProps || {}),
       appId: appId!,
       path: joinQuery(path, extraData),
       envVersion,
       extraData,
-    });
+      async fail(e) {
+        const { errMsg = '' } = e;
+        console.error(e);
+
+        if (errMsg.includes('fail can only be invoked by user TAP gesture.')) {
+          const { confirm } = await apiAsync(uni.showModal, {
+            content: '确认跳转第三方小程序?',
+          });
+
+          if (confirm) {
+            uni.navigateToMiniProgram(opts);
+          }
+        }
+      },
+    };
+    uni.navigateToMiniProgram(opts);
   }
 };
 

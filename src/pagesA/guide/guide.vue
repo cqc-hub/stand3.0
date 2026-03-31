@@ -301,7 +301,7 @@
   const visitInfoList = ref(<TVisitInfo[]>[]);
   const visitItemClick = async (item: TVisitRecord) => {
     const { patientId } = gStores.userStore.patChoose;
-    const { visitNo } = item;
+    const { visitNo, areaName = '' } = item;
 
     visitItemSel.value = item;
     visitInfoList.value = [];
@@ -329,6 +329,7 @@
 
     let isBreak = false;
     isComplete.value = true;
+    const _regWay = areaName === '网络就诊' ? '1' : areaName;
     // 8个node必定存在
     let rList: any[] = [
       node1Info,
@@ -343,6 +344,7 @@
       .filter((o: any, i) => {
         if (o) {
           o.title = titleMap[i + 1];
+          o._regWay = _regWay;
         }
         return o;
       })
@@ -394,7 +396,6 @@
       }
     }
 
-    console.log(rList);
     visitInfoList.value = rList.reverse();
   };
 
@@ -736,8 +737,9 @@
         orderId: item.orderId,
         hosOrderId: item.hosOrderId,
         preWz: item.orderStatus === '10' && '1',
-        _type: 'znpz',
         typeId: '1',
+        _type: 'znpz',
+        _disabled: ['refound'],
       }),
     });
   };

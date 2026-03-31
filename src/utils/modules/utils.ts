@@ -1,5 +1,5 @@
 import { useRouterStore, useUserStore } from '@/stores';
-import { ServerStaticData } from './serverStaticData';
+import { ServerStaticData, useTBanner } from './serverStaticData';
 import { useCommonTo } from '@/common/checkJump';
 import { IsAny } from '@/typeUtils';
 import { useCacheStore } from '@/stores';
@@ -258,8 +258,10 @@ export const routerJump = async (url?: `/${string}`, type?: string) => {
   };
 
   if (routerStore.isWork) {
-    const _p = routerStore._p;
-    if (_p) {
+    const { _p, fullUrl, tbConfig } = routerStore;
+    if (Object.keys(tbConfig).length) {
+      useTBanner(tbConfig);
+    } else if (_p) {
       const menus = await ServerStaticData.getHomeConfig();
 
       const menuItem = getMenuById(routerStore._id, menus);
@@ -267,13 +269,13 @@ export const routerJump = async (url?: `/${string}`, type?: string) => {
 
       routerStore.clear();
     } else {
-      if (routerStore.fullUrl.startsWith('/pages/login/h5')) {
+      if (fullUrl.startsWith('/pages/login/h5')) {
         uni.reLaunch({
           url: '/pages/home/home',
         });
       } else {
         uni.reLaunch({
-          url: routerStore.fullUrl,
+          url: fullUrl,
           fail,
         });
       }

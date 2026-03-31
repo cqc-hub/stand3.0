@@ -87,7 +87,7 @@
 
   import { onLoad, onShareTimeline } from '@dcloudio/uni-app';
   import { GStores, LoginUtils, wait } from '@/utils';
-  import { joinQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { beforeEach } from '@/router/index';
   import global from '@/config/global';
 
@@ -138,6 +138,7 @@
   }
 
   const props = defineProps<TPageType>();
+  const pageProps = ref({} as TPageType);
   const messageStore = useMessageStore();
   const routeStore = useRouterStore();
   const gStores = new GStores();
@@ -234,7 +235,9 @@
   };
 
   onLoad((opt) => {
-    console.log('获取到参数--my', opt);
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    console.log('获取到参数--my', pageProps.value);
+
     if (!viewerStore.version) {
       viewerStore.init();
     }
@@ -264,7 +267,7 @@
   });
 
   onMounted(() => {
-    routeStore.receiveQuery(props);
+    routeStore.receiveQuery(pageProps.value);
     if (props.setOutLogin === '1') {
       new LoginUtils().outLogin({
         isHideMessage: true,

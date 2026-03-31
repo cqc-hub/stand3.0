@@ -1,27 +1,29 @@
 <template>
   <view class="">
-    <view v-for="item in list" :key="item.visitId" class="item mb16">
-      <view class="flex-between f32 g-bold mb16">
-        <view class="flex-normal">
-          <view class="mr12 lH1Half">{{ item.deptName || item.categorName }}</view>
-          <view class="g-nowrap mr12">{{ item.docName }}</view>
+    <view v-for="item in list" :key="item.visitId" class="item mb24">
+      <view class="flex">
+        <view class="flex-1 mr24 f32 g-bold mb12">
+          <view class="lH1Half">
+            {{ item.deptName || item.categorName }}
+          </view>
         </view>
 
-        <view v-if="isShowFlagLabel()">
-          <text
-            :class="{
-              'color-888': ['1', '2'].includes(item.reportFlag),
-            }"
-            class="color-blue "
-          >
-            <text class="g-nowrap">
-              {{ getReportFlagInfo(item.reportFlag).label }}
-            </text>
+        <text
+          v-if="isShowFlagLabel()"
+          :class="{
+            'color-888': ['1', '2'].includes(item.reportFlag),
+          }"
+          class="color-blue"
+        >
+          <text class="g-nowrap">
+            {{ getReportFlagInfo(item.reportFlag).label }}
           </text>
-        </view>
+        </text>
       </view>
 
-      <view class="color-444 f28 mb32">
+      <view class="f32 g-bold mb12">{{ item.docName }}</view>
+
+      <view class="color-444 f28 mb12">
         <text class="mr8">{{ item.visitDate }}</text>
         <text>{{ item?.ampmName?.replace(/^[^;]*;/, '') }}</text>
         <text class="mr8">{{ item.timeDesc }}</text>
@@ -211,9 +213,9 @@
     border-radius: 8px;
 
     .take-number {
-      width: 280rpx;
-      height: 280rpx;
-      padding: 20rpx;
+      width: 240rpx;
+      height: 240rpx;
+      // padding: 20rpx;
       background: var(--hr-brand-color-6);
       border-radius: 50%;
       color: #fff;
@@ -243,5 +245,4 @@
       -webkit-transform: rotate(360deg);
     }
   }
-
 </style>
