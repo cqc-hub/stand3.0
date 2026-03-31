@@ -37,7 +37,26 @@
 
   const isRenBtn = (opt: { lab?: any; btn: TGuideButtonConfig; item: any }) => {
     const { btn, lab = {}, item } = opt;
-    const { labStatus = [], completionStatus = [], disposeStatus = [] } = btn;
+    const {
+      labStatus = [],
+      completionStatus = [],
+      disposeStatus = [],
+      otherStatus = [],
+    } = btn;
+
+    if (otherStatus.length) {
+      for (let index = 0; index < otherStatus.length; index++) {
+        let { label: key, value = [] } = otherStatus[index];
+        if (!Array.isArray(value)) {
+          value = [value];
+        }
+
+        const itemValue = item[key];
+        if (!value.includes(itemValue)) {
+          return false;
+        }
+      }
+    }
 
     if (labStatus.length && lab) {
       if (!labStatus.includes(lab.status)) {

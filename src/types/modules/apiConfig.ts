@@ -13,6 +13,8 @@ export type ApiParamsConfig = {
     jcBtns: TGuideButtonConfig[];
     // 门诊取号下面按钮
     mzqhBtns: TGuideButtonConfig[];
+    // 门诊就诊下面的按钮
+    mzjzBtns: TGuideButtonConfig[];
     // 诊区签到下面的按钮
     zqqdBtns: TGuideButtonConfig[];
     // 门诊取药下面按钮
@@ -108,6 +110,8 @@ export type TGuideButtonConfig = TButtonConfig & {
   disposeStatus?: string[];
   // 子项状态 1 已完成  历史中是 -1
   completionStatus?: number[];
+  // 其他状态
+  otherStatus?: IOptions<any[]>[];
 
   // 按钮样式
   btnClass?: string;
