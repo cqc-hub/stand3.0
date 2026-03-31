@@ -200,7 +200,7 @@ export interface ISystemConfig_ {
     // 热门搜索
     hosRegHistory?: IRegSearchHistoryItem[];
 
-    /** 门诊取号 | 在线签到 takeNumber */
+    /** 门诊取号 | 在线签到 takeNumber  -> 新增配置入口 TakeNumber */
     // 列表页面
     takeNumberGoPayBtn?: '1'; // 是否显示门诊缴费入口按钮
     takeNumberQueueBtn?: '1'; // 是否显示排队叫号入口按钮

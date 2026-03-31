@@ -35,7 +35,7 @@
       </view>
     </view>
 
-    <scroll-view class="g-container" scroll-y>
+    <view class="g-container" scroll-y>
       <view v-if="isComplete || isRefresh" class="pr24 pl24">
         <view v-if="list.length">
           <Number-List
@@ -59,7 +59,7 @@
           <g-empty :current="1" noTransformY />
         </view>
       </view>
-    </scroll-view>
+    </view>
 
     <xy-dialog
       title="授权提示"
