@@ -136,8 +136,8 @@
       :confirmColor="'var(--hr-brand-color-6)'"
       :cancelFontWeight="'bold'"
       :isMaskClick="false"
-      confirmText="去填写病情"
-      cancelText="仅候补登记"
+      confirmText="加号登记"
+      cancelText="候补登记"
     >
       <view class="reg-tip">
         <g-flag

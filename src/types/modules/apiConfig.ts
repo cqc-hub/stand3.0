@@ -1,8 +1,22 @@
 import { TButtonConfig } from './serverStaticData';
 
+type TTakeNumber = {
+  /** 顶部协议 */
+  topTypeFg?: string;
+  /** 顶部按钮 */
+  headBtns?: TButtonConfig[];
+};
+
 export type ApiParamsConfig = {
   HomeTabBar: {
     tabs: string[];
+  };
+
+  TakeNumber: TTakeNumber & {
+    types: {
+      /** 页面存在type时候单独配置 */
+      [type: string]: TTakeNumber;
+    };
   };
 
   //pagesA/guide/guide
