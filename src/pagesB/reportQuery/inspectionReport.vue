@@ -20,15 +20,13 @@
       scrollY
     >
       <view class="auto-person g-fade-in">
-        <text>
-          AI解读
-        </text>
+        <text>AI解读</text>
         <image
           :src="global.BASE_IMG + pageConfig.reportAnalysisImg"
           mode="heightFix"
         ></image>
       </view>
-    </drag-button> 
+    </drag-button>
     <!--  #ifdef MP-WEIXIN -->
     <view class="placeholder" v-if="queryCompData.isShowHealthCardMode">
       <health-card-query-comp
@@ -356,7 +354,11 @@
   import { onLoad, onPageScroll } from '@dcloudio/uni-app';
   import { ref, onMounted, computed, nextTick, onUpdated } from 'vue';
 
-  import { examineReportDetails, addWatermark, reportAnalysisFun } from './utils';
+  import {
+    examineReportDetails,
+    addWatermark,
+    reportAnalysisFun,
+  } from './utils';
   import {
     GStores,
     nameConvert,
@@ -376,7 +378,7 @@
   import global from '@/config/global';
   import api from '@/service/api';
   import dayjs from 'dayjs';
-  import env from '@/config/env';  
+  import env from '@/config/env';
 
   import GreenToast from '@/components/greenPower/greenToast.vue';
   import BottomNav from './components/BottomNav.vue';
@@ -686,6 +688,17 @@
         return;
       }
 
+      // cacheStore.changeCacheData(pdfPath);
+      if (pdfPath.startsWith('http')) {
+        cacheStore.changeCacheData(pdfPath);
+        uni.navigateTo({
+          url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
+            name: '',
+            type: 'cache',
+          }),
+        });
+        return;
+      }
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
           // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
@@ -775,9 +788,8 @@
       if (pdfType === 'JPG') {
         uni.showLoading({ title: '加载中' });
         try {
-          const msg = await ImageDownloader.downloadAndSaveImage(
-            pdfPath1001035
-          );
+          const msg =
+            await ImageDownloader.downloadAndSaveImage(pdfPath1001035);
           gStores.messageStore.showMessage(msg, 1500);
         } catch (error) {
           const errorMessage =
@@ -859,7 +871,7 @@
     if (pageConfig.value?.isCheckGetYunUrlByH5 === '1') {
       copyDataUrl.value = url!;
       popupCopy.value.show();
-      return
+      return;
     }
 
     // 需要缴费
@@ -1057,7 +1069,7 @@
       image {
         height: 148rpx;
       }
-   }
+    }
     .watermarkView {
       position: absolute;
       z-index: 1;

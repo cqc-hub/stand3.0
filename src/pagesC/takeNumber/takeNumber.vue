@@ -5,7 +5,11 @@
     }"
     class="g-page"
   >
-    <g-flag v-if="isRender" :typeFg="isOnlineSign ? '1116' : '5'" isShowFg />
+    <g-flag
+      v-if="isRender"
+      :typeFg="takeNumberConfig.topTypeFg || (isOnlineSign ? '1116' : '5')"
+      isShowFg
+    />
     <g-choose-pat @choose-pat="init" />
     <view v-if="headBtns.length" class="pat-box">
       <view class="health-card">
@@ -507,11 +511,12 @@
 
   const getConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('order');
-    const { TakeNumber } = await cacheUtil.getSystemConfig('TakeNumber')();
+    let { TakeNumber } = await cacheUtil.getSystemConfig('TakeNumber')();
+    const { type } = pageProps.value;
 
     takeNumberConfig.value = TakeNumber;
     console.log(takeNumberConfig.value);
-    takeNumberConfig.value.headBtns
+    takeNumberConfig.value.headBtns;
     const {
       takeNumberQueueBtn,
       takeNumber1ElectronicGuideBtn,
@@ -530,8 +535,21 @@
     isTakeNumberAfterBtnForGoQueueNumber.value =
       takeNumberAfterBtnForGoQueueNumber === '1';
 
-    // headBtns.value =
-    if (isOnlineSign.value || isPharmacy.value) {
+    if (Object.keys(TakeNumber)) {
+      console.log(
+        TakeNumber,
+        'takeNumberConfig.valuetakeNumberConfig.valuetakeNumberConfig.value'
+      );
+      if (type && TakeNumber.types && TakeNumber.types[type]) {
+        // @ts-expect-error
+        TakeNumber = TakeNumber.types[type];
+      }
+      takeNumberConfig.value = TakeNumber;
+      console.log(
+        takeNumberConfig.value,
+        'takeNumberConfig.valuetakeNumberConfig.valuetakeNumberConfig.value'
+      );
+    } else if (isOnlineSign.value || isPharmacy.value) {
       headBtns.value = [...(onlineSignHeadBtns || [])];
       confirmAfterBtn.value = onlineSignConfirmAfterBtn;
     } else {
