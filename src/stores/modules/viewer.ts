@@ -91,8 +91,6 @@ const viewerStore = defineStore('viewer', {
     },
 
     homeBannerLeftFunctionList(): any[] {
-      const list = this.viewConfig[2]?.leftFunctionList || [];
-
       return this.viewConfig[2]?.leftFunctionList || [];
     },
 
