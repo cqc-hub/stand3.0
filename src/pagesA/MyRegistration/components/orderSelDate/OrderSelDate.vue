@@ -65,7 +65,6 @@
         <view class="iconfont ico-arrow absolute">&#xe6c4;</view>
       </view>
     </view>
-
     <Datetime-Picker
       v-if="isOpenCalendar"
       ref="calendarRef"

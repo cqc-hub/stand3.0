@@ -963,6 +963,7 @@
       addedNum: undefined as any,
       patientId,
       hosDeptId,
+      addType: addedNum ? '1' : '0',
     };
 
     if (isOpenAddedNum === '1') {
