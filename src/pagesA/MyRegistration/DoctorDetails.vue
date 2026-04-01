@@ -845,11 +845,12 @@
       .finally(() => {
         isComplete.value = true;
       });
+      
 
     if (schList.length) {
       const { schDate } = schList[0];
       checkedDay.value = schDate;
-      docSchList.value = schList;
+      docSchList.value = schList ;
 
       //判断是否多院区
       let schListByhosId = groupedByHosId(schList);

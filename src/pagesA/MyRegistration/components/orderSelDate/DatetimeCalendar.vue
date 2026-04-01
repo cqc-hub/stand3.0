@@ -722,8 +722,10 @@
        */
       setEmit(name) {
         let { year, month, date, fullDate, lunar, extraInfo } = this.calendar;
-
-        if (this.enableDays[fullDate] !== '0') {
+        if (
+          this.enableDays[fullDate] !== '0' &&
+          this.enableDays[fullDate] !== '2'
+        ) {
           new GStores().messageStore.showMessage(
             '未查询到可预约的排班信息',
             1500

@@ -229,7 +229,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed } from 'vue';
+  import { ref, computed ,nextTick} from 'vue';
 
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
@@ -900,9 +900,15 @@
 
   const confirmAsync = () => {
     resolve();
+    nextTick(() => {
+      waitChooseDialog.value = false;
+    });
   };
   const cancelAsync = () => {
     reject();
+    nextTick(() => {
+      waitChooseDialog.value = false;
+    });
   };
   const waitRegShow = async (args) => {
     await wait(200);

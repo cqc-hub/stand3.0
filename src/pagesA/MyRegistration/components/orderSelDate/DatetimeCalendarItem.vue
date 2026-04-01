@@ -103,7 +103,7 @@
       },
 
       isHasOrder() {
-        return this.getOrderSchState === '0';
+        return this.getOrderSchState === '0' || this.getOrderSchState === '2';
       },
 
       getOrderSchStateLabel() {
