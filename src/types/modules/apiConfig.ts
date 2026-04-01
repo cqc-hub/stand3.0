@@ -13,8 +13,10 @@ export type ApiParamsConfig = {
   };
 
   TakeNumber: TTakeNumber & {
-    /** 页面存在type时候单独配置 */
-    [type: string]: TTakeNumber;
+    types: {
+      /** 页面存在type时候单独配置 */
+      [type: string]: TTakeNumber;
+    };
   };
 
   //pagesA/guide/guide

@@ -156,6 +156,7 @@
     ISystemConfig,
     apiAsync,
     cacheUtil,
+    ApiParamsConfig,
   } from '@/utils';
   import { type TTakeNumberListItem } from './utils/takeNumber';
 
@@ -167,6 +168,7 @@
 
   const gStores = new GStores();
   const pageConfig = ref(<ISystemConfig['order']>{});
+  const takeNumberConfig = ref({} as ApiParamsConfig['TakeNumber']);
   const isComplete = ref(false);
   const isRefresh = ref(false);
   const isShowRefreshQrCode = ref(false);
@@ -183,6 +185,7 @@
         hosId?: string; // 采血取号 需要
         _type?: 'blood' | 'pharmacy'; //区分普通取号和 濮阳采血取号
         type?: '0' | '1' | '2' | '3'; // 普通取号 区分为 0为门诊取号 1 为门诊签到 2采血
+        title?: string; // 页面标题
       }
     >{}
   );
@@ -504,6 +507,11 @@
 
   const getConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('order');
+    const { TakeNumber } = await cacheUtil.getSystemConfig('TakeNumber')();
+
+    takeNumberConfig.value = TakeNumber;
+    console.log(takeNumberConfig.value);
+    takeNumberConfig.value.headBtns
     const {
       takeNumberQueueBtn,
       takeNumber1ElectronicGuideBtn,
@@ -617,24 +625,29 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
+    await getConfig();
+
+    const { title } = pageProps.value;
+
     uni.setNavigationBarTitle({
-      title: isOnlineSign.value
-        ? '在线签到'
-        : isPharmacy.value
-          ? '药房签到'
-          : '门诊取号',
+      title:
+        title ||
+        (isOnlineSign.value
+          ? '在线签到'
+          : isPharmacy.value
+            ? '药房签到'
+            : '门诊取号'),
     });
 
     if (isBloodSign.value) {
       pageProps.value.type = '2';
     }
-    const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
 
     isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
       'pagesC/takeNumber/takeNumber'
     );
 
-    await getConfig();
     isRender.value = true;
     init();
     isFirst = false;

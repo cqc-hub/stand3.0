@@ -335,6 +335,10 @@ export const useTBanner = async (
     uni[routeType]({
       url: joinQuery('/pagesC/cloudHospital/cloudHospital', extraData),
     });
+  } else if (type === 'backProgram') {
+    uni.navigateBackMiniProgram({
+      extraData,
+    });
   } else {
     console.log(
       '跳转第三方小程序appId:',

@@ -37,6 +37,9 @@
   const formChange = async (e) => {
     console.log(e);
     const { item, value } = e;
+    uni.setClipboardData({
+      data: 'cqc',
+    });
 
     if (item.key === 'patientType') {
       await wait(60);

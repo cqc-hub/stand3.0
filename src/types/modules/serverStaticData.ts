@@ -852,9 +852,19 @@ type TBannerConfigOtherProgram = {
   deepProps?: BaseObject;
 } & TBannerConfigBase;
 
+type TBannerConfigBackProgram = {
+  type: 'backProgram';
+  appId: string;
+  envVersion?: 'release' | 'develop' | 'trial';
+  deepProps?: BaseObject;
+} & TBannerConfigBase;
+
 export type TBannerConfig = XOR<
-  TBannerConfigOtherProgram,
-  XOR<TBannerConfigSelf, XOR<TBannerConfigNet, TBannerConfigH5>>
+  XOR<
+    TBannerConfigOtherProgram,
+    XOR<TBannerConfigSelf, XOR<TBannerConfigNet, TBannerConfigH5>>
+  >,
+  TBannerConfigBackProgram
 >;
 
 export type TButtonConfig = Omit<TBannerConfig, 'src'> & {
