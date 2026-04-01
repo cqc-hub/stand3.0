@@ -911,7 +911,8 @@
         waitChooseDialog.value = false;
         r('sueess');
       };
-      reject = () => {
+      reject = async () => {
+        await checkWaitReg('1');
         waitChooseDialog.value = false;
         useTBanner({
           type: 'h5',
@@ -935,7 +936,7 @@
     });
   };
 
-  const checkWaitReg = async () => {
+  const checkWaitReg = async (addType?: string) => {
     const { isOpenAddedNum } = pageConfig.value;
     const { patientId } = gStores.userStore.patChoose;
 
@@ -963,7 +964,7 @@
       addedNum: undefined as any,
       patientId,
       hosDeptId,
-      addType: addedNum ? '1' : '0',
+      addType,
     };
 
     if (isOpenAddedNum === '1') {
@@ -982,7 +983,6 @@
   };
 
   const waitReg = async () => {
-    await checkWaitReg();
     const { schSecondResultList, alternateData } = await getWaitRegSch();
 
     waitRegSchSecondResultList.value = schSecondResultList;
@@ -1025,10 +1025,13 @@
             patientId: gStores.userStore.patChoose.patientId,
             source: gStores.globalStore.browser.source,
             addFlag,
-            addType: addedNum ? '1' : '0',
+            addType: '1',
           });
         }
       }
+      const addType = isAddedNumSelf.value ? '0' : undefined;
+      await checkWaitReg(addType);
+
       await api
         .addRegAlternate({
           ...props.value,
@@ -1037,7 +1040,7 @@
           patientId: gStores.userStore.patChoose.patientId,
           source: gStores.globalStore.browser.source,
           addFlag,
-          addType: addedNum ? '1' : '0',
+          addType,
         })
         .catch(async (e) => {
           if (e) {

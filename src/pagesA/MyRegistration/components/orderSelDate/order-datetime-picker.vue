@@ -697,6 +697,7 @@
         return Date.parse(new Date(date));
       },
       singleChange(e) {
+        
         this.tempSingleDate = e.fulldate;
         if (this.hasTime) return;
         this.confirmSingleChange();
@@ -718,6 +719,8 @@
       },
 
       leftChange(e) {
+        console.log(44);
+        
         const { before, after } = e.range;
         this.rangeChange(before, after);
         const obj = {
@@ -733,7 +736,7 @@
         );
       },
 
-      rightChange(e) {
+      rightChange(e) {        
         const { before, after } = e.range;
         this.rangeChange(before, after);
         const obj = {
