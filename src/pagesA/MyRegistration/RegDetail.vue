@@ -293,7 +293,7 @@
                       v-if="orderRegInfo.refundNeedAuth === '0'"
                       class="ml12"
                     >
-                      医保挂号
+                      (医保)
                     </view>
                   </view>
                   <view
