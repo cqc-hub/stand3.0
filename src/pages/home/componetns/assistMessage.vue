@@ -42,23 +42,23 @@
           <view class="info-area">
             <view class="p24 f28 flex-normal-between">
               <view class="flex">
-                <text class="name pr12" v-if="messData.patientName">
+                <text class="name pr12 text-no-wrap" v-if="messData.patientName">
                   {{ messData.patientName }}
                 </text>
-                <text class="date pr12" v-if="messData.appointmentDate">
+                <text class="date pr12 text-no-wrap" v-if="messData.appointmentDate">
                   {{ dayjs(messData.appointmentDate).format('MM-DD') }}
                 </text>
-                <text class="time pr12" v-if="messData.ampmName">
+                <text class="time pr12 text-no-wrap" v-if="messData.ampmName">
                   {{ messData.ampmName }}
                 </text>
-                <text class="time pr12" v-if="messData.timeDesc">
+                <text class="time pr12 text-no-wrap" v-if="messData.timeDesc">
                   {{ messData.timeDesc }}
                 </text>
-                <text class="number pr12" v-if="messData.disNo">
+                <text class="number pr12 text-no-wrap" v-if="messData.disNo">
                   {{ messData.disNo }}号
                 </text>
               </view>
-              <view class="tag f24">
+              <view class="tag f24 text-no-wrap">
                 {{
                   getDaysFromTodayEnhanced(messData?.appointmentDate) == 0
                     ? '今日'
