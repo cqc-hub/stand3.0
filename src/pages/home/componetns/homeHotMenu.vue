@@ -1,10 +1,12 @@
 <template>
+  <!-- 最多3个 -->
   <view v-if="list.length" class="flex gap-4 mb24">
     <g-login
       v-for="(item, i) in list"
       :key="item.id"
       @handler-next="useCommonTo(item)"
       :disabled="item.loginInterception === '0'"
+      class="flex-1"
     >
       <view
         :style="{
@@ -13,8 +15,8 @@
         @tap="useCommonTo(item)"
         class="flex-1 relative"
       >
-        <view class="item p24 relative z-1">
-          <view class="flex">
+        <view class="item p24 pr12 relative z-1">
+          <view class="flex justify-between">
             <view class="font-semibold mr12 text-no-wrap">
               {{ item.title }}
             </view>
@@ -31,7 +33,7 @@
             </view>
           </view>
           <view class="color-888 f24 text-no-wrap">
-            {{ item.detail }}安全用药指南
+            {{ item.detail }}
           </view>
         </view>
 
