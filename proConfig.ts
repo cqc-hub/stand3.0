@@ -53,6 +53,7 @@ export const miniProgramConfig: {
       isOpenPopularSci: { wx: '1' },
       isOpenWechatSI: true,
       isOpenHelpOld: '1',
+      isWxShowToggleEcZh: '1',
       homeTopBanner: { topShow: true },
       medicalMHelp: {
         wx: {
@@ -1371,4 +1372,3 @@ export const manifestFileDataObj: any = {
     },
   },
 };
-
