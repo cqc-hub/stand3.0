@@ -59,6 +59,11 @@
   flex-wrap: wrap;
 }
 
+.g-flex-rc-cc {
+  justify-content: center;
+  @extend .flex-normal;
+}
+
 .flex1,
 .flex-1 {
   flex: 1 !important;
@@ -72,37 +77,17 @@
   flex: 3 !important;
 }
 
-
 .hidden-scrollbar {
   &::-webkit-scrollbar {
     width: 0;
     height: 0;
     color: transparent;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
-    color: transparent;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-
-  &::-webkit-scrollbar {
     display: none;
   }
 }
 
 .flex-normal-between {
   justify-content: space-between;
-  @extend .flex-normal;
-}
-
-.g-flex-rc-cc {
-  justify-content: center;
   @extend .flex-normal;
 }
 

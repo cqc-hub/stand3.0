@@ -27,11 +27,6 @@
 
   &.btn-border {
     border: 2rpx solid var(--hr-neutral-color-4);
-    // box-shadow:
-    //   inset 1rpx 1rpx 1rpx 0 rgba(0, 0, 255, .2),
-    //   inset 1rpx -1rpx 1rpx 0 rgba(0, 0, 255, .2),
-    //   inset -1rpx 1rpx 1rpx 0 rgba(0, 0, 255, .2),
-    //   inset -1rpx -1rpx 1rpx 0 rgba(0, 0, 255, .2);
   }
 
   &.btn-normal {
@@ -68,9 +63,7 @@
   &.btn-size-small {
     font-size: var(--hr-font-size-xs);
     padding: 16rpx 24rpx;
-    line-height: 1em;
-    // height: 100%;
-    // width: 100%;
+    line-height: 1.5;
     border-radius: 99px;
 
     &::after {
@@ -80,7 +73,6 @@
 
   &.btn-disabled {
     pointer-events: none;
-    // background-color: var(--hr-brand-color-3) !important;
     opacity: .3 !important;
   }
 }

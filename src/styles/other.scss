@@ -60,7 +60,7 @@
 
 // ==================== Borders ====================
 .g-border {
-  border: 1px solid var(--hr-neutral-color-2);
+  border: 1px solid var(--hr-neutral-color-11);
 }
 
 .g-border-top {
@@ -129,52 +129,22 @@
 }
 
 // ==================== Font Size ====================
-.f24 {
-  font-size: var(--hr-font-size-xxxs) !important;
-}
+$font-sizes: (
+  24: var(--hr-font-size-xxxs),
+  26: var(--hr-font-size-xxs),
+  28: var(--hr-font-size-xs),
+  32: var(--hr-font-size-base),
+  36: var(--hr-font-size-xl),
+  48: var(--hr-font-size-xxl),
+  56: 56rpx,
+  60: 60rpx,
+  80: 80rpx
+);
 
-.f26 {
-  font-size: var(--hr-font-size-xxs) !important;
-}
-
-.f28 {
-  font-size: var(--hr-font-size-xs) !important;
-}
-
-.f30 {
-  font-size: 30rpx !important;
-}
-
-.f32 {
-  font-size: var(--hr-font-size-base) !important;
-}
-
-.f36 {
-  font-size: var(--hr-font-size-xl) !important;
-}
-
-.f40 {
-  font-size: 40rpx !important;
-}
-
-.f44 {
-  font-size: 44rpx !important;
-}
-
-.f48 {
-  font-size: var(--hr-font-size-xxl) !important;
-}
-
-.f56 {
-  font-size: 56rpx !important;
-}
-
-.f60 {
-  font-size: 60rpx !important;
-}
-
-.f80 {
-  font-size: 80rpx !important;
+@each $size, $value in $font-sizes {
+  .f#{$size} {
+    font-size: $value !important;
+  }
 }
 
 // ==================== Line Height ====================
@@ -261,11 +231,11 @@
 }
 
 .bg-green {
-  background-color: #e7fff8;
+  background-color: var(--hr-brand-color-8-light);
 }
 
 .bg-warn {
-  background-color: #fff3e0;
+  background-color: var(--hr-warning-color-1);
 }
 
 // ==================== Spacing - Margin ====================
@@ -377,24 +347,18 @@
   text-align: center;
   padding: 0 8rpx;
 
-  &.tag-dark {
-    background-color: #5f494a;
-    color: #ffe2c1;
-  }
+  $tag-variants: (
+    dark: #5f494a #ffe2c1,
+    brown: linear-gradient(270deg, #d26900, #ac4b1c) #fff,
+    light: #ffe2c1 #5f494a,
+    danger: var(--hr-error-color-1) var(--hr-error-color-6)
+  );
 
-  &.tag-brown {
-    background: linear-gradient(270deg, #d26900, #ac4b1c);
-    color: #fff;
-  }
-
-  &.tag-light {
-    background-color: #ffe2c1;
-    color: #5f494a;
-  }
-
-  &.tag-danger {
-    background-color: var(--hr-error-color-1);
-    color: var(--hr-error-color-6);
+  @each $name, $colors in $tag-variants {
+    &.tag-#{$name} {
+      background: nth($colors, 1);
+      color: nth($colors, 2);
+    }
   }
 }
 
@@ -433,7 +397,7 @@
 .g-split-line,
 .g-split-line1 {
   &::after {
-    content: '|';
+    content: "|";
     position: relative;
     left: 12rpx;
     font-size: 24rpx;
@@ -465,7 +429,7 @@
 
 .safe-height {
   &::before {
-    content: '';
+    content: "";
     display: block;
     height: 40rpx;
     width: 1rpx;
