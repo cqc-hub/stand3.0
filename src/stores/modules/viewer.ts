@@ -98,6 +98,10 @@ const viewerStore = defineStore('viewer', {
       return this.viewConfig[3]?.typeList || [];
     },
 
+    homeHotMenuList(): IRoute[] {
+      return this.myMenu2List.slice(0, 3);
+    },
+
     homeNoticeText(): string {
       const len = this.homeNoticeMenu.length;
       if (len) {

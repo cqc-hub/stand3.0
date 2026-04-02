@@ -235,6 +235,8 @@
               />
             </view>
 
+            <homeHotMenu :list="viewerStore.homeHotMenuList" />
+
             <!-- #ifdef MP-WEIXIN -->
             <view>
               <official-account></official-account>
@@ -474,6 +476,7 @@
   import home1 from './componetns/home-1.vue';
   import homeTranslateWx from './componetns/homeTranslateWx.vue';
   import compBySysCode from './componetns/compBySysCode.vue';
+  import homeHotMenu from './componetns/homeHotMenu.vue';
 
   const props = ref({
     code: '',
@@ -583,7 +586,7 @@
     ) {
       assistMessageRef.value?.reLoad();
     }
-   
+
     // #endif
   });
 
@@ -591,9 +594,8 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
-    healthCounselConfig.value = await ServerStaticData.getSystemConfig(
-      'HEALTH_COUNSEL'
-    );
+    healthCounselConfig.value =
+      await ServerStaticData.getSystemConfig('HEALTH_COUNSEL');
 
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');
@@ -660,7 +662,7 @@
         authorization();
     }
 
-     if (orderConfig.value.getDoctorBannerOnShow === '1') {
+    if (orderConfig.value.getDoctorBannerOnShow === '1') {
       getDocRecommendList();
     }
   });
