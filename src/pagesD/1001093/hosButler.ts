@@ -443,8 +443,6 @@ export const useHosButlerOrder = () => {
     // console.log(reqArg);
     // console.log(JSON.stringify(reqArg));
     // return
-    console.log(reqArg);
-    return;
     await api.submitAdmissionApplication(reqArg);
 
     await apiAsync(uni.showModal, {
