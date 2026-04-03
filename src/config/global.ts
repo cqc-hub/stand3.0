@@ -28,7 +28,6 @@ if (process.env.NODE_ENV === 'production') {
 if (env === 'prod') {
   authUrl = 'https://auth.eheren.com/service-authentication';
 }
-
 const systemInfo: ISystemGlobalItem = systemConfig.sysConfig[SYS_CODE];
 
 /**

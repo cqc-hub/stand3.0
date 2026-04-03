@@ -36,7 +36,16 @@ export const useHosButlerOrder = () => {
   const formData3 = ref({});
   let isBackPoint = false;
   const formChange = (e) => {
-    const key = selStepStatus.value;
+    const v = (selStepStatus.value as any) * 1;
+    if (v === 1) {
+      formData2.value = {
+        ...formData.value,
+      };
+    } else if (v === 2) {
+      formData3.value = {
+        ...formData.value,
+      };
+    }
 
     if (['wx', 'alipay'].includes(gStores.globalStore.ev) && !isBackPoint) {
       isBackPoint = true;
@@ -127,7 +136,11 @@ export const useHosButlerOrder = () => {
       {
         label: '出生日期',
         key: 'birthday',
-        field: 'input-text',
+        field: 'time-picker',
+        type: 'date',
+        end: new Date().getTime(),
+        start: '1900-01-01',
+        placeholder: '请选择',
         disabled: true,
       },
       {
@@ -153,6 +166,7 @@ export const useHosButlerOrder = () => {
         key: 'nativePlaceString',
         field: 'input-text',
         disabled: true,
+        placeholder: '请输入',
       },
       {
         required: true,
@@ -277,6 +291,9 @@ export const useHosButlerOrder = () => {
       // },
 
       {
+        required: true,
+        showRequireIcon: true,
+
         label: '户口地址',
         key: 'address',
         field: 'input-text',
@@ -302,7 +319,7 @@ export const useHosButlerOrder = () => {
         placeholder: '请选择',
         key: 'relationship',
         field: 'select',
-        labelWidth: '220rpx',
+        // labelWidth: '220rpx',
         autoOptions: 'yqjc_relationship',
         options: [],
       },
@@ -335,12 +352,15 @@ export const useHosButlerOrder = () => {
         },
       },
 
-      // {
-      //   label: '联系人地址',
-      //   key: 'membersAddress',
-      //   field: 'input-text',
-      //   placeholder: '请输入',
-      // },
+      {
+        required: true,
+        showRequireIcon: true,
+
+        label: '联系人地址',
+        key: 'membersAddress',
+        field: 'input-text',
+        placeholder: '请输入',
+      },
     ],
   });
   const initForm = async () => {
@@ -423,6 +443,8 @@ export const useHosButlerOrder = () => {
     // console.log(reqArg);
     // console.log(JSON.stringify(reqArg));
     // return
+    console.log(reqArg);
+    return;
     await api.submitAdmissionApplication(reqArg);
 
     await apiAsync(uni.showModal, {
@@ -490,16 +512,6 @@ export const useHosButlerOrder = () => {
         gform.value.submit();
         resolve = r;
       });
-
-      if (v === 1) {
-        formData2.value = {
-          ...formData.value,
-        };
-      } else if (v === 2) {
-        formData3.value = {
-          ...formData.value,
-        };
-      }
 
       if (v === 2) {
         handlerSubmit();
