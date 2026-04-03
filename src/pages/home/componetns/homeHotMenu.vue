@@ -1,6 +1,6 @@
 <template>
   <!-- 最多3个 -->
-  <view v-if="list.length" class="flex gap-4 mb24">
+  <view v-if="list.length" class="flex flex-wrap gap-4 mb24">
     <g-login
       v-for="(item, i) in list"
       :key="item.id"
@@ -15,9 +15,9 @@
         @tap="useCommonTo(item)"
         class="flex-1 relative"
       >
-        <view class="item p24 pr12 relative z-1">
+        <view class="item p24 pr0 relative z-1">
           <view class="flex justify-between">
-            <view class="font-semibold mr12 text-no-wrap">
+            <view class="font-semibold mr0 text-no-wrap">
               {{ item.title }}
             </view>
             <view
