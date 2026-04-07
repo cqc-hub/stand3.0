@@ -196,7 +196,7 @@
 
     if (!Object.keys(pageProps.value).length) {
       await beforeEach({
-        _isLogin: true,
+        _isPatient: true,
       });
     }
     setData();
