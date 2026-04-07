@@ -2554,10 +2554,17 @@ export const usePayPage = () => {
       gStores.userStore.patChoose.cardNumber;
 
     try {
-      const { result } = await api.getChineseMedicineList({
-        cardNumber,
-        patientId,
-      });
+      const { result } = await api
+        .getChineseMedicineList({
+          cardNumber,
+          patientId,
+        })
+        .catch((e) => {
+          gStores.messageStore.closeMessage();
+          console.error('获取中药代煎数据失败:', e);
+
+          return { result: null };
+        });
       if (result?.results && result.results.length) {
         const { confirm, cancel } = await apiAsync(uni.showModal, {
           content: '本次缴费项目中含有中草药处方，是否需要代煎？',
@@ -2851,8 +2858,8 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
       authCode,
       // 机构ID
       orgId,
-      // anotherIdNo,
-      // anotherName,
+      anotherIdNo,
+      anotherName,
     });
 
     if (type === 'first') {

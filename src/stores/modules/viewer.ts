@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ServerStaticData, GStores } from '@/utils';
 import api from '@/service/api';
+import globalGl from '@/config/global';
 
 const viewerStore = defineStore('viewer', {
   persist: {
@@ -74,6 +75,10 @@ const viewerStore = defineStore('viewer', {
   },
 
   getters: {
+    isBannerShowInTop(): boolean {
+      return !!globalGl.sConfig?.homeTopBanner?.topShow;
+    },
+
     homeTopMenuList(): any[] {
       return this.viewConfig[0]?.functionList || [];
     },
@@ -87,17 +92,26 @@ const viewerStore = defineStore('viewer', {
     },
 
     homeBannerFunctionList(): any[] {
+      if (this.isBannerShowInTop) {
+        return [];
+      }
+
       return this.viewConfig[2]?.functionList || [];
     },
 
     homeBannerLeftFunctionList(): any[] {
-      const list = this.viewConfig[2]?.leftFunctionList || [];
-
       return this.viewConfig[2]?.leftFunctionList || [];
     },
 
     homeMenuList(): any[] {
       return this.viewConfig[3]?.typeList || [];
+    },
+
+    homeHotMenuList(): IRoute[] {
+      if (this.isBannerShowInTop) {
+        return this.viewConfig[2]?.functionList || [];
+      }
+      return [];
     },
 
     homeNoticeText(): string {

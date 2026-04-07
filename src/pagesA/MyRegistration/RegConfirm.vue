@@ -627,7 +627,7 @@
             result: { ApplyBookFlag },
           } = await api.GetBiosampleConsentRecord({
             cardNumber: gStores.userStore.patChoose.cardNumber,
-            deptId: hosDeptId,
+            deptId: props.value.specialClinicDept,
           });
           if (ApplyBookFlag === '1') {
             throw new Error('无需弹窗');

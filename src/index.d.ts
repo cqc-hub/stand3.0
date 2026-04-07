@@ -2,6 +2,7 @@
 /// <reference types="@dcloudio/uni-app" />
 /// <reference types="@dcloudio/types" />
 
+
 declare const wx: any;
 declare const my: any;
 declare const tt: any;

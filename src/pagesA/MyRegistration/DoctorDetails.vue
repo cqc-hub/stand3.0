@@ -845,7 +845,7 @@
       .finally(() => {
         isComplete.value = true;
       });
-      
+
 
     if (schList.length) {
       const { schDate } = schList[0];
@@ -1160,7 +1160,7 @@
 
   onShareAppMessage((res) => {
     return {
-      title: `${docDetail.value.docName}医生`,
+      title: `${docDetail.value.docTitleName || ' '}`,
       path: joinQuery('/pagesA/MyRegistration/DoctorDetails', props.value),
     };
   });

@@ -1338,6 +1338,14 @@
       pageProps.value.pageType || 'addPatient',
       formData.value
     );
+
+    if (
+      pageProps.value.pageType === 'addPatient' &&
+      defaultValue.patientPhone
+    ) {
+      delete defaultValue['patientPhone'];
+    }
+
     Object.keys(defaultValue).forEach((key) => {
       if (formData.value[key]) {
         delete defaultValue[key];
