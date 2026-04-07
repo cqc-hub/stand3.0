@@ -1,12 +1,37 @@
 <template>
   <view class="g-page bg-white"></view>
+  <Order-Reg-Confirm
+    :headerIcon="`${$global.BASE_IMG}v3-order-reg-confirm${
+      gStores.globalStore.isTcmStyle ? '-tcm' : ''
+    }.png`"
+    @confirm="resolve()"
+    @cancel="reject()"
+    :title="'人脸识别认证须知'"
+    ref="faceDialog"
+  >
+    <g-flag
+      title="人脸识别认证须知"
+      :typeFg="'1250'"
+      isShowFgTip
+      isHideTitle
+      aaa
+    />
+  </Order-Reg-Confirm>
+  <g-message />
 </template>
 <script lang="ts" setup>
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { nextTick, ref, warn } from 'vue';
-  import { apiAsync, GStores, useTBanner, type TButtonConfig } from '@/utils';
+  import {
+    apiAsync,
+    GStores,
+    PatientUtils,
+    useTBanner,
+    type TButtonConfig,
+  } from '@/utils';
   import { BASE_IMG } from '@/config/global';
   import { deQueryForUrl, encryptDes } from '@/common';
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
   const gStores = new GStores();
   const showNum = ref(0);
@@ -14,10 +39,11 @@
     <
       {
         type:
-          | 'scanCode'
-          | 'openLocation'
-          | 'getUserInfo'
-          | 'scanCodeAndgetUserInfo'; //scanCode:扫码 openLocation:定位;微信用户信息
+          | 'scanCode' //scanCode:扫码
+          | 'openLocation' //openLocation:定位
+          | 'getUserInfo' //微信用户信息
+          | 'scanCodeAndgetUserInfo' //扫码并微信用户信息
+          | 'faceVerify';
         backUrl: string; //返回路径
         routeType?: 'redirectTo' | 'reLaunch';
         [key: string]: any;
@@ -25,6 +51,10 @@
     >{}
   );
   const backUrl = ref(<TButtonConfig>{});
+  const faceDialog = ref(<any>'');
+  let resolve: (...any) => any = () => {};
+  let reject: (...any) => any = () => {};
+
   onShow(() => {
     switch (pageProps.value.type) {
       case 'openLocation': {
@@ -65,7 +95,7 @@
           break;
         }
         case 'getUserInfo': {
-        const { userInfo } = await apiAsync(wx.getUserInfo, {});
+          const { userInfo } = await apiAsync(wx.getUserInfo, {});
           console.log('用户信息', userInfo);
           backUrl.value.extraData = {
             ...backUrl.value.extraData,
@@ -85,6 +115,49 @@
               console.log('success', res);
             },
           });
+          break;
+        }
+        case 'faceVerify': {
+          const { routeType, idCard, name } = pageProps.value;
+          backUrl.value.extraData = {
+            ...pageProps.value,
+            backStatus: 'fail',
+            herenId: gStores.globalStore.herenId,
+          };
+          function backWithErr() {
+            console.log(' 看看有没有走到这里');
+
+            gStores.messageStore.showMessage('人脸识别失败', 3000, {
+              closeCallBack: () => {
+                useTBanner(
+                  backUrl.value,
+                  pageProps.value?.routeType || 'reLaunch'
+                );
+              },
+            });
+          }
+          await new Promise((rl, rj) => {
+            resolve = rl;
+            reject = () => {
+              backWithErr();
+              rj();
+            };
+            faceDialog.value.show();
+          });
+          const patientUtils = new PatientUtils();
+          const { pData } = await patientUtils
+            .faceVerifyAndPData({
+              idCardNumber: idCard,
+              name,
+            })
+            .catch((e) => {
+              backWithErr();
+              throw e;
+            });
+
+          backUrl.value.extraData.pata = encodeURIComponent(pData);
+          backUrl.value.extraData.backStatus = 'success';
+          useTBanner(backUrl.value, pageProps.value?.routeType || 'reLaunch');
           break;
         }
       }

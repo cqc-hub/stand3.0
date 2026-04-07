@@ -415,7 +415,7 @@ export class LoginUtils extends GStores {
                   pData,
                 });
               },
-              fail(err) {
+              fail:(err)=> {
                 //识别失败
                 this.messageStore.showMessage('识别失败');
                 console.error('识别失败', err);

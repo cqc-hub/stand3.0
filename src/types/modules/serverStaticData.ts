@@ -564,6 +564,11 @@ export interface ISystemConfig_ {
     /** 检查报告云影像复制链接前往h5查看*/
     isCheckGetYunUrlByH5?: '1';
 
+    /** 检查报告图文报告复制链接前往h5查看*/
+    isJCGetImageUrlByH5?: '1';
+    /** 检验报告图文报告复制链接前往h5查看*/
+    isJYGetImageUrlByH5?: '1';
+
     /** 报告查询列表云影像链接 */
     listYun?: {
       // 只传入 imgUrl 调用后端接口获取三方h5链接
