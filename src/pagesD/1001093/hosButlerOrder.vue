@@ -63,8 +63,6 @@
     addressChange,
   } = useHosButlerOrder();
 
-  gform;
-
   onLoad(async (opt: any) => {
     const { _pd } = opt;
     if (_pd) {
