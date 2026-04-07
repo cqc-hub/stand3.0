@@ -73,6 +73,7 @@
   import { GStores, ServerStaticData, ISystemConfig } from '@/utils';
   import { deQueryForUrl } from '@/common';
   import api from '@/service/api';
+  import { beforeEach } from '@/router';
 
   const pageProps = ref(
     {} as {
@@ -191,6 +192,12 @@
   onLoad(async (opt) => {
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    }
+
+    if (!Object.keys(pageProps.value).length) {
+      await beforeEach({
+        _isLogin: true,
+      });
     }
     setData();
     if (pageProps.value.tabIndex) {
