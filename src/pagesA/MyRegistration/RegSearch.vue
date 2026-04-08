@@ -61,6 +61,7 @@
             <view class="container">
               <block v-if="item.key === 0">
                 <Doc-List
+                  :pageConfig="orderConfig"
                   :list="r.docInfoResultList.value"
                   @item-click="goDocDetail"
                 />
@@ -68,6 +69,7 @@
 
               <block v-if="item.key === 1">
                 <Doc-List
+                  :pageConfig="orderConfig"
                   :list="r.symptomResultList.value"
                   @item-click="goDocDetail"
                 />

@@ -32,7 +32,7 @@
       <!-- </g-login> -->
 
       <view @click="avatarClick" class="doc-info-introduce">
-        <view class="flex-between flex1">
+        <view class="flex-between flex1 items-start">
           <text class="doc-info-introduce-header">
             <text class="doc-info-introduce-name f36 text-no-wrap">
               <text class="">{{ item.docName }}</text>
@@ -83,6 +83,15 @@
           </text>
         </view>
 
+        <view
+          v-if="isShowDeptName && item.deptName"
+          class="doc-info-introduce-title color-888"
+        >
+          <text>
+            {{ item.deptName }}
+          </text>
+        </view>
+
         <!-- <view v-if="item.clinicTime" class="text-ellipsis ellipsis-line-clamp2">
           <text>{{ '门诊时间: ' }}</text>
           <text>{{ item.clinicTime }}</text>
@@ -130,7 +139,10 @@
           {{ item.visitingArea }}
         </view> -->
 
-        <view class="doc-info-introduce-goodat text-ellipsis">
+        <view
+          v-if="!isHideGoodAt"
+          class="doc-info-introduce-goodat text-ellipsis"
+        >
           <view
             v-if="!item.schQukCategor && item.goodAt"
             class="text-ellipsis ellipsis-line-clamp2"
@@ -172,6 +184,8 @@
     // item: IDocListAll;
     item: any;
     isAllDate?: boolean;
+    isShowDeptName?: boolean;
+    isHideGoodAt?: boolean;
     isShowHosNameWithDeptName?: boolean;
     pageConfig: ISystemConfig['order'];
   }>();
@@ -258,8 +272,6 @@
         // justify-content: space-between;
 
         .doc-info-introduce-header {
-          // display: flex;
-          // align-items: center;
           .doc-info-introduce-name {
             font-weight: 600;
             color: var(--hr-neutral-color-10);
