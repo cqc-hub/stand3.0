@@ -54,7 +54,7 @@
   import globalGl from '@/config/global';
   import { GStores } from '@/utils';
 
- const gStores = new GStores();
+  const gStores = new GStores();
   const props = withDefaults(
     defineProps<{
       cols: any[];
@@ -64,15 +64,33 @@
   );
 
   const showAddress = (col) => {
-    if(gStores.globalStore.sysCode === '1001035' && ['12675','12713',].includes(props.lab.hosId) && ['itemAddress'].includes(col.key)){
+    if (
+      gStores.globalStore.sysCode === '1001035' &&
+      ['12675', '12713'].includes(props.lab.hosId) &&
+      ['itemAddress'].includes(col.key)
+    ) {
       //省中本部和紫东院区开启
-      return true
+      return true;
+    }
+    if (
+      gStores.globalStore.sysCode === '1001067' &&
+      ['13009'].includes(props.lab.hosId) &&
+      ['itemAddress', 'site', 'areaName'].includes(col.key)
+    ) {
+      console.log();
+      
+      //温附二
+      if(props.lab.performDeptName||props.lab.deptName){
+        return true;
+      }
     }
     return props.lab.performDeptCode && ['itemAddress'].includes(col.key);
   };
 
   const emits = defineEmits(['go-report', 'go-address-map', 'click-row']);
   const rowClick = (col) => {
+    console.log(1);
+    
     if (showAddress(col)) {
       emits('go-address-map', props.lab);
     }

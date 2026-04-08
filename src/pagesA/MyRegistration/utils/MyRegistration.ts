@@ -51,6 +51,24 @@ export type IRegistrationCardItem = {
 
 //多院区院内导航 根据hosId
 export const HosNavData = {
+  13009: () => {
+    return {
+      appId: 'wxe51129e09bb46147',
+      path: 'pages/index/map',
+      text: '院内导航',
+      type: 'otherProgram',
+      extraData: {
+        token: '61b8355cf623912d092a6c26f3a0b3ba',
+        buildingId: 'B000A11DFR',
+        method: 'showPois',
+        style: 'yiyuan',
+        projName: 'DXOneMap_v3',
+      },
+      addition: {
+        deptName: 'keyword',
+      },
+    };
+  },
   1281: () => {
     return {
       appId: 'wx8735a8a39cf58b5e',
@@ -217,6 +235,11 @@ export const judgeAllowNav = (item) => {
 
   if (sysCode === '1001046') {
     return true;
+  }
+  if (sysCode === '1001067') {
+    if (['13009'].includes(hosId)) {
+      return true;
+    }
   }
 
   if (sysCode === '1001035') {

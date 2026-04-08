@@ -619,7 +619,6 @@
           if (t.itemList.length) {
             t.itemList = t.itemList.sort((a, b) => b.sort - a.sort);
           }
-          console.log(8888, t.itemList);
           return t;
         });
     }
@@ -781,6 +780,7 @@
   };
 
   const handlerAddressMap = (item) => {
+    
     if (gStores.globalStore.sysCode === '1001052') {
       useTBanner(
         {
@@ -811,6 +811,15 @@
     }
     if (gStores.globalStore.sysCode === '1001035') {
       item.hosDeptId = item.deptId;
+      useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
+      return;
+    } else if (
+      gStores.globalStore.sysCode === '1001067' &&
+      item.hosId === '13009'
+    ) {
+      if (item.performDeptName) {
+        item.deptName = item.performDeptName;
+      }
       useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
       return;
     }

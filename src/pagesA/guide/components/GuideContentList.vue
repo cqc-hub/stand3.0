@@ -270,7 +270,11 @@
               </view>
 
               <view v-else-if="item.title === '门诊就诊'">
-                <GuideContentListCol :cols="mzjzCol" :lab="item" />
+                <GuideContentListCol
+                  :cols="mzjzCol"
+                  :lab="item"
+                  @go-address-map="handlerAddressMap"
+                />
 
                 <GuideBtns
                   :item="item"
@@ -291,6 +295,7 @@
                   :cols="mzqhCol"
                   :lab="item"
                   @click-row="(v) => colRowClick(item, v)"
+                  @go-address-map="handlerAddressMap"
                 />
 
                 <GuideBtns
@@ -305,6 +310,7 @@
                   :cols="mzqhCol"
                   :lab="item"
                   @click-row="(v) => colRowClick(item, v)"
+                  @go-address-map="handlerAddressMap"
                 />
                 <GuideBtns
                   :item="item"
@@ -318,6 +324,7 @@
                   :cols="mzqhCol"
                   :lab="item"
                   @click-row="(v) => colRowClick(item, v)"
+                  @go-address-map="handlerAddressMap"
                 />
               </view>
 
@@ -326,6 +333,7 @@
                   :cols="mzqhCol"
                   :lab="item"
                   @click-row="(v) => colRowClick(item, v)"
+                  @go-address-map="handlerAddressMap"
                 />
                 <GuideBtns
                   :item="item"
@@ -586,6 +594,7 @@
   };
 
   const handlerAddressMap = (item) => {
+
     emits('go-address-map', item);
   };
 
