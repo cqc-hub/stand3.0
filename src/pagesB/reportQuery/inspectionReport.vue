@@ -82,9 +82,26 @@
           }"
         >
           <view class="container-block-top">
+            <view
+              v-if="hosInfo.hosName"
+              class="pt40 pr32 pl32 color-444 f32 text-ellipsis"
+            >
+              <image
+                :src="globalGl.BASE_IMG + 'report-hos-icon.png'"
+                :style="{
+                  width: `${20}px`,
+                  height: `${20}px`,
+                  top: '3px',
+                }"
+                class="relative"
+              />
+              {{ hosInfo.hosName }}
+            </view>
             <view class="container-top-click" @click="more(index)">
               <view class="flex-between flex-start">
-                <view class="title flex1">{{ item.repName }}</view>
+                <view class="ml32 pt32 flex1 f48 font-semibold">
+                  {{ item.repName }}
+                </view>
 
                 <view
                   v-if="
@@ -358,6 +375,7 @@
     examineReportDetails,
     addWatermark,
     reportAnalysisFun,
+    useHosInfo,
   } from './utils';
   import {
     GStores,
@@ -370,6 +388,7 @@
     useTBanner,
     ImageDownloader,
     getShareTotalUrl,
+    IHosInfo,
   } from '@/utils';
   import { joinQuery, encryptDes, getSysCode, joinQueryForUrl } from '@/common';
   import { deQueryForUrl } from '@/common';
@@ -386,6 +405,7 @@
   import { payMoneyOnline, toPayPull } from '@/components/g-pay';
   import { useCacheStore } from '@/stores';
   import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
+  import globalGl from '@/config/global';
   const pageConfig = ref(<ISystemConfig['reportQuery']>{});
   const alipayPid = global.systemInfo.alipayPid;
   const cacheStore = useCacheStore();
@@ -570,6 +590,7 @@
         // 分享进来
         s?: '1';
         params?: string;
+        hosId?: string;
         [key: string]: any;
       }
     >{}
@@ -1002,6 +1023,8 @@
     }
   };
 
+  const { getHosInfo, hosInfo } = useHosInfo();
+
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
 
@@ -1023,6 +1046,11 @@
 
     console.log('获取到页面参数---');
     console.log(pageProps.value);
+
+    if (pageProps.value.hosId) {
+      getHosInfo(pageProps.value.hosId);
+    }
+
     windowInfo.value = uni.getSystemInfoSync();
     getInspectionReportList();
     if (pageProps.value.isWatermark === '1') {
@@ -1131,13 +1159,6 @@
             width: 100%;
             height: 100%;
             z-index: 50;
-          }
-          .title {
-            // width: calc(100% - 32rpx);
-            font-size: 44rpx;
-            font-weight: 600;
-            margin-left: 32rpx;
-            padding-top: 40rpx;
           }
           .patient-information {
             // width: calc(100% - 32rpx);
