@@ -768,7 +768,7 @@
     if (gStores.globalStore.sysCode !== '1001048') {
       return;
     }
-    dialogContent.value = '是否立即去给医生留言，方便医生提前了解您的病情?';
+    dialogContent.value = '是否立即去给医生留言，方便医生了解您的病情?';
     isCancelOrderDialogShow.value = true;
     await new Promise((confirm) => {
       cancelOrderDialogConfirm = confirm;
@@ -788,7 +788,7 @@
       orderConfig.value.isOpenPreConsultation === '1' &&
       gStores.globalStore.sysCode !== '1001048'
     ) {
-      dialogContent.value = '是否立即去给医生留言，方便医生提前了解您的病情?';
+      dialogContent.value = '是否立即去给医生留言，方便医生了解您的病情?';
       isCancelOrderDialogShow.value = true;
 
       await new Promise((confirm) => {
