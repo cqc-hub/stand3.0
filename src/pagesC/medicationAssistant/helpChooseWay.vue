@@ -155,8 +155,7 @@
       </view>
       <button
         :class="{
-          'btn-disabled':
-            !feeDetail.totalCost && globalGl.SYS_CODE === '1001035',
+          'btn-disabled': !isComplete && globalGl.SYS_CODE === '1001035',
         }"
         @click="submit"
         class="btn btn-primary flex1"
@@ -302,6 +301,7 @@
     feeDetail.value.iceBagCharges = iceFee;
     feeDetail.value.totalCost = feeDetail.value.totalFee * 1 + iceFee;
   };
+  const isComplete = ref(false);
   const getExpressFee = async (type?: string) => {
     feeDetail.value.hosOrderId = '';
     feeDetail.value.costs = '';
@@ -310,6 +310,7 @@
     const { city, county, province, senderName, senderPhone, detailedAddress } =
       addressData as any;
     let expressCompany = aimValue.value[0];
+    isComplete.value = false;
     const params = {
       city,
       county,
@@ -338,6 +339,8 @@
           ? api.getScanExpressDrugCost
           : api.drugDeliveryCost;
       const { result } = await actionApi(params);
+      isComplete.value = true;
+
       const { totalFee, iceBagCharges, hosOrderId, expressList } = result;
       expressInfo.value = {
         expressCompany,
@@ -495,6 +498,8 @@
         iceBagNum.value > 0
       ) {
         getExpressFee(`SZYouZhen`);
+      } else {
+        isComplete.value = true;
       }
       if (args.expressCompany != expressInfo.value.expressCompany) {
         gStores.messageStore.showMessage(
@@ -527,8 +532,15 @@
   };
 
   const gotoExpressPay = async (args) => {
-    if (!feeDetail.value.totalCost || feeDetail.value.totalCost === '0') {
+    if (
+      (!feeDetail.value.totalCost || feeDetail.value.totalCost === '0') &&
+      !isComplete.value
+    ) {
       gStores.messageStore.showMessage('请重新获取费用信息', 2000);
+      /**
+       * 检查是否满足条件并获取快递费用
+       * 当目标值、地址列表和在线支付配置都存在时，调用获取快递费用接口
+       */
       setTimeout(async () => {
         if (
           aimValue?.value &&
@@ -541,12 +553,13 @@
       return;
     }
 
+    console.log(feeDetail.value);
     const { title, content } = await gStores.getSysAppMore('504');
     const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
       gStores.messageStore.showMessage(content, 0, {
         useDialog: true,
         dialogOpt: {
-          title: '江苏省中医院',
+          title,
           isShowCancel: true,
           cancelText: '取消',
           confirmText: '确认',
@@ -555,24 +568,29 @@
       });
     });
 
-    if (confirm) {
-      const { source } = gStores.globalStore.browser;
-      const { patientName, cardNumber } = gStores.userStore.patChoose;
-      const params = {
-        ...args,
-        ...feeDetail.value,
-        fee: feeDetail.value.totalCost,
-        hosPatientId: args.cardNumber,
-        prescId: cacheStore.medicalHelpSelList.map((o) => o.prescId),
-        prescNo: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
-        openId: gStores.globalStore.openId,
-        payType: aliPayOldSystemPayType(),
-        source,
-      };
+    if (!confirm) {
+      return;
+    }
 
-      const {
-        result: { paySign, phsOrderNo },
-      } = await api.expressPay(params);
+    const { source } = gStores.globalStore.browser;
+    const { patientName, cardNumber } = gStores.userStore.patChoose;
+    const params = {
+      ...args,
+      ...feeDetail.value,
+      fee: feeDetail.value.totalCost,
+      hosPatientId: args.cardNumber,
+      prescId: cacheStore.medicalHelpSelList.map((o) => o.prescId),
+      prescNo: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
+      openId: gStores.globalStore.openId,
+      payType: aliPayOldSystemPayType(),
+      source,
+    };
+
+    const {
+      result: { paySign, phsOrderNo },
+    } = await api.expressPay(params);
+
+    if (feeDetail.value.totalCost) {
       const { hosId, totalCost } = params;
       const payRes = await payMoneyOnline({
         paySign,
@@ -588,8 +606,14 @@
         businessType: args.expressCompany == '1' ? 8 : 9, //8顺丰，9邮政
       });
       await toPayPull(payRes, '药品配送下单');
-      await handlePayAfter();
+    } else {
+      await api.freeOrder({
+        paySign,
+        phsOrderNo,
+      });
     }
+
+    await handlePayAfter();
   };
 
   const handlePayAfter = () => {
