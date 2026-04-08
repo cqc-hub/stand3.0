@@ -838,3 +838,64 @@ export const calculateDistance = (
 
   return distance;
 };
+
+/**
+ * 去除URL中的重复参数，支持指定去除某些参数
+ * @param url 原始URL
+ * @param removeParams 需要去除的参数名数组（可选）
+ * @returns 处理后的新URL
+ * @example
+ * // 去除重复参数
+ * removeDuplicateParams('/home/index?a=xxx&b=xxx&a=xxx&d=xxx')
+ * // 返回: '/home/index?a=xxx&b=xxx&d=xxx'
+ *
+ * // 去除重复参数并指定去除某些参数
+ * removeDuplicateParams('/home/index?a=xxx&b=xxx&a=xxx&d=xxx', ['b', 'd'])
+ * // 返回: '/home/index?a=xxx'
+ */
+export const removeDuplicateParams = (
+  url: string,
+  removeParams?: string[]
+): string => {
+  // 分离path和query
+  const queryIndex = url.indexOf('?');
+  if (queryIndex === -1) {
+    return url;
+  }
+
+  const path = url.slice(0, queryIndex);
+  const queryString = url.slice(queryIndex + 1);
+
+  // 解析参数
+  const params = queryString.split('&');
+  const paramMap = new Map<string, string>();
+
+  for (const param of params) {
+    const equalIndex = param.indexOf('=');
+    if (equalIndex === -1) continue;
+
+    const key = param.slice(0, equalIndex);
+    const value = param.slice(equalIndex + 1);
+
+    // 跳过需要去除的参数
+    if (removeParams?.includes(key)) {
+      continue;
+    }
+
+    // 保留第一个出现的参数值（去重）
+    if (!paramMap.has(key)) {
+      paramMap.set(key, value);
+    }
+  }
+
+  // 重新构建query string
+  if (paramMap.size === 0) {
+    return path;
+  }
+
+  const newQuery = Array.from(paramMap.entries())
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&');
+
+  return `${path}?${newQuery}`;
+};

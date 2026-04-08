@@ -24,7 +24,7 @@
     handlerMedicalPayDongRuan,
     getQxMedicalNation,
   } from './utils/cloudHospital';
-  import { apiAsync, GStores, wait } from '@/utils';
+  import { apiAsync, GStores, removeDuplicateParams, wait } from '@/utils';
 
   //第三方h5页面入口——网络医院
   const src = ref('');
@@ -402,9 +402,16 @@
 
   onShareAppMessage((res) => {
     console.warn('分享233', res, shareData.value);
+
     let path = '';
     if (JSON.stringify(shareData.value) === '{}' && res.webViewUrl) {
-      const _url = res.webViewUrl.split('#/')[1];
+      const _url = removeDuplicateParams(res.webViewUrl.split('#/')[1], [
+        'token',
+        'openid',
+        'source',
+        'initSysCode',
+      ]);
+      console.log('cqc23');
       // s
       path = joinQueryForUrl('/pagesC/cloudHospital/cloudHospital', {
         _url,
@@ -415,11 +422,6 @@
       )}`;
     }
 
-    if (!path.includes('initSysCode=')) {
-      path = joinQuery(path, {
-        initSysCode: gStores.globalStore.sysCode,
-      });
-    }
     return {
       title: shareData.value.title,
       path: path,
