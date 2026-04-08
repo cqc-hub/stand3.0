@@ -158,8 +158,10 @@ export const useHosButlerOrder = () => {
       {
         label: '民族',
         key: 'nation',
-        field: 'input-text',
         disabled: true,
+        field: 'select',
+        options: [],
+        autoOptions: 'nationTerms',
       },
       {
         label: '籍贯',
@@ -194,7 +196,7 @@ export const useHosButlerOrder = () => {
         options: [],
         autoOptions: 'countries',
         // rowStyle: 'margin-bottom: 16rpx;',
-        labelWidth: '220rpx',
+        // labelWidth: '220rpx',
         filterOptions(opt, search) {
           if (search) {
             return opt.filter((o) => {
@@ -229,7 +231,7 @@ export const useHosButlerOrder = () => {
         placeholder: '请选择',
         key: '_address',
         field: 'address',
-        labelWidth: '220rpx',
+        // labelWidth: '220rpx',
       },
       {
         label: '职业',
@@ -269,13 +271,10 @@ export const useHosButlerOrder = () => {
         key: 'presentAddress',
         field: 'input-text',
         placeholder: '请输入',
+        required: true,
+        showRequireIcon: true,
       },
-      {
-        label: '邮编',
-        key: 'postCode',
-        field: 'input-text',
-        placeholder: '请输入',
-      },
+
       // {
       //   label: '家庭联系人',
       //   key: 'phone',
@@ -296,6 +295,13 @@ export const useHosButlerOrder = () => {
 
         label: '户口地址',
         key: 'address',
+        field: 'input-text',
+        placeholder: '请输入',
+      },
+
+      {
+        label: '邮编',
+        key: 'postCode',
         field: 'input-text',
         placeholder: '请输入',
       },
@@ -388,6 +394,56 @@ export const useHosButlerOrder = () => {
     } = pageProps.value;
 
     gform.value.setList([]);
+
+    const allItems = Object.keys(formTemps.value).reduce((pre, k) => {
+      return [...pre, ...(formTemps.value[k] || [])];
+    }, [] as TInstance[]);
+
+    let needSubmitItems = [
+      'patientName',
+      'idCard',
+      'nation',
+      'nativePlaceString',
+    ];
+
+    needSubmitItems = needSubmitItems.filter((key) => !pageProps.value[key]);
+
+    if (needSubmitItems.length) {
+      allItems.map((o) => {
+        const { key, field } = o;
+
+        if (needSubmitItems.includes(key)) {
+          o.required = true;
+          o.showRequireIcon = true;
+          o.disabled = false;
+          o.placeholder = field === 'input-text' ? '请输入' : '请选择';
+
+          if (key === 'idCard') {
+            o.validator = async (v) => {
+              if (!idValidator.checkIdCardNo(v)) {
+                return Promise.resolve({
+                  success: false,
+                  message: '请确认证件号码是否有误',
+                });
+              }
+              return {
+                success: true,
+              };
+            };
+          }
+
+          if (key === 'nation') {
+            o.key = 'nationCode';
+            o.showSuffixArrowIcon = true;
+          }
+
+          if (key === 'nativePlaceString') {
+            o.field = 'address';
+            o.showSuffixArrowIcon = true;
+          }
+        }
+      });
+    }
 
     if (key === '0') {
       formData1.value = {

@@ -677,7 +677,7 @@
         return;
       }
 
-      if (['1001067'].includes(gStores.globalStore.sysCode)) {
+      if (['1001067', '1001084'].includes(gStores.globalStore.sysCode)) {
         cacheStore.changeCacheData(pdfPath);
         uni.navigateTo({
           url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
@@ -688,17 +688,6 @@
         return;
       }
 
-      // cacheStore.changeCacheData(pdfPath);
-      if (pdfPath.startsWith('http')) {
-        cacheStore.changeCacheData(pdfPath);
-        uni.navigateTo({
-          url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
-            name: '',
-            type: 'cache',
-          }),
-        });
-        return;
-      }
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
           // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
