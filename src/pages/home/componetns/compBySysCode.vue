@@ -13,7 +13,7 @@
       detail: '',
       engDetail: '',
       otherDetail: '',
-      iconfont: `https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/PZGL1001054image/file-2026032610093537c7152e405b4d95b1445c48dda2fd10wxtp_20260326100830.png`,
+      iconfont: `https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/PZGL1001054image/file-2026040715541615e4c34225c24cf2a65e80fc88ed838dwxtp_20260407155218.png`,
       path: '/pagesC/commonHosNet/commonHosNet?returnUrl=pages%2Fv3%2FfreeClinic%2FchooseDept%3FtoSearchDoc%3D1%26receptionMode%3D8%26deptId%3DXY01',
       terminalType: 'my',
       appId: '',

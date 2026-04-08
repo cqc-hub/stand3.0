@@ -110,7 +110,7 @@
     clinicalType: string; // 1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
     thRegisterId?: string;
     hideSelHos?: '1'; // 隐藏选择医院组件
-    showFirstDept?: Array<String>;
+    showFirstDept?: any;
   }>();
   const pageProps = ref(<typeof props>{});
   const orderConfig = ref({} as ISystemConfig['order']);
@@ -302,7 +302,14 @@
     const { showFirstDept } = pageProps.value;
     showFirstDept &&
       (result.firstDeptList = result.firstDeptList.filter((firstDept) => {
-        return showFirstDept.includes(firstDept.firstHosDeptId);
+        let flag = false;
+        
+        JSON.parse(showFirstDept).forEach((showDept) => {
+          if (firstDept.firstHosDeptId == showDept) {
+            flag = true;
+          }
+        });
+        return flag;
       }));
 
     let { firstDeptList, deptListLevel } = result;
