@@ -93,10 +93,10 @@
         <!-- #ifdef MP-WEIXIN || MP-ALIPAY-->
         <template #footer="{ pat }: { pat: IPat }">
           <view>
-            <view class="button-line">
+            <view class="flex justify-end flex-wrap">
               <view
                 v-if="pageConfig.isSearchPatBound === '1'"
-                class="pat-btns flex-normal mt16 ml12"
+                class="flex-normal mt16 ml12"
               >
                 <view
                   @click="goPatBound(pat)"
@@ -106,10 +106,7 @@
                 </view>
               </view>
 
-              <view
-                v-if="getRealNameAuth.length"
-                class="pat-btns flex-normal mt16 ml12"
-              >
+              <view v-if="getRealNameAuth.length" class="flex-normal mt16 ml12">
                 <view
                   v-if="pat.realNameAuth === '0' && pat.idType === '01'"
                   @click="realNameAuth(pat)"
@@ -121,7 +118,7 @@
 
               <view
                 v-if="pageConfig.isEditPatPhone == '1' && pat.idType == '01'"
-                class="pat-btns flex-normal mt16 ml12"
+                class="flex-normal mt16 ml12"
               >
                 <view
                   @click="goEditPhone(pat)"
@@ -131,10 +128,7 @@
                 </view>
               </view>
 
-              <view
-                v-if="isCanAddGuardian(pat)"
-                class="pat-btns flex-normal mt16 ml12"
-              >
+              <view v-if="isCanAddGuardian(pat)" class="flex-normal mt16 ml12">
                 <view
                   @click="editUpName(pat)"
                   class="btn btn-round btn-border btn-plain btn-size-small color-dark"
@@ -143,10 +137,7 @@
                 </view>
               </view>
 
-              <view
-                v-if="isCanAddPatCardNo(pat)"
-                class="pat-btns flex-normal mt16 ml12"
-              >
+              <view v-if="isCanAddPatCardNo(pat)" class="flex-normal mt16 ml12">
                 <view
                   @click="addPatInfo(pat)"
                   class="btn btn-round btn-border btn-plain btn-size-small color-dark"
@@ -154,10 +145,7 @@
                   补充档案信息
                 </view>
               </view>
-              <view
-                v-if="showMedicalFiling(pat)"
-                class="pat-btns flex-normal mt16 ml12"
-              >
+              <view v-if="showMedicalFiling(pat)" class="flex-normal mt16 ml12">
                 <view
                   @click="goMedicalFiling(pat)"
                   class="btn btn-round btn-border btn-plain btn-size-small color-dark"
@@ -647,13 +635,5 @@
     text-align: center;
     font-size: var(--hr-font-size-xs);
     margin-top: 24rpx;
-  }
-  .button-line {
-    display: flex;
-    flex-direction: row-reverse;
-  }
-  .pat-btns {
-    flex-direction: row-reverse;
-    width: fit-content;
   }
 </style>
