@@ -115,9 +115,6 @@
             <text v-if="pageConfig.orderMode === '1'" class="mr12">
               {{ item.categorName }}
             </text>
-            <text v-else-if="pageConfig.orderMode === '2'" class="mr12">
-              {{ item.deptName }}/{{ item.categorName }}
-            </text>
             <text v-else-if="item.schQukCategor" class="mr12">
               {{ item.schQukCategor }}
             </text>

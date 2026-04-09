@@ -72,8 +72,8 @@ export interface ISystemConfig_ {
       | (TBannerConfig & { label: string });
 
     /** 挂号页面 */
-    /** 挂号模式(挂号排序,显示等医院定制) 1 西安红会 */
-    orderMode?: '1';
+    /** 挂号模式(挂号排序,显示等医院定制) 1 西安红会  2 义乌*/
+    orderMode?: '1'|'2';
     // 选择科室医生页面顶部可选择的天数， chooseDay > 20 出现组件 ‘日历’
     chooseDay: number;
     /** 日历日期下面显示号源状态（有号、约满...） */

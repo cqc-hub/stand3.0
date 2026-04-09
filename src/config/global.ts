@@ -4,14 +4,14 @@ export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静�
 
 export let SYS_CODE = systemConfig.sysCode;
 
-let env: 'dev' | 'test' | 'prod' = 'prod'; // dev 开发； test 测试； prod 生产
+let env: 'dev' | 'test' | 'prod' = 'test'; // dev 开发； test 测试； prod 生产
 
 const WEB_OUT_LOGIN_TIME = 0; // web 环境下自动退出登录时间 ms
 const wxAppid = manifest['mp-weixin'].appid;
 const YMD = '20250408'; //年月日，每次版本更新必须同步更新
 const HM = '1723'; //时分，每次版本更新必须同步更新
 const version = '0.0.2'; //暂定
-
+ 
 const VERSION = version + '.' + YMD; //版本号
 const TIMESTAMP = version + '.' + YMD + HM; //时间戳，修改时间戳会清理项目缓存
 const isOpenDes = false; //测试环境是否开启加密 正式环境必加密

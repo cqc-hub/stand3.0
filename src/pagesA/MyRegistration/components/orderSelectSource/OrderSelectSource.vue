@@ -126,7 +126,16 @@
                 "
                 class="order-info mb24 f32"
               >
-                <text v-if="pageConfig.orderMode !== '1'" class="mr24">
+                <text v-if="pageConfig.orderMode === '2'" class="mr24">
+                  {{
+                    `${
+                      selectSchInfo.schQukCategor ||
+                      selectSchInfo.deptName ||
+                      ''
+                    }/${selectSchInfo.categorName || ''}`
+                  }}
+                </text>
+                <text v-else-if="pageConfig.orderMode !== '1'" class="mr24">
                   {{
                     selectSchInfo.schQukCategor ||
                     `${selectSchInfo.deptName || ''}/${
