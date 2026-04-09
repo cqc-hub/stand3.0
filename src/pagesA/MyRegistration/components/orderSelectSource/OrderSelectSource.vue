@@ -57,8 +57,17 @@
                   <!-- accordion -->
                   <template #title>
                     <view :class="{}" class="collapse-title f32 g-bold">
+                      <text v-if="pageConfig.orderMode === '2'" class="mr12">
+                        {{
+                          `${
+                            _item.schQukCategor ||
+                            _item.deptName ||
+                            ''
+                          }/${_item.categorName || ''}`
+                        }}
+                      </text>
                       <text
-                        v-if="_item.schQukCategor || _item.categorName"
+                        v-else-if="_item.schQukCategor || _item.categorName"
                         class="mr12"
                       >
                         {{ _item.schQukCategor || _item.categorName || '' }}
