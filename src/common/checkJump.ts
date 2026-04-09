@@ -94,6 +94,9 @@ export const checkGrid = (item: IRoute) => {
       reject('维护中');
     } else {
       routerStore.updateId(item.id);
+      if (item.patientInterception === '1') {
+        item.loginInterception = '1';
+      }
       if (item.loginInterception === '1' && !gStores.globalStore.isLogin) {
         await checkLogin(item);
       }

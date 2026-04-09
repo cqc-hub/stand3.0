@@ -1,5 +1,4 @@
 <template>
-
   <view
     :class="{
       [gStores.globalStore.getPageClass]: true,
@@ -20,9 +19,7 @@
       scrollY
     >
       <view class="auto-person g-fade-in">
-        <text>
-          AI解读
-        </text>
+        <text>AI解读</text>
         <image
           :src="global.BASE_IMG + pageConfig.reportAnalysisImg"
           mode="heightFix"
@@ -47,8 +44,25 @@
     <view class="container">
       <view class="container-block mt24">
         <view class="container-block-top" @click="more">
+          <view
+            v-if="hosInfo.hosName"
+            class="pt40 pr32 pl32 color-444 f32 text-ellipsis"
+          >
+            <image
+              :src="globalGl.BASE_IMG + 'report-hos-icon.png'"
+              :style="{
+                width: `${20}px`,
+                height: `${20}px`,
+                top: '3px',
+              }"
+              class="relative"
+            />
+            {{ hosInfo.hosName }}
+          </view>
           <view class="flex-between flex-start">
-            <view class="title flex1">{{ checkoutReportList.repName }}</view>
+            <view class="ml32 pt32 flex1 f48 font-semibold">
+              {{ checkoutReportList.repName }}
+            </view>
 
             <view
               v-if="
@@ -455,7 +469,12 @@
 <script lang="ts" setup>
   import { onLoad } from '@dcloudio/uni-app';
   import { onMounted, ref, computed } from 'vue';
-  import { checkoutReportDetails, addWatermark, reportAnalysisFun } from './utils';
+  import {
+    checkoutReportDetails,
+    addWatermark,
+    reportAnalysisFun,
+    useHosInfo,
+  } from './utils';
   import {
     GStores,
     nameConvert,
@@ -463,7 +482,7 @@
     ServerStaticData,
     ISystemConfig,
     getShareTotalUrl,
-    apiAsync
+    apiAsync,
   } from '@/utils';
   import { joinQuery, encryptDes, joinQueryForUrl, getSysCode } from '@/common';
   import { deQueryForUrl } from '@/common';
@@ -481,6 +500,7 @@
   import { storeToRefs } from 'pinia';
   import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
   import { useCacheStore } from '@/stores';
+  import globalGl from '@/config/global';
 
   const alipayPid = global.systemInfo.alipayPid;
 
@@ -496,6 +516,7 @@
       key: '',
     },
   ]);
+  const { getHosInfo, hosInfo } = useHosInfo();
 
   const queryCompData = ref(<
     {
@@ -538,6 +559,7 @@
         s?: '0';
         // 隐藏收藏
         hideCollect?: '1';
+        hosId?: string;
 
         hidePatInfo?: '1';
         [key: string]: any;
@@ -586,6 +608,11 @@
   onLoad(async (p) => {
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
     pageProps.value = deQueryForUrl(deQueryForUrl(deQueryForUrl(p)));
+    console.log('获取到页面参数---');
+    console.log(pageProps.value);
+    if (pageProps.value.hosId) {
+      getHosInfo(pageProps.value.hosId);
+    }
     // #ifdef MP-WEIXIN
     await getqueryCompData();
     // #endif
@@ -735,7 +762,9 @@
       let params: any = {
         type: 'cache',
       };
-      if (['1001083',"1001085", '1001095'].includes(gStores.globalStore.sysCode)) {
+      if (
+        ['1001083', '1001085', '1001095'].includes(gStores.globalStore.sysCode)
+      ) {
         params = {
           type: 'base64',
           url: encodeURIComponent(
@@ -793,10 +822,6 @@
     });
   };
 
-
-
-
-
   onMounted(async () => {
     await wait(600);
     getTips();
@@ -841,7 +866,7 @@
       image {
         height: 148rpx;
       }
-   }
+    }
     .container {
       margin: 0 auto;
       width: 686rpx;
@@ -857,13 +882,6 @@
           padding-bottom: 40rpx;
           position: relative;
           z-index: 99;
-          .title {
-            // width: calc(100% - 32rpx);
-            font-size: var(--hr-font-size-xxl);
-            font-weight: 600;
-            margin-left: 32rpx;
-            padding-top: 40rpx;
-          }
           .patient-information {
             // width: calc(100% - 32rpx);
             margin-left: 32rpx;

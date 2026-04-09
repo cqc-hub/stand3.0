@@ -374,6 +374,10 @@ const queryApi = {
     service.post('/phs-query/delivery/drugDeliveryCost', parm(data), {
       hideLoading: false,
     }),
+  freeOrder: (data) =>
+    service.post('/phs-query/delivery/freeOrder', parm(data), {
+      hideLoading: false,
+    }),
   getScanExpressDrugCost: (data) =>
     service.post('/phs-query/delivery/getScanExpressDrugCost', parm(data), {
       hideLoading: false,
@@ -679,7 +683,7 @@ const regApi = {
     service.post('/phs-reg/reg/freeRegPay', parm(data), {
       hideLoading: false,
     }),
-    GetBiosampleConsentRecord: (data: any) =>
+  GetBiosampleConsentRecord: (data: any) =>
     service.post('/phs-reg/reg/GetBiosampleConsentRecord', parm(data), {
       hideLoading: false,
     }),
