@@ -607,7 +607,7 @@
 
         newPat.value = { patientId };
 
-        if (isPayWithoutSecretAuth === '1') {
+        if (isPayWithoutSecretAuth === '1' && patientId) {
           await goPaySign(patientId);
         }
       }

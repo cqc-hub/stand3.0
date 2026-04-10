@@ -682,7 +682,9 @@
         });
       newPat.value = { patientId: patientId };
 
-      await goPaySign(patientId);
+      if (patientId) {
+        await goPaySign(patientId);
+      }
       await patientUtils.getPatCardList();
       // if (isPayWithoutSecretAuth === '1' && gStores.userStore.patList.length) {
       //   uni.redirectTo({
