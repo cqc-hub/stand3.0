@@ -162,7 +162,7 @@ export const tempList: TInstance[] = [
     required: true,
     label: '证件号码',
     field: 'input-text',
-    placeholder: '请输入',
+    placeholder: '一经填写修改需到前台,请谨慎填写',
     key: formKey.idCard,
     labelWidth: '220rpx',
     async validator(v, item, data) {
@@ -187,7 +187,7 @@ export const tempList: TInstance[] = [
     required: true,
     label: '真实姓名',
     field: 'input-text',
-    placeholder: '请输入',
+    placeholder: '一经填写修改需到前台,请谨慎填写',
     key: formKey.patientName,
     labelWidth: '220rpx',
     maxlength: 50,

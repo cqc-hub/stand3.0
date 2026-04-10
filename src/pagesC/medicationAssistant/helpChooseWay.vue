@@ -95,7 +95,7 @@
               v-if="
                 pageConfig.isPayOnline === '1' &&
                 pageConfig.isSelectIceBag == '1' &&
-                feeDetail.totalFee
+                isComplete
               "
               class="f28"
             >

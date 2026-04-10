@@ -6,7 +6,7 @@
   import { defineComponent, ref } from 'vue';
 
   import { onLoad, onShow } from '@dcloudio/uni-app';
-  import { deQueryForUrl } from '@/common';
+  import { decryptDes, deQueryForUrl } from '@/common';
   import { useCacheStore } from '@/stores';
 
   let n = 0;
@@ -25,8 +25,10 @@
   // @ts-expect-error
   let uPath = uni.env?.USER_DATA_PATH;
   onLoad(async (opt) => {
-    let { url, name, type, _type } = deQueryForUrl(deQueryForUrl(opt));
-    if (_type === 'cache') {
+    let { url, name, type, _type, desUrl } = deQueryForUrl(deQueryForUrl(opt));
+    if (desUrl) {
+      url = decryptDes(desUrl);
+    } else if (_type === 'cache') {
       url = cacheStore.cacheData;
     }
     console.log('获取到url----');

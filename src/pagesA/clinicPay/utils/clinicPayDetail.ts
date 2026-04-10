@@ -1706,12 +1706,17 @@ export const usePayPage = () => {
       const { isForceSelfPayFirst } = pageConfig.value;
       const isForceSelfPay = isForceSelfPayFirst === '1';
 
+      // 不同就诊记录不能一起选
       const selKeys = selUnPayList.value.map((o) => o.childOrder);
+      const selVisitNos = [
+        ...new Set(selUnPayList.value.map((o) => o.visitNo)),
+      ];
       const hasMedicalItem = selUnPayList.value.some(
         (o) => o.costTypeCode === '2'
       );
       const restUnPayList = unPayList.value.filter(
-        (o) => !selKeys.includes(o.childOrder)
+        (o) =>
+          !selKeys.includes(o.childOrder) && selVisitNos.includes(o.visitNo)
       );
       const hasSelfPayItem = restUnPayList.some((o) => o.costTypeCode === '1');
 
@@ -1733,7 +1738,7 @@ export const usePayPage = () => {
 
         if (confirm) {
           if (isForceSelfPay) {
-            selUnPayList.value = unPayList.value.filter(
+            selUnPayList.value = restUnPayList.filter(
               (o) => o.costTypeCode === '1'
             );
           }
