@@ -239,7 +239,7 @@
     if (['1001038', '1001048'].includes(gStores.globalStore.sysCode)) {
       payArg.businessType = 2;
     }
-    const res = await payMoneyOnline(payArg);
+    const res = await payMoneyOnline(payArg, { type: 'paymentPage' });
 
     await toPayPull(res, '住院缴费');
     payAfter();
@@ -386,7 +386,7 @@
   });
   onLoad((opt: any) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    const { _pd } = pageProps.value ;
+    const { _pd } = pageProps.value;
     if (_pd) {
       changePatient(_pd);
     }

@@ -47,7 +47,10 @@ export interface IPayRes {
 
 export const payMoneyOnline = async (
   data: BaseObject,
-  opt: BaseObject = {
+  opt: {
+    hideLoading?: boolean;
+    type?: 'paymentPage'; //预交金 1001093渠道号特殊处理
+  } = {
     // showMessage: false,
     hideLoading: false,
   }
@@ -80,7 +83,7 @@ export const payMoneyOnline = async (
   }
   // #endif
 
-  requestArg.channel = aliPayOldSystemPayType();
+  requestArg.channel = aliPayOldSystemPayType(opt?.type);
 
   requestArg = {
     ...requestArg,
@@ -306,7 +309,8 @@ export const getOpenidTtResult = async (): Promise<{
 };
 
 //判断该项目是否为2024年12月以前的项目，如是则payType使用ALI_MINI，否则使用ALI_JSAPI
-export const aliPayOldSystemPayType = () => {
+//type 个别渠道号特殊处理 paymentPage：住院预交金 1001093
+export const aliPayOldSystemPayType = (type?: 'paymentPage') => {
   const gStores = new GStores();
   const { sysCode, ev } = gStores.globalStore;
   let channel = '';
@@ -335,6 +339,9 @@ export const aliPayOldSystemPayType = () => {
       default:
         channel = 'WX_MINI';
         break;
+    }
+    if (type === 'paymentPage' && sysCode === '1001093') {
+      channel = 'CCB_WX_MINI';
     }
   } else if (ev === 'alipay') {
     const aliMiniSystemList = [
@@ -382,6 +389,9 @@ export const aliPayOldSystemPayType = () => {
           channel = 'ALI_JSAPI';
         }
         break;
+    }
+    if (type === 'paymentPage' && sysCode === '1001093') {
+      channel = 'CCB_ALI_MINI';
     }
   } else if (ev === 'tt') {
     // 1001035

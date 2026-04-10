@@ -625,7 +625,7 @@ export const miniProgramConfig: {
         wx: {
           medicalNation: {
             appId: 'wxe183cd55df4b4369',
-            path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=520500&channel=AAEBc2RH-gUYFz7T2U2NVQhi&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxuumfluttL87+gDtSEtCYLx&orgCodg=H52050200015&orgAppId=1JBJL87EA1684460C80A000078F00A4C',
+            path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=520500&channel=AAEBc2RH-gUYFz7T2U2NVQhi&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxuumfluttL87+gDtSEtCYLx&orgCodg=H52050200015&orgAppId=1JC80CJNJ03S8D430B0A0000471ED2B3',
           },
           isMedicalOrder: '1',
           isGbFamilyPayment: '1',

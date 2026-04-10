@@ -38,6 +38,7 @@ export const useScan = () => {
        * - 23 用药查询
        * - 24 检查预约 1001093
        * - 25 院前服务 1001093
+       * - 26 中西医满意度
        */
       type:
         | '_1'
@@ -65,7 +66,8 @@ export const useScan = () => {
         | '22'
         | '23'
         | '24'
-        | '25';
+        | '25'
+        | '26';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
@@ -130,6 +132,60 @@ export const useScan = () => {
         herenId: 'herenId',
         token: 'token',
       },
+    });
+  };
+  const initQuestion85 = async () => {
+    const {
+      category, //  50 门诊  55 住院
+      a: patientName,
+      b: cardNumber,
+      c: patientPhone,
+      d: visitNo,
+      e: hosName,
+      f: deptName,
+      g: docName,
+      h: visitDate,
+      i: inHospitalNo,
+      j: source = gStores.globalStore.browser.source,
+      k: outTime,
+      l: hospitalWard,
+      n: hosId,
+      m: attendingDoctor,
+      o: admissionTime,
+    } = pageProps.value;
+
+    const addition: any = {
+      // patientId: 'patientId',
+    };
+
+    if (!cardNumber) {
+      addition.patientId = 'patientId';
+    }
+
+    useTBanner({
+      type: 'h5',
+      isLocal: '1',
+      isSelfH5: '1',
+      path: `pagesC/question/wzzxyQuestion${category == '55' ? 2 : 1}`,
+      extraData: {
+        category,
+        patientName,
+        cardNumber,
+        hospitalWard,
+        deptName,
+        docName,
+        visitDate,
+        visitNo,
+        outTime,
+        hosId,
+        source,
+        inHospitalNo,
+        patientPhone,
+        hosName,
+        attendingDoctor,
+        admissionTime,
+      },
+      addition,
     });
   };
 
@@ -647,6 +703,7 @@ export const useScan = () => {
     initQuestionList58,
     initAddPat,
     initQuestion52,
+    initQuestion85,
     tjyy1001067,
     aijiance1001082,
     yun1001082,

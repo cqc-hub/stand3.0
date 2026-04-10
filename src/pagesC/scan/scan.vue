@@ -42,6 +42,7 @@
     tjyy1001067,
     initQuestionList58,
     initQuestion52,
+    initQuestion85,
     childNewborn10001067,
     aijiance1001082,
     wenxinzaixian1001082,
@@ -190,6 +191,10 @@
       // 院前服务
       case '25':
         goYQFW1001093();
+        break;
+        //中西医满意度
+      case '26':
+       initQuestion85();
         break;
 
       default:
