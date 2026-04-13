@@ -337,6 +337,13 @@ export const useTBanner = async (
       url: joinQuery('/pagesC/cloudHospital/cloudHospital', extraData),
     });
   } else if (type === 'backProgram') {
+    console.log(
+      'backProgram 参数------',
+      joinQuery(path, extraData),
+      ';extraData',
+      extraData,
+      envVersion
+    );
     uni.navigateBackMiniProgram({
       extraData,
     });
