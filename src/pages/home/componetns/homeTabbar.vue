@@ -306,12 +306,12 @@
         sort: 2,
       },
       {
-        label: 'home-tabbar:线上商城',
-        icon: global.BASE_IMG + 'oral-mall-home-icon.png',
+        label: 'home-tabbar:速递到家',
+        icon: '/static/image/wlyy.png',
         iconActive: `/static/image/oral-mall-home-icon-active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
         }.png`,
-        url: '/pagesC/commonHosNet/commonHosNet?returnUrl=pages%2Fv3%2FspecialPrescription%2Findex',
+        url: '/pagesD/common/chooseTabJump',
         loginInterception: '0',
         sort: 3,
       },
@@ -423,7 +423,7 @@
     }
     if (global.SYS_CODE === '1001054') {
       tabList.push('home-tabbar:在线复诊');
-      tabList.push('home-tabbar:线上商城');
+      tabList.push('home-tabbar:速递到家');
     }
 
     const {

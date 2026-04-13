@@ -8,6 +8,7 @@ export const miniProgramConfig: {
     alipayAppid: '2021002139602458',
     isvAlipayAppid: '2021003154665105',
     h5Appid: 'wx8e5a08ccb011d26c',
+  h5AppidDisabledInTest:true,
     name: '台州市第一人民医院',
 
     isSearchInHos: true,
@@ -101,7 +102,7 @@ export const miniProgramConfig: {
   },
   '1001036': {
     wxAppid: 'wx8c42096613665ada',
-    h5Appid1: 'wxab05eba59d902b5f',
+    // h5AppidTest: 'wxab05eba59d902b5f',
     alipayAppid: '2021003120612222',
     isvAlipayAppid: '2021003120637143',
     name: '东部战区总医院',
@@ -853,7 +854,7 @@ export const miniProgramConfig: {
   },
   '1001085': {
     wxAppid: 'wx3a24f824ca86d6dc',
-    h5Appid1: 'wxfca4d96e3a9edf91',
+    h5Appid: 'wxfca4d96e3a9edf91',
     alipayAppid: '2021006124681484',
     isvAlipayAppid: '',
     name: '温州市中西医结合医院',

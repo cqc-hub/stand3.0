@@ -340,7 +340,7 @@ export const aliPayOldSystemPayType = (type?: 'paymentPage') => {
         channel = 'WX_MINI';
         break;
     }
-    if (type === 'paymentPage' && sysCode === '1001093') {
+    if (type === 'paymentPage' && sysCode === '1001097') {
       channel = 'CCB_WX_MINI';
     }
   } else if (ev === 'alipay') {
@@ -390,7 +390,7 @@ export const aliPayOldSystemPayType = (type?: 'paymentPage') => {
         }
         break;
     }
-    if (type === 'paymentPage' && sysCode === '1001093') {
+    if (type === 'paymentPage' && sysCode === '1001097') {
       channel = 'CCB_ALI_MINI';
     }
   } else if (ev === 'tt') {
