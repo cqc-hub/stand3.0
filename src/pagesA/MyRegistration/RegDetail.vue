@@ -537,7 +537,7 @@
   const hosInfo = ref({} as IHosInfo);
   const isShowQr = computed(() => {
     return (
-      ['0', '100', '70', '75'].includes(orderRegInfo.value.orderStatus) &&
+      ['0', '100', '70', '75', '76'].includes(orderRegInfo.value.orderStatus) &&
       qrCodeOpt.value.code
     );
   });

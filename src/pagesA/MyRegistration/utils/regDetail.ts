@@ -268,6 +268,14 @@ export const orderStatusMap = {
     title: '待就诊',
     cardColor: 'var(--hr-brand-color-6)',
   },
+  '76': {
+    headerClass: 'header-green',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '已取号',
+    cardColor: 'var(--hr-brand-color-6)',
+  },
 
   // 已退号
   '23': {
