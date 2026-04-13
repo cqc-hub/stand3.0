@@ -648,6 +648,8 @@
         result = _result;
       }
     }
+    // result.detailsResult[0].pdfPath =
+      // 'https://nethospital.zchospital.com/phs/switch/encryptImages2pdf?imageUrls=F1DQFpjH9Dbk0NyX3fXAULvceqGzl7xRbTe1lvnV-4UnmXxnQ_PA-L-B_c0-0h9D9NvQy7gAZNu-chRcY11l7qYkF9C2LZ1vPUioSZPHBBxqh3sJt83ow6fIX-xOEeSLm6z9kURQWOpq0PbLdVOxhKrj33TZEFVYrVfZ1CraVyEDzFvJxHzDiGU0rWkO974p_9FG-rzpOCOQtQONnCC0u0nfmrthmztdmgClVRWMl8fgUwvj7FH6Kg0xZ6rvnEtF8QIJw2ZdytZ8QFNMWY5p_J3gs3jkk_SFQUwaKWNlpU7ljaockYeV82kRbMbNEBbH';
     examineReportList.value = result;
     if (
       gStores.globalStore.sysCode === '1001035' &&

@@ -73,7 +73,7 @@ export interface ISystemConfig_ {
 
     /** 挂号页面 */
     /** 挂号模式(挂号排序,显示等医院定制) 1 西安红会  2 义乌*/
-    orderMode?: '1'|'2';
+    orderMode?: '1' | '2';
     // 选择科室医生页面顶部可选择的天数， chooseDay > 20 出现组件 ‘日历’
     chooseDay: number;
     /** 日历日期下面显示号源状态（有号、约满...） */
@@ -565,9 +565,11 @@ export interface ISystemConfig_ {
     isCheckGetYunUrlByH5?: '1';
     /** 检查报告图文报告复制链接前往h5查看*/
     isJCGetImageUrlByH5?: '1';
-    /** 检验报告图文报告复制链接前往h5查看*/
     isJYGetImageUrlByH5?: '1';
     isTJGetImageUrlByH5?: '1';
+    /** 云影像复制链接前往h5查看*/
+    isJCGetYunUrlByH5?: '1';
+    isJYGetYunUrlByH5?: '1';
 
     /** 报告查询列表云影像链接 */
     listYun?: {
