@@ -163,6 +163,7 @@ export const useTBanner = async (
   routeType: 'reLaunch' | 'redirectTo' | 'navigateTo' = 'navigateTo',
   additionData: BaseObject = {}
 ) => {
+  console.log('触发useTBanner---:', config);
   const gStores = new GStores();
   const cacheStore = useCacheStore();
 
@@ -171,7 +172,7 @@ export const useTBanner = async (
   const {
     type,
     extraData = {},
-    path,
+    path = '',
     appId,
     envVersion = 'release',
     addition,
