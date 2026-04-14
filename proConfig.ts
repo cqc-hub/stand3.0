@@ -1162,9 +1162,12 @@ export const miniProgramConfig: {
   '1001103': {
     wxAppid: 'wxf82fb22d5a87e9af',
     name: '上海儿童医学中心贵州医院',
-    isSearchInHos: true,
+    isSearchInHos: false,
     isOpenOcr: false,
     sConfig: {
+      isOpenHelpOld: '1',
+      isWxShowToggleEcZh: '1',
+
       login: { isSkipPerfect: '1' },
       homeNavTitleLogo:
         'https://phsdevoss.eheren.com/pcloud/phs3.0/1001103-home-nav-title.png',

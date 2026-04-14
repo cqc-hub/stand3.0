@@ -56,7 +56,10 @@
     class="flex-column-center footer-area-bottom bg-whit pt32"
     :animation="animationData"
   >
-    <view class="bottom-dh-char flex-row-around"         :style="{ opacity: voicing ? 0 : 1 }">
+    <view
+      class="bottom-dh-char flex-row-around"
+      :style="{ opacity: voicing ? 0 : 1 }"
+    >
       <view
         class="input-send m-left mr20"
         :disabled="msgState.msgLoad"
@@ -126,7 +129,6 @@
       <view
         class="bottom-dh-content"
         v-if="isVoice"
-
         @longpress="handleVoice"
         @touchstart="touchStart"
         @touchmove="touchMove"
@@ -168,7 +170,25 @@
       :style="{ display: voicing ? 'flex' : 'none' }"
       @click="cancleVoice"
     >
-      <view class="tap-area">
+      <view class="tap-area bg-white top-radius">
+        <view class="pb42 pt42 mr42 ml42 mb42">
+          <view
+            :style="{
+              transition: 'all .3s',
+            }"
+            :class="{
+              'un-active': !isCancelRecord,
+              [isCancelRecord ? 'btn-error btn-border' : 'btn-normal']: 1,
+            }"
+            class="btn btn-round btn-size-small flex-1 normal-btn"
+          >
+            上滑取消发送
+          </view>
+        </view>
+        <view class="pb10 text-center f28 mb42">
+          {{ isCancelRecord ? '松开取消' : '松开发送' }}
+        </view>
+
         <view class="animation">
           <view class="animation-contaner">
             <view
@@ -179,9 +199,9 @@
           </view>
         </view>
       </view>
-      <view class="title f28">松开发送</view>
+      <!-- <view class="title f28">松开发送{{ touchLocation }}</view> -->
     </view>
-      <text class="f22 color-888 mb30">本服务为AI生成内容，结果仅供参考</text>
+    <text class="f22 color-888 mb30">本服务为AI生成内容，结果仅供参考</text>
   </view>
 </template>
 <script setup lang="ts">
@@ -199,7 +219,7 @@
   // #endif
   import globalGl from '@/config/global';
   import SecondRecommend from './SecondRecommend.vue';
-  import { type TButtonConfig, debounce, GStores,throttle } from '@/utils';
+  import { type TButtonConfig, debounce, GStores, throttle } from '@/utils';
   import {
     msgState,
     isReportAnalysis,
@@ -209,6 +229,8 @@
 
   var SImanager: any = null;
   const animationData = ref<UniNamespace.Animation>();
+  const gStores = new GStores();
+
   const isVoice = ref<boolean>(false);
   const voicing = ref<boolean>(false);
   const isShow = ref<boolean>(false);
@@ -223,7 +245,7 @@
   const isRecording = ref(false);
 
   const inst = getCurrentInstance();
-  let query = uni.createSelectorQuery(); 
+  let query = uni.createSelectorQuery();
   // #ifndef MP-TOUTIAO
   query = query.in(inst);
   // #endif
@@ -334,7 +356,7 @@
     if (hasWechatSI.value && hasSIPolicy.value) {
       isVoice.value = !isVoice.value;
       // #ifdef  H5
-       // #endif
+      // #endif
       // #ifdef  MP-WEIXIN
       if (!SImanager) {
         initRecord();
@@ -349,9 +371,10 @@
     }
   };
 
+  let SImanagerTimmer;
   const handleVoice = (...args) => {
     // SImanager.stop();
-        // #ifdef  MP-WEIXIN
+    // #ifdef  MP-WEIXIN
     if (isRecording.value) {
       voicing.value = false;
       return;
@@ -361,7 +384,7 @@
       duration: 60000,
       lang: 'zh_CN',
     });
-    setTimeout(() => {
+    SImanagerTimmer = setTimeout(() => {
       if (isRecording.value) {
         SImanager.stop();
       }
@@ -370,7 +393,6 @@
       }
     }, 60000);
     // #endif
-
   };
   const initRecord = () => {
     if (hasWechatSI.value) {
@@ -380,11 +402,16 @@
         console.log('initRecord');
 
         SImanager.onStop = (res) => {
-          msgState.value.msg += res.result || '';
-          if (!msgState.value.msg) {
+          console.log('res---------', res);
+          if (isRecording.value) {
+            isRecording.value = false;
+          }
+          msgState.value.msg = res.result || '';
+
+          if (!msgState.value.msg || isCancelRecord.value) {
             return;
           }
-          isRecording.value && (isRecording.value = false);
+
           // console.log('SImanager.onStop', msgState.value.msg);
           emits('send-msg', msgState.value.msg);
           nextTick(() => {
@@ -398,45 +425,7 @@
         };
         0;
 
-        SImanager.onError = function (res) {
-          // SImanager.stop();
-          console.error('error msg', res);
-          isRecording.value && (isRecording.value = false);
-          voicing.value && (voicing.value = false);
-
-          const gStores = new GStores();
-          if (res.retcode === '-30004' || res.retcode === '-30008') {
-            gStores.messageStore.showMessage(
-              '诶呀，当前网络环境差，请稍后重试~~~',
-              1000
-            );
-          } else if (
-            res.retcode === '-30009' ||
-            res.retcode === '-30007' ||
-            res.retcode === '-30011' ||
-            res.retcode === '-30012'
-          ) {
-            gStores.messageStore.showMessage(
-              '诶呀，语音识别启动失败，请重新尝试~~~',
-              1000
-            );
-          } else if (res.retcode === '-40001') {
-            gStores.messageStore.showMessage(
-              '诶呀，接口调用频率已达限制，请稍后重试~~~',
-              1000
-            );
-          } else if (res.retcode === '-30001') {
-            gStores.messageStore.showMessage(
-              '诶呀，语音识别启动失败，请检查是否开启语音权限后重试~~~',
-              1000
-            );
-          } else {
-            gStores.messageStore.showMessage(
-              '诶呀，没听清楚您在说什么，请再说一遍~~~',
-              1000
-            );
-          }
-        };
+        SImanager.onError = errorBack;
         //有新的识别内容返回，则会调用此事件
         SImanager.onRecognize = (res) => {
           // console.log('SImanager..onRecognize', res);
@@ -446,11 +435,59 @@
       }
     }
   };
+
+  const errorBack = (res) => {
+    // SImanager.stop();
+    if (SImanagerTimmer) {
+      clearTimeout(SImanagerTimmer);
+    }
+    console.error('error msg', res);
+    isRecording.value && (isRecording.value = false);
+    voicing.value && (voicing.value = false);
+    const { retcode } = res;
+
+    if (retcode === -30012) {
+      handleVoice();
+    } else if (res.retcode === '-30004' || res.retcode === '-30008') {
+      gStores.messageStore.showMessage(
+        '诶呀，当前网络环境差，请稍后重试~~~',
+        1000
+      );
+    } else if (
+      res.retcode === '-30009' ||
+      res.retcode === '-30007' ||
+      res.retcode === '-30011' ||
+      res.retcode === '-30012'
+    ) {
+      gStores.messageStore.showMessage(
+        '诶呀，语音识别启动失败，请重新尝试~~~',
+        1000
+      );
+    } else if (res.retcode === '-40001') {
+      gStores.messageStore.showMessage(
+        '诶呀，接口调用频率已达限制，请稍后重试~~~',
+        1000
+      );
+    } else if (res.retcode === '-30001') {
+      gStores.messageStore.showMessage(
+        '诶呀，语音识别启动失败，请检查是否开启语音权限后重试~~~',
+        1000
+      );
+    } else {
+      gStores.messageStore.showMessage(
+        '诶呀，没听清楚您在说什么，请再说一遍~~~',
+        1000
+      );
+    }
+  };
+
   const startListen = (e) => {
     e.preventDefault();
     startRecord();
   };
   let cancleVoice = async () => {
+    voicing.value && (voicing.value = false);
+
     if (isRecording.value) {
       // #ifdef  MP-WEIXIN
       SImanager?.stop();
@@ -473,35 +510,56 @@
           });
         }
       } catch (e) {
-        const gStores = new GStores();
         gStores.messageStore.showMessage('诶呀，语音识别失败，请重试~~~', 1000);
       }
-
       // #endif
-      voicing.value && (voicing.value = false);
     }
   };
 
-  cancleVoice = throttle(cancleVoice, 3000);
+  // cancleVoice = throttle(cancleVoice, 3000);
 
-  let  touchStart = (e) => {
+  let touchStart = (e) => {
     voiceTouchData.value.clientY = e.changedTouches[0].clientY; //手指按下时的Y坐标
+
+    touchLocation.value = {
+      moveTouch: 0,
+      endTouch: 0,
+      startTouch: voiceTouchData.value.clientY,
+    };
     !msgState.value.msgLoad && (voicing.value = true);
     // #ifdef  H5
-    if( !isListening.value&&!msgState.value.msgLoad){
-    console.log('handleVoice', !isListening.value ? '开始录音' : '未开始录音');
-    isRecording.value = true;
-    voicing.value = true
-    startListen(e);
+    if (!isListening.value && !msgState.value.msgLoad) {
+      console.log(
+        'handleVoice',
+        !isListening.value ? '开始录音' : '未开始录音'
+      );
+      isRecording.value = true;
+      voicing.value = true;
+      startListen(e);
     }
     // #endif
   };
-  touchStart = throttle(touchStart, 2000);
+  touchStart = throttle(touchStart, 500);
 
+  const touchLocation = ref({
+    moveTouch: 0,
+    endTouch: 0,
+    startTouch: 0,
+  });
+  const isCancelRecord = computed(() => {
+    if (touchLocation.value.moveTouch) {
+      return (
+        touchLocation.value.startTouch - touchLocation.value.moveTouch > 140
+      );
+    }
+
+    return false;
+  });
   let touchMove = (e) => {
     console.log('touchMove', e);
     let touchData = e.touches[0]; //滑动过程中，手指滑动的坐标信息 返回的是Objcet对象
     let moveY = touchData.clientY - voiceTouchData.value.clientY;
+    touchLocation.value.moveTouch = touchData.clientY;
     console.log('moveY滑动', moveY);
     if (moveY < -50) {
       // 取消语音识别
@@ -513,9 +571,13 @@
       voiceTouchData.value.isMoveUp = true;
     }
   };
-  touchMove = debounce(touchMove, 500, false);
+  touchMove = throttle(touchMove, 100);
 
   const endRecord = (e) => {
+    const { changedTouches } = e;
+    if (changedTouches && changedTouches[0]) {
+      touchLocation.value.endTouch = changedTouches[0].clientY;
+    }
     e.preventDefault();
     console.log('endRecord', e);
     if (voiceTouchData.value.isMoveUp) {
@@ -535,7 +597,7 @@
       query
         .selectAll(`.guess-server`)
         .boundingClientRect((data: any) => {
-          guessServerBottom.value = `calc(100vh - 800rpx - ${data[0]?.height||0}px)`;
+          guessServerBottom.value = `calc(100vh - 800rpx - ${data[0]?.height || 0}px)`;
         })
         .exec();
     }, 100);
@@ -847,20 +909,26 @@
     z-index: 99;
     display: flex;
     flex-direction: column-reverse;
-    .title {
-      text-align: center;
-      color: #ececec;
-      padding-bottom: 10rpx;
+
+    .top-radius {
+      border-top-left-radius: 10%;
+      border-top-right-radius: 10%;
+    }
+    .normal-btn {
+      background-color: var(--hr-brand-color-1);
+      &.un-active {
+        border: 2rpx solid rgba(255, 255, 255, 0);
+      }
     }
     .animation {
+      border-top-left-radius: 20%;
+      border-top-right-radius: 20%;
       width: 100%;
       height: 200rpx;
       z-index: 999;
       background: linear-gradient(#defffd, #f5fbff);
       // filter: blur(2px);
       border-top: 10rpx solid #f5fbff;
-      border-top-left-radius: 40%;
-      border-top-right-radius: 40%;
       .animation-contaner {
         display: flex;
         justify-content: center;
@@ -869,7 +937,7 @@
         .line {
           display: inline-block;
           width: 10rpx;
-          height: 40rpx;
+          height: 20rpx;
           margin: 0 5rpx;
           background: var(--hr-brand-color-6);
           transform-origin: center center;
@@ -917,7 +985,7 @@
   .float-from-top {
     animation: floatFromTop 1s ease-out forwards;
   }
-    .f22{
+  .f22 {
     font-size: 22rpx;
   }
 

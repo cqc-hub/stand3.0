@@ -489,6 +489,10 @@ export const pickTempItem = function <T = TFormKeys>(
   list.map((o) => {
     if (o.field !== 'switch') {
       o.labelWidth = '180rpx';
+
+      if (gStores.globalStore.ev === 'alipay') {
+        o.labelWidth = '160rpx';
+      }
     }
   });
 
