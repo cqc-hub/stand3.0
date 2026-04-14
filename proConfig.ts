@@ -8,7 +8,7 @@ export const miniProgramConfig: {
     alipayAppid: '2021002139602458',
     isvAlipayAppid: '2021003154665105',
     h5Appid: 'wx8e5a08ccb011d26c',
-  h5AppidDisabledInTest:true,
+    h5AppidDisabledInTest: true,
     name: '台州市第一人民医院',
 
     isSearchInHos: true,
@@ -432,6 +432,7 @@ export const miniProgramConfig: {
     h5Appid: 'wx69bb1d0f7210807b',
     name: '西安市红会互联网医院',
     isSearchInHos: true,
+    h5AppidDisabledInTest: true,
     isOpenOcr: false,
     isOpenHealthCard: {
       healthCardText: '陕西省卫生健康委员会',

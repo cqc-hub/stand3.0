@@ -51,6 +51,7 @@ export const formKey = <const>{
   countries: 'countries',
   height: 'height',
   weight: 'weight',
+  waistline: 'waistline',
 };
 
 export type TCardPat = {
@@ -317,14 +318,26 @@ export const tempList: TInstance[] = [
 
   {
     required: true,
+    label: '腰围(厘米)',
+    field: 'input-text',
+    placeholder: '请输入',
+    key: formKey.waistline,
+    labelWidth: '220rpx',
+    maxlength: 50,
+    inputType: 'digit',
+  },
+
+  {
+    required: true,
     label: '监护人证件号',
     field: 'input-text',
     placeholder: '请输入',
     key: formKey.upIdCard,
     validator: async (v: unknown, item: any) => {
       if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
-        const { ageGuardian } =
-          await ServerStaticData.getSystemConfig('person');
+        const { ageGuardian } = await ServerStaticData.getSystemConfig(
+          'person'
+        );
 
         const info = idValidator.getIdCardInfo(v);
 
@@ -457,9 +470,6 @@ export const tempList: TInstance[] = [
     rowStyle: 'margin-top: 16rpx;',
   },
 ];
-
-
-
 
 export const pickTempItem = function <T = TFormKeys>(
   keys: TFormKeys[]
@@ -968,8 +978,9 @@ export const useProgramPaySign = () => {
     flagTitle1226,
     isSignExist,
     async initSign() {
-      const { isPayWithoutSecretAuth } =
-        await ServerStaticData.getSystemConfig('person');
+      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
+        'person'
+      );
 
       if (isPayWithoutSecretAuth === '1') {
         // regDialogConfirmSign.value.show();
@@ -980,8 +991,9 @@ export const useProgramPaySign = () => {
     async goPaySign(patientId, payload = {} as TSingnPayload) {
       const { type = 'addPat', cb } = payload;
 
-      const { isPayWithoutSecretAuth } =
-        await ServerStaticData.getSystemConfig('person');
+      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
+        'person'
+      );
       if (isPayWithoutSecretAuth !== '1') {
         return;
       }
