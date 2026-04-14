@@ -659,6 +659,9 @@
       const { result: _result } = await api.getCheckoutReportDetails(params);
       result = _result;
     }
+
+    // result.pdfUrl =
+      // 'https://nethospital.zchospital.com/phs/switch/encryptImages2pdf?imageUrls=F1DQFpjH9Dbk0NyX3fXAULvceqGzl7xRbTe1lvnV-4UnmXxnQ_PA-L-B_c0-0h9D9NvQy7gAZNu-chRcY11l7qYkF9C2LZ1vPUioSZPHBBxqh3sJt83ow6fIX-xOEeSLm6z9kURQWOpq0PbLdVOxhKrj33TZEFVYrVfZ1CraVyEDzFvJxHzDiGU0rWkO974p_9FG-rzpOCOQtQONnCC0u0nfmrthmztdmgClVRWMl8fgUwvj7FH6Kg0xZ6rvnEtF8QIJw2ZdytZ8QFNMWY5p_J3gs3jkk_SFQUwaKWNlpU7ljaockYeV82kRbMbNEBbH';
     if (result.antiItemResult) {
       checkoutReportList.value = result;
       if (alipayPid) {
@@ -749,16 +752,28 @@
   };
 
   const cacheStore = useCacheStore();
-  const goPdfUrl = () => {
+  const goPdfUrl = async () => {
     const { repName } = checkoutReportList.value;
+    const { isJYGetImageUrlByH5 } = pageConfig.value;
+
     if (
       checkoutReportList.value.pdfUrl ||
-      checkoutReportList.value?.pdfUrls?.length === 1
+      checkoutReportList.value.pdfUrls?.length === 1
     ) {
-      cacheStore.changeCacheData(
-        //@ts-expect-error
-        checkoutReportList.value.pdfUrl || checkoutReportList.value?.pdfUrls[0]
-      );
+      const pdfUrl =
+        checkoutReportList.value.pdfUrl ||
+        checkoutReportList.value.pdfUrls?.[0] ||
+        '';
+
+      if (isJYGetImageUrlByH5 === '1') {
+        copyDataUrl.value = pdfUrl;
+        await wait(200);
+        popupCopy.value.show();
+
+        return;
+      }
+
+      cacheStore.changeCacheData(pdfUrl);
       let params: any = {
         type: 'cache',
       };
@@ -767,11 +782,7 @@
       ) {
         params = {
           type: 'base64',
-          url: encodeURIComponent(
-            checkoutReportList.value.pdfUrl ||
-              //@ts-expect-error
-              checkoutReportList.value?.pdfUrls[0]
-          ),
+          url: encodeURIComponent(pdfUrl),
         };
       }
       uni.navigateTo({

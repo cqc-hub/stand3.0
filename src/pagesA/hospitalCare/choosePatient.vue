@@ -103,7 +103,7 @@
 <script setup lang="ts">
   import { computed, ref } from 'vue';
   import { useUserStore, IPat } from '@/stores';
-  import { GStores, ServerStaticData, useTBanner } from '@/utils';
+  import { GStores, PatientUtils, ServerStaticData, useTBanner } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import api from '@/service/api';
   import {
@@ -142,6 +142,7 @@
   const _actionSheet = ref();
   const userSore = useUserStore();
   const gStores = new GStores();
+  const patientUtils = new PatientUtils();
 
   const inputChange = () => {
     hosInfoParam.value.patientId = '';
@@ -177,14 +178,25 @@
       actionSheet.value.show();
     }
   };
-  const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
+  const choosePatHandler = async ({ item }: { item: IPat; number: number }) => {
     const key = 'hrtest22';
     const phone = item.cellPhoneNumber;
-    const message = decryptDes(phone, key);
-    gStores.userStore.updatePatChoose(item);
+
     hosInfoParam.value.patientName = item.patientName;
-    phoneStatus.value = /^1[3-9]\d{9}$/.test(message);
+    gStores.userStore.updatePatChoose(item);
+
+    if (!phone) {
+      gStores.messageStore.showMessage(
+        '未查询到用户手机号, 请手动输入手机号码',
+        1500
+      );
+      return;
+    }
+
+    const message = decryptDes(phone, key);
     hosInfoParam.value.patientPhone = message;
+
+    phoneStatus.value = /^1[3-9]\d{9}$/.test(hosInfoParam.value.patientPhone!);
     hosInfoParam.value.patientId = item.patientId;
     hosInfoParam.value.cardNumber = item.cardNumber;
   };

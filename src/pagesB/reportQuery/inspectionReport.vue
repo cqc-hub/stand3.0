@@ -669,10 +669,19 @@
     }
   };
 
-  const goReportPdf = (item) => {
+  const goReportPdf = async (item) => {
     let { repId, repName, pdfPath, pdfType } = item;
+    const { isJCGetImageUrlByH5 } = pageConfig.value;
 
     if (pdfPath) {
+      if (isJCGetImageUrlByH5 === '1') {
+        copyDataUrl.value = pdfPath;
+        await wait(200);
+        popupCopy.value.show();
+
+        return;
+      }
+
       if (['1001035'].includes(gStores.globalStore.sysCode)) {
         // pdf PDF JPG jpg
         if (pdfType && ['JPG', 'jpg'].includes(pdfType)) {

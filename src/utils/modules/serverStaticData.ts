@@ -163,6 +163,7 @@ export const useTBanner = async (
   routeType: 'reLaunch' | 'redirectTo' | 'navigateTo' = 'navigateTo',
   additionData: BaseObject = {}
 ) => {
+  console.log('触发useTBanner---:', config);
   const gStores = new GStores();
   const cacheStore = useCacheStore();
 
@@ -171,7 +172,7 @@ export const useTBanner = async (
   const {
     type,
     extraData = {},
-    path,
+    path = '',
     appId,
     envVersion = 'release',
     addition,
@@ -336,6 +337,13 @@ export const useTBanner = async (
       url: joinQuery('/pagesC/cloudHospital/cloudHospital', extraData),
     });
   } else if (type === 'backProgram') {
+    console.log(
+      'backProgram 参数------',
+      joinQuery(path, extraData),
+      ';extraData',
+      extraData,
+      envVersion
+    );
     uni.navigateBackMiniProgram({
       extraData,
     });
