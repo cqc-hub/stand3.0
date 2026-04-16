@@ -37,6 +37,7 @@ import type {
   ISystemConfig,
   IHosInfo,
   TButtonConfig,
+  TBannerHomeMenuConfig,
 } from '@/types';
 import { useViewerStore } from '@/stores/modules/viewer';
 
@@ -159,7 +160,7 @@ const tBannerIntercept = async (
 ) => {};
 
 export const useTBanner = async (
-  config: TBannerConfig | TButtonConfig,
+  config: TBannerConfig | TButtonConfig | TBannerHomeMenuConfig,
   routeType: 'reLaunch' | 'redirectTo' | 'navigateTo' = 'navigateTo',
   additionData: BaseObject = {}
 ) => {
@@ -268,7 +269,7 @@ export const useTBanner = async (
         (await getMiniProgramEnv()) === 'develop' &&
         globalGl.env !== 'prod'
       ) {
-        // baseUrl = h5UrlLocal;
+        baseUrl = h5UrlLocal;
       }
 
       fullUrl = baseUrl + fullUrl;

@@ -486,6 +486,16 @@ export const pickTempItem = function <T = TFormKeys>(
       return aIndex - bIndex;
     });
 
+  list.map((o) => {
+    if (o.field !== 'switch') {
+      o.labelWidth = '180rpx';
+
+      if (gStores.globalStore.ev === 'alipay') {
+        o.labelWidth = '160rpx';
+      }
+    }
+  });
+
   if (sysCode === '1001067') {
     const referenceId = list.find((o) => o.key === 'referenceId');
     if (referenceId && referenceId.field === 'input-text') {

@@ -465,20 +465,19 @@
 
   const inputPlaceHolderStyle = (item: TInstance) => {
     const key = item.key;
+    const r = ['font-size: var(--hr-font-size-xs)'];
+
     if (warningKeys.value.includes(key)) {
       if (props.value[item.key]) {
-        return `color: var(--hr-neutral-color-5);
-  		font-size: var(--hr-font-size-base);`;
+        r.push('color: var(--hr-neutral-color-5)');
       } else {
-        return `
-        font-size: var(--hr-font-size-base);
-        color: red;
-        `;
+        r.push(' color: red');
       }
     } else {
-      return `color: var(--hr-neutral-color-5);
-  		font-size: var(--hr-font-size-base);`;
+      r.push('color: var(--hr-neutral-color-5)');
     }
+
+    return r.join(';');
   };
 
   const _actionSheet = ref();

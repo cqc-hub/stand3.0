@@ -20,16 +20,19 @@
               >
                 {{ item?.content }}
               </view>
-              <view @click="moreClick(o?.type)" class="g-flex-rc-cc button-item mt32">
-            <image
-              :src="'https://phsdevoss.eheren.com/pcloud/phs3.0/intelMedicalAssist_more.png'"
-              class="icon-btn mr8"
-            />
+              <view
+                @click="moreClick(o?.type)"
+                class="g-flex-rc-cc button-item mt32"
+              >
+                <image
+                  :src="'https://phsdevoss.eheren.com/pcloud/phs3.0/intelMedicalAssist_more.png'"
+                  class="icon-btn mr8"
+                />
 
-            <view class="color-blue f28 ">
-              {{ o?.type === 'symptom' ? '更多部位症状' : '更多药品查询' }}
-            </view>
-          </view>
+                <view class="color-blue f28">
+                  {{ o?.type === 'symptom' ? '更多部位症状' : '更多药品查询' }}
+                </view>
+              </view>
             </template>
             <template v-else>
               <view class="guess-content">
@@ -40,15 +43,18 @@
                     :key="'grid-item' + index"
                     @click="handleClickServer(item)"
                   >
-                    <img :src="imgUrl + item.icon" alt="" class="icon" lazy-load />
+                    <img
+                      :src="imgUrl + item.icon"
+                      alt=""
+                      class="icon"
+                      lazy-load
+                    />
                     <view class="label f28">{{ item.text }}</view>
                   </view>
                 </view>
               </view>
             </template>
           </view>
-
-
         </view>
       </view>
     </scroll-view>
@@ -61,6 +67,7 @@
   import { useTBanner } from '@/utils';
 
   import api from '@/service/api';
+  import { joinQuery } from '@/common';
   export default {
     props: {
       serverArray: {
@@ -118,7 +125,7 @@
         const desMap = {
           symptom: '您可以详细描述症状,让我来帮您找科室找医生吧~',
           drug: '您可以描述药品名称,让我来帮您推荐药品使用说明书~',
-          server:'您可能会需要以下服务~'
+          server: '您可能会需要以下服务~',
         };
 
         return desMap[type] || '我不知道推荐啥';
@@ -137,14 +144,26 @@
               globalGl.SYS_CODE,
           });
         } else {
-          useTBanner({
-            type: 'h5',
-            path:
-              globalGl.h5Url +
-              'pagesC/IntelligentGuidance/select?sysCode=' +
-              globalGl.SYS_CODE +
-              '&mulSelect=true',
-          });
+          if (globalGl.SYS_CODE === '1001017') {
+            useTBanner({
+              type: 'h5',
+              path:
+                globalGl.h5Url +
+                'pagesC/IntelligentGuidance/select?sysCode=' +
+                globalGl.SYS_CODE +
+                '&mulSelect=true',
+            });
+          } else {
+            useTBanner({
+              type: 'h5',
+              isSelfH5: '1',
+              path: joinQuery('pagesC/IntelligentGuidance/select', {
+                _type: 'aiAsk',
+                channel: '3',
+                mulSelect: 'true',
+              }),
+            });
+          }
         }
       },
     },
@@ -213,10 +232,10 @@
       }
     }
   }
-  .color-blue{
-    color:var(--hr-brand-color-6)
+  .color-blue {
+    color: var(--hr-brand-color-6);
   }
-  .button-item{
-    width:100%
+  .button-item {
+    width: 100%;
   }
 </style>

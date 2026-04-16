@@ -473,6 +473,10 @@ const switchHandleResult = async (
   typeInIndex?: number,
   tips?: string
 ) => {
+  console.log({
+    showType,
+    list
+  });
   if (!(list && list.length)) {
     msgList.value.push({
       my: false,
@@ -1773,3 +1777,4 @@ export const regConfirm = async (pageArg) => {
 export const handleSourceChoose = (pageArg) => {
   regConfirm(pageArg);
 };
+

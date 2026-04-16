@@ -8,7 +8,7 @@ import {
 } from '@/utils';
 
 import api from '@/service/api';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import wx from 'weixin-js-sdk';
 
 let isWxOfficialAccountAuth = false;
@@ -24,9 +24,8 @@ export const useTranslateVoiceHook = () => {
     } else {
       // 需要设置js接口安全域名
       // 接口权限开启  接收语音识别结果
-      const { WxOfficialAccount } = await cacheUtil.getSystemConfig(
-        'WxOfficialAccount'
-      )();
+      const { WxOfficialAccount } =
+        await cacheUtil.getSystemConfig('WxOfficialAccount')();
       const { appId } = WxOfficialAccount;
 
       if (!appId) {
@@ -78,6 +77,8 @@ export const useTranslateVoiceHook = () => {
   setTimeout(init, 200);
 
   const startRecord = async () => {
+    await apiAsync(wx.stopRecord, {});
+
     await apiAsync(wx.startRecord, {});
     dateStar = new Date().getTime();
     isListening.value = true;
