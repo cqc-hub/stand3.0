@@ -23,6 +23,8 @@ export type MsgListType = {
   isSysAppMore?: boolean;
   chatId?: string;
   hosData?: string;
+
+  showType?: string;
 };
 
 export type MsgStatusType = {

@@ -9,7 +9,7 @@
       <view class="title">
         <view class="flex-between">
           <view class="popup-title text-ellipsis f48 pt32 pb32">
-            报告AI解读
+            {{ title }}
           </view>
           <view
             @click="reportPopupRef?.hide"
@@ -27,12 +27,17 @@
             <text style="color: var(--hr-brand-color-6)">检查报告</text><text>、</text>
             <text style="color: var(--hr-brand-color-6)">病历</text><text>、</text>
             <text style="color: var(--hr-brand-color-6)">药盒</text><text>、</text> -->
-             <text style="color: var(--hr-brand-color-6)">检查报告</text>、
+            <text style="color: var(--hr-brand-color-6)">检查报告</text>
+            、
             <text style="color: var(--hr-brand-color-6)">检验报告</text>
             <text>，大模型将为您进行智能解读~</text>
           </view>
           <view class="report-img relative">
-            <img :src="globalGl.BASE_IMG + 'znyz_jxw.png'" class="w-full" lazy-load />
+            <img
+              :src="globalGl.BASE_IMG + 'znyz_jxw.png'"
+              class="w-full"
+              lazy-load
+            />
           </view>
         </view>
         <view class="content relative">
@@ -41,29 +46,37 @@
             <text class="color-888 f26">请上传图文清晰、边框完整的图片</text>
           </view>
           <view class="report-img flex-normal p32c pt48">
-            <img :src="globalGl.BASE_IMG + 'znyz_jc.png'" class="w-full" lazy-load />
-            <img :src="globalGl.BASE_IMG + 'znyz_jy.png'" class="w-full" lazy-load />
+            <img
+              :src="globalGl.BASE_IMG + 'znyz_jc.png'"
+              class="w-full"
+              lazy-load
+            />
+            <img
+              :src="globalGl.BASE_IMG + 'znyz_jy.png'"
+              class="w-full"
+              lazy-load
+            />
           </view>
         </view>
       </view>
-      
+
       <template v-else>
         <view class="container g-container pt12">
-            <g-tabs
-              class="ml16"
-              v-model:value="tabCurrent"
-              :tabs="tabs"
-              :line-scale="0.8"
-              field="headerName"
-              :bgColor="'transparent'"
-              all-blod
-              @change="(e) => tabChange(e, 'click')"
-            />
+          <g-tabs
+            class="ml16"
+            v-model:value="tabCurrent"
+            :tabs="tabs"
+            :line-scale="0.8"
+            field="headerName"
+            :bgColor="'transparent'"
+            all-blod
+            @change="(e) => tabChange(e, 'click')"
+          />
           <swiper
             :current="tabCurrent"
             @change="(e) => tabChange(e.detail.current, '')"
             class="flex1"
-          > 
+          >
             <swiper-item v-for="tab in tabs" :key="tab.typeId">
               <scroll-list
                 :option="scrollOption"
@@ -83,7 +96,9 @@
                       :key="index"
                     >
                       <template
-                        v-for="(report, reportIndex) in item.reportHosNameResults"
+                        v-for="(
+                          report, reportIndex
+                        ) in item.reportHosNameResults"
                         :key="`reportHosNameResults${reportIndex}`"
                       >
                         <view class="date" :class="{ dateFirst: index == 0 }">
@@ -98,7 +113,10 @@
                           class="advisoryItem pb40"
                           :class="{ advisoryItemFirst: index == 0 }"
                         >
-                          <template v-for="(data, i) in report.reportList" :key="i">
+                          <template
+                            v-for="(data, i) in report.reportList"
+                            :key="i"
+                          >
                             <view @tap="changeCheck(data)">
                               <advisoryItem
                                 :data="data"
@@ -118,21 +136,30 @@
                 <template #empty>
                   <!-- v-if="!loading" -->
                   <view v-if="!loading" class="empty-box">
-                    <g-empty :current="1" text="未查询到您近一个月的报告内容~" />
+                    <g-empty
+                      :current="1"
+                      text="未查询到您近一个月的报告内容~"
+                    />
                   </view>
                 </template>
               </scroll-list>
             </swiper-item>
           </swiper>
         </view>
-      </template> 
+      </template>
 
       <view class="footer f32">
         <button class="btn btn-primary btn-border" @click="addPhoto">
           上传报告图片
         </button>
         <!-- #ifndef H5 -->
-        <button class="btn btn-border btn-primary" @click="changeTtype" v-if="pageConfigEle.intelMedicalAssistConfig?.isReportAnalysis !== '2'">
+        <button
+          class="btn btn-border btn-primary"
+          @click="changeTtype"
+          v-if="
+            pageConfigEle.intelMedicalAssistConfig?.isReportAnalysis !== '2'
+          "
+        >
           {{ isPhoto ? '解读本院报告' : '进行报告解读' }}
         </button>
         <!-- #endif -->
@@ -142,7 +169,7 @@
 </template>
 <script setup lang="ts">
   import { ref, nextTick, computed, onMounted, onUpdated } from 'vue';
-  import { reportPopupRef, isPhoto  } from '../utils/utils';
+  import { reportPopupRef, isPhoto } from '../utils/utils';
   import {
     ServerStaticData,
     ISystemConfig,
@@ -158,8 +185,13 @@
   import api from '@/service/api';
   import dayjs from 'dayjs';
 
+  defineProps<{
+    title?: string;
+    type: string;
+  }>();
+
   const pageConfig = ref(<ISystemConfig['reportQuery']>{});
-  const pageConfigEle=ref(<ISystemConfig['Electronic_Consultation_Sheet']>{});
+  const pageConfigEle = ref(<ISystemConfig['Electronic_Consultation_Sheet']>{});
   const pageList = ref<Record<string, any[]>>({});
   const tabCurrent = ref(0);
   const tabs = ref<any[]>([
@@ -325,7 +357,7 @@
 
                 if (reportList && reportList.length) {
                   reportList.map((item) => {
-                    item.checked = false; 
+                    item.checked = false;
                     const findItemSameDate = willChangeList.find((fItem) => {
                       return fItem.date === date;
                     });
@@ -433,7 +465,9 @@
 
   onMounted(async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
-    pageConfigEle.value = await ServerStaticData.getSystemConfig('Electronic_Consultation_Sheet');
+    pageConfigEle.value = await ServerStaticData.getSystemConfig(
+      'Electronic_Consultation_Sheet'
+    );
     // ImgUploadOption.value = {
     //   count: 3,
     //   title: '选择我的报告',
@@ -470,8 +504,8 @@
       margin: auto;
       border-radius: 40rpx;
       box-shadow: 0px 0px 20rpx 0px rgba(0, 0, 0, 0.06);
-      display: flex; 
-      flex-direction: column; 
+      display: flex;
+      flex-direction: column;
       .container-scroll {
         height: 100%;
 

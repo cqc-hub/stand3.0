@@ -53,6 +53,7 @@ export const msgState = ref<MsgStatusType>({
 export const messFormData = ref<Array<MessFormListType>>([]);
 export const messHisFormData = ref<Array<Array<MessFormListType>>>([[]]);
 export const reportPopupRef = ref<any>();
+export const reportPopupRefTitle = ref('报告AI解读');
 export const distinctiveImage = ref<string>('');
 export const distinctiveImagePopupRef = ref<any>();
 export const isReportAnalysis = ref<boolean>(false);
@@ -152,7 +153,13 @@ const test = async () => {
     ],
   };
   const { showType, list } = data;
-  switchHandleResult(showType, list, '', '', undefined, '提示语');
+  switchHandleResult({
+    showType,
+    list,
+    tips: data.tips,
+    requestId: '2222',
+    chatId: '23',
+  });
 };
 export const reload = async (isMess) => {
   popipHasShow.value = false;
@@ -431,7 +438,6 @@ export const sendMsg = async (
   msgState.value.msgLoad = true;
   // #ifdef  MP-WEIXIN
   if (chunkStatus.value?.isWXStreamApi) {
-
     typeInAsk(value, answertype || 0, opt);
     return;
   }
@@ -444,9 +450,7 @@ export const sendMsg = async (
   }
   // #endif
   const { source } = gStores.globalStore.browser;
-  const {
-    result: { showType, list, requestId, chatId, tips },
-  } = await api
+  const { result } = await api
     .customerAIask({
       ...req,
       content: value,
@@ -459,23 +463,26 @@ export const sendMsg = async (
     .finally(() => {
       msgState.value.msgLoad = false;
     });
+  const { showType, list, requestId, chatId, tips } = result;
   msgState.value.lastChatId = chatId;
   msgState.value.requestId = requestId;
+  console.log('执行2--------');
 
-  switchHandleResult(showType, list, requestId, chatId, undefined, tips);
+  switchHandleResult({ showType, list, requestId, chatId, tips });
 };
 
-const switchHandleResult = async (
-  showType: number,
-  list: Array<any>,
-  requestId: string,
-  chatId: string,
-  typeInIndex?: number,
-  tips?: string
-) => {
+const switchHandleResult = async (opt: {
+  showType: number;
+  list: Array<any>;
+  requestId: string;
+  chatId: string;
+  typeInIndex?: number;
+  tips?: string;
+}) => {
+  const { showType, list, requestId, chatId, typeInIndex, tips } = opt;
   console.log({
     showType,
-    list
+    list,
   });
   if (!(list && list.length)) {
     msgList.value.push({
@@ -526,6 +533,10 @@ const switchHandleResult = async (
         dealShowType12(list, requestId, chatId);
         break;
 
+      case 13:
+        dealShowType13(opt);
+        break;
+
       case 101:
         //推荐有胸痛、卒中相关展示最近医院
         dealShowType101(list, requestId, chatId);
@@ -572,11 +583,15 @@ export const scrollToNewMsgFun = (selector?: string, duration?: number) => {
 };
 
 export const scrollToNewMsg = throttle(scrollToNewMsgFun, 600);
+// 1 footer地区点击  2 ai回答里面上传资料
+export const reportPopupRefType = ref(<'1' | '2'>'1');
 export const reportShow = () => {
   if (msgState.value.msgLoad) {
     return;
   }
   !popipHasShow.value && (popipHasShow.value = true);
+  reportPopupRefTitle.value = '报告AI解读';
+  reportPopupRefType.value = '1';
   setTimeout(() => {
     reportPopupRef.value.show();
   }, 200);
@@ -614,17 +629,46 @@ export const inspectionAnalysis = async (reports) => {
   // #endif
 };
 
-export const sendImg = async () => {
-  if (msgState.value.msgLoad) {
-    return;
-  }
-  const gStores = new GStores();
-  const maxSize = 4 * 1024 * 1024; // 4MB 限制大小
+export const uChooseImg = async (count = 9) => {
   const { tempFilePaths } = (await apiAsync(uni.chooseImage, {
-    count: 1,
+    count,
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
   })) as any;
+
+  return tempFilePaths;
+};
+
+export const waitUploadFiles = ref<{ path: string }[]>([]);
+
+export const waitUploadFilesSelect = (newFiles) => {
+  waitUploadFiles.value.push(...newFiles);
+};
+
+export const waitUploadFilesDel = (idx) => {
+  waitUploadFiles.value.splice(idx, 1);
+};
+
+export const upLoadMedRecord = async () => {
+  waitUploadFiles.value = (await uChooseImg(5)).map((o) => ({
+    path: o,
+  }));
+};
+
+export const sendImg = async () => {
+  if (msgState.value.msgLoad) {
+    upLoadMedRecord();
+    return;
+  }
+
+  if (reportPopupRefType.value === '2') {
+    upLoadMedRecord();
+    return;
+  }
+
+  const gStores = new GStores();
+  const maxSize = 4 * 1024 * 1024; // 4MB 限制大小
+  const tempFilePaths = await uChooseImg(1);
   try {
     if (tempFilePaths.length === 0) {
       return;
@@ -885,6 +929,7 @@ const dealShowType1withStream = async (
   const { question, answer } = list[0];
   await new Promise((rl, rj) => {
     if (msgList.value?.length === typeInIndex) {
+      console.log('执行3------');
       msgList.value.push({
         my: false,
         msg: '',
@@ -1120,6 +1165,22 @@ const dealShowType12 = (lists, requestId, chatId) => {
   scrollToNewMsg();
 };
 
+const dealShowType13 = (opt) => {
+  const { list = [], requestId, chatId } = opt;
+
+  if (list.length) {
+    msgList.value.push({
+      my: false,
+      msg: list[0],
+      showType: '13',
+      type: 13,
+      requestId,
+      chatId,
+      // isSysAppMore: judgeIsSysAppMore(requestId),
+    });
+  }
+};
+
 //为卒中新增的类型 但实际没用
 const dealShowType101 = (list, requestId, chatId) => {
   if (list?.length) {
@@ -1202,10 +1263,14 @@ const processChunks = (chunkTemp: string, typeInIndex: number) => {
 let requestTask: any = null;
 let taskQueue = new TaskQueue();
 
-const typeInAsk = async (value, answertype,   opt = {} as {
+const typeInAsk = async (
+  value,
+  answertype,
+  opt = {} as {
     req?: BaseObject; // 补充到接口
     hideQuestion?: '1'; // 不显示问的内容
-  }) => {
+  }
+) => {
   const { req = {}, hideQuestion } = opt;
 
   const gStores = new GStores();
@@ -1488,7 +1553,15 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     }
     chatId && (msgState.value.lastChatId = chatId);
     requestId && (msgState.value.requestId = requestId);
-    switchHandleResult(showType, list, requestId, chatId, typeInIndex, tips);
+    console.log('执行1--------');
+    switchHandleResult({
+      showType,
+      list,
+      requestId,
+      chatId,
+      typeInIndex,
+      tips,
+    });
   }
 };
 
@@ -1777,4 +1850,3 @@ export const regConfirm = async (pageArg) => {
 export const handleSourceChoose = (pageArg) => {
   regConfirm(pageArg);
 };
-

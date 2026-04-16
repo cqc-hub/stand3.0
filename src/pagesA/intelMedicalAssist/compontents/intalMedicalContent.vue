@@ -11,184 +11,198 @@
       v-for="(msgItem, msgIndex) in msgList"
       :key="`smartChatRoomItem_${msgIndex}`"
     >
-      <view
-        v-if="msgItem.my"
-        :id="`smartChatRoomItem_${msgIndex}`"
-        class="flex-column smartChatRoom-item float-from-top"
-      >
+      <view @click="testClick(msgItem)">
         <view
-          class="flex justify-end padding-right one-show align-start padding-top"
+          v-if="msgItem.my"
+          :id="`smartChatRoomItem_${msgIndex}`"
+          class="flex-column smartChatRoom-item float-from-top"
         >
-          <view class="flex justify-end my-width">
-            <view class="chat-my-item e margin-left padding-chat by-cyan">
-              <image
-                @click="previewImage(msgItem.imgUrl)"
-                v-if="msgItem.type === 5"
-                :src="msgItem.imgUrl"
-                mode="aspectFill"
-                class="chat-img"
-              ></image>
-              <text user-select selectable v-else class="g-break-word">
-                {{ msgItem.msg }}
-              </text>
+          <view
+            class="flex justify-end padding-right one-show align-start padding-top"
+          >
+            <view class="flex justify-end my-width">
+              <view class="chat-my-item e ml20 padding-chat by-cyan">
+                <image
+                  @click="previewImage(msgItem.imgUrl)"
+                  v-if="msgItem.type === 5"
+                  :src="msgItem.imgUrl"
+                  mode="aspectFill"
+                  class="chat-img"
+                ></image>
+                <text user-select selectable v-else class="g-break-word">
+                  {{ msgItem.msg }}
+                </text>
+              </view>
             </view>
           </view>
         </view>
-      </view>
-      <view
-        v-else
-        :id="`smartChatRoomItem_${msgIndex}`"
-        class="flex-column smartChatRoom-item float-from-top"
-      >
         <view
-          class="flex justify-start padding-right one-show align-start padding-top"
+          v-else
+          :id="`smartChatRoomItem_${msgIndex}`"
+          class="flex-column f28 float-from-top"
         >
-          <view class="flex justify-start">
-            <view
-              v-if="msgItem.type === 4"
-              class="chat-system-item e margin-left by-cyan"
-            >
-              <!-- <text user-select  selectable class="g-break-word">{{ msgItem.msg }}</text> -->
-              <!-- 更多推荐 -->
-              <Second-Recommend
-                v-if="msgItem.secondCommendList"
-                :list="msgItem.secondCommendList"
-                :x="msgItem"
-              />
+          <view
+            class="flex justify-start padding-right one-show align-start padding-top"
+          >
+            <view class="flex justify-start">
+              <view
+                v-if="msgItem.type === 4"
+                class="chat-system-item e margin-left by-cyan"
+              >
+                <!-- <text user-select  selectable class="g-break-word">{{ msgItem.msg }}</text> -->
+                <!-- 更多推荐 -->
+                <Second-Recommend
+                  v-if="msgItem.secondCommendList"
+                  :list="msgItem.secondCommendList"
+                  :x="msgItem"
+                />
 
-              <!-- 首页菜单的样式 (占一行) -->
-              <Home-Menu-Item-Recommend
-                v-if="msgItem.homeMenuConfig"
-                :list="msgItem.homeMenuConfig"
-                :x="msgItem"
-              />
-            </view>
-            <!-- <view v-else-if="msgItem.type === 6">
+                <!-- 首页菜单的样式 (占一行) -->
+                <Home-Menu-Item-Recommend
+                  v-if="msgItem.homeMenuConfig"
+                  :list="msgItem.homeMenuConfig"
+                  :x="msgItem"
+                />
+              </view>
+              <!-- <view v-else-if="msgItem.type === 6">
               <Recommend-Card />
             </view> -->
-            <view v-else-if="msgItem.type === 6 && messFormData.length">
-              <Recommend-Remind />
-            </view>
+              <view v-else-if="msgItem.type === 6 && messFormData.length">
+                <Recommend-Remind />
+              </view>
 
-            <view v-else-if="msgItem.type === 63">
-              <Recommend-Remind />
-            </view>
-            <view v-else-if="msgItem.type === 61">
-              <Doc-Scheduling
-                :list="msgItem.addRessList"
-                :msg="msgItem.msg"
-                :source="props.source"
-              />
-            </view>
+              <view v-else-if="msgItem.type === 63">
+                <Recommend-Remind />
+              </view>
+              <view v-else-if="msgItem.type === 61">
+                <Doc-Scheduling
+                  :list="msgItem.addRessList"
+                  :msg="msgItem.msg"
+                  :source="props.source"
+                />
+              </view>
 
-            <view v-else-if="msgItem.type === 62">
-              <Recommend-Dept
-                :list="msgItem.addRessList"
-                :msg="msgItem.msg"
-                :hosData="msgItem?.hosData"
-                :source="props.source"
-              />
-            </view>
-            <view
-              v-else-if="msgItem.type === 99 && msgItem.msg"
-              class="chat-system-item margin-left padding-chat by-cyan"
-            >
-              <view>
-                <view class="report-header">
-                  好的，已收到报告单，以下是详细的报告解读:
-                </view>
-                <ua-markdown :source="msgItem.msg" />
-                <view class="report-declare">
-                  结果仅供参考，具体诊断和治疗应以医生的纸质检查单为准,请及时与医生沟通，以便获得专业的医疗建议和治疗方案。
+              <view v-else-if="msgItem.type === 62">
+                <Recommend-Dept
+                  :list="msgItem.addRessList"
+                  :msg="msgItem.msg"
+                  :hosData="msgItem?.hosData"
+                  :source="props.source"
+                />
+              </view>
+              <view
+                v-else-if="msgItem.type === 99 && msgItem.msg"
+                class="chat-system-item margin-left padding-chat by-cyan"
+              >
+                <view>
+                  <view class="report-header">
+                    好的，已收到报告单，以下是详细的报告解读:
+                  </view>
+                  <ua-markdown :source="msgItem.msg" />
+                  <view class="report-declare">
+                    结果仅供参考，具体诊断和治疗应以医生的纸质检查单为准,请及时与医生沟通，以便获得专业的医疗建议和治疗方案。
+                  </view>
                 </view>
               </view>
-            </view>
-            <view v-else-if="msgItem.type === 64 && messFormData.length">
-              <Recommend-Mess />
-            </view>
+              <view v-else-if="msgItem.type === 64 && messFormData.length">
+                <Recommend-Mess />
+              </view>
 
-            <view
-              v-else
-              :class="{
-                ['flex1']: msgItem.type === 3,
-              }"
-              class="chat-system-item margin-left padding-chat by-cyan"
-            >
-              <!-- <text user-select  selectable v-if="msgItem.type === 1" class="g-break-word">
+              <view
+                v-else
+                :class="{
+                  ['flex1']: msgItem.type === 3,
+                }"
+                class="chat-system-item margin-left padding-chat by-cyan"
+              >
+                <!-- <text user-select  selectable v-if="msgItem.type === 1" class="g-break-word">
                 {{ msgItem.msg }}
               </text> -->
-              <view
-                :class="{ 'b-bottom': msgItem.type.type === 2 }"
-                class="flex"
-              >
-                <view class="flex1 auto">
-                  <text
-                    user-select
-                    selectable
-                    v-if="msgItem.boldMsg"
-                    :style="
-                      msgItem.type === 2
-                        ? 'color: #838383; padding: 8rpx 0;word-break: break-all'
-                        : ''
-                    "
-                    :class="{
-                      ['color-888 f32']: msgItem.type === 3,
-                    }"
-                    class="f32"
-                  >
+                <view
+                  :class="{ 'b-bottom': msgItem.type.type === 2 }"
+                  class="flex"
+                >
+                  <view class="flex1 auto">
                     <text
                       user-select
                       selectable
-                      class="g-bold mr12 pb12 lineH64"
+                      v-if="msgItem.boldMsg"
+                      :style="
+                        msgItem.type === 2
+                          ? 'color: #838383; padding: 8rpx 0;word-break: break-all'
+                          : ''
+                      "
+                      :class="{
+                        ['color-888 f32']: msgItem.type === 3,
+                      }"
+                      class="f32"
                     >
-                      {{ msgItem.boldMsg }}\n
-                    </text>
+                      <text
+                        user-select
+                        selectable
+                        class="g-bold mr12 pb12 lineH64"
+                      >
+                        {{ msgItem.boldMsg }}\n
+                      </text>
 
-                    <!-- <text user-select  selectable>
+                      <!-- <text user-select  selectable>
                       {{ msgItem.msg }}
                     </text> -->
-                  </text>
-                  <view
-                    :style="
-                      msgItem.type === 2
-                        ? 'color: #838383; padding: 8rpx 0;word-break: break-all'
-                        : ''
-                    "
-                    :class="{
-                      ['color-888 f32']: msgItem.type === 3,
-                    }"
-                    class="f32 mWidth80"
-                  >
-                    <ua-markdown :source="msgItem.msg" />
-                  </view>
-                  <view
-                    v-if="msgItem.type === 1 && msgItem?.isSysAppMore"
-                    class="sysAppMore"
-                  >
-                    <rich-text :nodes="sysAppMore"></rich-text>
-                  </view>
+                    </text>
+                    <view
+                      :style="
+                        msgItem.type === 2
+                          ? 'color: #838383; padding: 8rpx 0;word-break: break-all'
+                          : ''
+                      "
+                      :class="{
+                        ['color-888 f32']: msgItem.type === 3,
+                      }"
+                      class="f32 mWidth80"
+                    >
+                      <ua-markdown :source="msgItem.msg" />
+                    </view>
+                    <view
+                      v-if="msgItem.type === 1 && msgItem?.isSysAppMore"
+                      class="sysAppMore"
+                    >
+                      <rich-text :nodes="sysAppMore"></rich-text>
+                    </view>
 
-                  <view v-if="msgItem.firstCommendList" class="pt20">
-                    <!-- 第一个推荐 -->
-                    <Recommend-Menu :list="msgItem.firstCommendList" />
-                  </view>
+                    <view v-if="msgItem.firstCommendList" class="pt20">
+                      <!-- 第一个推荐 -->
+                      <Recommend-Menu :list="msgItem.firstCommendList" />
+                    </view>
 
-                  <view v-if="msgItem.addRessList">
-                    <Recommend-Address :list="msgItem.addRessList" />
-                  </view>
+                    <view v-if="msgItem.addRessList">
+                      <Recommend-Address :list="msgItem.addRessList" />
+                    </view>
 
-                  <view v-if="msgItem.addRessInfo">
-                    <Recommend-Info :item="msgItem.addRessInfo" />
+                    <view v-if="msgItem.addRessInfo">
+                      <Recommend-Info :item="msgItem.addRessInfo" />
+                    </view>
+                    <!-- #ifndef H5 -->
+                    <Evaluate-Btn1
+                      v-if="msgItem.requestId && msgIndex >= msgList.length - 2"
+                      :requestId="msgItem.requestId"
+                      @askAgain="clearChatId"
+                    />
+                    <!-- #endif -->
                   </view>
-                  <!-- #ifndef H5 -->
-                  <Evaluate-Btn1
-                    v-if="msgItem.requestId && msgIndex >= msgList.length - 2"
-                    :requestId="msgItem.requestId"
-                    @askAgain="clearChatId"
-                  />
-                  <!-- #endif -->
                 </view>
               </view>
+            </view>
+          </view>
+
+          <view
+            v-if="msgItem.showType === '13' && msgIndex === msgList.length - 1"
+            class="ml20 flex pt12"
+          >
+            <view
+              class="color-blue text-semibold f24 bg-blue-light pr24 pl24 pt8 pb8 rounded"
+              @click="emits('up-med-record', msgItem)"
+            >
+              上传资料
             </view>
           </view>
         </view>
@@ -263,9 +277,15 @@
     source?: string;
   }>();
 
+  const emits = defineEmits(['up-med-record']);
+
   const sysAppMore = ref('');
   let progressTimer: number | null = null;
   const progressWidth = ref(0);
+
+  const testClick = (o) => {
+    console.log(o);
+  };
 
   watch(
     () => msgState.value.msgLoad,
