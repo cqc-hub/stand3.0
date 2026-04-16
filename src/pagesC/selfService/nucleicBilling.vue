@@ -249,6 +249,7 @@
           <view class="title flex1">{{ item.label }}:</view>
           <view class="field flex2" @click="pickerShow(item)">
             <uni-easyinput
+              v-if="isItemShowPop"
               :placeholder="`请选择${item.label}`"
               :inputBorder="false"
               :clearable="false"

@@ -45,7 +45,7 @@
   import { onReady, onLoad } from '@dcloudio/uni-app';
   import { generateUuid, GStores, rulePhone, useTBanner } from '@/utils';
 
-  import { decryptDes} from '@/common/des';
+  import { decryptDes } from '@/common/des';
   import type { TInstance } from '@/components/g-form/index';
   import { deQueryForUrl } from '@/common';
   import api from '@/service/api';
@@ -66,6 +66,7 @@
     diagnosis: '',
     isAnonymous: '',
     compDept: '',
+    hosId: '',
     selectType: 0, //1-选择就诊记录 0-不选择
     entryType: '', // 入口类型
   });
@@ -623,14 +624,18 @@
   };
 
   const handleSelect = ({ item, value }) => {
-    const { options } = item;
-    const target = options.find((e) => e.value === value);
-    console.log(target);
-    formData.value.visitLabel = `${target.diagnosis}-${target.admissionTime}`;
-    formData.value.visitDate = target.admissionTime;
-    formData.value.visitNo = target.visitNo;
-    formData.value.deptName = target.deptName;
-    formData.value.compDept = target.deptName;
+    if (item.key === 'visitUid') {
+      const { options } = item;
+      const target = options.find((e) => e.value === value);
+      formData.value.visitLabel = `${target.diagnosis}-${target.admissionTime}`;
+      formData.value.visitDate = target.admissionTime;
+      formData.value.visitNo = target.visitNo;
+      formData.value.deptName = target.deptName;
+      formData.value.docName = target.docName;
+      formData.value.hosId = target.hosId;
+      formData.value.type = target.typeLabel;
+      // formData.value.compDept = target.deptName;
+    }
   };
 
   const gotoRecord = () => {
