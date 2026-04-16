@@ -20,6 +20,7 @@ import {
   GStores,
   throttle,
   generateRandomUserId,
+  wait,
 } from '@/utils';
 import {
   cloneUtil,
@@ -34,7 +35,7 @@ import { getMyPowerQx } from '@/components/greenPower';
 import { checkLoginExpired } from '@/common/checkJump';
 import globalGl from '@/config/global';
 import api from '@/service/api';
-import env from '@/config/env';
+import env, { envBasic, globalEv } from '@/config/env';
 import dayjs from 'dayjs';
 
 export const pageConfig = ref(
@@ -393,6 +394,82 @@ export const recommendMenuList = [
     key: 'serviceCenter',
   },
 ];
+
+const upLoadPicOcr = async (files: string[]) => {
+  const gStores = new GStores();
+  const { sysCode, herenId = propsPbj.value?.herenId || '' } =
+    gStores.globalStore;
+
+  const uploadFile = async (filePath: string) => {
+    const { data } = await apiAsync(uni.uploadFile, {
+      url: joinQuery(`${globalEv.prod.baseApi}/phs-extend/customer/picOcr`, {
+        sysCode,
+        herenId,
+        type: 'mini',
+        source: '1',
+      }),
+      filePath,
+      // timeout: 60000,
+      name: 'file',
+      fileType: 'image',
+      header: {
+        phsId: isOpenSm4 ? '81681766' : '81681688',
+      },
+    });
+
+    const { result, code, message } = JSON.parse(data);
+
+    if (code === 1) {
+      throw new Error(result);
+    }
+
+    return result;
+  };
+
+  const tasksList = files.map((o) => uploadFile(o));
+  const fRes = await Promise.allSettled(tasksList);
+
+  return fRes;
+};
+
+const sendMsgWithPic = async () => {
+  const _cachePhoto1 = [...waitUploadFiles.value];
+  const _cachePhoto2 = [...waitUploadFiles.value];
+  waitUploadFiles.value.length = 0;
+  while (_cachePhoto1.length) {
+    msgList.value.push({
+      my: true,
+      imgUrl: _cachePhoto1.shift()!.path,
+      type: 5,
+    });
+  }
+
+  if (msgState.value.msg) {
+    msgList.value.push({
+      my: true,
+      msg: msgState.value.msg,
+      type: 1,
+    });
+  }
+
+  await wait(80);
+  scrollToNewMsg();
+
+  msgState.value.msgLoad = true;
+  msgState.value.msgText = '正在分析中，请稍候...';
+  const r = await upLoadPicOcr(_cachePhoto2.map((o) => o.path));
+  const ocrId: string[] = r
+    .filter((o) => o.status === 'fulfilled')
+    .map((o) => o.value);
+  console.log(r);
+
+  typeInAsk(msgState.value.msg, undefined, {
+    req: {
+      ocrId,
+    },
+  });
+};
+
 /**
  *
  * @param str 提问内容
@@ -415,13 +492,19 @@ export const sendMsg = async (
 
   // #endif
   const gStores = new GStores();
-  let value = str.trim().replace(/\s+/g, '');
-  if (!value) {
-    gStores.messageStore.showMessage('不能发送空白消息~', 3000);
-    return;
-  }
+
   if (msgState.value.msgLoad || chunkStatus.value?.isTyping) {
     gStores.messageStore.showMessage('正在为你解答，请稍等~', 3000);
+    return;
+  }
+  let value = str.trim().replace(/\s+/g, '');
+
+  if (waitUploadFiles.value.length) {
+    sendMsgWithPic();
+    return;
+  }
+  if (!value) {
+    gStores.messageStore.showMessage('不能发送空白消息~', 3000);
     return;
   }
 
@@ -705,7 +788,7 @@ export const sendImg = async () => {
       scrollToNewMsg();
     }, 500);
 
-    let baseApi = 'https://netphs.eheren.com/gateway';
+    let baseApi = globalEv.prod.baseApi;
 
     const { data } = await apiAsync(uni.uploadFile, {
       url: `${baseApi}/phs-extend/customer/picOcr?sysCode=${
@@ -1274,9 +1357,7 @@ const typeInAsk = async (
   const { req = {}, hideQuestion } = opt;
 
   const gStores = new GStores();
-  let baseApi = `https://${
-    globalGl.env === 'prod' ? 'net' : 'test'
-  }phs.eheren.com/gateway`;
+  let baseApi = envBasic.baseApi;
   const settings = {
     url: `${baseApi}/phs-extend/customer/aiStreamAsk`,
     method: 'POST',
