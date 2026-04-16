@@ -7,7 +7,7 @@
     }"
   >
     <!-- <p v-for="item in 200" :key="item">{{ item }}</p> -->
-      <template
+    <template
       v-for="(msgItem, msgIndex) in msgList"
       :key="`smartChatRoomItem_${msgIndex}`"
     >
@@ -48,7 +48,6 @@
               v-if="msgItem.type === 4"
               class="chat-system-item e margin-left by-cyan"
             >
-
               <!-- <text user-select  selectable class="g-break-word">{{ msgItem.msg }}</text> -->
               <!-- 更多推荐 -->
               <Second-Recommend
@@ -75,7 +74,11 @@
               <Recommend-Remind />
             </view>
             <view v-else-if="msgItem.type === 61">
-              <Doc-Scheduling :list="msgItem.addRessList" :msg="msgItem.msg" :source="props.source" />
+              <Doc-Scheduling
+                :list="msgItem.addRessList"
+                :msg="msgItem.msg"
+                :source="props.source"
+              />
             </view>
 
             <view v-else-if="msgItem.type === 62">
@@ -101,7 +104,6 @@
               </view>
             </view>
             <view v-else-if="msgItem.type === 64 && messFormData.length">
-
               <Recommend-Mess />
             </view>
 
@@ -166,8 +168,7 @@
                     <rich-text :nodes="sysAppMore"></rich-text>
                   </view>
 
-
-                 <view v-if="msgItem.firstCommendList" class="pt20">
+                  <view v-if="msgItem.firstCommendList" class="pt20">
                     <!-- 第一个推荐 -->
                     <Recommend-Menu :list="msgItem.firstCommendList" />
                   </view>
@@ -179,14 +180,13 @@
                   <view v-if="msgItem.addRessInfo">
                     <Recommend-Info :item="msgItem.addRessInfo" />
                   </view>
-                   <!-- #ifndef H5 -->
+                  <!-- #ifndef H5 -->
                   <Evaluate-Btn1
                     v-if="msgItem.requestId && msgIndex >= msgList.length - 2"
                     :requestId="msgItem.requestId"
                     @askAgain="clearChatId"
                   />
-                 <!-- #endif -->
-
+                  <!-- #endif -->
                 </view>
               </view>
             </view>
@@ -195,10 +195,9 @@
       </view>
     </template>
 
-
     <view :id="`smartChatRoomItem_load`" key="smartChatRoomItem_load">
       <view
-      v-show="msgState.msgLoad && !chunkStatus.isTyping"
+        v-show="msgState.msgLoad && !chunkStatus.isTyping"
         class="flex-column smartChatRoom-item"
       >
         <view
@@ -209,9 +208,9 @@
               class="chat-system-item margin-left padding-chat by-cyan flex-normal smartChatRoomItem_load"
             >
               <text user-select selectable class="g-break-word g-blod">
-              {{msgState.msgText ? msgState.msgText: "正在理解您的问题"}}
+                {{ msgState.msgText ? msgState.msgText : '正在理解您的问题' }}
               </text>
-               <text class="progress-text">{{ progressWidth }}%</text>
+              <text class="progress-text">{{ progressWidth }}%</text>
               <view
                 class="loading-cricle relative"
                 v-for="(item, index) in 4"
@@ -226,7 +225,14 @@
   </view>
 </template>
 <script setup lang="ts">
-  import { ref, computed, getCurrentInstance, onMounted, watch, onUnmounted } from 'vue';
+  import {
+    ref,
+    computed,
+    getCurrentInstance,
+    onMounted,
+    watch,
+    onUnmounted,
+  } from 'vue';
   import { type StyleConfigType } from '../utils/types';
   import {
     msgState,
@@ -254,42 +260,45 @@
   const props = defineProps<{
     msgList: any[];
     headerConfig: StyleConfigType;
-    source?:string
+    source?: string;
   }>();
 
   const sysAppMore = ref('');
   let progressTimer: number | null = null;
   const progressWidth = ref(0);
 
- watch(() => msgState.value.msgLoad, (newVal) => {
-    if (newVal) {
-      // 重置进度条
-      progressWidth.value = 0;
+  watch(
+    () => msgState.value.msgLoad,
+    (newVal) => {
+      if (newVal) {
+        // 重置进度条
+        progressWidth.value = 0;
 
-      // 清除之前的进度定时器
-      if (progressTimer) {
-        clearInterval(progressTimer);
+        // 清除之前的进度定时器
+        if (progressTimer) {
+          clearInterval(progressTimer);
+        }
+
+        // 启动进度条动画
+        progressTimer = setInterval(() => {
+          // 模拟不规律的进度增长
+          const increment = Math.random() * 4 + 2; // 2-10之间的随机数
+          progressWidth.value = Math.floor(
+            Math.min(progressWidth.value + increment, 95)
+          );
+        }, 400);
+      } else {
+        // 清除进度条定时器并完成进度
+        if (progressTimer) {
+          clearInterval(progressTimer);
+          progressTimer = null;
+        }
+
+        // 瞬间完成进度条
+        progressWidth.value = 100;
       }
-
-      // 启动进度条动画
-      progressTimer = setInterval(() => {
-        // 模拟不规律的进度增长
-        const increment = Math.random() * 4 + 2; // 2-10之间的随机数
-        progressWidth.value =Math.floor(Math.min(progressWidth.value + increment, 95));
-      }, 400);
-
-    } else {
-
-      // 清除进度条定时器并完成进度
-      if (progressTimer) {
-        clearInterval(progressTimer);
-        progressTimer = null;
-      }
-
-      // 瞬间完成进度条
-      progressWidth.value = 100;
     }
-  });
+  );
 
   onMounted(async () => {
     const gStores = new GStores();
@@ -298,11 +307,11 @@
   });
 
   onUnmounted(() => {
-  if (progressTimer) {
+    if (progressTimer) {
       clearInterval(progressTimer);
       progressTimer = null;
     }
-});
+  });
 
   const previewImage = (url) => {
     uni.previewImage({
@@ -370,11 +379,11 @@
   .smartChatRoomItem_load {
     align-items: center;
 
-     .progress-text {
-        font-size: 24rpx;
-        color: var(--hr-brand-color-6);
-        margin: 0 6px;
-      }
+    .progress-text {
+      font-size: 24rpx;
+      color: var(--hr-brand-color-6);
+      margin: 0 6px;
+    }
 
     .loading-cricle {
       width: 16rpx;
@@ -422,7 +431,7 @@
   .mWidth80 {
     min-width: 80vw;
   }
-  .auto{
+  .auto {
     overflow: auto;
   }
 </style>

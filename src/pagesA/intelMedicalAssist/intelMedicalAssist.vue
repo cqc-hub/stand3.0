@@ -42,7 +42,7 @@
     <view v-if="showOrder">
       <Doc-Sch-Order :orderInfo="schOrderInfo"></Doc-Sch-Order>
     </view>
-    <distinctiveImagePopup/>
+    <distinctiveImagePopup />
 
     <g-message />
   </view>
@@ -61,7 +61,7 @@
   import intalMedicalContent from './compontents/intalMedicalContent.vue';
   import reportPopup from './compontents/reportPopup.vue';
   // import DocSchOrder from './compontents/DocSchOrder.vue';
-  import distinctiveImagePopup from './compontents/distinctiveImagePopup.vue'
+  import distinctiveImagePopup from './compontents/distinctiveImagePopup.vue';
   import {
     styleConfig,
     pageConfig,
@@ -80,21 +80,22 @@
     showOrder,
     schOrderInfo,
   } from './utils/utils';
-  import { throttle, GStores } from '@/utils'; 
-  import { type IPat } from '@/stores';
+  import { throttle, GStores, wait } from '@/utils';
+  import { useCacheStore, type IPat } from '@/stores';
 
   const props = defineProps<{
     isMess?: string;
     sysCode?: string;
     source?: string;
     herenId?: string; //埋点
-    type?: 'report'|'homePage';
+    type?: 'report' | 'homePage';
     reportId?: string; //报告id
     reportData?: any;
     setNavBarTitle?: string;
   }>();
 
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
 
   const scrollChangeView = (e) => {
     // console.log('e.scrollTop,styleConfig.value.showHeader',e.scrollTop,styleConfig.value.showHeader)
@@ -149,8 +150,23 @@
     scrollChangeView(e);
   });
 
-  onShow(() => {
+  onShow(async () => {
     reload(props?.isMess);
+
+    // await wait(200);
+    const evt = cacheStore.webViewCacheData;
+    const evtData = evt?.detail?.data?.[0]?.data;
+    if (evtData) {
+      const { type, value } = evtData;
+
+      if (type === 'aiAskSymptom') {
+        const { sliceWorld } = value;
+
+        cacheStore.changeCacheDataWebView({});
+        await wait(200);
+        sendMsg(sliceWorld);
+      }
+    }
   });
 
   onLoad(() => {
