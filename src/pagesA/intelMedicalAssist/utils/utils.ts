@@ -490,7 +490,16 @@ const sendReportInQst = async (reports) => {
       }
     );
   });
-  typeInAsk(req1, 'getReportInfo');
+
+  const { result: reportId } = await api.getReportInfo({
+    list: req1,
+  });
+
+  typeInAsk('', undefined, {
+    req: {
+      reportId,
+    },
+  });
 };
 
 /**
@@ -1424,12 +1433,6 @@ const typeInAsk = async (
   }
   if (answertype == 'report') {
     settings.url = `${baseApi}/phs-extend/customer/aiStreamReportAsk`;
-    settings.data = JSON.stringify({
-      args: value,
-    });
-  }
-  if (answertype == 'getReportInfo') {
-    settings.url = `${baseApi}/phs-extend/customer/getReportInfo`;
     settings.data = JSON.stringify({
       args: value,
     });
