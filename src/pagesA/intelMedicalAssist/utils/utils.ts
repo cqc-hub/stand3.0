@@ -436,6 +436,7 @@ const sendMsgWithPic = async () => {
   const _cachePhoto1 = [...waitUploadFiles.value];
   const _cachePhoto2 = [...waitUploadFiles.value];
   waitUploadFiles.value.length = 0;
+  const msg = msgState.value.msg;
   while (_cachePhoto1.length) {
     msgList.value.push({
       my: true,
@@ -446,8 +447,8 @@ const sendMsgWithPic = async () => {
 
   if (msgState.value.msg) {
     msgList.value.push({
+      msg,
       my: true,
-      msg: msgState.value.msg,
       type: 1,
     });
   }
@@ -461,9 +462,8 @@ const sendMsgWithPic = async () => {
   const ocrId: string[] = r
     .filter((o) => o.status === 'fulfilled')
     .map((o) => o.value);
-  console.log(r);
 
-  typeInAsk(msgState.value.msg, undefined, {
+  typeInAsk(msg, undefined, {
     req: {
       ocrId,
     },

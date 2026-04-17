@@ -153,15 +153,17 @@
           上传报告图片
         </button>
         <!-- #ifndef H5 -->
-        <button
-          class="btn btn-border btn-primary"
-          @click="changeTtype"
-          v-if="
-            pageConfigEle.intelMedicalAssistConfig?.isReportAnalysis !== '2'
-          "
-        >
-          {{ isPhoto ? '解读本院报告' : '进行报告解读' }}
-        </button>
+        <g-login :disabled="!isPhoto" @handler-next="changeTtype">
+          <button
+            class="btn btn-border btn-primary"
+            @click="changeTtype"
+            v-if="
+              pageConfigEle.intelMedicalAssistConfig?.isReportAnalysis !== '2'
+            "
+          >
+            {{ isPhoto ? '解读本院报告' : '进行报告解读' }}
+          </button>
+        </g-login>
         <!-- #endif -->
       </view>
     </view>
