@@ -5,7 +5,7 @@ import global from '@/config/global';
 import { useGlobalStore, IPat } from '@/stores';
 
 // 参数的额外配置
-let parm = (
+export const parm = (
   data: any,
   payload: {
     outArg?: boolean;
@@ -1380,6 +1380,10 @@ const userApi = {
     }),
   customerAIask: (data: any) =>
     service.post('/phs-extend/customer/aiAsk', parm(data), {
+      hideLoading: true,
+    }),
+  getReportInfo: (data: any) =>
+    service.post('/phs-extend/customer/getReportInfo', parm(data), {
       hideLoading: true,
     }),
   customerEvaluate: (data: any) =>

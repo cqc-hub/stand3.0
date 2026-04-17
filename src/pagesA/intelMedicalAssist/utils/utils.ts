@@ -30,11 +30,11 @@ import {
 } from '@/common';
 import type { TInstance } from '@/components/g-form/index';
 import { useDeptStore, useGlobalStore } from '@/stores';
-import { isOpenSm4 } from '@/service';
+import { getConfigHeader, isOpenSm4 } from '@/service';
 import { getMyPowerQx } from '@/components/greenPower';
 import { checkLoginExpired } from '@/common/checkJump';
 import globalGl from '@/config/global';
-import api from '@/service/api';
+import api, { parm } from '@/service/api';
 import env, { envBasic, globalEv } from '@/config/env';
 import dayjs from 'dayjs';
 
@@ -470,6 +470,28 @@ const sendMsgWithPic = async () => {
   });
 };
 
+// 问答中点击补充信息
+const sendReportInQst = async (reports) => {
+  // typeInAsk(args, 'report');
+  const gStores = new GStores();
+  const { source } = gStores.globalStore.browser;
+
+  const req1 = reports.map((o) => {
+    return parm(
+      {
+        ...o,
+        source,
+        cardNumber: gStores.userStore.patChoose.cardNumber,
+        herenId: gStores.globalStore.herenId,
+      },
+      {
+        outArg: true,
+      }
+    );
+  });
+  typeInAsk(req1, 'getReportInfo');
+};
+
 /**
  *
  * @param str 提问内容
@@ -680,7 +702,6 @@ export const reportShow = () => {
   }, 200);
 };
 export const inspectionAnalysis = async (reports) => {
-  msgState.value.msgLoad = true;
   const gStores = new GStores();
   try {
     reportPopupRef.value.hide();
@@ -688,6 +709,12 @@ export const inspectionAnalysis = async (reports) => {
   nextTick(() => {
     styleConfig.value.showHeader = false;
   });
+
+  // 上传资料进来
+  if (reportPopupRefType.value === '2') {
+    sendReportInQst(reports);
+    return;
+  }
   // const allPromise: any[] = [];
   msgState.value.msgLoad = true;
   const args: any[] = [];
@@ -1364,10 +1391,8 @@ const typeInAsk = async (
     timeout: 0,
     responseType: 'text',
     enableChunked: true,
-    headers: {
-      'Content-Type': 'application/json',
-      phsId: isOpenSm4 ? '81681766' : '81681688',
-    },
+    headers: getConfigHeader(),
+    header: getConfigHeader(),
     data: JSON.stringify({
       args: {
         ...req,
@@ -1398,6 +1423,12 @@ const typeInAsk = async (
   }
   if (answertype == 'report') {
     settings.url = `${baseApi}/phs-extend/customer/aiStreamReportAsk`;
+    settings.data = JSON.stringify({
+      args: value,
+    });
+  }
+  if (answertype == 'getReportInfo') {
+    settings.url = `${baseApi}/phs-extend/customer/getReportInfo`;
     settings.data = JSON.stringify({
       args: value,
     });
@@ -1470,6 +1501,7 @@ const typeInAskH5 = (value: any, answertype) => {
       'Content-Type': 'application/json',
       phsId: isOpenSm4 ? '81681766' : '81681688',
     },
+    header: {},
     data: JSON.stringify({
       args: {
         content: value,
