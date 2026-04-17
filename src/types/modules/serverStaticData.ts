@@ -491,15 +491,18 @@ export interface ISystemConfig_ {
   //住院服务 PATIENT_SERVICE_CONFIG
   hospitalCare: {
     //顶部tab
-    /** {"value":"0","label":"住院信息"},{"value":"1","label":"日费用清单"},{ "value": "2", "label": "历次住院清单" } */
-    tab: (IOptions<'0' | '1' | '2' | '3'> & {
+    /**
+     * {"value":"0","label":"住院信息"},{"value":"1","label":"日费用清单"},{ "value": "2", "label": "历次住院清单" }
+     * value 2|4 都是总计清单
+     * */
+    tab: (IOptions<'0' | '1' | '2' | '3' | '4'> & {
       isHosTotallist?: '1' | '2'; // value 2|3 时候区分列表和详情
     })[];
     //配置的预缴金额 [500,1000,2000,3000,5000,10000]
     inPatientPrePay: string[];
     /** 共3种模式：默认 1 不限制金额，2 仅支持整数金额，3 仅支持百倍金额输入  */
     isMode: '1' | '2' | '3';
-    //列表1, 即历次住院清单 详情2 住院总计清单
+    // 列表1, 即历次住院清单 详情2 住院总计清单
     isHosTotallist: '1' | '2';
     //列表1 详情2 日费用清单模式
     isHosDaylist: '1' | '2';

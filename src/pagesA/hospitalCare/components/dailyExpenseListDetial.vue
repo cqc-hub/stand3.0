@@ -245,7 +245,7 @@
       costType: props.isHosDaylist ? '1' : '3',
       patientId: gStores.userStore.patChoose.patientId,
       cardNumber: gStores.userStore.patChoose.cardNumber,
-      hospitalId: props.hospitalId || providePageProp().hospitalId,
+      hospitalId: props.hospitalId || props.pageProps1?.hospitalId || providePageProp().hospitalId,
       visitNo: _pageProps.value.visitNo,
     };
     const { result } =

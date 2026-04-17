@@ -480,6 +480,7 @@ const sendReportInQst = async (reports) => {
     return parm(
       {
         ...o,
+        reportName: o.repName,
         source,
         cardNumber: gStores.userStore.patChoose.cardNumber,
         herenId: gStores.globalStore.herenId,

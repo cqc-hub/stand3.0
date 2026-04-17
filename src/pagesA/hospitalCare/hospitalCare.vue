@@ -52,6 +52,16 @@
         :tabCurrent="tabCurrent"
         :pageProps="pageProps"
       ></totalList>
+      <!-- 总计清单 当历次清单 和 总计清单一起开的时候 tabs 内设置 isHosTotallist -->
+      <totalList
+        ref="totalListRef4"
+        v-if="getValue('4')"
+        :isHosTotallist="
+          getCurrentTab.isHosTotallist || resultHos.isHosTotallist
+        "
+        :tabCurrent="tabCurrent"
+        :pageProps="pageProps"
+      ></totalList>
 
       <totalList
         ref="totalListRef3"
@@ -106,6 +116,7 @@
   const dailyExpenseListRef = ref<any>('');
   const totalListRef = ref<any>('');
   const totalListRef3 = ref<any>('');
+  const totalListRef4 = ref<any>('');
   const pageLoading = ref(false);
   const currentTabValue = ref(false);
 
@@ -145,6 +156,10 @@
         break;
       case '3':
         totalListRef3?.value.init();
+
+        break;
+      case '4':
+        totalListRef4?.value.init();
 
         break;
 
