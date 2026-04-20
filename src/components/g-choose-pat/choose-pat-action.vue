@@ -32,7 +32,7 @@
   import { GStores } from '@/utils';
   import { IPat } from '@/stores';
   import globalGl from '@/config/global';
-  import { beforeEach } from '@/router';
+
   import PatList from './choose-pat-list.vue';
 
   export default defineComponent({
@@ -91,24 +91,24 @@
         const pages = getCurrentPages();
         const fullPathNow = (pages[pages.length - 1] as any).$page
           .fullPath as string;
-        if (
-          globalGl.systemInfo?.isOpenHealthCard &&
-          globalGl.systemInfo.isOpenHealthCard?.isNewMode
-        ) {
-          beforeEach({
+        // if (
+        //   globalGl.systemInfo?.isOpenHealthCard &&
+        //   globalGl.systemInfo.isOpenHealthCard?.isNewMode
+        // ) {
+          uni.navigateTo({
             url:
               '/pagesA/medicalCardMan/medicalCardMan' +
               '?_url=' +
               encodeURIComponent(fullPathNow),
           });
-        } else {
-          uni.navigateTo({
-            url:
-              globalGl.addPersonUrl +
-              '?_url=' +
-              encodeURIComponent(fullPathNow),
-          });
-        }
+        // } else {
+        //   uni.navigateTo({
+        //     url:
+        //       globalGl.addPersonUrl +
+        //       '?_url=' +
+        //       encodeURIComponent(fullPathNow),
+        //   });
+        // }
       };
 
       const onActionSheetHide = () => {
