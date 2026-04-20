@@ -109,10 +109,9 @@
 
           <block v-if="detailData.costList && detailData.costList.length">
             <view class="mt8">
-
               <pay-Detail-Cost-List
                 :disabled="isDisabledCostList"
-                :list="detailData.costList"
+                :list="showCostList"
                 :selList="selList"
                 :mulit="isCanSelServerFee"
                 :selListChildren="selListChildren"
@@ -377,6 +376,21 @@
   const selListChildren = ref<TCostList[number]['costList']>([]);
 
   const { getDetailData, detailData } = usePayDetailPage();
+  const showCostList = computed(() => {
+    const list = detailData.value.costList || [];
+
+    return list.map((o) => {
+      const item = {
+        ...o,
+      };
+
+      if ((o.subCostTypeName || '').includes('保密')) {
+        o.costList = [];
+      }
+
+      return item;
+    });
+  });
   const {
     pageConfig,
     getSysConfig,
@@ -389,7 +403,6 @@
     getPay,
     hookInit,
     changeRefPayList,
-    wxPryMoneyMedicalDialog,
     wxPayMoneyMedicalPlugin,
     getDigitalPay,
     wxCrossProgramInfo,
