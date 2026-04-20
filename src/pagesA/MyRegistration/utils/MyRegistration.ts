@@ -91,7 +91,26 @@ export const HosNavData = {
       },
     };
   },
-  // #ifdef  MP-WEIXIN
+  // #ifdef  MP-ALIPAY
+  // 13178: (item: IRegistrationCardItem, type?: string) => {
+  //   return {
+  //     appId: '2018122862716277',
+  //     path: 'pages/index/index',
+  //     text: '院内导航',
+  //     type: 'otherProgram',
+  //     extraData: {
+  //       hisCode: item.hosDeptId,
+  //       buildingId: 208089,
+  //       type: 3,
+  //     },
+  //   };
+  // },
+  // #endif
+};
+
+// #ifdef  MP-WEIXIN
+// 微信医院导航数据
+Object.assign(HosNavData, {
   13062: (item: IRegistrationCardItem) => {
     let extraData: any = {
       type: '8_2',
@@ -206,24 +225,8 @@ export const HosNavData = {
       // },
     };
   },
-
-  // #endif
-  // #ifdef  MP-ALIPAY
-  // 13178: (item: IRegistrationCardItem, type?: string) => {
-  //   return {
-  //     appId: '2018122862716277',
-  //     path: 'pages/index/index',
-  //     text: '院内导航',
-  //     type: 'otherProgram',
-  //     extraData: {
-  //       hisCode: item.hosDeptId,
-  //       buildingId: 208089,
-  //       type: 3,
-  //     },
-  //   };
-  // },
-  // #endif
-};
+});
+// #endif
 
 export const judgeAllowNav = (item) => {
   const { hosId } = item;
