@@ -336,6 +336,10 @@ export const aliPayOldSystemPayType = (type?: 'paymentPage') => {
         channel = 'BCM_WX_MINI';
         break;
 
+      case '1001101':
+        channel = 'CCB_WX_MINI';
+        break;
+
       default:
         channel = 'WX_MINI';
         break;
@@ -380,6 +384,10 @@ export const aliPayOldSystemPayType = (type?: 'paymentPage') => {
 
       case '1001036':
         channel = 'BCM_ALI_MINI';
+        break;
+
+      case '1001101':
+        channel = 'CCB_ALI_MINI';
         break;
 
       default:

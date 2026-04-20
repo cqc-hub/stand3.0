@@ -14,7 +14,7 @@
       engDetail: '',
       otherDetail: '',
       iconfont: `https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/PZGL1001054image/file-2026040715541615e4c34225c24cf2a65e80fc88ed838dwxtp_20260407155218.png`,
-      path: '/pagesC/commonHosNet/commonHosNet?returnUrl=pages%2Fv3%2FfreeClinic%2FchooseDept%3FtoSearchDoc%3D1%26receptionMode%3D8%26deptId%3DXY01',
+      path: '/pagesA/MyRegistration/DepartmentCard?hosId=13002',
       terminalType: 'my',
       appId: '',
       query: '',

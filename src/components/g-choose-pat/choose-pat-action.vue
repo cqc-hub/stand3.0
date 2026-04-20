@@ -32,7 +32,7 @@
   import { GStores } from '@/utils';
   import { IPat } from '@/stores';
   import globalGl from '@/config/global';
-
+  import { beforeEach } from '@/router';
   import PatList from './choose-pat-list.vue';
 
   export default defineComponent({
@@ -95,7 +95,7 @@
           globalGl.systemInfo?.isOpenHealthCard &&
           globalGl.systemInfo.isOpenHealthCard?.isNewMode
         ) {
-          uni.navigateTo({
+          beforeEach({
             url:
               '/pagesA/medicalCardMan/medicalCardMan' +
               '?_url=' +
