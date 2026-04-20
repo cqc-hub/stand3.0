@@ -46,7 +46,19 @@
       <totalList
         ref="totalListRef"
         v-if="getValue('2')"
-        :isHosTotallist="resultHos.isHosTotallist"
+        :isHosTotallist="
+          getCurrentTab.isHosTotallist || resultHos.isHosTotallist
+        "
+        :tabCurrent="tabCurrent"
+        :pageProps="pageProps"
+      ></totalList>
+      <!-- 总计清单 当历次清单 和 总计清单一起开的时候 tabs 内设置 isHosTotallist -->
+      <totalList
+        ref="totalListRef4"
+        v-if="getValue('4')"
+        :isHosTotallist="
+          getCurrentTab.isHosTotallist || resultHos.isHosTotallist
+        "
         :tabCurrent="tabCurrent"
         :pageProps="pageProps"
       ></totalList>
@@ -54,7 +66,9 @@
       <totalList
         ref="totalListRef3"
         v-if="getValue('3')"
-        :isHosTotallist="resultHos.isHosTotallist"
+        :isHosTotallist="
+          getCurrentTab.isHosTotallist || resultHos.isHosTotallist
+        "
         :tabCurrent="tabCurrent"
         :pageProps="pageProps"
         type="outList"
@@ -65,7 +79,7 @@
 
 <script setup lang="ts">
   import { IPat } from '@/stores';
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import inpatientInfo from './components/inpatientInfo.vue';
   import dailyExpenseList from './components/dailyExpenseList.vue';
@@ -102,8 +116,15 @@
   const dailyExpenseListRef = ref<any>('');
   const totalListRef = ref<any>('');
   const totalListRef3 = ref<any>('');
+  const totalListRef4 = ref<any>('');
   const pageLoading = ref(false);
   const currentTabValue = ref(false);
+
+  const getCurrentTab = computed(() => {
+    const tab = resultHos.value.tab || [];
+    const item = tab[tabCurrent.value] || {};
+    return item;
+  });
 
   //获取当前的value
   const getValue = (value) => {
@@ -135,6 +156,10 @@
         break;
       case '3':
         totalListRef3?.value.init();
+
+        break;
+      case '4':
+        totalListRef4?.value.init();
 
         break;
 

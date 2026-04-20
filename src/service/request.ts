@@ -88,7 +88,7 @@ class requestClass {
     return new Promise((resolve, reject) => {
       options.success = function (res) {
         if (res.statusCode === 200) {
-          resolve(requestClass[requestAfter]({ res, options }));
+          resolve(requestClass[requestAfter]({ res, options, task }));
         } else {
           reject(requestClass[requestErr](res));
         }
@@ -102,7 +102,8 @@ class requestClass {
 
         reject(err);
       };
-      uni.request({
+
+      const task = uni.request({
         ...options,
         url: `${options.baseURL}${options.url}`,
         complete() {
@@ -113,6 +114,7 @@ class requestClass {
           }
         },
       });
+
     });
   }
 

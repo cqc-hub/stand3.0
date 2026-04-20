@@ -15,12 +15,20 @@
           :headerConfig="styleConfig"
           :source="props.source"
           id="pageScroll"
+          @up-med-record="upMedRecord"
         />
+
+        <view v-if="waitUploadFiles.length">
+          <view class="safe-height"></view>
+          <view class="safe-height"></view>
+          <view class="safe-height"></view>
+        </view>
         <!-- fotter区域 -->
         <intalMedicalFooter
           :guessServerList="
             pageConfig?.intelMedicalAssistConfig?.guessServerList
           "
+          :waitUploadFiles="waitUploadFiles"
           :source="props.source"
           :headerConfig="styleConfig"
           @click-server="handleServer"
@@ -37,6 +45,8 @@
       <reportPopup
         @inspectionAnalysis="inspectionAnalysis"
         @send-img="sendImg"
+        :title="reportPopupRefTitle"
+        :type="reportPopupRefType"
       />
     </view>
     <view v-if="showOrder">
@@ -79,6 +89,10 @@
     reload,
     showOrder,
     schOrderInfo,
+    reportPopupRef,
+    reportPopupRefTitle,
+    reportPopupRefType,
+    waitUploadFiles,
   } from './utils/utils';
   import { throttle, GStores, wait } from '@/utils';
   import { useCacheStore, type IPat } from '@/stores';
@@ -96,6 +110,15 @@
 
   const gStores = new GStores();
   const cacheStore = useCacheStore();
+
+  const upMedRecord = async (item) => {
+    popipHasShow.value = true;
+    reportPopupRefTitle.value = '病历上传';
+    reportPopupRefType.value = '2';
+
+    await wait(200);
+    reportPopupRef.value.show();
+  };
 
   const scrollChangeView = (e) => {
     // console.log('e.scrollTop,styleConfig.value.showHeader',e.scrollTop,styleConfig.value.showHeader)

@@ -50,9 +50,17 @@
 
           <view
             v-else
+            :class="{
+              pt42: showHealthCode,
+            }"
             class="flex justify-center items-center flex-col relative"
           >
-            <img :src="barImg" mode="widthFix" class="bar-img mb32" />
+            <img
+              v-if="!showHealthCode"
+              :src="barImg"
+              mode="widthFix"
+              class="bar-img mb32"
+            />
             <img :src="qrImg" mode="widthFix" class="qrcode-img pb32" />
           </view>
 

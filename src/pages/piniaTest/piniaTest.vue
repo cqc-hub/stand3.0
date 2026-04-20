@@ -232,7 +232,7 @@
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
-    text: '绍兴检查预约',
+    text: '',
     extraData: {
       _type: 'shaoxinInspectOrder',
     },
@@ -240,6 +240,7 @@
       patientId: '_patientId',
     },
     isLocal: '1',
+    _type: 'useTBanner',
   } as TBannerConfig;
 
   const 绍兴二院采血预约 = {

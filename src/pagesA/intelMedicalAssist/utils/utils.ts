@@ -20,6 +20,7 @@ import {
   GStores,
   throttle,
   generateRandomUserId,
+  wait,
 } from '@/utils';
 import {
   cloneUtil,
@@ -29,12 +30,12 @@ import {
 } from '@/common';
 import type { TInstance } from '@/components/g-form/index';
 import { useDeptStore, useGlobalStore } from '@/stores';
-import { isOpenSm4 } from '@/service';
+import { getConfigHeader, isOpenSm4 } from '@/service';
 import { getMyPowerQx } from '@/components/greenPower';
 import { checkLoginExpired } from '@/common/checkJump';
 import globalGl from '@/config/global';
-import api from '@/service/api';
-import env from '@/config/env';
+import api, { parm } from '@/service/api';
+import env, { envBasic, globalEv } from '@/config/env';
 import dayjs from 'dayjs';
 
 export const pageConfig = ref(
@@ -53,6 +54,7 @@ export const msgState = ref<MsgStatusType>({
 export const messFormData = ref<Array<MessFormListType>>([]);
 export const messHisFormData = ref<Array<Array<MessFormListType>>>([[]]);
 export const reportPopupRef = ref<any>();
+export const reportPopupRefTitle = ref('报告AI解读');
 export const distinctiveImage = ref<string>('');
 export const distinctiveImagePopupRef = ref<any>();
 export const isReportAnalysis = ref<boolean>(false);
@@ -152,7 +154,13 @@ const test = async () => {
     ],
   };
   const { showType, list } = data;
-  switchHandleResult(showType, list, '', '', undefined, '提示语');
+  switchHandleResult({
+    showType,
+    list,
+    tips: data.tips,
+    requestId: '2222',
+    chatId: '23',
+  });
 };
 export const reload = async (isMess) => {
   popipHasShow.value = false;
@@ -386,6 +394,114 @@ export const recommendMenuList = [
     key: 'serviceCenter',
   },
 ];
+
+const upLoadPicOcr = async (files: string[]) => {
+  const gStores = new GStores();
+  const { sysCode, herenId = propsPbj.value?.herenId || '' } =
+    gStores.globalStore;
+
+  const uploadFile = async (filePath: string) => {
+    const { data } = await apiAsync(uni.uploadFile, {
+      url: joinQuery(`${globalEv.prod.baseApi}/phs-extend/customer/picOcr`, {
+        sysCode,
+        herenId,
+        type: 'mini',
+        source: '1',
+      }),
+      filePath,
+      // timeout: 60000,
+      name: 'file',
+      fileType: 'image',
+      header: {
+        phsId: isOpenSm4 ? '81681766' : '81681688',
+      },
+    });
+
+    const { result, code, message } = JSON.parse(data);
+
+    if (code === 1) {
+      throw new Error(result);
+    }
+
+    return result;
+  };
+
+  const tasksList = files.map((o) => uploadFile(o));
+  const fRes = await Promise.allSettled(tasksList);
+
+  return fRes;
+};
+
+const sendMsgWithPic = async () => {
+  const _cachePhoto1 = [...waitUploadFiles.value];
+  const _cachePhoto2 = [...waitUploadFiles.value];
+  waitUploadFiles.value.length = 0;
+  const msg = msgState.value.msg;
+  while (_cachePhoto1.length) {
+    msgList.value.push({
+      my: true,
+      imgUrl: _cachePhoto1.shift()!.path,
+      type: 5,
+    });
+  }
+
+  if (msgState.value.msg) {
+    msgList.value.push({
+      msg,
+      my: true,
+      type: 1,
+    });
+  }
+
+  await wait(80);
+  scrollToNewMsg();
+
+  msgState.value.msgLoad = true;
+  msgState.value.msgText = '正在分析中，请稍候...';
+  const r = await upLoadPicOcr(_cachePhoto2.map((o) => o.path));
+  const ocrId: string[] = r
+    .filter((o) => o.status === 'fulfilled')
+    .map((o) => o.value);
+
+  typeInAsk(msg, undefined, {
+    req: {
+      ocrId,
+    },
+  });
+};
+
+// 问答中点击补充信息
+const sendReportInQst = async (reports) => {
+  // typeInAsk(args, 'report');
+  const gStores = new GStores();
+  const { source } = gStores.globalStore.browser;
+
+  const req1 = reports.map((o) => {
+    return parm(
+      {
+        ...o,
+        reportName: o.repName,
+        source,
+        cardNumber: gStores.userStore.patChoose.cardNumber,
+        herenId: gStores.globalStore.herenId,
+      },
+      {
+        outArg: true,
+      }
+    );
+  });
+
+  const { result: reportId } = await api.getReportInfo({
+    list: req1,
+  });
+
+  typeInAsk('', undefined, {
+    req: {
+      reportId,
+    },
+  });
+};
+
 /**
  *
  * @param str 提问内容
@@ -408,13 +524,19 @@ export const sendMsg = async (
 
   // #endif
   const gStores = new GStores();
-  let value = str.trim().replace(/\s+/g, '');
-  if (!value) {
-    gStores.messageStore.showMessage('不能发送空白消息~', 3000);
-    return;
-  }
+
   if (msgState.value.msgLoad || chunkStatus.value?.isTyping) {
     gStores.messageStore.showMessage('正在为你解答，请稍等~', 3000);
+    return;
+  }
+  let value = str.trim().replace(/\s+/g, '');
+
+  if (waitUploadFiles.value.length) {
+    sendMsgWithPic();
+    return;
+  }
+  if (!value) {
+    gStores.messageStore.showMessage('不能发送空白消息~', 3000);
     return;
   }
 
@@ -431,7 +553,6 @@ export const sendMsg = async (
   msgState.value.msgLoad = true;
   // #ifdef  MP-WEIXIN
   if (chunkStatus.value?.isWXStreamApi) {
-
     typeInAsk(value, answertype || 0, opt);
     return;
   }
@@ -444,9 +565,7 @@ export const sendMsg = async (
   }
   // #endif
   const { source } = gStores.globalStore.browser;
-  const {
-    result: { showType, list, requestId, chatId, tips },
-  } = await api
+  const { result } = await api
     .customerAIask({
       ...req,
       content: value,
@@ -459,23 +578,26 @@ export const sendMsg = async (
     .finally(() => {
       msgState.value.msgLoad = false;
     });
+  const { showType, list, requestId, chatId, tips } = result;
   msgState.value.lastChatId = chatId;
   msgState.value.requestId = requestId;
+  console.log('执行2--------');
 
-  switchHandleResult(showType, list, requestId, chatId, undefined, tips);
+  switchHandleResult({ showType, list, requestId, chatId, tips });
 };
 
-const switchHandleResult = async (
-  showType: number,
-  list: Array<any>,
-  requestId: string,
-  chatId: string,
-  typeInIndex?: number,
-  tips?: string
-) => {
+const switchHandleResult = async (opt: {
+  showType: number;
+  list: Array<any>;
+  requestId: string;
+  chatId: string;
+  typeInIndex?: number;
+  tips?: string;
+}) => {
+  const { showType, list, requestId, chatId, typeInIndex, tips } = opt;
   console.log({
     showType,
-    list
+    list,
   });
   if (!(list && list.length)) {
     msgList.value.push({
@@ -526,6 +648,10 @@ const switchHandleResult = async (
         dealShowType12(list, requestId, chatId);
         break;
 
+      case 13:
+        dealShowType13(opt);
+        break;
+
       case 101:
         //推荐有胸痛、卒中相关展示最近医院
         dealShowType101(list, requestId, chatId);
@@ -572,17 +698,20 @@ export const scrollToNewMsgFun = (selector?: string, duration?: number) => {
 };
 
 export const scrollToNewMsg = throttle(scrollToNewMsgFun, 600);
+// 1 footer地区点击  2 ai回答里面上传资料
+export const reportPopupRefType = ref(<'1' | '2'>'1');
 export const reportShow = () => {
   if (msgState.value.msgLoad) {
     return;
   }
   !popipHasShow.value && (popipHasShow.value = true);
+  reportPopupRefTitle.value = '报告AI解读';
+  reportPopupRefType.value = '1';
   setTimeout(() => {
     reportPopupRef.value.show();
   }, 200);
 };
 export const inspectionAnalysis = async (reports) => {
-  msgState.value.msgLoad = true;
   const gStores = new GStores();
   try {
     reportPopupRef.value.hide();
@@ -590,6 +719,12 @@ export const inspectionAnalysis = async (reports) => {
   nextTick(() => {
     styleConfig.value.showHeader = false;
   });
+
+  // 上传资料进来
+  if (reportPopupRefType.value === '2') {
+    sendReportInQst(reports);
+    return;
+  }
   // const allPromise: any[] = [];
   msgState.value.msgLoad = true;
   const args: any[] = [];
@@ -614,17 +749,46 @@ export const inspectionAnalysis = async (reports) => {
   // #endif
 };
 
-export const sendImg = async () => {
-  if (msgState.value.msgLoad) {
-    return;
-  }
-  const gStores = new GStores();
-  const maxSize = 4 * 1024 * 1024; // 4MB 限制大小
+export const uChooseImg = async (count = 9) => {
   const { tempFilePaths } = (await apiAsync(uni.chooseImage, {
-    count: 1,
+    count,
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
   })) as any;
+
+  return tempFilePaths;
+};
+
+export const waitUploadFiles = ref<{ path: string }[]>([]);
+
+export const waitUploadFilesSelect = (newFiles) => {
+  waitUploadFiles.value.push(...newFiles);
+};
+
+export const waitUploadFilesDel = (idx) => {
+  waitUploadFiles.value.splice(idx, 1);
+};
+
+export const upLoadMedRecord = async () => {
+  waitUploadFiles.value = (await uChooseImg(5)).map((o) => ({
+    path: o,
+  }));
+};
+
+export const sendImg = async () => {
+  if (msgState.value.msgLoad) {
+    upLoadMedRecord();
+    return;
+  }
+
+  if (reportPopupRefType.value === '2') {
+    upLoadMedRecord();
+    return;
+  }
+
+  const gStores = new GStores();
+  const maxSize = 4 * 1024 * 1024; // 4MB 限制大小
+  const tempFilePaths = await uChooseImg(1);
   try {
     if (tempFilePaths.length === 0) {
       return;
@@ -661,7 +825,7 @@ export const sendImg = async () => {
       scrollToNewMsg();
     }, 500);
 
-    let baseApi = 'https://netphs.eheren.com/gateway';
+    let baseApi = globalEv.prod.baseApi;
 
     const { data } = await apiAsync(uni.uploadFile, {
       url: `${baseApi}/phs-extend/customer/picOcr?sysCode=${
@@ -885,6 +1049,7 @@ const dealShowType1withStream = async (
   const { question, answer } = list[0];
   await new Promise((rl, rj) => {
     if (msgList.value?.length === typeInIndex) {
+      console.log('执行3------');
       msgList.value.push({
         my: false,
         msg: '',
@@ -1120,6 +1285,22 @@ const dealShowType12 = (lists, requestId, chatId) => {
   scrollToNewMsg();
 };
 
+const dealShowType13 = (opt) => {
+  const { list = [], requestId, chatId } = opt;
+
+  if (list.length) {
+    msgList.value.push({
+      my: false,
+      msg: list[0],
+      showType: '13',
+      type: 13,
+      requestId,
+      chatId,
+      // isSysAppMore: judgeIsSysAppMore(requestId),
+    });
+  }
+};
+
 //为卒中新增的类型 但实际没用
 const dealShowType101 = (list, requestId, chatId) => {
   if (list?.length) {
@@ -1202,26 +1383,26 @@ const processChunks = (chunkTemp: string, typeInIndex: number) => {
 let requestTask: any = null;
 let taskQueue = new TaskQueue();
 
-const typeInAsk = async (value, answertype,   opt = {} as {
+const typeInAsk = async (
+  value,
+  answertype,
+  opt = {} as {
     req?: BaseObject; // 补充到接口
     hideQuestion?: '1'; // 不显示问的内容
-  }) => {
+  }
+) => {
   const { req = {}, hideQuestion } = opt;
 
   const gStores = new GStores();
-  let baseApi = `https://${
-    globalGl.env === 'prod' ? 'net' : 'test'
-  }phs.eheren.com/gateway`;
+  let baseApi = envBasic.baseApi;
   const settings = {
     url: `${baseApi}/phs-extend/customer/aiStreamAsk`,
     method: 'POST',
     timeout: 0,
     responseType: 'text',
     enableChunked: true,
-    headers: {
-      'Content-Type': 'application/json',
-      phsId: isOpenSm4 ? '81681766' : '81681688',
-    },
+    headers: getConfigHeader(),
+    header: getConfigHeader(),
     data: JSON.stringify({
       args: {
         ...req,
@@ -1324,6 +1505,7 @@ const typeInAskH5 = (value: any, answertype) => {
       'Content-Type': 'application/json',
       phsId: isOpenSm4 ? '81681766' : '81681688',
     },
+    header: {},
     data: JSON.stringify({
       args: {
         content: value,
@@ -1488,7 +1670,15 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     }
     chatId && (msgState.value.lastChatId = chatId);
     requestId && (msgState.value.requestId = requestId);
-    switchHandleResult(showType, list, requestId, chatId, typeInIndex, tips);
+    console.log('执行1--------');
+    switchHandleResult({
+      showType,
+      list,
+      requestId,
+      chatId,
+      typeInIndex,
+      tips,
+    });
   }
 };
 
@@ -1777,4 +1967,3 @@ export const regConfirm = async (pageArg) => {
 export const handleSourceChoose = (pageArg) => {
   regConfirm(pageArg);
 };
-

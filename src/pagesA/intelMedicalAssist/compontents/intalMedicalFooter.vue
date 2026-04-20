@@ -52,10 +52,20 @@
     class="bottom-bg-blue"
     :style="{ height: `${whiteAreaHeight}` }"
   ></view>
+
   <view
     class="flex-column-center footer-area-bottom bg-whit pt32"
     :animation="animationData"
   >
+    <view v-if="waitUploadFiles.length" class="p32 ml32 w-full">
+      <FileSelect
+        :list="waitUploadFiles"
+        :limit="5"
+        @file-del="waitUploadFilesDel"
+        @file-add="waitUploadFilesSelect"
+      />
+    </view>
+
     <view
       class="bottom-dh-char flex-row-around"
       :style="{ opacity: voicing ? 0 : 1 }"
@@ -224,7 +234,10 @@
     isReportAnalysis,
     chunkStatus,
     pageConfig,
+    waitUploadFilesSelect,
+    waitUploadFilesDel,
   } from '../utils/utils';
+  import FileSelect from './fileSelect.vue';
 
   var SImanager: any = null;
   const animationData = ref<UniNamespace.Animation>();
@@ -254,6 +267,7 @@
     guessServerList?: TButtonConfig[];
     headerConfig: StyleConfigType;
     source?: string;
+    waitUploadFiles: any[];
   }>();
   // #ifdef  H5
   const {

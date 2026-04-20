@@ -42,6 +42,7 @@ let isGettingOpenId = false;
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
   const globalStore = useGlobalStore();
+  console.log(request, '222');
   const specialUrls1001035 = ['https://phs.jshtcm.com'];
 
   // #ifdef MP-WEIXIN
@@ -205,29 +206,34 @@ Request.interceptors.response(
   }
 );
 
-// 设置默认配置
-Request.setConfig((config: any) => {
-  config.baseURL = env.baseApi;
-  config.header = {
+export const getConfigHeader = () => {
+  const header: any = {
+    'Content-Type': 'application/json',
     hrCode: encryptDes(getSysCode(), 'hrtest22'),
+    Authorization: getToken(),
   };
-  //判断是否携带token校验
-  if (config.token) {
-    config.header['Authorization'] = getToken();
-  }
+
   if (isOpenSm4) {
-    config.header.phsSign = encryptDes(
+    header.phsSign = encryptDes(
       getSysCode() + '_' + new Date().getTime(),
       'SkpOe3I1'
     );
-    config.header.phsId = '81681766';
+    header.phsId = '81681766';
   } else {
-    config.header.phsSign = encryptDes(
+    header.phsSign = encryptDes(
       getSysCode() + '_' + new Date().getTime(),
       'W7ZEgfnv'
     );
-    config.header.phsId = '81681688';
+    header.phsId = '81681688';
   }
+
+  return header;
+};
+
+// 设置默认配置
+Request.setConfig((config: any) => {
+  config.baseURL = env.baseApi;
+  config.header = getConfigHeader();
 
   return config;
 });

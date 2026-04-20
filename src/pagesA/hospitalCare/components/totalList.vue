@@ -70,7 +70,7 @@
     <view class="page" v-if="props.isHosTotallist == '2'">
       <dailyExpenseListDetial
         ref="dailyExpenseListDetialRef"
-        :isHosTotallist="props.isHosTotallist"
+        :isHosTotallist="'2'"
         :pageProps1="pageProps"
       />
     </view>
