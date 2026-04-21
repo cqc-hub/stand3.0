@@ -252,7 +252,7 @@
       visitNo: _pageProps.value.visitNo,
     };
 
-    if (!params.hospitalId) {
+    if (!params.hospitalId && gStores.globalStore.sysCode === '1001035') {
       const { result } = await api.getInHospitalInfo<any>({
         patientId: gStores.userStore.patChoose.patientId,
         cardNumber: gStores.userStore.patChoose.cardNumber,
