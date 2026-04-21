@@ -3,7 +3,11 @@
     <view
       id="_drag_button"
       class="drag"
-      :style="right?'right: ' + right + 'px; top:' + top + 'px;':'left: ' + left + 'px; top:' + top + 'px;'"
+      :style="
+        right
+          ? 'right: ' + right + 'px; top:' + top + 'px;'
+          : 'left: ' + left + 'px; top:' + top + 'px;'
+      "
       @touchstart="touchstart"
       @touchmove.stop.prevent="touchmove"
       @touchend="touchend"
@@ -55,10 +59,10 @@
         default: 10,
       },
 
-      right:{
+      right: {
         type: Number,
         default: 0,
-      }
+      },
     },
     data() {
       return {
@@ -105,7 +109,7 @@
             this.top = hisLocation.top;
           } else {
             this.left = this.windowWidth - this.width - this.edge;
-            this.top = (this.windowHeight - this.height) / 2 - this.edge;
+            this.top = (this.windowHeight - this.height) / 2;
           }
         })
         .exec();
@@ -179,7 +183,9 @@
     z-index: 999999;
 
     &.transition {
-      transition: left 0.3s ease, top 0.3s ease;
+      transition:
+        left 0.3s ease,
+        top 0.3s ease;
     }
   }
   .mask {

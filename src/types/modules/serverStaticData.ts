@@ -496,7 +496,7 @@ export interface ISystemConfig_ {
      * value 2|4 都是总计清单
      * */
     tab: (IOptions<'0' | '1' | '2' | '3' | '4'> & {
-      isHosTotallist?: '1' | '2'; // value 2|3 时候区分列表和详情
+      isHosTotallist?: '1' | '2'; // value 2|4 时候区分列表和详情
     })[];
     //配置的预缴金额 [500,1000,2000,3000,5000,10000]
     inPatientPrePay: string[];
