@@ -1,6 +1,7 @@
 import { orderStatusMap, OrderStatus } from './regDetail';
 import { joinQuery } from '../../../common/utils';
 import { getSysCode } from '@/common';
+import { TButtonConfig } from '@/types';
 
 export type IRegistrationCardItem = {
   sysCode: string;
@@ -50,7 +51,9 @@ export type IRegistrationCardItem = {
 };
 
 //多院区院内导航 根据hosId
-export const HosNavData = {
+export const HosNavData: {
+  [key: string]: (...args: any[]) => TButtonConfig;
+} = {
   13009: () => {
     return {
       appId: 'wxe51129e09bb46147',
@@ -227,6 +230,21 @@ Object.assign(HosNavData, {
   },
 });
 // #endif
+
+export const isCanUseCustomGuide = (item) => {
+  const { hosId } = item;
+
+  if (hosId && HosNavData[hosId]) {
+    const btnConfig = HosNavData[hosId](item);
+
+    const { addition = {} } = btnConfig;
+
+    const hasAllValue = Object.keys(addition).every((key) => item[key]);
+
+    return hasAllValue;
+  }
+  return false;
+};
 
 export const judgeAllowNav = (item) => {
   const { hosId } = item;

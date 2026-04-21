@@ -129,7 +129,10 @@
     joinQueryForUrl,
     setLocalStorage,
   } from '@/common';
-  import { IRegistrationCardItem } from '../MyRegistration/utils/MyRegistration';
+  import {
+    IRegistrationCardItem,
+    isCanUseCustomGuide,
+  } from '../MyRegistration/utils/MyRegistration';
   import {
     getOrderStatusTitle,
     RegDetailUtil,
@@ -780,7 +783,6 @@
   };
 
   const handlerAddressMap = (item) => {
-    
     if (gStores.globalStore.sysCode === '1001052') {
       useTBanner(
         {
@@ -859,7 +861,18 @@
     });
   };
 
-  const openHosLocation = async ({ hosId }) => {
+  const openHosLocation = async (item) => {
+    const { hosId, deptId, hosDeptId } = item;
+
+    if (gStores.globalStore.sysCode === '1001035') {
+      item.hosDeptId = hosDeptId || deptId;
+    }
+
+    if (isCanUseCustomGuide(item)) {
+      handlerAddressMap(item);
+      return;
+    }
+
     const hosInfo = (await ServerStaticData.getHosList()).find(
       (o) => o.hosId === hosId
     );

@@ -242,13 +242,11 @@
       });
 
       uni.navigateTo({
-        url: joinQuery('/pagesC/cloudHospital/cachePage', {
-          _ur: encodeURIComponent(
-            joinQuery(furl, {
-              encryptedData,
-              iv,
-            })
-          ),
+        url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
+          _ur: joinQueryForUrl(furl, {
+            encryptedData,
+            iv,
+          }),
         }),
       });
     }
