@@ -246,15 +246,8 @@ export class LoginUtils extends GStores {
         await api.patSync({ source: this.globalStore.browser.source });
       }
       // //通过微信openId去同步 type传1 ，复用老小程序则取用openId，
-      // if (['1001085'].includes(sysCode)) {
-      //   await api.patSync({
-      //     source: this.globalStore.browser.source,
-      //     type: 1,
-      //     wxOpenId: openId,
-      //   });
-      // }
       //通过微信h5OpenId去同步 type传1 ，复用老公众号则取用h5OpenId，
-      if (['1001097', '1001093', '1001085','1001101'].includes(sysCode)) {
+      if (['1001097', '1001093', '1001085','1001101', '1001102'].includes(sysCode)) {
         const reqData = {
           source: this.globalStore.browser.source,
           wxOpenId: this.globalStore.h5OpenId,
@@ -269,9 +262,8 @@ export class LoginUtils extends GStores {
   //判断是否需要前往手机号登录
   async judgeLoginByPhoneVerify() {
     let flag = false;
-    const { isLoginByPhoneVerify } = await ServerStaticData.getSystemConfig(
-      'RestOfConfig'
-    );
+    const { isLoginByPhoneVerify } =
+      await ServerStaticData.getSystemConfig('RestOfConfig');
     if (isLoginByPhoneVerify === '1') {
       // 把promise的resolve函数，赋值给messageStore的closeCallBack状态
       const { confirm } = await new Promise<any>((closeCallBack) => {
@@ -415,7 +407,7 @@ export class LoginUtils extends GStores {
                   pData,
                 });
               },
-              fail:(err)=> {
+              fail: (err) => {
                 //识别失败
                 this.messageStore.showMessage('识别失败');
                 console.error('识别失败', err);
@@ -1248,9 +1240,8 @@ export class Login extends LoginUtils {
 export class PatientUtils extends LoginUtils {
   usePatDynamicCode = {
     async isOpen(path: string) {
-      const { GlobalConfig } = await cacheUtil.getSystemConfig(
-        'GlobalConfig'
-      )();
+      const { GlobalConfig } =
+        await cacheUtil.getSystemConfig('GlobalConfig')();
 
       return (GlobalConfig.refreshQrCode || []).includes(path);
     },
@@ -1563,9 +1554,8 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
-        data
-      );
+      const { healthCardId, qrCodeText } =
+        await this.regHealthCardByPatInfo(data);
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;
@@ -1617,9 +1607,8 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
-        data
-      );
+      const { healthCardId, qrCodeText } =
+        await this.regHealthCardByPatInfo(data);
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;
