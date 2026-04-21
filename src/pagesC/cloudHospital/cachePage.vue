@@ -24,7 +24,14 @@
     handlerMedicalPayDongRuan,
     getQxMedicalNation,
   } from './utils/cloudHospital';
-  import { apiAsync, GStores, removeDuplicateParams, wait } from '@/utils';
+  import {
+    apiAsync,
+    GStores,
+    packageAuthParams,
+    removeDuplicateParams,
+    wait,
+  } from '@/utils';
+  import api from '@/service/api';
 
   //第三方h5页面入口——网络医院
   const src = ref('');
@@ -188,6 +195,54 @@
     return fPath;
   };
 
+  const handlerGetWxRunData = async ({ backUrl, cancelUrl }) => {
+    // #ifdef MP-WEIXIN
+
+    let furl = backUrl;
+
+    uni.showLoading({});
+    const { code } = await apiAsync(wx.login, {});
+    const { encryptedData, iv } = await apiAsync(wx.getWeRunData, {
+      complete(e) {
+        console.log('获取到微信运动步数-----');
+        console.log(e);
+      },
+    }).catch(() => {
+      furl = cancelUrl;
+      return {};
+    });
+    const pageArg: any = {
+      encryptedData,
+      iv,
+    };
+
+    if (encryptedData) {
+      const { result } = await api.allinoneAuthApi(
+        packageAuthParams(
+          {
+            code,
+            accountType: globalStore.browser.accountType,
+          },
+          '/wx/getWxOpenId',
+          {
+            isOutArgs: true,
+          }
+        )
+      );
+
+      pageArg.sessionKeyEn = result.sessionKeyEn;
+    }
+    await wait(500);
+    uni.hideLoading();
+
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
+        _url: joinQueryForUrl(furl, pageArg),
+      }),
+    });
+    // #endif
+  };
+
   const handleMessage = async (evt) => {
     var data = evt.target.data;
     const fd = data[0] || {};
@@ -225,34 +280,15 @@
       }
     }
 
+    // #ifdef MP-WEIXIN
     if (type === 'getWxRunData') {
       const { backUrl, cancelUrl } = fd;
-
-      let furl = backUrl;
-
-      uni.showLoading({});
-      await apiAsync(wx.login, {});
-      const { encryptedData, iv } = await apiAsync(wx.getWeRunData, {
-        complete(e) {
-          console.log('获取到微信运动步数-----');
-          console.log(e);
-        },
-      }).catch(() => {
-        furl = cancelUrl;
-        return {};
-      });
-      await wait(500);
-      uni.hideLoading();
-
-      uni.navigateTo({
-        url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
-          _url: joinQueryForUrl(furl, {
-            encryptedData,
-            iv,
-          }),
-        }),
+      handlerGetWxRunData({
+        backUrl,
+        cancelUrl,
       });
     }
+    // #endif
 
     if (insuranceParams1001035) {
       handleWxMedicalPay1001035(insuranceParams1001035);
