@@ -254,7 +254,7 @@ export class LoginUtils extends GStores {
       //   });
       // }
       //通过微信h5OpenId去同步 type传1 ，复用老公众号则取用h5OpenId，
-      if (['1001097', '1001093', '1001085'].includes(sysCode)) {
+      if (['1001097', '1001093', '1001085','1001101'].includes(sysCode)) {
         const reqData = {
           source: this.globalStore.browser.source,
           wxOpenId: this.globalStore.h5OpenId,

@@ -1515,6 +1515,11 @@ const api1001035 = {
       hideLoading: false,
       baseURL: api1001035.baseURL,
     }),
+  getHisDeptList: <T>(data: any) =>
+    service.post<T>('/reg/getHisDeptList', parm(data), {
+      hideLoading: false,
+      baseURL: api1001035.baseURL,
+    }),
 };
 
 export default {

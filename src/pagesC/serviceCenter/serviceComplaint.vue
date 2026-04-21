@@ -14,10 +14,11 @@
         v-model:value="formData"
         @submit="formSubmit"
         @selectChange="handleSelect"
+        @row-click="handleRowClick"
         :show-require-icon="false"
         bodyBold
         ref="gform"
-      />
+      ></g-form>
       <ImgUpload
         v-if="options?.selectRecords !== '0' || options?.isAnonymous === '1'"
         v-model:uploadImgList="uploadImgList"
@@ -37,6 +38,13 @@
       </button>
     </view>
     <g-message />
+    <!-- <chooseDept
+      v-model:show="dialogShow.dept"
+      @change="pickerChange($event, 'dept')"
+      :pageType="'3'"
+      :value="formData"
+      title="选择科室"
+    /> -->
   </view>
 </template>
 
@@ -48,9 +56,11 @@
   import { decryptDes } from '@/common/des';
   import type { TInstance } from '@/components/g-form/index';
   import { deQueryForUrl } from '@/common';
+
   import api from '@/service/api';
   import env from '@/config/env';
   import ImgUpload from './components/ImgUpload.vue';
+  import chooseDept from './components/choose-dept.vue';
   const options = ref({
     selectRecords: '0',
     cardNumber: '',
@@ -77,6 +87,10 @@
     // phone: '13868529891',
     // compDept: '消化内科',
     // compContext: '好好好哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
+  });
+  const dialogShow = ref({
+    dept: false,
+    doc: false,
   });
   const pageTitle =
     gStores.globalStore.sysCode === '1001033' ? '投诉' : '意见反馈';
@@ -140,9 +154,34 @@
     {
       required: false,
       label: '您投诉的对象',
-      field: 'input-text',
-      placeholder: '请输入',
-      maxlength: 11,
+      placeholder: '请选择',
+      field: 'select',
+      options: [
+        {
+          value: '医生',
+          label: '医生',
+        },
+        {
+          value: '护士',
+          label: '护士',
+        },
+        {
+          value: '医技人员',
+          label: '医技人员',
+        },
+        {
+          value: '后勤人员',
+          label: '后勤人员',
+        },
+        {
+          value: '其他人员',
+          label: '其他人员',
+        },
+        {
+          value: '无',
+          label: '无',
+        },
+      ],
       key: 'compDept',
       labelWidth: '220rpx',
     },
@@ -240,13 +279,37 @@
       key: 'visitLabel',
       labelWidth: '220rpx',
     },
-
     {
-      required: true,
+      required: false,
       label: '您投诉的对象',
-      field: 'input-text',
-      placeholder: '请输入',
-      maxlength: 11,
+      placeholder: '请选择',
+      field: 'select',
+      options: [
+        {
+          value: '医生',
+          label: '医生',
+        },
+        {
+          value: '护士',
+          label: '护士',
+        },
+        {
+          value: '医技人员',
+          label: '医技人员',
+        },
+        {
+          value: '后勤人员',
+          label: '后勤人员',
+        },
+        {
+          value: '其他人员',
+          label: '其他人员',
+        },
+        {
+          value: '无',
+          label: '无',
+        },
+      ],
       key: 'compDept',
       labelWidth: '220rpx',
     },
@@ -280,11 +343,36 @@
   ];
   const tempList3: TInstance[] = [
     {
-      required: true,
+      required: false,
       label: '您投诉的对象',
-      field: 'input-text',
-      placeholder: '请输入',
-      maxlength: 11,
+      placeholder: '请选择',
+      field: 'select',
+      options: [
+        {
+          value: '医生',
+          label: '医生',
+        },
+        {
+          value: '护士',
+          label: '护士',
+        },
+        {
+          value: '医技人员',
+          label: '医技人员',
+        },
+        {
+          value: '后勤人员',
+          label: '后勤人员',
+        },
+        {
+          value: '其他人员',
+          label: '其他人员',
+        },
+        {
+          value: '无',
+          label: '无',
+        },
+      ],
       key: 'compDept',
       labelWidth: '220rpx',
     },
@@ -343,11 +431,36 @@
     },
 
     {
-      required: true,
+      required: false,
       label: '您投诉的对象',
-      field: 'input-text',
-      placeholder: '请输入',
-      maxlength: 11,
+      placeholder: '请选择',
+      field: 'select',
+      options: [
+        {
+          value: '医生',
+          label: '医生',
+        },
+        {
+          value: '护士',
+          label: '护士',
+        },
+        {
+          value: '医技人员',
+          label: '医技人员',
+        },
+        {
+          value: '后勤人员',
+          label: '后勤人员',
+        },
+        {
+          value: '其他人员',
+          label: '其他人员',
+        },
+        {
+          value: '无',
+          label: '无',
+        },
+      ],
       key: 'compDept',
       labelWidth: '220rpx',
     },
@@ -519,6 +632,102 @@
       },
     },
   ];
+  const tempList6: TInstance[] = [
+    {
+      required: true,
+      label: '手机号',
+      field: 'input-text',
+      placeholder: '请输入',
+      maxlength: 11,
+      key: 'phone',
+      rule: [
+        {
+          message: '请确认手机号是否有误',
+          rule: rulePhone,
+        },
+      ],
+      labelWidth: '220rpx',
+    },
+    {
+      required: true,
+      label: '就诊记录',
+      placeholder: '请选择',
+      key: 'visitUid',
+      labelWidth: '220rpx',
+      field: 'select',
+      options: [],
+    },
+    {
+      required: true,
+      label: '科室',
+      placeholder: '请选择科室',
+      key: 'deptName',
+      labelWidth: '220rpx',
+      field: 'input-text',
+      disabled: true,
+    },
+    {
+      required: false,
+      label: '您投诉的对象',
+      placeholder: '请选择',
+      field: 'select',
+      options: [
+        {
+          value: '医生',
+          label: '医生',
+        },
+        {
+          value: '护士',
+          label: '护士',
+        },
+        {
+          value: '医技人员',
+          label: '医技人员',
+        },
+        {
+          value: '后勤人员',
+          label: '后勤人员',
+        },
+        {
+          value: '其他人员',
+          label: '其他人员',
+        },
+        {
+          value: '无',
+          label: '无',
+        },
+      ],
+      key: 'compDept',
+      labelWidth: '220rpx',
+    },
+
+    {
+      required: true,
+      inputType: 'textarea',
+      label: pageTitle,
+      subLabel: '您的意见将帮助我们改进产品和服务',
+      field: 'input-text',
+      placeholder: '请填写5字及以上的问题描述以使我们提供更好的帮助',
+      maxlength: 200,
+      key: 'compContext',
+      direction: 'horizontal',
+      rowStyle: 'margin-top: 16rpx;',
+      bodyStyle: 'margin-top: 12rpx;',
+      labelStyle: 'color: #111111; font-size: 36rpx;font-weight: 600;',
+      validator: async (v: any) => {
+        if (v && v.length > 4) {
+          return {
+            success: true,
+          };
+        } else {
+          return {
+            message: '请填写5字及以上的问题描述以使我们提供更好的帮助',
+            success: false,
+          };
+        }
+      },
+    },
+  ];
 
   const formSubmit = async ({ data }) => {
     let message = '反馈成功,感谢您的支持';
@@ -595,7 +804,9 @@
       if (!result || !result.length) {
         throw new Error();
       }
-      tempList = tempList4.map((item: any) => {
+      let newTempList =
+        gStores.globalStore.sysCode === '1001033' ? tempList6 : tempList4;
+      tempList = newTempList.map((item: any) => {
         if (item.key == 'visitUid') {
           item.options = result.map((i) => {
             item.placeholder = '请选择就诊记录';
@@ -621,6 +832,31 @@
     }
 
     gform.value.setList(tempList);
+  };
+
+  const handleRowClick = ({ item, value }) => {
+    if (item.key === 'deptName') {
+      dialogShow.value['dept'] = true;
+    }
+  };
+
+  const pickerChange = async (e, type) => {
+    const tempData: any = [];
+    e.item.forEach((element, i) => {
+      const index = formData.value.praiseDeptDocParams.findIndex(
+        (item) => item.hosDeptId === element.hosDeptId
+      );
+      if (index == -1) {
+        tempData.push({
+          deptName: element.deptName,
+          docList: [],
+          hosDeptId: element.hosDeptId,
+        });
+      } else {
+        tempData.push(formData.value.praiseDeptDocParams[index]);
+      }
+    });
+    formData.value.praiseDeptDocParams = tempData;
   };
 
   const handleSelect = ({ item, value }) => {
