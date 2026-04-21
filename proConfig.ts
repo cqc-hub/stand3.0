@@ -1152,6 +1152,7 @@ export const miniProgramConfig: {
     wxAppid: 'wxf343a92ddd77b40b',
     name: '绍兴市中医院',
     alipayAppid: '2021003148628093',
+    h5Appid: 'wxdfe5ad8722bac411',
 
     isSearchInHos: true,
     isOpenOcr: false,
