@@ -1,6 +1,7 @@
 import { orderStatusMap, OrderStatus } from './regDetail';
 import { joinQuery } from '../../../common/utils';
 import { getSysCode } from '@/common';
+import { TButtonConfig } from '@/types';
 
 export type IRegistrationCardItem = {
   sysCode: string;
@@ -50,7 +51,9 @@ export type IRegistrationCardItem = {
 };
 
 //多院区院内导航 根据hosId
-export const HosNavData = {
+export const HosNavData: {
+  [key: string]: (...args: any[]) => TButtonConfig;
+} = {
   13009: () => {
     return {
       appId: 'wxe51129e09bb46147',
@@ -91,7 +94,26 @@ export const HosNavData = {
       },
     };
   },
-  // #ifdef  MP-WEIXIN
+  // #ifdef  MP-ALIPAY
+  // 13178: (item: IRegistrationCardItem, type?: string) => {
+  //   return {
+  //     appId: '2018122862716277',
+  //     path: 'pages/index/index',
+  //     text: '院内导航',
+  //     type: 'otherProgram',
+  //     extraData: {
+  //       hisCode: item.hosDeptId,
+  //       buildingId: 208089,
+  //       type: 3,
+  //     },
+  //   };
+  // },
+  // #endif
+};
+
+// #ifdef  MP-WEIXIN
+// 微信医院导航数据
+Object.assign(HosNavData, {
   13062: (item: IRegistrationCardItem) => {
     let extraData: any = {
       type: '8_2',
@@ -206,23 +228,22 @@ export const HosNavData = {
       // },
     };
   },
+});
+// #endif
 
-  // #endif
-  // #ifdef  MP-ALIPAY
-  // 13178: (item: IRegistrationCardItem, type?: string) => {
-  //   return {
-  //     appId: '2018122862716277',
-  //     path: 'pages/index/index',
-  //     text: '院内导航',
-  //     type: 'otherProgram',
-  //     extraData: {
-  //       hisCode: item.hosDeptId,
-  //       buildingId: 208089,
-  //       type: 3,
-  //     },
-  //   };
-  // },
-  // #endif
+export const isCanUseCustomGuide = (item) => {
+  const { hosId } = item;
+
+  if (hosId && HosNavData[hosId]) {
+    const btnConfig = HosNavData[hosId](item);
+
+    const { addition = {} } = btnConfig;
+
+    const hasAllValue = Object.keys(addition).every((key) => item[key]);
+
+    return hasAllValue;
+  }
+  return false;
 };
 
 export const judgeAllowNav = (item) => {

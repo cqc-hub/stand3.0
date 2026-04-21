@@ -594,7 +594,6 @@
   };
 
   const handlerAddressMap = (item) => {
-
     emits('go-address-map', item);
   };
 

@@ -156,12 +156,12 @@ const interceptorRoute = async function (item: any) {
 
       if (_tip) {
         await new Promise((closeCallBack) =>
-          gStores.messageStore.showMessage(_tip, 0, {
+          gStores.messageStore.showMessage(_tip, 3000, {
             closeCallBack,
-            useDialog: true,
-            dialogOpt: {
-              isShowCancel: false,
-            },
+            // useDialog: true,
+            // dialogOpt: {
+            //   isShowCancel: false,
+            // },
           })
         );
       }

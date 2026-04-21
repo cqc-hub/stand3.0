@@ -27,7 +27,7 @@
                 {{ lab[col.key] }}
 
                 <view
-                  v-if="col.key === 'hosName' && lab.hosId"
+                  v-if="col.key === 'categorName' && lab.hosId"
                   class="ml12 color-blue flex items-center"
                 >
                   <view class="icon-font ico_location2 right-icon guide-icon" />
@@ -77,10 +77,8 @@
       ['13009'].includes(props.lab.hosId) &&
       ['itemAddress', 'site', 'areaName'].includes(col.key)
     ) {
-      console.log();
-      
       //温附二
-      if(props.lab.performDeptName||props.lab.deptName){
+      if (props.lab.performDeptName || props.lab.deptName) {
         return true;
       }
     }
@@ -89,8 +87,7 @@
 
   const emits = defineEmits(['go-report', 'go-address-map', 'click-row']);
   const rowClick = (col) => {
-    console.log(1);
-    
+
     if (showAddress(col)) {
       emits('go-address-map', props.lab);
     }

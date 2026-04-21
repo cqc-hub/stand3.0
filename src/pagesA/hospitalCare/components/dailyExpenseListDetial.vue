@@ -245,9 +245,22 @@
       costType: props.isHosDaylist ? '1' : '3',
       patientId: gStores.userStore.patChoose.patientId,
       cardNumber: gStores.userStore.patChoose.cardNumber,
-      hospitalId: props.hospitalId || props.pageProps1?.hospitalId || providePageProp().hospitalId,
+      hospitalId:
+        props.hospitalId ||
+        props.pageProps1?.hospitalId ||
+        providePageProp().hospitalId,
       visitNo: _pageProps.value.visitNo,
     };
+
+    if (!params.hospitalId && gStores.globalStore.sysCode === '1001035') {
+      const { result } = await api.getInHospitalInfo<any>({
+        patientId: gStores.userStore.patChoose.patientId,
+        cardNumber: gStores.userStore.patChoose.cardNumber,
+      });
+
+      params.hospitalId = result.visitNo;
+    }
+
     const { result } =
       await api.getInHospitalCostInfo<inHospitalCostInfo>(params);
     costInfoDetal.value = result;

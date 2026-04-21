@@ -210,6 +210,7 @@
       registerId,
       insuranceParams1001035,
       cardNumber,
+      type = '',
     } = fd;
 
     if (cardNumber) {
@@ -222,6 +223,32 @@
           gStores.userStore.updatePatChoose(pat);
         }
       }
+    }
+
+    if (type === 'getWxRunData') {
+      const { backUrl, cancelUrl } = fd;
+
+      let furl = backUrl;
+
+      await apiAsync(wx.login, {});
+      const { encryptedData, iv } = await apiAsync(wx.getWeRunData, {
+        complete(e) {
+          console.log('获取到微信运动步数-----');
+          console.log(e);
+        },
+      }).catch(() => {
+        furl = cancelUrl;
+        return {};
+      });
+
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
+          _ur: joinQueryForUrl(furl, {
+            encryptedData,
+            iv,
+          }),
+        }),
+      });
     }
 
     if (insuranceParams1001035) {

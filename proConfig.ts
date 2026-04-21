@@ -1139,7 +1139,6 @@ export const miniProgramConfig: {
     },
   },
   '1001101': {
-    // wxeccca51d0d27a12f
     wxAppid: 'wxb0cb07afbebac462',
     alipayAppid: '2021003154666616',
     name: '湖州市中心医院',
