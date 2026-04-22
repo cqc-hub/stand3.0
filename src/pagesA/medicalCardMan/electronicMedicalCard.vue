@@ -549,7 +549,16 @@
   const init = async () => {
     const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
 
+    tabs.value.map((o) => {
+      if (o.value === '1') {
+        o.label = isHasHealthCode.value ? '电子健康卡' : '电子就诊卡';
+      }
+    });
+
+    showHealthCode.value = isHasHealthCode.value;
+
     changeShowName();
+    setStatus();
     isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
       'pagesA/medicalCardMan/electronicMedicalCard'
     );
@@ -589,12 +598,6 @@
       toggleList.value.push({
         label: '电子健康卡',
         key: '1',
-      });
-
-      tabs.value.map((o) => {
-        if (o.value === '1') {
-          o.label = '电子健康卡';
-        }
       });
 
       toggleQrCode();

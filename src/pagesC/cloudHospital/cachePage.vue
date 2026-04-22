@@ -230,6 +230,7 @@
 
       let furl = backUrl;
 
+      uni.showLoading({});
       await apiAsync(wx.login, {});
       const { encryptedData, iv } = await apiAsync(wx.getWeRunData, {
         complete(e) {
@@ -240,10 +241,12 @@
         furl = cancelUrl;
         return {};
       });
+      await wait(500);
+      uni.hideLoading();
 
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
-          _ur: joinQueryForUrl(furl, {
+          _url: joinQueryForUrl(furl, {
             encryptedData,
             iv,
           }),
