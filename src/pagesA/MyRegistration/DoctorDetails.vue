@@ -27,7 +27,13 @@
                   :class="isPliticalDoc ? 'mb48' : 'mb16'"
                 >
                   <image
-                    :src="headerBg"
+                    :src="
+                      (!isError && headerBg) ||
+                      `/static/image/order/order-doctor-avatar${
+                        gStores.globalStore.isTcmStyle ? '-tcm' : ''
+                      }.png`
+                    "
+                    @error="handleImgError"
                     @click="previewImg"
                     mode="aspectFill"
                     class="doc-avatar g-border"
@@ -623,6 +629,7 @@
   const flagTitle9 = ref('');
   const docHosSchHeight = ref(100);
   const isMultHosDoc = ref(false);
+  const isError = ref(false);
 
   const getSuffixTitle = (): string[] => {
     let { docJobName, docTitleName } = docDetail.value;
@@ -775,6 +782,10 @@
     );
   });
 
+  const handleImgError = () => {
+    isError.value = true;
+  };
+
   const previewImg = () => {
     const photo = docDetail.value.docPhoto;
     if (photo) {
@@ -846,11 +857,10 @@
         isComplete.value = true;
       });
 
-
     if (schList.length) {
       const { schDate } = schList[0];
       checkedDay.value = schDate;
-      docSchList.value = schList ;
+      docSchList.value = schList;
 
       //判断是否多院区
       let schListByhosId = groupedByHosId(schList);

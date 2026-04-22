@@ -1,5 +1,5 @@
 <template>
-  <view class="">
+  <view class="pop">
     <Gl-Popup
       ref="popup"
       :type="type"
@@ -31,13 +31,13 @@
       <view class="footer flex">
         <view
           @click="reSet"
-          class="btn btn-plain flex1 btn-border btn-normal p24v m12 mb32 ml32"
+          class="btn btn-plain flex1 btn-border btn-normal  m12 mb32 ml32"
         >
           {{ '重置' }}
         </view>
         <view
           @click="deptSure"
-          class="btn btn-primary flex1 p24v m12 mb32 mr32"
+          class="btn btn-primary flex1  m12 mb32 mr32"
         >
           {{ '确定' }}
         </view>
@@ -74,6 +74,7 @@
     {
       title: '',
       type: 'bottom',
+      show:false
     }
   );
 
@@ -134,6 +135,8 @@
   watch(
     () => props.show,
     () => {
+      console.log(999999,);
+      
       if (props.show) {
         show();
       } else {
@@ -179,7 +182,7 @@
     // props.value?.sysCode && (requestArg.sysCode = props.value.sysCode);
     const getDeptListApi = api.getHisDeptList;
     // const res = await api.getDeptList(requestArg).finally(() => {});
-    const { result } = await getDeptListApi(requestArg).finally(() => {});
+    const { result } = await getDeptListApi(requestArg)
     const { firstDeptList } = result;
     firstDeptList.push({
       firstDefaultShowDept: '0',
@@ -262,8 +265,8 @@
   const reSet = () => {
     deptStep = [];
     deptStore.changeActiveLv1({});
-    deptStore.changeActiveLv2([]);
-    deptStore.changeActiveLv3([]);
+    deptStore.changeActiveLv2({});
+    deptStore.changeActiveLv3({});
   };
 
   function updateArray(array, obj) {

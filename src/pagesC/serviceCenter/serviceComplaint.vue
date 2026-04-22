@@ -14,7 +14,7 @@
         v-model:value="formData"
         @submit="formSubmit"
         @selectChange="handleSelect"
-        @row-click="handleRowClick"
+        @disabled-click="handleRowClick"
         :show-require-icon="false"
         bodyBold
         ref="gform"
@@ -25,6 +25,13 @@
         :count="3"
       />
     </view>
+    <ChooseDept
+      v-model:show="dialogShow"
+      @change="pickerChange($event, 'dept')"
+      :pageType="'3'"
+      :value="formData"
+      title="选择科室"
+    />
     <view class="g-footer flex">
       <button
         v-if="options?.entryType == '1'"
@@ -38,13 +45,6 @@
       </button>
     </view>
     <g-message />
-    <!-- <chooseDept
-      v-model:show="dialogShow.dept"
-      @change="pickerChange($event, 'dept')"
-      :pageType="'3'"
-      :value="formData"
-      title="选择科室"
-    /> -->
   </view>
 </template>
 
@@ -60,7 +60,7 @@
   import api from '@/service/api';
   import env from '@/config/env';
   import ImgUpload from './components/ImgUpload.vue';
-  import chooseDept from './components/choose-dept.vue';
+  import ChooseDept from './components/choose-dept.vue';
   const options = ref({
     selectRecords: '0',
     cardNumber: '',
@@ -88,10 +88,7 @@
     // compDept: '消化内科',
     // compContext: '好好好哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
   });
-  const dialogShow = ref({
-    dept: false,
-    doc: false,
-  });
+  const dialogShow = ref(false);
   const pageTitle =
     gStores.globalStore.sysCode === '1001033' ? '投诉' : '意见反馈';
   const tempList: TInstance[] = [
@@ -667,6 +664,15 @@
       disabled: true,
     },
     {
+      required: true,
+      label: '医护人员',
+      placeholder: '请选择医护人员',
+      key: 'docName',
+      labelWidth: '220rpx',
+      field: 'input-text',
+      disabled: true,
+    },
+    {
       required: false,
       label: '您投诉的对象',
       placeholder: '请选择',
@@ -834,9 +840,11 @@
     gform.value.setList(tempList);
   };
 
-  const handleRowClick = ({ item, value }) => {
-    if (item.key === 'deptName') {
-      dialogShow.value['dept'] = true;
+  const handleRowClick = (item) => {
+    if ((item.key = 'deptName')) {
+      console.log(777777771, dialogShow.value);
+      dialogShow.value = true;
+      console.log(77777777, dialogShow.value);
     }
   };
 

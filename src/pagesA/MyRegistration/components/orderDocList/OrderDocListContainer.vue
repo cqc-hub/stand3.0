@@ -7,12 +7,13 @@
       <!-- <g-login @handler-next="avatarClick"> -->
       <img
         :src="
-          item.docPhoto ||
+          (!isError && item.docPhoto) ||
           `/static/image/order/order-doctor-avatar${
             gStores.globalStore.isTcmStyle ? '-tcm' : ''
           }.png`
         "
         @click="avatarClick"
+        @error="handleImgError"
         class="doc-info-avatar mr24"
         mode="aspectFill"
         lazy-load
@@ -175,7 +176,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
   import { GStores, ISystemConfig, throughCharacterLineFeed } from '@/utils';
   import globalGl from '@/config/global';
   import HTMLParser from '@/common/html-parser';
@@ -190,6 +191,7 @@
     pageConfig: ISystemConfig['order'];
   }>();
   const gStores = new GStores();
+  const isError = ref(false);
 
   const isPliticalDoc = computed(() => {
     return (
@@ -199,6 +201,10 @@
   });
 
   const emits = defineEmits(['avatar-click', 'preregistration-click']);
+
+  const handleImgError = () => {
+    isError.value = true;
+  };
 
   const avatarClick = () => {
     emits('avatar-click', props.item);
