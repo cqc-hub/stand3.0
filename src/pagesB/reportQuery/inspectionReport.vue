@@ -641,7 +641,7 @@
           patientId: pat.patientId,
           repId: repId,
           examClassName: examClassName,
-          extend: decodeURIComponent(extend),
+          extend,
         };
         const { result: _result } = await api.getExamineReportDetails(params);
 
