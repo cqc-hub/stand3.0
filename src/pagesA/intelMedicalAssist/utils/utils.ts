@@ -402,7 +402,8 @@ const upLoadPicOcr = async (files: string[]) => {
 
   const uploadFile = async (filePath: string) => {
     const { data } = await apiAsync(uni.uploadFile, {
-      url: joinQuery(`${globalEv.prod.baseApi}/phs-extend/customer/picOcr`, {
+      // url: joinQuery(`${globalEv.prod.baseApi}/phs-extend/customer/picOcr`, {
+      url: joinQuery(`${envBasic.baseApi}/phs-extend/customer/picOcr`, {
         sysCode,
         herenId,
         type: 'mini',
@@ -825,7 +826,7 @@ export const sendImg = async () => {
       scrollToNewMsg();
     }, 500);
 
-    let baseApi = globalEv.prod.baseApi;
+    let baseApi = envBasic.baseApi;
 
     const { data } = await apiAsync(uni.uploadFile, {
       url: `${baseApi}/phs-extend/customer/picOcr?sysCode=${

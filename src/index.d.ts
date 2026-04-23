@@ -222,7 +222,7 @@ interface ISConfig {
   isOpenAlipayFollow?: string;
   //首页是否支持展示咨询文章
   isOpenHomeArticle?: string;
-  //首页是否智能消息提醒
+  //首页是否智能消息提醒 首页卡片
   isOpenAssistMessage?: '1';
   //首页banner置顶
   homeTopBanner?: {
