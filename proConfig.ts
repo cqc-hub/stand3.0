@@ -1141,6 +1141,7 @@ export const miniProgramConfig: {
   '1001101': {
     wxAppid: 'wxb0cb07afbebac462',
     alipayAppid: '2021003154666616',
+    h5Appid: 'wx7e88bc4968e4e9f0',
     name: '湖州市中心医院',
     isSearchInHos: true,
     isOpenOcr: false,

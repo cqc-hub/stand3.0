@@ -24,7 +24,15 @@
 
       <view class="flex-normal doc-goodat mb12">
         <view class="color-444 f32 doc-goodat-content text-ellipsis">
+          <text
+            v-if="pageProps.isXkTeam"
+            class="color-blue doc-major-goodat mr12"
+          >
+            学科介绍
+          </text>
+
           <image
+            v-else
             :src="$global.BASE_IMG + 'department-intro-text.png'"
             class="doc-major-goodat mr12"
             mode="widthFix"
@@ -74,7 +82,9 @@
 
       <block v-if="detailInfo.docList && detailInfo.docList.length">
         <view class="department-doc-title g-bold f36">
-          科室医生({{ detailInfo.docList.length }})
+          {{ pageProps.isXkTeam ? '学科团队' : '科室医生' }}({{
+            detailInfo.docList.length
+          }})
         </view>
 
         <view class="mt16">
@@ -139,6 +149,7 @@
     deptName: '',
     hosId: '',
     hosDeptId: '',
+    isXkTeam: false,
   });
   const isComplete = ref(false);
   const regDialogConfirm = ref<any>('');
@@ -251,7 +262,7 @@
 
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
 
     if (queryParams || opt?.q) {
       return;

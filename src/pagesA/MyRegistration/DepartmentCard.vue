@@ -59,6 +59,8 @@
 
   const pageProp = ref({
     hosId: '',
+    isXkTeam: false,
+    onlyShowDept: '',
   });
   const gStores = new GStores();
   const searchValue = ref('');
@@ -90,8 +92,15 @@
           }
         }, 80);
       });
-
-    list.value = result || [];
+    if (pageProp.value.onlyShowDept) {
+      list.value =
+        result.filter((item) => {
+          return item.id === pageProp.value.onlyShowDept;
+        }) || [];
+      isHideLv1.value = true;
+    } else {
+      list.value = result || [];
+    }
   };
 
   const clearData = () => {
@@ -115,6 +124,7 @@
         id,
         deptName,
         hosId,
+        isXkTeam: pageProp.value.isXkTeam,
       }),
     });
   };

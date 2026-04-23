@@ -361,7 +361,7 @@
         //昌安院区
         useTBanner({
           type: 'h5',
-          path: 'https://www.youehu.com/business/h5/gtp/home.html#/preorderOrg/1135366844861960193',
+          path: 'https://www.youehu.com/business/h5/gtp/home.html#/index',
           text: '护工预约',
         });
       }

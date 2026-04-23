@@ -25,13 +25,13 @@
         :count="3"
       />
     </view>
-    <ChooseDept
+    <!-- <ChooseDept
       v-model:show="dialogShow"
       @change="pickerChange($event, 'dept')"
       :pageType="'3'"
       :value="formData"
       title="选择科室"
-    />
+    /> -->
     <view class="g-footer flex">
       <button
         v-if="options?.entryType == '1'"
