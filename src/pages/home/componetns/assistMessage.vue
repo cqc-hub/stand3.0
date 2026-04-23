@@ -42,10 +42,16 @@
           <view class="info-area">
             <view class="p24 f28 flex-normal-between">
               <view class="flex">
-                <text class="name pr12 text-no-wrap" v-if="messData.patientName">
+                <text
+                  class="name pr12 text-no-wrap"
+                  v-if="messData.patientName"
+                >
                   {{ messData.patientName }}
                 </text>
-                <text class="date pr12 text-no-wrap" v-if="messData.appointmentDate">
+                <text
+                  class="date pr12 text-no-wrap"
+                  v-if="messData.appointmentDate"
+                >
                   {{ dayjs(messData.appointmentDate).format('MM-DD') }}
                 </text>
                 <text class="time pr12 text-no-wrap" v-if="messData.ampmName">
@@ -90,9 +96,8 @@
                     class="dot"
                     :class="{
                       active: item.value * 1 <= messData.activeStausIndex * 1,
-                      [`active-${
-                        messData.activeStausIndex * 1 - item.value * 1
-                      }`]: true,
+                      [`active-${messData.activeStausIndex - item.value}`]:
+                        true,
                     }"
                     v-for="item in getFourItemsSmart(
                       messData.statusList,
@@ -413,13 +418,13 @@
             border: 4rpx solid var(--h-qrcode-1) !important;
           }
           .active-1 {
-            border: 4rpx solid rgb(175, 94, 69) !important;
+            border: 4rpx solid var(--h-qrcode-2) !important;
           }
           .active-2 {
-            border: 4rpx solid rgb(206, 113, 77) !important;
+            border: 4rpx solid var(--h-qrcode-2) !important;
           }
           .active-3 {
-            border: 4rpx solid rgb(237, 131, 85) !important;
+            border: 4rpx solid var(--h-qrcode-2) !important;
           }
 
           :nth-child(1) {
