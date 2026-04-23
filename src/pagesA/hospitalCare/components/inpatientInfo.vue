@@ -106,14 +106,16 @@
         </view>
 
         <view
-          v-if="isShowPayBtn && !isShowCtypeBtn"
+          v-if="isOutHosButNotPay && !isShowCtypeBtn"
           class="button f36"
           @click="toPayOut"
         >
           已出院，立即结算
         </view>
         <view
-          v-if="props.isHidePay !== '1' && !isShowPayBtn && !isShowCtypeBtn"
+          v-if="
+            props.isHidePay !== '1' && !isOutHosButNotPay && !isShowCtypeBtn
+          "
           @click="checkCount"
         >
           <view
@@ -221,7 +223,6 @@
   const hosConfig = ref<ISystemConfig['hospitalCare']>(<any>{});
   const selPlace = ref('');
   const isSelShow = ref(false);
-  const isShowPayBtn = ref(false);
   const selClose = () => {
     isSelShow.value = false;
     reject();
@@ -238,6 +239,10 @@
   });
 
   const hosInfoResObj = ref({} as getInHospitalInfoResult);
+  const isOutHosButNotPay = computed(() => {
+    //status 在院状态 1.在院 2.出院未结算
+    return hosInfoResObj.value.status === '2';
+  });
   const row1 = computed(() => {
     const { hosName, inpatientWard, inpatientBed } = hosInfoResObj.value;
 
@@ -508,17 +513,8 @@
     }
     const { result } =
       await api.getInHospitalInfo<getInHospitalInfoResult>(args);
-
+    // result.status = '2';
     hosInfoResObj.value = result;
-
-    //status 在院状态 1.在院 2.出院未结算
-    if (result && Object.keys(result).length) {
-      if (result.status === '2') {
-        isShowPayBtn.value = true;
-      } else {
-        isShowPayBtn.value = false;
-      }
-    }
 
     if (props.isShowAppointment && (!result || !Object.keys(result).length)) {
       getAppointmentList();

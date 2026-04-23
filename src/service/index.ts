@@ -42,7 +42,6 @@ let isGettingOpenId = false;
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
   const globalStore = useGlobalStore();
-  console.log(request, '222');
   const specialUrls1001035 = ['https://phs.jshtcm.com'];
 
   // #ifdef MP-WEIXIN

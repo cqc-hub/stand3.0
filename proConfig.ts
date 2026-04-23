@@ -983,6 +983,7 @@ export const miniProgramConfig: {
       hospitalId: '40652',
     },
     sConfig: {
+      isOpenAssistMessage: '1',
       homeNavTitleLogo:
         'https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png',
       isOpenHelpOld: '1',

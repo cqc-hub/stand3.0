@@ -654,7 +654,7 @@
         patientId: pat.value.patientId,
         repId: repId,
         repType: repType,
-        extend: decodeURIComponent(extend),
+        extend,
       };
       const { result: _result } = await api.getCheckoutReportDetails(params);
       result = _result;
