@@ -71,7 +71,7 @@ const globalGl = {
   isOpenSm4,
   netUrl,
   h5Url,
-  sConfig: (systemConfig.sysConfig.sConfig || {}) as ISConfig,
+  sConfig: (systemConfig.sysConfig.sConfig || {}) as unknown as ISConfig,
   WEB_OUT_LOGIN_TIME,
   q: getK('q'),
   r: getK('s'),

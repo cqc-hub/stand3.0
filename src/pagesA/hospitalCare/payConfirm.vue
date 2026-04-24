@@ -61,7 +61,7 @@
           <text class="color-444 f28 mr8">退还金额</text>
         </template>
         <text class="f36 g-bold color-error">
-          {{ Math.abs(info.totalNeedPay) || '' }}元
+          {{ Math.abs(info.totalNeedPay - 0) }}元
         </text>
       </view>
 
@@ -197,7 +197,7 @@
   const getOutHospitalAffirmPay = async () => {
     const { cardNumber, patientId, hosId } = pageProps.value;
     const source = gStores.globalStore.browser.source;
-    const { totalNeedPay, visitNo } = info.value;
+    const { totalNeedPay, visitNo, recipeNo } = info.value;
     await api.outHospitalAffirmPay<any>({
       amount: totalNeedPay,
       patientId,
@@ -205,6 +205,7 @@
       source,
       cardNumber,
       visitNo,
+      recipeNo,
     });
     payAfter();
   };

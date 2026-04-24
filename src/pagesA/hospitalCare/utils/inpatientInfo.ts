@@ -12,6 +12,7 @@ export interface getInHospitalInfoParam {
 }
 //获取住院信息 出参类型
 export interface getInHospitalInfoResult {
+  recipeNo?: string;
   singleSelfPay?: string;
   prepaymentPayCount?: number;
   prepaymentQuota?: string;
@@ -208,6 +209,7 @@ export type TPayConfirmHosPageProp = {
   hosName: string;
   extend: string;
   visitNo?: string;
+  recipeNo?: string;
 };
 
 interface IGPay {
