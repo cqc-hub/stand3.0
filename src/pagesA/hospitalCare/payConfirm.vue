@@ -91,7 +91,7 @@
   import {
     type TPayConfirmHosPageProp,
     payOrderResult,
-    useHosPayPage
+    useHosPayPage,
   } from './utils/inpatientInfo';
   import { encryptForPage, decryptForPage } from '@/common/des';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
@@ -117,7 +117,7 @@
     getSysConfig,
     pageConfig,
     toDigitalPay,
-    getRefPay
+    getRefPay,
   } = useHosPayPage();
 
   const pageProps = ref(<TPayConfirmHosPageProp>{});
@@ -133,7 +133,7 @@
     {
       label: '预交金额',
       key: 'inpPrepayments',
-    }
+    },
   ]);
 
   const payArg = ref<BaseObject>({});
@@ -147,14 +147,14 @@
 
   const payClick = async () => {
     if (Number(info.value.totalNeedPay) > 0) {
-      getRefPay(info.value.totalNeedPay)
+      getRefPay(info.value.totalNeedPay);
     } else {
       getOutHospitalAffirmPay();
     }
   };
 
   const getNormalData = async () => {
-    const { cardNumber, patientId, hosId } = pageProps.value;
+    const { cardNumber, patientId, hosId, visitNo } = pageProps.value;
     const source = gStores.globalStore.browser.source;
     isComplete.value = false;
     const { result } = await api.getOutHospitalPreparePay<any>({
@@ -162,6 +162,7 @@
       hosId,
       source,
       cardNumber,
+      visitNo,
     });
 
     isComplete.value = true;
@@ -188,9 +189,8 @@
   const getPayInfo = async ({ item }: { item: IGPay }) => {
     if (item.key === 'online') {
       toPay();
-    }else if (item.key === 'digital') {
-      toDigitalPay( pageProps.value,
-      info.value.totalNeedPay)
+    } else if (item.key === 'digital') {
+      toDigitalPay(pageProps.value, info.value.totalNeedPay);
     }
   };
 
@@ -199,7 +199,7 @@
     const source = gStores.globalStore.browser.source;
     const { totalNeedPay, visitNo } = info.value;
     await api.outHospitalAffirmPay<any>({
-      amount:totalNeedPay,
+      amount: totalNeedPay,
       patientId,
       hosId,
       source,
@@ -216,10 +216,10 @@
     });
     try {
       const payArg = await getCreateInHospitalPayOrderData(
-      pageProps.value,
-      info.value.totalNeedPay,
-      'outHos'
-    );
+        pageProps.value,
+        info.value.totalNeedPay,
+        'outHos'
+      );
 
       const res = await payMoneyOnline(payArg);
 

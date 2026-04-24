@@ -432,7 +432,7 @@
 
   const toPayOut = async () => {
     if (hosInfoResObj.value.costTypeName === '自费') {
-      const { hosId, cardNumber, patientName, hosName, extend } =
+      const { hosId, cardNumber, patientName, hosName, extend, visitNo } =
         hosInfoResObj.value;
       const patientId = gStores.userStore.patChoose.patientId;
       const args = {
@@ -443,6 +443,7 @@
         patientName,
         hospitalAccount: '13',
         extend,
+        visitNo,
       };
       uni.navigateTo({
         url: joinQuery('/pagesA/hospitalCare/payConfirm', args),

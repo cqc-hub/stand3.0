@@ -207,6 +207,7 @@ export type TPayConfirmHosPageProp = {
   hospitalAccount: string;
   hosName: string;
   extend: string;
+  visitNo?: string;
 };
 
 interface IGPay {
