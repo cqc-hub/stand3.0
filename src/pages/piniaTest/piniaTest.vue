@@ -761,7 +761,7 @@
     // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
     // useTBanner(肿瘤住院管家);
-    useTBanner(queryCase);
+    // useTBanner(queryCase);
     // patientUtils.faceVerifyAndPData({
     //   name: '陈钦川',
     //   idCardNumber: '330326199908286713',

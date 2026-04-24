@@ -21,7 +21,7 @@ export const _goElectronicMedicalCard = (type: 'bySelf' | 'byMedical') => {
     uni.navigateTo({
       url: joinQuery('/pagesA/medicalCardMan/electronicMedicalCard', {
         dp: 1,
-        tab: 1,
+        // tab: 1,
       }),
     });
   }

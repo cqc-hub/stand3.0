@@ -29,7 +29,7 @@
       >
         <view class="assist-card animate__animated animate__fadeIn">
           <view class="flex-normal-between">
-            <view @click.stop="guideToHos(messData)" class="flex p24v f32">
+            <view @click.stop="guideToHos(messData)" class="flex p24v f32 items-center">
               <text class="iconfont icon-location ml12 f40">&#xe6d7;</text>
               <view class="hos pr12">{{ messData.hosName }}</view>
               <view class="dept pl12">{{ messData.deptName }}</view>
