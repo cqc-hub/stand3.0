@@ -1,9 +1,9 @@
 <template>
   <g-login @handler-next="routerJump">
-    <view v-if="gStores.globalStore.modeOld">
+    <view v-if="gStores.globalStore.modeOld" class="color-fff">
       <block v-if="globalStore.isLogin">
         <view
-          class="top-card-old flex-normal-between animate__animated animate__fadeIn"
+          class="top-card-old flex-normal-between animate__animated animate__fadeIn pl32"
         >
           <!-- 有就诊人时 -->
           <block v-if="getShowName">
@@ -15,14 +15,29 @@
               >
                 &#xe6a7;
               </view>
-              <view class="patient">
-                <text>
-                  {{ getShowName }}
+              <view class="ml32">
+                <text @click.stop="isClose = !isClose" class="mr12">
+                  <text class="font-semibold">
+                    {{
+                      isClose
+                        ? nameConvert(gStores.userStore.patChoose.patientName)
+                        : gStores.userStore.patChoose.patientName
+                    }}
+                  </text>
+
+                  <text
+                    :style="{
+                      top: '2px',
+                    }"
+                    class="iconfont icon-resize relative f48"
+                  >
+                    {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
+                  </text>
                 </text>
-                <text v-if="getShowPatId">
+                <view v-if="getShowPatId" class="f28">
                   ID
                   {{ getShowPatId }}
-                </text>
+                </view>
               </view>
             </view>
             <view class="switchPatient" @tap="chooseAction">更换就诊人</view>
@@ -30,7 +45,7 @@
           <!-- 没有就诊人时 -->
           <block v-else>
             <view class="flex-normal">
-              <view class="patient-old">
+              <view class="f48">
                 <text>暂无就诊人</text>
               </view>
             </view>
@@ -42,12 +57,14 @@
       <block v-else>
         <!-- 未登录 -->
         <view
-          class="top-card-old flex-normal-between animate__animated animate__fadeIn"
+          class="top-card-old flex-normal-between animate__animated animate__fadeIn pl32"
           :class="{ 'card-1001054': globalStore.sysCode === '1001054' }"
         >
-          <view class="no-login">
-            <text>{{ getLangLabel('home:请登录') }}</text>
-            <text>{{ getLangLabel('home:登录后享受更多服务') }}</text>
+          <view class="">
+            <view class="f48">{{ getLangLabel('home:请登录') }}</view>
+            <view class="f32">
+              {{ getLangLabel('home:登录后享受更多服务') }}
+            </view>
           </view>
           <button class="login-btn text-no-wrap">
             {{ getLangLabel('home:请登录') }}
@@ -56,7 +73,7 @@
       </block>
     </view>
 
-    <view v-else>
+    <view v-else class="color-fff">
       <view
         v-if="isHomeStyle1"
         class="mb24 bg-white rounded-xl pt16 pb16 pr24 pl24"
@@ -69,26 +86,41 @@
         <block v-if="globalStore.isLogin">
           <view
             :class="{ 'card-1001054': globalStore.sysCode === '1001054' }"
-            class="top-card flex-normal-between animate__animated animate__fadeIn"
+            class="top-card flex-normal-between animate__animated animate__fadeIn pl32"
           >
             <!-- 有就诊人时 -->
             <block v-if="getShowName">
-              <view class="flex-normal">
+              <view class="flex items-center">
                 <view
                   v-if="personConfig.isQrCodeDisabled !== '1'"
                   @tap="cardClick"
-                  class="iconfont icon-size"
+                  class="iconfont icon-size f60"
                   :class="
                     gStores.globalStore.sysCode == '1001036' ? 'revent' : ''
                   "
                 >
                   &#xe6a7;
                 </view>
-                <view class="patient">
-                  <text>
-                    {{ getShowName }}
+                <view class="f32 ml24">
+                  <text @click.stop="isClose = !isClose" class="mr24 flex">
+                    <text class="mr12 font-semibold f36">
+                      {{
+                        isClose
+                          ? nameConvert(gStores.userStore.patChoose.patientName)
+                          : gStores.userStore.patChoose.patientName
+                      }}
+                    </text>
+
+                    <text
+                      :style="{
+                        top: '2px',
+                      }"
+                      class="iconfont icon-resize f48 relative"
+                    >
+                      {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
+                    </text>
                   </text>
-                  <text v-if="getShowPatId">
+                  <text v-if="getShowPatId" class="f28">
                     ID
                     {{ getShowPatId }}
                   </text>
@@ -119,29 +151,16 @@
         <block v-else>
           <!-- 未登录 -->
           <view
-            class="top-card flex-normal-between animate__animated animate__fadeIn"
+            class="top-card flex-normal-between animate__animated animate__fadeIn pl32"
           >
             <view class="flex-normal no-login">
-              <text>{{ getLangLabel('home:请登录') }}</text>
+              <text class="mr24">{{ getLangLabel('home:请登录') }}</text>
               <text>
                 {{ getLangLabel('home:登录后享受更多服务') }}
               </text>
             </view>
 
-            <view
-              v-if="gStores.globalStore.ev === 'alipay'"
-              class="switchPatient no-login-tip"
-            >
-              {{ getLangLabel('home:请登录') }}
-            </view>
-
-            <button
-              v-if="
-                gStores.globalStore.ev &&
-                ['wx', 'web', 'harmony'].includes(gStores.globalStore.ev)
-              "
-              class="login-btn"
-            >
+            <button class="login-btn">
               {{ getLangLabel('home:请登录') }}
             </button>
           </view>
@@ -154,7 +173,7 @@
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
 
-  import { GStores, routerJump, ISystemConfig } from '@/utils';
+  import { GStores, routerJump, ISystemConfig, nameConvert } from '@/utils';
   import { IPat, isAreaProgram, useGlobalStore } from '@/stores';
   import { getLangLabel } from '@/config/lang';
   import { goElectronicMedicalCard } from '../utils';
@@ -168,6 +187,8 @@
   defineProps<{
     personConfig: ISystemConfig['person'];
   }>();
+
+  const isClose = ref(true);
 
   const getShowName = computed(() => {
     return gStores.userStore.patChoose.patientName;
@@ -211,18 +232,6 @@
     border-top-right-radius: 24rpx;
     height: 100rpx;
 
-    .patient {
-      text {
-        display: block;
-        font-size: var(--hr-font-size-base);
-        line-height: 44rpx;
-
-        &:last-child {
-          font-size: var(--hr-font-size-xs);
-          line-height: 40rpx;
-        }
-      }
-    }
     &::after {
       width: 100%;
       height: 112rpx;
@@ -243,22 +252,6 @@
           font-size: var(--hr-font-size-xxxs);
         }
       }
-    }
-
-    .icon-size {
-      font-size: var(--h-iconfont-60);
-      margin-left: 56rpx;
-      display: inline-block;
-      color: var(--h-color-white);
-    }
-
-    text {
-      font-size: var(--h-size-40);
-      font-weight: var(--h-weight-2);
-      text-align: left;
-      color: var(--h-color-white);
-      margin-left: 24rpx;
-      line-height: 60rpx;
     }
 
     view.switchPatient {
@@ -335,15 +328,6 @@
         }
       }
     }
-    .no-login {
-      text {
-        font-size: 48rpx;
-        display: block;
-        &:last-child {
-          font-size: 32rpx;
-        }
-      }
-    }
 
     .icon-size {
       font-size: 72rpx;
@@ -352,20 +336,6 @@
       color: var(--h-color-white);
     }
 
-    text {
-      font-size: var(--h-size-40);
-      font-weight: var(--h-weight-2);
-      text-align: left;
-      color: var(--h-color-white);
-      margin-left: 24rpx;
-      line-height: 60rpx;
-    }
-
-    .patient-old {
-      text {
-        font-size: 48rpx !important;
-      }
-    }
     view.switchPatient {
       width: 228rpx;
       background: linear-gradient(
