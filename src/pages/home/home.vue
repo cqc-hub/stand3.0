@@ -751,7 +751,7 @@
         }
 
         &.top-menu-normal {
-          rgba(180, 178, 178, 0.9)nd-color-3-light);
+          background: var(--hr-brand-color-3-light);
           box-shadow: 0px 8rpx 40rpx 0rpx rgba(0, 0, 0, 0.06);
           border: 2rpx solid var(--hr-brand-color-3);
         }
