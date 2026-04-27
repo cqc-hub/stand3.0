@@ -11,11 +11,11 @@
               <view
                 v-if="personConfig.isQrCodeDisabled !== '1'"
                 @tap="cardClick"
-                class="iconfont icon-size"
+                class="iconfont icon-size f80"
               >
                 &#xe6a7;
               </view>
-              <view class="ml32">
+              <view class="ml24">
                 <text @click.stop="isClose = !isClose" class="mr12">
                   <text class="font-semibold">
                     {{
@@ -40,7 +40,12 @@
                 </view>
               </view>
             </view>
-            <view class="switchPatient" @tap="chooseAction">更换就诊人</view>
+            <view
+              class="switchPatient f32 color-blue text-center"
+              @tap="chooseAction"
+            >
+              更换就诊人
+            </view>
           </block>
           <!-- 没有就诊人时 -->
           <block v-else>
@@ -268,9 +273,6 @@
       line-height: 64rpx;
       text-align: center;
     }
-    view.no-login-tip {
-      width: 124rpx;
-    }
   }
 
   .login-btn {
@@ -329,13 +331,6 @@
       }
     }
 
-    .icon-size {
-      font-size: 72rpx;
-      margin-left: 32rpx;
-      display: inline-block;
-      color: var(--h-color-white);
-    }
-
     view.switchPatient {
       width: 228rpx;
       background: linear-gradient(
@@ -344,14 +339,7 @@
         rgba(255, 255, 255, 0.5)
       );
       border-radius: 200rpx 0 0 200rpx;
-      font-size: 32rpx;
-      font-weight: 400;
-      color: var(--hr-brand-color-6);
       line-height: 72rpx;
-      text-align: center;
-    }
-    view.no-login-tip {
-      width: 124rpx;
     }
   }
 
