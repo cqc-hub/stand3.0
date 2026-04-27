@@ -13,11 +13,24 @@
             class="flex items-center"
             @click="togglePat"
           >
-            <view class="font-semibold">
-              <text class="mr24">
-                {{ gStores.userStore.patChoose.patientNameEncry }}
+            <view class="">
+              <text @click.stop="isClose = !isClose" class="mr24">
+                <text class="mr12 font-semibold">
+                  {{
+                    isClose
+                      ? nameConvert(gStores.userStore.patChoose.patientName)
+                      : gStores.userStore.patChoose.patientName
+                  }}
+                </text>
+
+                <text :class="`iconfont icon-resize`">
+                  {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
+                </text>
               </text>
-              <text v-if="gStores.userStore.patChoose._showId">
+              <text
+                v-if="gStores.userStore.patChoose._showId"
+                class="font-semibold"
+              >
                 <text class="mr12">ID</text>
                 <text>{{ gStores.userStore.patChoose._showId }}</text>
               </text>
@@ -72,12 +85,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { GStores } from '@/utils';
+  import { GStores, nameConvert } from '@/utils';
   import { getLangLabel } from '@/config/lang';
   import { getAvatar } from '@/stores';
   import globalGl from '@/config/global';
+  import { ref } from 'vue';
 
   const gStores = new GStores();
+  const isClose = ref(true);
 
   const emits = defineEmits(['toggle-pat', 'add-pat']);
   const togglePat = () => {
