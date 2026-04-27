@@ -15,8 +15,8 @@
               >
                 &#xe6a7;
               </view>
-              <view class="ml24">
-                <text @click.stop="isClose = !isClose" class="mr12">
+              <view @click.stop="isClose = !isClose" class="ml24">
+                <text class="mr12">
                   <text class="font-semibold">
                     {{
                       isClose
@@ -106,8 +106,8 @@
                 >
                   &#xe6a7;
                 </view>
-                <view class="f32 ml24">
-                  <text @click.stop="isClose = !isClose" class="mr24 flex">
+                <view @click.stop="isClose = !isClose" class="f32 ml24">
+                  <text class="mr24 flex">
                     <text class="mr12 font-semibold f36">
                       {{
                         isClose
@@ -259,7 +259,7 @@
       }
     }
 
-    view.switchPatient {
+    .switchPatient {
       width: 180rpx;
       background: linear-gradient(
         180deg,
@@ -331,7 +331,7 @@
       }
     }
 
-    view.switchPatient {
+    .switchPatient {
       width: 228rpx;
       background: linear-gradient(
         180deg,
