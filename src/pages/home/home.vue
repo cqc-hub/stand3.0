@@ -742,38 +742,6 @@
     padding: 0 32rpx 188rpx 32rpx;
 
     .card {
-      .login-btn {
-        border: none !important;
-        background-color: transparent;
-        box-shadow: none !important;
-        margin: 0;
-        height: 64rpx;
-        width: 144rpx;
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.9),
-          rgba(255, 255, 255, 0.5)
-        );
-        border-radius: 200rpx 0 0 200rpx;
-        font-size: var(--hr-font-size-xs);
-        font-weight: 400;
-        color: var(--hr-brand-color-6);
-        line-height: 64rpx;
-        text-align: center;
-        & button,
-        & uni-button:after,
-        & button:after {
-          border: none !important;
-          background-color: transparent;
-          box-shadow: none !important;
-          padding: 0;
-        }
-        &:after {
-          background: none;
-          border: none;
-          padding: 0;
-        }
-      }
 
       .top-menu {
         &.top-menu-style1 {
@@ -783,7 +751,7 @@
         }
 
         &.top-menu-normal {
-          background: var(--hr-brand-color-3-light);
+          rgba(180, 178, 178, 0.9)nd-color-3-light);
           box-shadow: 0px 8rpx 40rpx 0rpx rgba(0, 0, 0, 0.06);
           border: 2rpx solid var(--hr-brand-color-3);
         }
