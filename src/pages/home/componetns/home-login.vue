@@ -1,86 +1,80 @@
 <template>
-  <view>
-    <g-login>
-      <view class="flex items-center">
-        <img
-          :src="getAvatar(gStores.userStore.patChoose.patientSex)"
-          class="user-avatar g-fade-in mr24"
-        />
+  <view class="flex items-center">
+    <img
+      :src="getAvatar(gStores.userStore.patChoose.patientSex)"
+      class="user-avatar g-fade-in mr24"
+    />
 
-        <view v-if="gStores.globalStore.isLogin" class="flex-1">
-          <view
-            v-if="gStores.userStore.patList.length"
-            class="flex items-center"
-            @click="togglePat"
+    <view v-if="gStores.globalStore.isLogin" class="flex-1">
+      <view
+        v-if="gStores.userStore.patList.length"
+        class="flex items-center"
+        @click="togglePat"
+      >
+        <view class="">
+          <text @click.stop="isClose = !isClose" class="mr24">
+            <text class="mr12 font-semibold">
+              {{
+                isClose
+                  ? nameConvert(gStores.userStore.patChoose.patientName)
+                  : gStores.userStore.patChoose.patientName
+              }}
+            </text>
+
+            <text :class="`iconfont icon-resize`">
+              {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
+            </text>
+          </text>
+          <text
+            v-if="gStores.userStore.patChoose._showId"
+            class="font-semibold"
           >
-            <view class="">
-              <text @click.stop="isClose = !isClose" class="mr24">
-                <text class="mr12 font-semibold">
-                  {{
-                    isClose
-                      ? nameConvert(gStores.userStore.patChoose.patientName)
-                      : gStores.userStore.patChoose.patientName
-                  }}
-                </text>
-
-                <text :class="`iconfont icon-resize`">
-                  {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
-                </text>
-              </text>
-              <text
-                v-if="gStores.userStore.patChoose._showId"
-                class="font-semibold"
-              >
-                <text class="mr12">ID</text>
-                <text>{{ gStores.userStore.patChoose._showId }}</text>
-              </text>
-            </view>
-
-            <view class="flex-1" />
-
-            <img
-              :src="globalGl.BASE_IMG + 'stand3-home-pat-toggle-icon.png'"
-              class="user-avatar"
-            />
-          </view>
-          <view v-else class="flex items-center">
-            <view class="font-semibold mr24">
-              {{ getLangLabel('home:已登录') }}
-            </view>
-
-            <view class="flex-1" />
-
-            <view>
-              <view
-                @click="addPatient"
-                class="btn btn-primary btn-size-small bg-blue-light color-blue"
-              >
-                新增就诊人
-              </view>
-            </view>
-          </view>
+            <text class="mr12">ID</text>
+            <text>{{ gStores.userStore.patChoose._showId }}</text>
+          </text>
         </view>
 
-        <view v-else class="flex-1 flex items-center">
-          <view>
-            <text class="font-semibold mr24">
-              {{ getLangLabel('home:请登录') }}
-            </text>
-            <text class="color-888 f28">登录后享受更多服务</text>
-          </view>
+        <view class="flex-1" />
 
-          <view class="flex-1" />
+        <img
+          :src="globalGl.BASE_IMG + 'stand3-home-pat-toggle-icon.png'"
+          class="user-avatar"
+        />
+      </view>
+      <view v-else class="flex items-center">
+        <view class="font-semibold mr24">
+          {{ getLangLabel('home:已登录') }}
+        </view>
 
-          <view>
-            <view
-              class="btn btn-primary btn-size-small bg-blue-light color-blue"
-            >
-              去登录
-            </view>
+        <view class="flex-1" />
+
+        <view>
+          <view
+            @click="addPatient"
+            class="btn btn-primary btn-size-small bg-blue-light color-blue"
+          >
+            新增就诊人
           </view>
         </view>
       </view>
-    </g-login>
+    </view>
+
+    <view v-else class="flex-1 flex items-center">
+      <view>
+        <text class="font-semibold mr24">
+          {{ getLangLabel('home:请登录') }}
+        </text>
+        <text class="color-888 f28">登录后享受更多服务</text>
+      </view>
+
+      <view class="flex-1" />
+
+      <view>
+        <view class="btn btn-primary btn-size-small bg-blue-light color-blue">
+          去登录
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 

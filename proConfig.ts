@@ -60,6 +60,7 @@ export const miniProgramConfig: {
         wx: {
           isMedicalOrder: '1',
           isGbFamilyPayment: '1',
+          // medicalFiling: '1',
 
           // cs
           // medical1001035: {

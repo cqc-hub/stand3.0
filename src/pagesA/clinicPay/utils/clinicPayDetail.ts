@@ -372,14 +372,13 @@ export const getMedicalAuthCode = async (
         }
       }
       if (type === 'medicalFiling') {
-        const medicalFilingPath = 'auth/pages/bindcard/auth/index';
         if (pathExtraData) {
-          path = medicalFilingPath;
           pathExtraData.relatedType = 'family';
         } else {
-          path =
-            path.replace('auth/pages/bindcard/auth/index', medicalFilingPath) +
-            '&relatedType=family';
+          // @ts-expect-error
+          pathExtraData = {
+            relatedType: 'family',
+          };
         }
       }
       if (pathExtraData) {
