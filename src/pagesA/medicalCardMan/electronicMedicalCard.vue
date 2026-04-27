@@ -757,13 +757,6 @@
     padding-bottom: 32rpx;
     .info-name {
       position: relative;
-
-      .eyes-icon {
-        font-size: var(--hr-font-size-xxl);
-        margin-left: 30rpx;
-        position: absolute;
-        transform: translateX(88rpx);
-      }
     }
   }
 

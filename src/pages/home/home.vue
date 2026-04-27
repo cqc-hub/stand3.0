@@ -76,6 +76,7 @@
               </view>
 
               <view v-else>
+
                 <g-login @handler-next="routerJump">
                   <!-- 登录之后 -->
                   <block v-if="globalStore.isLogin">
@@ -477,6 +478,7 @@
   import homeTranslateWx from './componetns/homeTranslateWx.vue';
   import compBySysCode from './componetns/compBySysCode.vue';
   import homeHotMenu from './componetns/homeHotMenu.vue';
+  import homePatViewer from './componetns/homePatViewer.vue';
 
   const props = ref({
     code: '',
