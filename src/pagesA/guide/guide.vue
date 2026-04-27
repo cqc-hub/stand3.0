@@ -299,6 +299,11 @@
     ];
   });
 
+  const dealItem = (item) => {
+    const { deptId, hosDeptId } = item;
+
+    item.hosDeptId = hosDeptId || deptId;
+  };
   const visitList = ref(<TVisitRecord[]>[]);
   const visitItemSel = ref(<TVisitRecord>{});
   const visitInfoList = ref(<TVisitInfo[]>[]);
@@ -399,6 +404,11 @@
       }
     }
 
+    rList.map((o) => {
+      if (o) {
+        dealItem(o);
+      }
+    });
     visitInfoList.value = rList.reverse();
   };
 
@@ -484,6 +494,7 @@
             visitNo,
             hosDocId,
           };
+          dealItem(info);
           t.itemList = [
             {
               ...info,
@@ -783,6 +794,7 @@
   };
 
   const handlerAddressMap = (item) => {
+    console.log(item);
     if (gStores.globalStore.sysCode === '1001052') {
       useTBanner(
         {
