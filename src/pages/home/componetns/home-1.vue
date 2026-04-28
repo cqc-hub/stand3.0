@@ -2,7 +2,7 @@
   <view class="">
     <view
       class="flex-between mb24"
-      v-if="globalGl.sConfig.isHideHomeSearch != '1'"
+      v-if="globalGl.sConfig.isHideHomeSearch !== '1'"
     >
       <!-- 在有搜索框的前提下 是否开启助老版本 -->
       <view

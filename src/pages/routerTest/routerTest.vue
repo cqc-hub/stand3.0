@@ -114,13 +114,6 @@
   onLoad(async () => {
     formData.value.idCard = '332039293';
     formData.value.otherData = 'oopoposss';
-    await apiAsync(wx.login, {});
-    const r = await apiAsync(wx.getWeRunData, {
-      complete(e) {
-        console.log(e);
-      }
-    });
-    console.log(r);
   });
   onMounted(() => {
     gform.value.setList([

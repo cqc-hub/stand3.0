@@ -2,6 +2,7 @@ export type TVisitRecord = {
   date: string;
   deptName: string;
   visitNo: string;
+  deptId?: string;
   // regWay: '云门诊' | '图文问诊' | '普通预约';
   areaName: string; // 互联网医院类型的值为 "网络就诊"
 };

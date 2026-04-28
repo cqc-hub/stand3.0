@@ -60,6 +60,8 @@ export const miniProgramConfig: {
         wx: {
           isMedicalOrder: '1',
           isGbFamilyPayment: '1',
+          // medicalFiling: '1',
+
           // cs
           // medical1001035: {
           //   auth: {
@@ -1152,8 +1154,8 @@ export const miniProgramConfig: {
     },
   },
   '1001102': {
-    wxAppid: 'wxf343a92ddd77b40b',
     name: '绍兴市中医院',
+    wxAppid: 'wxf343a92ddd77b40b',
     alipayAppid: '2021003148628093',
     h5Appid: 'wxdfe5ad8722bac411',
 

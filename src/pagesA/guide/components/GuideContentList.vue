@@ -584,7 +584,7 @@
   ]);
 
   const colRowClick = (item, { col }) => {
-    if (col.key === 'hosName' && item.hosId) {
+    if (['categorName', 'site', 'areaName', 'hosName'].includes(col.key) && item.hosId) {
       emits('open-hos-location', item);
     }
   };

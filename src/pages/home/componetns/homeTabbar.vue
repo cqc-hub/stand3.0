@@ -82,7 +82,7 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue';
 
-  import { setLocalStorage, getLocalStorage, getSysCode } from '@/common';
+  import { getSysCode } from '@/common';
 
   import {
     useTBanner,
@@ -452,7 +452,7 @@
         iconActive: `/static/image/my_active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
         }.png`,
-        url: '/pagesA/medicalCardMan/electronicMedicalCard?showNavBar=1&dp=1&tab=1',
+        url: '/pagesA/medicalCardMan/electronicMedicalCard?showNavBar=1&dp=1',
         loginInterception: '1',
         sort: 4,
       };
