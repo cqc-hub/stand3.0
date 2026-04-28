@@ -5,7 +5,7 @@
     }"
     class="g-page"
   >
-    <view class="search-input">
+    <view class="search-input" v-if="!pageProp.onlyShowDept">
       <uni-search-input
         v-model:value="searchValue"
         @change="searchList"
@@ -47,8 +47,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { ref,nextTick } from 'vue';
+  import { onLoad, onReady } from '@dcloudio/uni-app';
 
   import { type ListItem, type TDeptItem } from './utils/DepartmentCard';
   import { joinQueryForUrl } from '@/common';
@@ -171,6 +171,12 @@
 
   onLoad((opt) => {
     pageProp.value = opt as any;
+  
+    nextTick(() => {
+      uni.setNavigationBarTitle({
+        title: pageProp.value.isXkTeam ? '' : '科室列表',
+      });
+    });
 
     init();
   });

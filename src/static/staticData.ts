@@ -44,7 +44,7 @@ export const MEDICAL_PHOTOS = <const>[
   {
     value: '7',
     url: `${BASE_IMG}medRecord_photos_11@2x.png`,
-    label: '患者户口本',
+    label: '患者户口本页',
   },
 
   {
@@ -62,7 +62,7 @@ export const MEDICAL_PHOTOS = <const>[
   {
     value: '10',
     url: `${BASE_IMG}medRecord_photos_15@2x.png`,
-    label: '死亡证明',
+    label: '死亡证明或火化证明',
   },
 
   {
@@ -87,6 +87,16 @@ export const MEDICAL_PHOTOS = <const>[
     value: '14',
     url: `${BASE_IMG}medRecord_photos_19@2x.png`,
     label: '委托书',
+  },
+  {
+    value: '15',
+    url: `${BASE_IMG}medRecord_photos_11@2x.png`,
+    label: '代办人户口本页',
+  },
+  {
+    value: '16',
+    url: `${BASE_IMG}medRecord_photos_10@2x.png`,
+    label: '代办人手持患者身份证露脸',
   },
 ];
 

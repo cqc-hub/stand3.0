@@ -35,10 +35,10 @@
           <view class="row-content">{{ item.visitNo }}</view>
         </view>
 
-        <view v-if="item.diagnosis" class="row flex-normal">
+        <!-- <view v-if="item.diagnosis" class="row flex-normal">
           <view class="row-title">诊断</view>
           <view class="row-content">{{ getDiagnosis(item.diagnosis) }}</view>
-        </view>
+        </view> -->
 
         <view class="row flex-normal">
           <view class="row-title">医生</view>

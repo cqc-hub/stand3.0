@@ -6,6 +6,7 @@ export const sysConfigEnv = <const>{
   'person.isSmsVerify': '0',
   // 'person.isCanAddPatCardNo': '1',
   // 'order.isConfirmOrderWithPay': '1',
+  'person.isChangeHosPhoneWay': ['face', 'remoteFace'],
   'pay.medical': {
     isMedicalOrder: '1',
     isMedicalPay: '1',
@@ -21,6 +22,9 @@ export const sysConfigTrial = <const>{
     isMedicalOrder: '1',
     isMedicalPay: '1',
   },
+  // 'person.isFace': '1',
+  // 'person.isFaceRemote': '1',
+  // 'person.isChangeHosPhoneWay': ['face', 'remoteFace'],
 };
 
 export const apiConfigEnv = <const>{

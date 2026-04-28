@@ -1144,6 +1144,7 @@ export const miniProgramConfig: {
     alipayAppid: '2021003154666616',
     h5Appid: 'wx7e88bc4968e4e9f0',
     name: '湖州市中心医院',
+    h5AppidDisabledInTest: true,
     isSearchInHos: true,
     isOpenOcr: false,
     sConfig: {

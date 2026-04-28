@@ -403,12 +403,12 @@ export interface ISystemConfig_ {
     isUpFace?: '1';
     /** 适用人脸范围 默认 [17, 60] */
     faceAgeRange?: [number, number];
-    // 远程人脸
+    // 远程人脸（建档、修改手机号暂不能同时支持）
     isFaceRemote?: '1';
 
     // 修改建档手机号 pagesA/medicalCardMan/ocrUser
     isCanChangeHosPhone?: '1'; // 前提需要开通 ocr | 人脸 至少一个
-    isChangeHosPhoneWay?: ('ocr' | 'face')[]; // 和 useFaceVerifyInChangePhone 具备重复性
+    isChangeHosPhoneWay?: ('ocr' | 'face' | 'remoteFace')[]; // 和 useFaceVerifyInChangePhone 具备重复性
     useFaceVerifyInChangePhone?: '1'; // 使用人脸认证, 否则使用 ocr 认证
   };
 
@@ -750,6 +750,10 @@ export interface ISystemConfig_ {
 
     //入口选择页pagesD/common/chooseTabJump
     tabJumpConfig?: {
+      topImagesHeight?: string; //入口选择页顶部图片高度
+      topImages?: Array<
+        TButtonConfig & { bgSrc?: string;  }
+      >; //入口选择页顶部图片配置
       title?: string; //页面标题，无则标题展示空
       showFlag?: number; //页面底部协议，无则不展示
       entryType?: string; //多次使用需跟页面路由参数入口一致，无则取第一项

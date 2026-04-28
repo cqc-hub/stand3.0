@@ -10,6 +10,12 @@
         v-if="options.selectRecords === '2'"
         @choose-pat="patChange"
       />
+      <g-selhos
+        v-if="isCompleteRealName"
+        v-model:hosId="formData.hosId"
+        :autoGetData="false"
+        ref="selHosRef"
+      />
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
@@ -49,7 +55,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { shallowRef, ref, onMounted } from 'vue';
+  import { shallowRef, ref, onMounted, computed } from 'vue';
   import { onReady, onLoad } from '@dcloudio/uni-app';
   import { generateUuid, GStores, rulePhone, useTBanner } from '@/utils';
 
@@ -82,12 +88,8 @@
   });
   const uploadImgList = ref(<string[]>[]);
   const gStores = new GStores();
-  const formData = shallowRef(<BaseObject>{
-    // name: '炒青菜',
-    // phone: '13868529891',
-    // compDept: '消化内科',
-    // compContext: '好好好哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-  });
+  const formData = shallowRef(<BaseObject>{});
+  const completeRealNameList = ref(['1001033']);
   const dialogShow = ref(false);
   const pageTitle =
     gStores.globalStore.sysCode === '1001033' ? '投诉' : '意见反馈';
@@ -735,6 +737,10 @@
     },
   ];
 
+  const isCompleteRealName = computed(() =>
+    completeRealNameList.value.includes(gStores.globalStore.sysCode)
+  );
+
   const formSubmit = async ({ data }) => {
     let message = '反馈成功,感谢您的支持';
     let args = {
@@ -810,8 +816,7 @@
       if (!result || !result.length) {
         throw new Error();
       }
-      let newTempList =
-        gStores.globalStore.sysCode === '1001033' ? tempList6 : tempList4;
+      let newTempList = isCompleteRealName.value ? tempList6 : tempList4;
       tempList = newTempList.map((item: any) => {
         if (item.key == 'visitUid') {
           item.options = result.map((i) => {
@@ -842,29 +847,8 @@
 
   const handleRowClick = (item) => {
     if ((item.key = 'deptName')) {
-      console.log(777777771, dialogShow.value);
       dialogShow.value = true;
-      console.log(77777777, dialogShow.value);
     }
-  };
-
-  const pickerChange = async (e, type) => {
-    const tempData: any = [];
-    e.item.forEach((element, i) => {
-      const index = formData.value.praiseDeptDocParams.findIndex(
-        (item) => item.hosDeptId === element.hosDeptId
-      );
-      if (index == -1) {
-        tempData.push({
-          deptName: element.deptName,
-          docList: [],
-          hosDeptId: element.hosDeptId,
-        });
-      } else {
-        tempData.push(formData.value.praiseDeptDocParams[index]);
-      }
-    });
-    formData.value.praiseDeptDocParams = tempData;
   };
 
   const handleSelect = ({ item, value }) => {

@@ -77,7 +77,7 @@
       title="选择认证方式"
     >
       <view class="p32">
-        <g-flag :typeFg="'xxxxx'" isShowFgTip isHideTitle aaa />
+        <g-flag :typeFg="'1293'" isShowFgTip isHideTitle aaa />
       </view>
     </g-pay>
 
@@ -359,12 +359,16 @@
         if (isChangeHosPhoneWay) {
           const chooseList = [
             {
-              label: '使用人脸验证',
+              label: '本机人脸验证',
               value: 'face',
             },
             {
               label: '上传证件验证',
               value: 'ocr',
+            },
+            {
+              label: '远程人脸验证',
+              value: 'remoteFace',
             },
             // @ts-expect-error
           ].filter((o) => isChangeHosPhoneWay.includes(o.value));
@@ -407,6 +411,21 @@
             name: formData.value[formKey.patientName],
           });
           pdata = pData;
+        } else if (selWay === 'remoteFace') {
+          // Handle remote face verification
+          const sign = await patientUtils.addCachePatient(requestData);
+          const { patientName, idCard } = formData.value;
+
+          uni.navigateTo({
+            url: joinQueryForUrl('/pagesD/service/addPatByScan', {
+              sign,
+              name: patientName,
+              idCard,
+              phone: formData.value[formKey.patientPhone],
+              isSelf: '1',
+            }),
+          });
+          throw new Error('去到远程人脸页面');
         } else {
           // const { pdata: pData } = await useOcr(true, {
           //   aliThroughByEnd: true,
@@ -465,11 +484,11 @@
       if (isFaceRemote === '1' && pageType !== 'perfectReal') {
         const list = [
           {
-            label: '人脸认证',
+            label: '本机人脸验证',
             key: 'isFace',
           },
           {
-            label: '远程人脸认证',
+            label: '远程人脸验证',
             key: 'isFaceRemote',
           },
         ];
@@ -481,9 +500,7 @@
         });
 
         if (v === 'isFaceRemote') {
-          isFace = undefined;
-        } else {
-          pageConfig.value.isFaceRemote = undefined;
+          return true;
         }
       }
 
@@ -573,7 +590,7 @@
 
     let { isCanChangeHosPhone } = pageConfig.value;
     const isIDCard = formData.value[formKey.idType] === '01';
-    await faceVerify(requestData);
+    const isRemoteFace = await faceVerify(requestData);
 
     if (pageProps.value.pageType === 'perfectReal') {
       try {
@@ -640,7 +657,7 @@
         return;
       }
 
-      if (pageConfig.value.isFaceRemote === '1' && isIDCard) {
+      if (isRemoteFace && isIDCard) {
         const sign = await patientUtils.addCachePatient(requestData);
         const { patientName, idCard } = formData.value;
 
@@ -649,6 +666,7 @@
             sign,
             name: patientName,
             idCard,
+            phone: formData.value[formKey.patientPhone],
             isSelf: '1',
           }),
         });

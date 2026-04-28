@@ -105,7 +105,8 @@
       <view>
         <view class="mb16 flex-normal">
           <text class="ico_doctor-hat icon-font intro-popup-logo"></text>
-          <text class="f36 g-bold">科室介绍</text>
+          <text v-if="pageProps.isXkTeam" class="f36 g-bold">学科介绍</text>
+          <text v-else class="f36 g-bold">科室介绍</text>
         </view>
 
         <view class="color-444 f32">

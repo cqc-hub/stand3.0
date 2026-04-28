@@ -162,7 +162,7 @@
       const { title, content } = await gStores.getSysAppMore('8');
 
       const cancelText = deptDialogBtnCannel?.label;
-      const confirmText = cancelText ? '继续预约' : '确定';
+      const confirmText = cancelText ? '继续预约' : '我已知晓并同意，继续预约挂号';
       gStores.messageStore.showMessage(content, 0, {
         useDialog: true,
         dialogOpt: {

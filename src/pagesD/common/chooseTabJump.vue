@@ -4,6 +4,9 @@
       [gStores.globalStore.getPageClass]: true,
     }"
   >
+  <view class="top-image" >
+<!-- {{ imageOptions }} -->
+  </view>
     <view class="medical-page">
       <view
         class="module home-doctor mb12"
@@ -69,6 +72,16 @@
       >
     >[]
   );
+   const imageOptions = ref(
+    <
+      Array<
+        TButtonConfig & {
+          bgSrc?: string;
+        }
+      >
+    >[]
+  );
+  const imageHeight = ref(300);
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
@@ -84,6 +97,8 @@
         tabJumpConfig.value = pageConfig.value?.tabJumpConfig[0];
       }
       options.value = tabJumpConfig.value?.tabs || [];
+      imageHeight.value = tabJumpConfig.value?.topImagesHeight || 300;
+      imageOptions.value = tabJumpConfig.value?.topImages || [];
     }
   });
 
