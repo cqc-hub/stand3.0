@@ -2,7 +2,7 @@
   <view class="flex items-center">
     <img
       :src="getAvatar(gStores.userStore.patChoose.patientSex)"
-      class="user-avatar g-fade-in mr24 "
+      class="user-avatar g-fade-in mr24"
     />
 
     <view v-if="gStores.globalStore.isLogin" class="flex-1">
@@ -59,7 +59,7 @@
       </view>
     </view>
 
-    <view v-else class="flex-1 flex items-center">
+    <view v-else class="flex-1 flex items-center color-111">
       <view>
         <text class="font-semibold mr24">
           {{ getLangLabel('home:请登录') }}
