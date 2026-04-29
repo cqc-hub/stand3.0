@@ -2,7 +2,7 @@
   <view class="flex items-center">
     <img
       :src="getAvatar(gStores.userStore.patChoose.patientSex)"
-      class="user-avatar g-fade-in mr24"
+      class="user-avatar g-fade-in mr24 "
     />
 
     <view v-if="gStores.globalStore.isLogin" class="flex-1">
@@ -11,7 +11,7 @@
         class="flex items-center"
         @click="togglePat"
       >
-        <view class="">
+        <view class="color-111">
           <text @click.stop="isClose = !isClose" class="mr24">
             <text class="mr12 font-semibold">
               {{
