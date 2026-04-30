@@ -2922,7 +2922,6 @@ export const reDealMedicalFiling = async () => {
       getArchiveToken: async (token) => {
         if (token) dealMedicalFiling(yibaoPatientId, 'second');
         else {
-          await patientUtil.getPatCardList();
           setTimeout(() => {
             my.reLaunch({ url: `/pagesA/medicalCardMan/medicalCardMan` });
           }, 1600);
@@ -2958,7 +2957,7 @@ export const reDealMedicalFiling = async () => {
         ...args,
       }),
     });
-    return;
+    throw new Error('跳转建档页面');
   }
 };
 
