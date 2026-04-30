@@ -12,18 +12,33 @@
       class="xy-dialog__container"
       :class="{ 'xy-dialog__showWithBg': titleBgSrc ? true : false }"
     >
+      <view class="xy-dialog__header" v-if="title.length > 0 && !titleBgSrc">
+        {{ title }}
+      </view>
       <view
-        class="xy-dialog__header"
-        v-if="title.length > 0 && !titleBgSrc"
-      >{{ title }}</view>
-      <view
-        class="xy-dialog__header xy-dialog__headerBg "
-        :style="{ background: `url(${titleBgSrc}) 50% 0% no-repeat` ,backgroundSize: '100% 100%'}"
+        class="xy-dialog__header xy-dialog__headerBg"
+        :style="{
+          background: `url(${titleBgSrc}) 50% 0% no-repeat`,
+          backgroundSize: '100% 100%',
+        }"
         v-else-if="title.length > 0 && titleBgSrc"
       >
         <view class="pb12">{{ title }}</view>
       </view>
+      <view
+        class="xy-dialog__content"
+        :style="{ 'text-align': textalign, 'max-height': `${maxHeight}rpx` }"
+        v-if="noScroll"
+      >
+        <template v-if="content">
+          <view class="modal-content">{{ content }}</view>
+        </template>
+        <template v-else>
+          <slot />
+        </template>
+      </view>
       <scroll-view
+        v-else
         class="xy-dialog__content"
         :style="{ 'text-align': textalign, 'max-height': `${maxHeight}rpx` }"
         scroll-y
@@ -165,6 +180,10 @@
       titleBgSrc: {
         type: String,
         default: '',
+      },
+      noScroll: {
+        type: Boolean,
+        default: false,
       },
     },
     data() {

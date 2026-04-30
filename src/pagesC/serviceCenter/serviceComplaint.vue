@@ -9,13 +9,15 @@
       <g-choose-pat
         v-if="options.selectRecords === '2'"
         @choose-pat="patChange"
+        v-model="formData.hosId"
       />
       <g-selhos
         v-if="isCompleteRealName"
-        v-model:hosId="formData.hosId"
         :autoGetData="false"
         ref="selHosRef"
+        @change="hosChange"
       />
+      {{ formData }}
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
@@ -38,6 +40,47 @@
       :value="formData"
       title="选择科室"
     /> -->
+    <xy-dialog
+      :title="'选择科室'"
+      :show="deptDialogShow"
+      :noScroll="true"
+      isMaskClick
+      :isShowCancel="true"
+      @confirmButton="deptDialogShow = false"
+    >
+      <view class="dialogContent">
+        <uni-section title="请输入关键字并查询选择科室" type="line">
+          <uni-data-select
+            :value="formData.deptName"
+            :placeholder="'请输入关键字并查询选择科室'"
+            :localdata="deptList"
+            @change="(e) => changeSelect('dept', e)"
+            @text-change="(e) => changeSelectText('dept', e)"
+            :editable="true"
+          ></uni-data-select>
+        </uni-section>
+      </view>
+    </xy-dialog>
+    <xy-dialog
+      :title="'选择医护人员'"
+      :show="docDialogShow"
+      :noScroll="true"
+      isMaskClick
+      :isShowCancel="true"
+      @confirmButton="docDialogShow = false"
+    >
+      <view class="dialogContent">
+        <uni-section title="请输入关键字并查询选择医护人员" type="line">
+          <uni-data-select
+            :placeholder="'请输入关键字并查询选择医护人员'"
+            :localdata="docList"
+            @change="(e) => changeSelect('doc', e)"
+            @text-change="(e) => changeSelectText('doc', e)"
+            :editable="true"
+          ></uni-data-select>
+        </uni-section>
+      </view>
+    </xy-dialog>
     <view class="g-footer flex">
       <button
         v-if="options?.entryType == '1'"
@@ -57,14 +100,20 @@
 <script lang="ts" setup>
   import { shallowRef, ref, onMounted, computed } from 'vue';
   import { onReady, onLoad } from '@dcloudio/uni-app';
-  import { generateUuid, GStores, rulePhone, useTBanner } from '@/utils';
-
+  import {
+    generateUuid,
+    GStores,
+    rulePhone,
+    throttle,
+    wait,
+    ServerStaticData,
+  } from '@/utils';
+  import { useCacheStore } from '@/stores';
   import { decryptDes } from '@/common/des';
   import type { TInstance } from '@/components/g-form/index';
   import { deQueryForUrl } from '@/common';
 
   import api from '@/service/api';
-  import env from '@/config/env';
   import ImgUpload from './components/ImgUpload.vue';
   import ChooseDept from './components/choose-dept.vue';
   const options = ref({
@@ -88,9 +137,14 @@
   });
   const uploadImgList = ref(<string[]>[]);
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
   const formData = shallowRef(<BaseObject>{});
   const completeRealNameList = ref(['1001033']);
-  const dialogShow = ref(false);
+  const docDialogShow = ref(false);
+  const deptList = ref([]);
+  const docList = ref([]);
+  const deptDialogShow = ref(false);
+  const selHosRef = ref<any>(null);
   const pageTitle =
     gStores.globalStore.sysCode === '1001033' ? '投诉' : '意见反馈';
   const tempList: TInstance[] = [
@@ -798,8 +852,62 @@
   };
   const gform = ref<any>('');
 
+  const hosChange = (hosId) => {
+    formData.value.hosId = hosId;
+    getListData();
+  };
   const patChange = () => {
     getListData();
+  };
+
+  const dialogAssignConfirm = (type, e) => {
+    if (type === 'dept') {
+      // formData.value.compDept = empNoInfo.empName
+    }
+    // deptDialogShow.value = false;
+  };
+  let changeSelectText: any = async (type, text) => {
+    if (!text) return;
+    if (type === 'dept') {
+      const { result } = await api.getUndertakerInfo({
+        hosId: formData.value.hosId,
+        context: text,
+        type: 2,
+      });
+      deptList.value = result.map((item) => ({
+        value: item.docName,
+        ...item,
+        text: ` ${item?.docName || ''} ${
+          item?.deptName ? '(' + item?.deptName + ')' : ''
+        }`,
+      }));
+    } else if (type === 'doc') {
+      const { result } = await api.getUndertakerInfo({
+        hosId: formData.value.hosId,
+        context: text,
+        deptName: formData.value.deptName,
+        type: 1,
+      });
+      docList.value = result.map((item) => ({
+        value: item.docName,
+        ...item,
+        text: ` ${item?.docName || ''} ${
+          item?.deptName ? '(' + item?.deptName + ')' : ''
+        }`,
+      }));
+    }
+  };
+  changeSelectText = throttle(changeSelectText, 1000);
+
+  const changeSelect = async (type, value) => {
+    console.log(99999,type,value);
+    
+    if (type === 'dept') {
+      formData.value.deptName = value;
+    } else if (type === 'doc') {
+      formData.value.docName = value;
+    }
+    console.log(formData.value);
   };
 
   const getListData = async () => {
@@ -811,6 +919,7 @@
     try {
       const { result } = await api.getOutpatientHospitalList({
         patientId: gStores.userStore.patChoose.patientId,
+        hosId: formData.value.hosId,
         type: 3,
       });
       if (!result || !result.length) {
@@ -845,9 +954,17 @@
     gform.value.setList(tempList);
   };
 
-  const handleRowClick = (item) => {
-    if ((item.key = 'deptName')) {
-      dialogShow.value = true;
+  const handleRowClick = async (item) => {
+
+    if (item.key == 'deptName') {
+      // dialogShow.value = true;
+      if (isCompleteRealName.value) {
+        deptDialogShow.value = true;
+      }
+    } else if (item.key === 'docName') {
+      if (isCompleteRealName.value) {
+        docDialogShow.value = true;
+      }
     }
   };
 
@@ -858,10 +975,11 @@
       formData.value.visitLabel = `${target.diagnosis}-${target.admissionTime}`;
       formData.value.visitDate = target.admissionTime;
       formData.value.visitNo = target.visitNo;
-      formData.value.deptName = target.deptName;
-      formData.value.docName = target.docName;
-      formData.value.hosId = target.hosId;
       formData.value.type = target.typeLabel;
+      if (!isCompleteRealName.value) {
+        formData.value.docName = target.docName;
+        formData.value.deptName = target.deptName;
+      }
       // formData.value.compDept = target.deptName;
     }
   };
@@ -874,7 +992,12 @@
     });
   };
 
-  onMounted(() => {
+  onMounted(async () => {
+    if (isCompleteRealName.value) {
+      await selHosRef.value.init();
+      const hosList = await ServerStaticData.getHosList();
+      formData.value.hosId = hosList[0].hosId;
+    }
     if (options.value.isAnonymous === '1') {
       gform.value.setList(tempList3);
       return;
@@ -951,6 +1074,67 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
+    }
+  }
+  .dialogContent {
+    height: 100%;
+    text-align: justify;
+    padding: 20rpx;
+  }
+
+  :deep(.xy-dialog__container) {
+    overflow: initial !important;
+  }
+  :deep(.uni-scroll-view) {
+    overflow: initial !important;
+  }
+
+  ::v-deep .uni-steps__column-text {
+    max-width: 85vw;
+  }
+
+  ::v-deep .uni-card__content {
+    white-space: normal;
+    word-wrap: break-word;
+  }
+
+  .rectification-content {
+    padding: 32rpx;
+    box-sizing: border-box;
+
+    .rectification-input {
+      width: 100%;
+      min-height: 200rpx;
+      padding: 20rpx;
+      background: #f6f6f6;
+      border-radius: 16rpx;
+      font-size: var(--hr-font-size-xs);
+      line-height: 1.6;
+      box-sizing: border-box;
+    }
+
+    .rectification-btns {
+      display: flex;
+      gap: 20rpx;
+      margin-top: 40rpx;
+
+      .btn {
+        flex: 1;
+        height: 88rpx;
+        line-height: 88rpx;
+        border-radius: 44rpx;
+        font-size: var(--hr-font-size-md);
+      }
+
+      .btn-cancel {
+        background: #f6f6f6;
+        color: #333;
+      }
+
+      .btn-primary {
+        background: #007aff;
+        color: #fff;
+      }
     }
   }
 </style>

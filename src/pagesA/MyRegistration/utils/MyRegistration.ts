@@ -54,7 +54,8 @@ export type IRegistrationCardItem = {
 export const HosNavData: {
   [key: string]: (...args: any[]) => TButtonConfig;
 } = {
-  13009: () => {
+  13009: (item: IRegistrationCardItem)  => {
+ let { areaId } = JSON.parse(item?.extend || '');
     return {
       appId: 'wxe51129e09bb46147',
       path: 'pages/index/map',
@@ -63,13 +64,14 @@ export const HosNavData: {
       extraData: {
         token: '61b8355cf623912d092a6c26f3a0b3ba',
         buildingId: 'B000A11DFR',
-        method: 'showPois',
-        style: 'yiyuan',
+        bdid: 'B000A11DFR',
         projName: 'DXOneMap_v3',
-      },
-      addition: {
-        deptName: 'keyword',
-      },
+        style: 'yiyuan',
+        method: 'showPois',
+        page: 'MapPage',
+        // deptids:areaId
+        deptids:areaId
+      }
     };
   },
   1281: () => {
@@ -259,7 +261,12 @@ export const judgeAllowNav = (item) => {
   }
   if (sysCode === '1001067') {
     if (['13009'].includes(hosId)) {
-      return true;
+      try {
+        if (JSON.parse(item?.extend || '').areaId) {
+          return true;
+        }
+      } catch (e) {}
+      return false;
     }
   }
 

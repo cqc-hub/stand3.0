@@ -25,9 +25,14 @@
             >
               <view class="flex-1 flex items-center">
                 {{ lab[col.key] }}
-
+                <text
+                  v-if="showAddress(col)"
+                  class="text-no-wrap color-blue mr12 location-tip"
+                >
+                  带我去
+                </text>
                 <view
-                  v-if="
+                  v-else-if="
                     ['categorName', 'site', 'areaName'].includes(col.key) &&
                     lab.hosId
                   "
@@ -38,13 +43,6 @@
                   <text>导航</text>
                 </view>
               </view>
-
-              <text
-                v-if="showAddress(col)"
-                class="text-no-wrap color-blue mr12 location-tip"
-              >
-                带我去
-              </text>
             </view>
           </view>
         </view>
@@ -75,6 +73,7 @@
       //省中本部和紫东院区开启
       return true;
     }
+
     if (
       gStores.globalStore.sysCode === '1001067' &&
       ['13009'].includes(props.lab.hosId) &&
@@ -84,6 +83,7 @@
       if (props.lab.performDeptName || props.lab.deptName) {
         return true;
       }
+      return false;
     }
     return props.lab.performDeptCode && ['itemAddress'].includes(col.key);
   };

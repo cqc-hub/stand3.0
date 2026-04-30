@@ -831,10 +831,12 @@
       gStores.globalStore.sysCode === '1001067' &&
       item.hosId === '13009'
     ) {
-      if (item.performDeptName) {
-        item.deptName = item.performDeptName;
+      if (item.deptId) {
+        item.extend = JSON.stringify({
+          areaId: item.deptId,
+        });
+        useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
       }
-      useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
       return;
     }
   };

@@ -961,6 +961,9 @@ const regApi = {
 
   hpCalendar: <T = any>(data: any) =>
     service.post<T>('/phs-reg/reg/hpCalendar', parm(data)),
+
+  getHisDeptList: <T>(data: any) =>
+    service.post<T>('/reg/getHisDeptList', parm(data), {}),
 };
 
 // 用户服务
@@ -1258,6 +1261,8 @@ const userApi = {
     }),
   getHospitalGuidelines: <T>(data) =>
     service.post<T>('/phs-base/hospital/getHospitalGuidelines', parm(data)),
+  getUndertakerInfo: <T>(data: any) =>
+    service.post<T>('/phs-base/complains/getUndertakerInfo', parm(data), {}),
 
   //添加已就诊就诊人
   addPatByHasBeenTreatedEncry: (data) =>
@@ -1512,11 +1517,6 @@ const api1001035 = {
 
   getNumberSource1001035: <T>(data: any) =>
     service.post<T>('/reg/getNumberSource', parm(data), {
-      hideLoading: false,
-      baseURL: api1001035.baseURL,
-    }),
-  getHisDeptList: <T>(data: any) =>
-    service.post<T>('/reg/getHisDeptList', parm(data), {
       hideLoading: false,
       baseURL: api1001035.baseURL,
     }),
