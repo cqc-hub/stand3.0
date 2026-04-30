@@ -1474,11 +1474,11 @@ export const usePayPage = () => {
     }
 
     const {
-      result: { phsOrderNo },
+      result
     } = await api.createClinicOrder(args);
 
     const payArg: BaseObject = {
-      phsOrderNo,
+      ...result,
       totalFee: _totalCost,
       phsOrderSource: '2',
       hosId: selectList[0].hosId,

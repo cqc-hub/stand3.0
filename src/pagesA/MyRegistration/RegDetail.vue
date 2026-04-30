@@ -1353,8 +1353,8 @@
       if (result && result.paySign) {
         const { hosId } = orderRegInfo.value;
         payArg.value = {
+          ...result,
           phsOrderNo: orderId,
-          sign: result.paySign,
           totalFee,
           hosId,
           phsOrderSource: '1',
