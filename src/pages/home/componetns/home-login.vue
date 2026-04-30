@@ -11,7 +11,7 @@
         class="flex items-center"
         @click="togglePat"
       >
-        <view class="">
+        <view class="color-111">
           <text @click.stop="isClose = !isClose" class="mr24">
             <text class="mr12 font-semibold">
               {{
@@ -59,7 +59,7 @@
       </view>
     </view>
 
-    <view v-else class="flex-1 flex items-center">
+    <view v-else class="flex-1 flex items-center color-111">
       <view>
         <text class="font-semibold mr24">
           {{ getLangLabel('home:请登录') }}

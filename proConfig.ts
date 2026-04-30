@@ -60,7 +60,7 @@ export const miniProgramConfig: {
         wx: {
           isMedicalOrder: '1',
           isGbFamilyPayment: '1',
-          // medicalFiling: '1',
+          medicalFiling: '1',
 
           // cs
           // medical1001035: {
@@ -96,6 +96,22 @@ export const miniProgramConfig: {
                 fixmedinsCode: 'H32010400468',
                 fixmedinsName: '江苏省中医院',
               },
+            },
+          },
+
+          medicalNation: {
+            appId: 'wxe183cd55df4b4369',
+            path: 'auth/pages/bindcard/auth/index',
+            pathExtraData: {
+              openType: 'getAuthCode',
+              bizType: '04107',
+              cityCode: '320100',
+              channel: 'AAH9tbKllV7sWIAT89M-Ziio',
+              orgChnlCrtfCodg:
+                'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtPYH4veMyOsoarTTx8iXr2',
+              orgCodg: 'H32010400468',
+              orgAppId: '1I4NTQGA605E8D430B0A00006E750DE8',
+              sourceapp: 'wxacb96ee66c3dee84-1',
             },
           },
         },
