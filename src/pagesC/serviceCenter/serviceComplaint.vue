@@ -16,6 +16,7 @@
         :value="formData.hosId"
         :autoGetData="true"
         ref="selHosRef"
+        v-model:hosId="formData.hosId"
         @change="hosChange"
       />
       <g-form
@@ -854,12 +855,17 @@
   };
   const gform = ref<any>('');
 
+<<<<<<< HEAD
   const hosChange = ({ item }) => {
     console.log(9999, item);
     formData.value.hosId = item.hosId;
     if (options.value.selectRecords === '2') {
       getListData();
     }
+=======
+  const hosChange = () => {
+    getListData();
+>>>>>>> 9ba39ab06b598fe586804dfd3f6268475f133ab5
   };
   const patChange = () => {
     if (options.value.selectRecords === '2') {
@@ -907,6 +913,11 @@
   changeSelectText = debounce(changeSelectText, 500, false);
 
   const changeSelect = async (type, value) => {
+<<<<<<< HEAD
+=======
+    console.log(99999,type,value);
+
+>>>>>>> 9ba39ab06b598fe586804dfd3f6268475f133ab5
     if (type === 'dept') {
       formData.value = {
         ...formData.value,
