@@ -15,6 +15,7 @@
         v-if="isCompleteRealName"
         :autoGetData="false"
         ref="selHosRef"
+        v-model:hosId="formData.hosId"
         @change="hosChange"
       />
       {{ formData }}
@@ -852,8 +853,7 @@
   };
   const gform = ref<any>('');
 
-  const hosChange = (hosId) => {
-    formData.value.hosId = hosId;
+  const hosChange = () => {
     getListData();
   };
   const patChange = () => {
@@ -901,7 +901,7 @@
 
   const changeSelect = async (type, value) => {
     console.log(99999,type,value);
-    
+
     if (type === 'dept') {
       formData.value.deptName = value;
     } else if (type === 'doc') {
