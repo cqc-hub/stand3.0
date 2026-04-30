@@ -1,7 +1,5 @@
 <template>
   <view class="">
-  111
-  {{value  }}
     <view v-if="list.length" class="container">
       <view
         v-for="item in list"

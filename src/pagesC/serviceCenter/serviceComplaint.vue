@@ -13,11 +13,11 @@
       />
       <g-selhos
         v-if="isCompleteRealName"
-        :autoGetData="false"
+        :value="formData.hosId"
+        :autoGetData="true"
         ref="selHosRef"
         @change="hosChange"
       />
-      {{ formData }}
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
@@ -44,8 +44,8 @@
       :title="'选择科室'"
       :show="deptDialogShow"
       :noScroll="true"
-      isMaskClick
-      :isShowCancel="true"
+      :isMaskClick="false"
+      :isShowCancel="false"
       @confirmButton="deptDialogShow = false"
     >
       <view class="dialogContent">
@@ -65,8 +65,8 @@
       :title="'选择医护人员'"
       :show="docDialogShow"
       :noScroll="true"
-      isMaskClick
-      :isShowCancel="true"
+      :isMaskClick="false"
+      :isShowCancel="false"
       @confirmButton="docDialogShow = false"
     >
       <view class="dialogContent">
@@ -104,7 +104,7 @@
     generateUuid,
     GStores,
     rulePhone,
-    throttle,
+    debounce,
     wait,
     ServerStaticData,
   } from '@/utils';
@@ -718,6 +718,7 @@
       labelWidth: '220rpx',
       field: 'input-text',
       disabled: true,
+      showSuffixArrowIcon: true,
     },
     {
       required: true,
@@ -727,6 +728,7 @@
       labelWidth: '220rpx',
       field: 'input-text',
       disabled: true,
+      showSuffixArrowIcon: true,
     },
     {
       required: false,
@@ -852,12 +854,17 @@
   };
   const gform = ref<any>('');
 
-  const hosChange = (hosId) => {
-    formData.value.hosId = hosId;
-    getListData();
+  const hosChange = ({ item }) => {
+    console.log(9999, item);
+    formData.value.hosId = item.hosId;
+    if (options.value.selectRecords === '2') {
+      getListData();
+    }
   };
   const patChange = () => {
-    getListData();
+    if (options.value.selectRecords === '2') {
+      getListData();
+    }
   };
 
   const dialogAssignConfirm = (type, e) => {
@@ -897,17 +904,20 @@
       }));
     }
   };
-  changeSelectText = throttle(changeSelectText, 1000);
+  changeSelectText = debounce(changeSelectText, 500, false);
 
   const changeSelect = async (type, value) => {
-    console.log(99999,type,value);
-    
     if (type === 'dept') {
-      formData.value.deptName = value;
+      formData.value = {
+        ...formData.value,
+        deptName: value,
+      };
     } else if (type === 'doc') {
-      formData.value.docName = value;
+      formData.value = {
+        ...formData.value,
+        docName: value,
+      };
     }
-    console.log(formData.value);
   };
 
   const getListData = async () => {
@@ -955,7 +965,6 @@
   };
 
   const handleRowClick = async (item) => {
-
     if (item.key == 'deptName') {
       // dialogShow.value = true;
       if (isCompleteRealName.value) {
@@ -976,10 +985,8 @@
       formData.value.visitDate = target.admissionTime;
       formData.value.visitNo = target.visitNo;
       formData.value.type = target.typeLabel;
-      if (!isCompleteRealName.value) {
-        formData.value.docName = target.docName;
-        formData.value.deptName = target.deptName;
-      }
+      formData.value.docName = target.docName;
+      formData.value.deptName = target.deptName;
       // formData.value.compDept = target.deptName;
     }
   };
@@ -996,7 +1003,8 @@
     if (isCompleteRealName.value) {
       await selHosRef.value.init();
       const hosList = await ServerStaticData.getHosList();
-      formData.value.hosId = hosList[0].hosId;
+      formData.value = { ...formData.value, hosId: hosList[0].hosId };
+      console.log(1111111111, formData.value.hosId, 'hosId');
     }
     if (options.value.isAnonymous === '1') {
       gform.value.setList(tempList3);
