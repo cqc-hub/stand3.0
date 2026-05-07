@@ -978,7 +978,6 @@ const userApi = {
     service.post<T>('/phs-user/authUser/allinoneAuthApi', parm(data), {
       isAuth: true,
       hideLoading: false,
-      baseURL: envBasic.baseApi,
     }),
 
   allinoneAuthApi1: (data) =>

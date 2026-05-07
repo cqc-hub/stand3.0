@@ -1423,6 +1423,7 @@ export const usePayPage = () => {
   const payBeforeCreateData = async () => {
     const selectList = selUnPayList.value;
     const { patientId, patientName } = gStores.userStore.patChoose;
+    const { hosId, hosName, visitDate } = selectList[0];
 
     const _totalCost = totalCost.value + '';
     const source = gStores.globalStore.browser.source;
@@ -1437,15 +1438,15 @@ export const usePayPage = () => {
     }, 0);
 
     const args: BaseObject = {
-      personalPayFee: personalPayFee || undefined,
+      personalPayFee,
       patientName: pageProps.value.deParams?.patientName,
       businessType: '1',
       patientId: pageProps.value.params ? '' : patientId,
       source,
       totalCost: _totalCost,
-      hosId: selectList[0].hosId,
-      hosName: selectList[0].hosName,
-      visitDate: selectList[0].visitDate,
+      hosId,
+      hosName,
+      visitDate,
       mergeOrder: selectList.map((o) => o.childOrder).join(','),
       medOrgOrd: selectList.map((o) => o.medOrgOrd).join(','),
       deptCode: selectList.map((o) => o.deptId).join(','),
@@ -1477,11 +1478,12 @@ export const usePayPage = () => {
 
     const payArg: BaseObject = {
       ...result,
+      personalPayFee,
       totalFee: _totalCost,
       phsOrderSource: '2',
-      hosId: selectList[0].hosId,
+      hosId,
       // hosId: '1279',
-      hosName: selectList[0].hosName,
+      hosName,
       patientId: pageProps.value.params ? undefined : patientId,
     };
 

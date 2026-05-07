@@ -36,8 +36,8 @@ if (global.SYS_CODE === '1001035') {
       baseApi: 'https://testphs.eheren.com/gateway',
     },
     prod: {
-      baseApi: 'https://netphs.eheren.com/gateway',
-      // baseApi: 'https://netphs.jshtcm.com.cn/gateway',
+      // baseApi: 'https://netphs.eheren.com/gateway',
+      baseApi: 'https://netphs.jshtcm.com.cn/gateway',
     },
   });
 }
