@@ -360,9 +360,10 @@
       } else if (item.hosId === '12930') {
         //昌安院区
         useTBanner({
-          type: 'h5',
-          path: 'https://www.youehu.com/business/h5/gtp/home.html#/index',
+          appId: 'wxc7a3f05f0f6ba703',
+          path: 'pages/index?orgId=1135366844861960193',
           text: '护工预约',
+          type: 'otherProgram',
         });
       }
       return;

@@ -140,7 +140,7 @@
   const gStores = new GStores();
   const cacheStore = useCacheStore();
   const formData = shallowRef(<BaseObject>{});
-  const completeRealNameList = ref(['1001033']);
+  const completeRealNameList = ref(['']);
   const docDialogShow = ref(false);
   const deptList = ref([]);
   const docList = ref([]);

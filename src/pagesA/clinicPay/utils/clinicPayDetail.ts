@@ -1473,9 +1473,7 @@ export const usePayPage = () => {
       args.cardNumber = pageProps.value.deParams.cardNumber;
     }
 
-    const {
-      result
-    } = await api.createClinicOrder(args);
+    const { result } = await api.createClinicOrder(args);
 
     const payArg: BaseObject = {
       ...result,
@@ -1814,11 +1812,19 @@ export const usePayPage = () => {
           payMethodConfig.medicalPay = '支付宝医保支付';
         }
       }
-      payMethodConfig.labelPay = '微信自费支付';
+      if (['1001083'].includes(gStores.globalStore.sysCode)) {
+        payMethodConfig.labelPay = '微信支付';
+      } else {
+        payMethodConfig.labelPay = '微信自费支付';
+      }
     }
 
     if (gStores.globalStore.ev === 'alipay') {
-      payMethodConfig.labelPay = '支付宝自费支付';
+      if (['1001083'].includes(gStores.globalStore.sysCode)) {
+        payMethodConfig.labelPay = '支付宝支付';
+      } else {
+        payMethodConfig.labelPay = '支付宝自费支付';
+      }
       if (getIsFamilyPayment()) {
         payMethodConfig.medicalPay = '支付宝医保支付(支持亲情付)';
       }
@@ -2945,8 +2951,9 @@ export const reDealMedicalFiling = async () => {
       args.idCard = result.idCard;
     }
     const cardInfo = idValidator.getIdCardInfo(args.idCard);
-    const { isGuardianWithIdCard } =
-      await ServerStaticData.getSystemConfig('person');
+    const { isGuardianWithIdCard } = await ServerStaticData.getSystemConfig(
+      'person'
+    );
     if (isGuardianWithIdCard && cardInfo.age <= isGuardianWithIdCard * 1) {
       args.upIdCard = result.idCard;
       args.upName = result.userName;
