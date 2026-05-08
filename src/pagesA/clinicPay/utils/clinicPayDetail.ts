@@ -2917,12 +2917,12 @@ export const reDealMedicalFiling = async () => {
   const gStores = new GStores();
   const { ev, sysCode } = gStores.globalStore;
   const patientUtil = new PatientUtils();
-  if (uni.getStorageSync('yibaoPatientId')) {
-    yibaoPatientId = uni.getStorageSync('yibaoPatientId');
-    uni.removeStorageSync('yibaoPatientId');
-  } else {
+  if (!uni.getStorageSync('yibaoPatientId')) {
     return;
   }
+
+  yibaoPatientId = uni.getStorageSync('yibaoPatientId');
+  uni.removeStorageSync('yibaoPatientId');
   if (ev === 'alipay') {
     const authPayPlugin = requirePlugin('auth-pay-plugin');
     authPayPlugin.initMethods({
@@ -2947,15 +2947,15 @@ export const reDealMedicalFiling = async () => {
       pageType: 'addPatient',
       upIdCard: '',
       upName: '',
+      disabledKeys: 'idCard,patientName',
     };
     if (!args.patientName && !result.familyPayAuthNo) {
       args.patientName = result.userName;
       args.idCard = result.idCard;
     }
     const cardInfo = idValidator.getIdCardInfo(args.idCard);
-    const { isGuardianWithIdCard } = await ServerStaticData.getSystemConfig(
-      'person'
-    );
+    const { isGuardianWithIdCard } =
+      await ServerStaticData.getSystemConfig('person');
     if (isGuardianWithIdCard && cardInfo.age <= isGuardianWithIdCard * 1) {
       args.upIdCard = result.idCard;
       args.upName = result.userName;

@@ -131,7 +131,7 @@
           return config?.[key];
         } catch (e) {
           console.warn('pageConfig 获取失败:', e);
-          return undefined;
+          return {} as any;
         }
       };
 
@@ -176,7 +176,7 @@
     -webkit-animation-name: fadeInRight;
     animation-name: fadeInRight;
     animation-duration: 0.5s;
-    
+
     /* #ifdef MP-TOUTIAO */
     margin-bottom: 16rpx;
     /* #endif */

@@ -57,6 +57,7 @@ export const miniProgramConfig: {
       isWxShowToggleEcZh: '1',
       homeTopBanner: { topShow: true },
       medicalMHelp: {
+        isOpenPatToMedicalPat: {},
         wx: {
           isMedicalOrder: '1',
           isGbFamilyPayment: '1',
