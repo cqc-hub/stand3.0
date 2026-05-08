@@ -2947,7 +2947,7 @@ export const reDealMedicalFiling = async () => {
       pageType: 'addPatient',
       upIdCard: '',
       upName: '',
-      disabledKeys: 'idCard,patientName',
+      disabledKeys: 'idCard,patientName,idType',
     };
     if (!args.patientName && !result.familyPayAuthNo) {
       args.patientName = result.userName;
