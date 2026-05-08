@@ -796,7 +796,10 @@
 
   const handlerAddressMap = (item) => {
     console.log(item);
-    if (gStores.globalStore.sysCode === '1001052') {
+    if (
+      gStores.globalStore.sysCode === '1001052' &&
+      gStores.globalStore.ev === 'wx'
+    ) {
       useTBanner(
         {
           type: 'otherProgram',

@@ -65,6 +65,7 @@
 
 <script lang="ts" setup>
   import globalGl from '@/config/global';
+  import { HosNavData } from '@/pagesA/MyRegistration/utils/MyRegistration';
   import { GStores } from '@/utils';
 
   const gStores = new GStores();
@@ -77,6 +78,7 @@
   );
 
   const showAddress = (col) => {
+    HosNavData;
     if (
       gStores.globalStore.sysCode === '1001035' &&
       ['12675', '12713'].includes(props.lab.hosId) &&
