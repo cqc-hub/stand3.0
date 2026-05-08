@@ -1008,3 +1008,61 @@ export const useRegBtnShows = () => {
     isShowRegCancel,
   };
 };
+
+export const ywzRql1001035 = (orderInfo) => {
+  const gStores = new GStores();
+  const { hosDeptId, hosDocId, hosRegVisitNo, deptName } = orderInfo;
+
+  // 省中 青玲医圣-专门预问诊
+  if (
+    gStores.globalStore.sysCode === '1001035' &&
+    hosDocId === '10306' &&
+    hosDeptId === '1223'
+  ) {
+    const { cardNumber, patientAge, patientSex } = gStores.userStore.patChoose;
+    const extractHrefFromAnchorHtml = (html: string): string | null => {
+      if (!html) {
+        return null;
+      }
+
+      const match = html.match(/<a\s+[^>]*href=(['"])(.*?)\1/i);
+      if (!match) {
+        return null;
+      }
+
+      return match[2].replace(/&amp;/g, '&').replace(/&quot;/g, '"');
+    };
+
+    uni.request({
+      method: 'POST',
+      url: 'https://gynecology.jshtcm.com.cn/agent/api/direct/welcome/10',
+      data: {
+        userId: cardNumber,
+        opEmNo: hosRegVisitNo,
+        age: (patientAge as any) * 1,
+        ageUnit: '岁',
+        gender: patientSex === '男' ? 1 : 0,
+        deptName,
+        deptNo: hosDeptId,
+      },
+
+      success({ data }) {
+        const html = typeof data === 'string' ? data : String(data);
+        const href = extractHrefFromAnchorHtml(html);
+
+
+        if (href) {
+          useTBanner({
+            path: href,
+            type: 'h5',
+          });
+          return;
+        }
+
+        gStores.messageStore.showMessage('未匹配到对应链接', 2000);
+        console.error('未匹配到对应链接');
+      },
+    });
+    throw new Error('青玲医圣-专门预问诊');
+  }
+};
