@@ -24,23 +24,30 @@
               class="g-break-word font-semibold relative flex items-start flex-1 row-value"
             >
               <view class="flex-1 flex items-start flex-between">
-                <text>
+                <view class="flex items-start">
                   <text>{{ lab[col.key] }}</text>
-                  <view
+                  <text
                     v-if="
                       !showAddress(col) &&
                       ['categorName', 'site', 'areaName'].includes(col.key) &&
                       lab.hosId
                     "
-                    class="ml12 color-blue flex items-center"
+                    class="ml12 color-blue"
                   >
-                    <view
+                    <text
                       class="icon-font ico_location2 right-icon guide-icon"
                     />
 
-                    <text>导航</text>
-                  </view>
-                </text>
+                    <text
+                      :style="{
+                        top: '-4px',
+                      }"
+                      class="relative"
+                    >
+                      导航
+                    </text>
+                  </text>
+                </view>
                 <text
                   v-if="showAddress(col)"
                   class="text-no-wrap color-blue mr12 location-tip"
