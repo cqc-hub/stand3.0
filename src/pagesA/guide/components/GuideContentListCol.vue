@@ -23,25 +23,30 @@
               @click="rowClick(col)"
               class="g-break-word font-semibold relative flex items-start flex-1 row-value"
             >
-              <view class="flex-1 flex items-center">
-                {{ lab[col.key] }}
+              <view class="flex-1 flex items-start flex-between">
+                <text>
+                  <text>{{ lab[col.key] }}</text>
+                  <view
+                    v-if="
+                      !showAddress(col) &&
+                      ['categorName', 'site', 'areaName'].includes(col.key) &&
+                      lab.hosId
+                    "
+                    class="ml12 color-blue flex items-center"
+                  >
+                    <view
+                      class="icon-font ico_location2 right-icon guide-icon"
+                    />
+
+                    <text>导航</text>
+                  </view>
+                </text>
                 <text
                   v-if="showAddress(col)"
                   class="text-no-wrap color-blue mr12 location-tip"
                 >
                   带我去
                 </text>
-                <view
-                  v-else-if="
-                    ['categorName', 'site', 'areaName'].includes(col.key) &&
-                    lab.hosId
-                  "
-                  class="ml12 color-blue flex items-center"
-                >
-                  <view class="icon-font ico_location2 right-icon guide-icon" />
-
-                  <text>导航</text>
-                </view>
               </view>
             </view>
           </view>
