@@ -252,6 +252,8 @@
     _directUrl?: string;
     // 手机号脱敏展示
     _phoneMask?: '0' | '1';
+    // 禁止修改的字段 实际链接地址为string 用逗号分隔 disabledKeys=patientName,idCard
+    disabledKeys?: string[];
 
     //健康卡
     _healthType?: 'addPat';
@@ -1132,10 +1134,14 @@
         }
       }
     }
-
+    const { disabledKeys = [] } = pageProps.value;
     formList.value.map((o) => {
       const { key } = o;
       const iValue = formData.value[key];
+
+      if (disabledKeys.includes(key)) {
+        o.disabled = true;
+      }
 
       if ([formKey.patientName, formKey.patientPhone].includes(key as any)) {
         if (iValue && pageProps.value[key]) {
@@ -1416,6 +1422,10 @@
 
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    if (pageProps.value.disabledKeys) {
+      // @ts-expect-error
+      pageProps.value.disabledKeys = pageProps.value.disabledKeys.split(',');
+    }
   });
 
   onMounted(async () => {

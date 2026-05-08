@@ -90,7 +90,13 @@
                     <GuideContentListCol
                       :cols="drugCol"
                       :lab="drug"
-                      @go-address-map="handlerAddressMap"
+                      @go-address-map="
+                        (e) =>
+                          handlerAddressMap({
+                            ...item,
+                            ...e,
+                          })
+                      "
                     />
 
                     <GuideBtns
@@ -146,7 +152,13 @@
                     <GuideContentListCol
                       :cols="reportJyCol"
                       :lab="lab"
-                      @go-address-map="handlerAddressMap"
+                      @go-address-map="
+                        (e) =>
+                          handlerAddressMap({
+                            ...item,
+                            ...e,
+                          })
+                      "
                     />
 
                     <GuideBtns
@@ -208,7 +220,13 @@
                     <GuideContentListCol
                       :cols="reportJcCol"
                       :lab="lab"
-                      @go-address-map="handlerAddressMap"
+                      @go-address-map="
+                        (e) =>
+                          handlerAddressMap({
+                            ...item,
+                            ...e,
+                          })
+                      "
                     />
 
                     <GuideBtns
@@ -244,7 +262,13 @@
                     <GuideContentListCol
                       :cols="reportJcCol"
                       :lab="lab"
-                      @go-address-map="handlerAddressMap"
+                      @go-address-map="
+                        (e) =>
+                          handlerAddressMap({
+                            ...item,
+                            ...e,
+                          })
+                      "
                     />
 
                     <view
@@ -584,7 +608,10 @@
   ]);
 
   const colRowClick = (item, { col }) => {
-    if (['categorName', 'site', 'areaName', 'hosName'].includes(col.key) && item.hosId) {
+    if (
+      ['categorName', 'site', 'areaName', 'hosName'].includes(col.key) &&
+      item.hosId
+    ) {
       emits('open-hos-location', item);
     }
   };

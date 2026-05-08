@@ -486,6 +486,7 @@
           } = t;
 
           const info = {
+            ...t,
             deptId,
             categorName: deptName,
             appointmentTime: disposeTime,
