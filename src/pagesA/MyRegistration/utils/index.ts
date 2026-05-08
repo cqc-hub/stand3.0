@@ -151,6 +151,8 @@ export type TSchInfo = {
   specialIndicator?: '1';
   /** 联合门诊id */
   clinicForRegistId?: string;
+
+  certificationNo?: string;
 } & IDocRow;
 
 type TSchDocAmPm = Pick<TSchInfo, 'ampm' | 'ampmName'> & {

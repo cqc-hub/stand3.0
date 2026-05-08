@@ -53,6 +53,16 @@
                     class="CPC-icon"
                     :src="globalGl.BASE_IMG + 'CPC-icon2.png'"
                   ></image>
+                  <view
+                    class="zizhi bg-green pt4 pb8 g-tag flex-normal flex-row rounded"
+                    v-if="docDetail.certificationNo"
+                    @click="ziZhipopup.show"
+                  >
+                    <text class="iconfont color-green mt4 f28">&#xe6c7;</text>
+                    <text class="f24 color-green">医生资质</text>
+                    <text class="iconfont color-green f24">&#xe66b;</text>
+                  </view>
+                  <!-- <g-tag type="green" text="医生资质"></g-tag> -->
 
                   <view class="flex-normal header-btn">
                     <g-login @handler-next="collectDoc">
@@ -74,7 +84,6 @@
                         </text>
                       </button>
                     </g-login>
-
                     <button
                       @click="refDocShare.show"
                       class="btn btn-warning btn-round btn-size-small share-btn color-blue"
@@ -559,6 +568,42 @@
       :pageConfig="orderConfig"
       @item-click="goPreregistration"
     />
+    <g-popup
+      title="医生资质"
+      @hide="ziZhipopup.hide()"
+      ref="ziZhipopup"
+    >
+      <view class="pop-container">
+        <view class="zizhi-container flex-column ">
+          <view class="zizhi-line flex-normal p24">
+            <text class="iconfont color-green mt4 f48">&#xe6c7;</text>
+            <text class="f32 p24c">医生资格证</text>
+            <text class="f24 color-green border-green mt4">认证通过</text>
+          </view>
+          <view class="zizhi-line flex-normal pl24 pr24">
+            <text class="iconfont color-green mt4 f48">&#xe6c7;</text>
+            <text class="f32 p24c">医师执业证</text>
+            <text class="f24 color-green border-green mt4">认证通过</text>
+          </view>
+          <view class="zizhi-line flex-normal  pl24 pr24 pb24">
+            <text class="iconfont color-green f48 my-hide">&#xe6c7;</text>
+            <text class="f24 color-666 p24c">执业证书编号:</text>
+            <text class="f24 color-666">
+              {{ docDetail.certificationNo }}
+            </text>
+          </view> <view class="dianpian"></view>
+        <view class="g-footer flex-column">
+          <button
+            @click="ziZhipopup.hide()"
+            class="btn btn-primary flex-normal"
+          >
+              <view>我知道了</view>
+          </button>
+        </view>
+        </view>
+       
+      </view>
+    </g-popup>
     <g-message />
   </view>
 </template>
@@ -627,7 +672,7 @@
   const selOutHosId = ref('');
   const selOutHosDay = ref('');
   const flagTitle9 = ref('');
-  const docHosSchHeight = ref(100);
+  const ziZhipopup = ref('');
   const isMultHosDoc = ref(false);
   const isError = ref(false);
 
@@ -858,9 +903,11 @@
       });
 
     if (schList.length) {
-      const { schDate } = schList[0];
+      const { schDate, schDateList } = schList[0];
       checkedDay.value = schDate;
       docSchList.value = schList;
+      const { certificationNo } = schDateList[0];
+      certificationNo && (docDetail.value.certificationNo = certificationNo);
 
       //判断是否多院区
       let schListByhosId = groupedByHosId(schList);
@@ -1278,6 +1325,11 @@
         bottom: 0;
         left: 130rpx;
       }
+      .zizhi {
+        border-radius: 12rpx;
+        position: relative;
+        top: 70rpx;
+      }
 
       .header-btn {
         margin-top: 20rpx;
@@ -1436,5 +1488,23 @@
     border-radius: 4rpx;
     padding: 0 4rpx;
     // line-height: 42rpx;
+  }
+  .border-green {
+    border: 1px solid var(--hr-success-color-6);
+    border-radius: 12rpx;
+    padding: 0 12rpx;
+  }
+  .pop-container{
+    width: 100vw;
+  }
+  .g-footer {
+    height: 90rpx;
+    width:calc( 100% - 64rpx);
+    position: absolute;
+    bottom: 0;
+  }
+  .dianpian {
+    height: 90rpx;
+    width: 1rpx;
   }
 </style>

@@ -45,6 +45,7 @@ export interface IDocDetail {
   multiplePracticeLocation: string;
   preStatus?: '1';
   politicalStatus?: string;
+  certificationNo?: string;
 }
 
 export interface IDocSchListItem {
@@ -197,8 +198,9 @@ export class UseDoctorDetail extends GStores {
   }
 
   async getDocSch() {
-    const { isSchNoDept, isSchNoHos } =
-      await ServerStaticData.getSystemConfig('order');
+    const { isSchNoDept, isSchNoHos } = await ServerStaticData.getSystemConfig(
+      'order'
+    );
     const { source } = this.globalStore.browser;
     let { clinicalType, docName, hosDeptId, hosDocId, hosId } = this.props;
     let schList: IDocSchListItem[] = [],
