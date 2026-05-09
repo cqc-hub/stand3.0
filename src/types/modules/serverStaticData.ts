@@ -750,10 +750,19 @@ export interface ISystemConfig_ {
 
     //入口选择页pagesD/common/chooseTabJump
     tabJumpConfig?: {
-      topImagesHeight?: string; //入口选择页顶部图片高度
-      topImages?: Array<
-        TButtonConfig & { bgSrc?: string;  }
-      >; //入口选择页顶部图片配置
+      imageOptions?:  {
+        topImages?: TButtonConfig & {
+          bgSrc?: string;
+        };
+        middleImages?: Array<
+          TButtonConfig & {
+            bgSrc?: string;
+          }
+        >;
+        bottomImages?: TButtonConfig & {
+          bgSrc?: string;
+        };
+      }; //图片配置
       title?: string; //页面标题，无则标题展示空
       showFlag?: number; //页面底部协议，无则不展示
       entryType?: string; //多次使用需跟页面路由参数入口一致，无则取第一项

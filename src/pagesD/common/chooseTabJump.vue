@@ -4,10 +4,71 @@
       [gStores.globalStore.getPageClass]: true,
     }"
   >
-  <view class="top-image" >
-<!-- {{ imageOptions }} -->
-  </view>
     <view class="medical-page">
+      <view v-if="imageOptions">
+        <view
+          class="top-image"
+          v-if="imageOptions?.topImages"
+          @click="useTBanner(imageOptions?.topImages)"
+          :style="{
+            backgroundImage: `url('${
+              imageOptions?.topImages?.bgSrc ||
+              'https://phsdevoss.eheren.com/pcloud/phs3.0/xianyang_pic1.png'
+            }')`,
+          }"
+        ></view>
+        <view
+          class="middle-image"
+          v-if="
+            imageOptions?.middleImages &&
+            imageOptions?.middleImages?.length >= 3
+          "
+        >
+          <view
+            class="left-image"
+            @click="useTBanner(imageOptions?.middleImages[0])"
+            :style="{
+              backgroundImage: `url('${
+                imageOptions?.middleImages[0]?.bgSrc ||
+                'https://phsdevoss.eheren.com/pcloud/phs3.0/xianyang_pic2.png'
+              }')`,
+            }"
+          ></view>
+          <view class="right-image">
+            <view
+              class="right-image-item"
+              @click="useTBanner(imageOptions?.middleImages[1])"
+              :style="{
+                backgroundImage: `url('${
+                  imageOptions?.middleImages[1]?.bgSrc ||
+                  'https://phsdevoss.eheren.com/pcloud/phs3.0/xianyang_pic3.png'
+                }')`,
+              }"
+            ></view>
+            <view
+              class="right-image-item"
+              @click="useTBanner(imageOptions?.middleImages[2])"
+              :style="{
+                backgroundImage: `url('${
+                  imageOptions?.middleImages[2]?.bgSrc ||
+                  'https://phsdevoss.eheren.com/pcloud/phs3.0/xianyang_pic4.png'
+                }')`,
+              }"
+            ></view>
+          </view>
+        </view>
+        <view
+          class="bottom-image"
+          v-if="imageOptions?.bottomImages"
+          @click="useTBanner(imageOptions?.bottomImages)"
+          :style="{
+            backgroundImage: `url('${
+              imageOptions?.bottomImages?.bgSrc ||
+              'https://phsdevoss.eheren.com/pcloud/phs3.0/xianyang_pic5.png'
+            }')`,
+          }"
+        ></view>
+      </view>
       <view
         class="module home-doctor mb12"
         @click="useTBanner(item)"
@@ -27,7 +88,7 @@
             {{ item.subTitle }}
           </view>
         </view>
-        <view class="external-icon ml24" v-if="item?.text||item?.subTitle">
+        <view class="external-icon ml24" v-if="item?.text || item?.subTitle">
           <image
             src="https://phs-dev.oss-cn-hangzhou.aliyuncs.com/pcloud/jxfy/ico_jt%402x.png"
             mode="widthFix"
@@ -72,14 +133,22 @@
       >
     >[]
   );
-   const imageOptions = ref(
+  const imageOptions = ref(
     <
-      Array<
-        TButtonConfig & {
+      {
+        topImages?: TButtonConfig & {
           bgSrc?: string;
-        }
-      >
-    >[]
+        };
+        middleImages?: Array<
+          TButtonConfig & {
+            bgSrc?: string;
+          }
+        >;
+        bottomImages?: TButtonConfig & {
+          bgSrc?: string;
+        };
+      }
+    >{}
   );
   const imageHeight = ref(300);
 
@@ -97,8 +166,7 @@
         tabJumpConfig.value = pageConfig.value?.tabJumpConfig[0];
       }
       options.value = tabJumpConfig.value?.tabs || [];
-      imageHeight.value = tabJumpConfig.value?.topImagesHeight || 300;
-      imageOptions.value = tabJumpConfig.value?.topImages || [];
+      imageOptions.value = tabJumpConfig.value?.imageOptions || [];
     }
   });
 
@@ -114,6 +182,7 @@
   .medical-page {
     padding: 20rpx;
     box-sizing: border-box;
+    width: 100vw;
 
     .module {
       display: flex;
@@ -172,5 +241,56 @@
         line-height: 44rpx;
       }
     }
+  }
+  .top-image {
+    height: 280rpx;
+    width: 100%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-image: url('https://phsdevoss.eheren.com/pcloud/phs3.0/xianyang_pic1.png');
+  }
+  .middle-image {
+    display: flex;
+    margin-top: 20rpx;
+    width: 100%;
+    height: 340rpx;
+    .left-image {
+      flex: 1;
+      background-image: url('https://phsdevoss.eheren.com/pcloud/phs3.0/xianyang_pic2.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+
+    .right-image {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-left: 20rpx;
+      // width: 400rpx;
+
+      .right-image-item {
+        height: 165rpx;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+
+        &:first-child {
+          background-image: url('https://phsdevoss.eheren.com/pcloud/phs3.0/xianyang_pic3.png');
+          margin-bottom: 10rpx;
+        }
+
+        &:last-child {
+          background-image: url('https://phsdevoss.eheren.com/pcloud/phs3.0/xianyang_pic4.png');
+        }
+      }
+    }
+  }
+  .bottom-image {
+    margin-top: 20rpx;
+    width: 100%;
+    height: 160rpx;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-image: url('https://phsdevoss.eheren.com/pcloud/phs3.0/xianyang_pic5.png');
   }
 </style>

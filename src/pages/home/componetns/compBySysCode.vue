@@ -14,7 +14,7 @@
       engDetail: '',
       otherDetail: '',
       iconfont: `https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/PZGL1001054image/file-2026040715541615e4c34225c24cf2a65e80fc88ed838dwxtp_20260407155218.png`,
-      path: '/pagesA/MyRegistration/DepartmentCard?hosId=13002&onlyShowDept=1214160&isXkTeam=1',
+      path: '/pagesD/common/chooseTabJump?entryType=yk',
       terminalType: 'my',
       appId: '',
       query: '',
