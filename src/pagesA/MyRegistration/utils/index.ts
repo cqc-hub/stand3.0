@@ -15,7 +15,6 @@ import { type XOR } from '@/typeUtils/obj';
 import globalGl from '@/config/global';
 
 dayjs.extend(isoWeek);
-
 export interface IQueryRegNum {
   categorName: string;
   categorNamePY: string;

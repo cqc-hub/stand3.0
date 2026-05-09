@@ -498,6 +498,7 @@
     goAskForDoc1001048,
     goAskForDoc1001045,
     useRegBtnShows,
+    ywzRql1001035,
   } from './utils/regDetail';
   import { payMoneyOnline, toPayPull, IGPay } from '@/components/g-pay/index';
 
@@ -800,6 +801,9 @@
   };
 
   const goPreConsultation = () => {
+    // 省中 青玲医圣-专门预问诊
+    ywzRql1001035(orderRegInfo.value);
+
     if (orderConfig.value.preConsultationBtn) {
       //指定的预问诊跳转
       useTBanner(
