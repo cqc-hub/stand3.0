@@ -68,7 +68,7 @@
                     <g-login @handler-next="collectDoc">
                       <button
                         @click="collectDoc"
-                        class="btn btn-warning btn-round btn-size-small"
+                        class="btn btn-warning btn-round btn-size-small pt6 pb6"
                       >
                         <text class="iconfont f36 mr12">
                           {{
@@ -86,7 +86,7 @@
                     </g-login>
                     <button
                       @click="refDocShare.show"
-                      class="btn btn-warning btn-round btn-size-small share-btn color-blue"
+                      class="btn btn-warning btn-round btn-size-small pt6 pb6 color-blue bg-blue-light ml12"
                     >
                       <text class="iconfont f36 mr12">&#xe6e0;</text>
                       <text class="text-no-wrap">分享</text>
@@ -568,13 +568,9 @@
       :pageConfig="orderConfig"
       @item-click="goPreregistration"
     />
-    <g-popup
-      title="医生资质"
-      @hide="ziZhipopup.hide()"
-      ref="ziZhipopup"
-    >
+    <g-popup title="医生资质" @hide="ziZhipopup.hide()" ref="ziZhipopup">
       <view class="pop-container">
-        <view class="zizhi-container flex-column ">
+        <view class="zizhi-container flex-column">
           <view class="zizhi-line flex-normal p24">
             <text class="iconfont color-green mt4 f48">&#xe6c7;</text>
             <text class="f32 p24c">医生资格证</text>
@@ -585,23 +581,23 @@
             <text class="f32 p24c">医师执业证</text>
             <text class="f24 color-green border-green mt4">认证通过</text>
           </view>
-          <view class="zizhi-line flex-normal  pl24 pr24 pb24">
+          <view class="zizhi-line flex-normal pl24 pr24 pb24">
             <text class="iconfont color-green f48 my-hide">&#xe6c7;</text>
             <text class="f24 color-666 p24c">执业证书编号:</text>
             <text class="f24 color-666">
               {{ docDetail.certificationNo }}
             </text>
-          </view> <view class="dianpian"></view>
-        <view class="g-footer flex-column">
-          <button
-            @click="ziZhipopup.hide()"
-            class="btn btn-primary flex-normal"
-          >
+          </view>
+          <view class="dianpian"></view>
+          <view class="g-footer flex-column">
+            <button
+              @click="ziZhipopup.hide()"
+              class="btn btn-primary flex-normal"
+            >
               <view>我知道了</view>
-          </button>
+            </button>
+          </view>
         </view>
-        </view>
-       
       </view>
     </g-popup>
     <g-message />
@@ -1388,11 +1384,6 @@
     }
   }
 
-  .share-btn {
-    background-color: var(--hr-brand-color-3-light);
-    margin-left: 12rpx;
-  }
-
   .label-mark {
     position: relative;
     left: -10rpx;
@@ -1494,12 +1485,12 @@
     border-radius: 12rpx;
     padding: 0 12rpx;
   }
-  .pop-container{
+  .pop-container {
     width: 100vw;
   }
   .g-footer {
     height: 90rpx;
-    width:calc( 100% - 64rpx);
+    width: calc(100% - 64rpx);
     position: absolute;
     bottom: 0;
   }

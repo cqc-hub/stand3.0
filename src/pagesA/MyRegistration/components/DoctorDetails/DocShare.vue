@@ -54,8 +54,8 @@
           <!-- #endif -->
         </view>
 
-        <button @click="close" class="share-btn g-bold">
-          <view class="cancel-btn g-border-top f32">取消</view>
+        <button @click="close" class="share-btn g-border-top g-bold mt20">
+          <view class="cancel-btn f32 p26">取消</view>
         </button>
       </view>
     </g-popup>
@@ -885,11 +885,6 @@
     }
 
     .cancel-btn {
-      padding: 26rpx;
-      margin-top: 20rpx;
-      /* #ifndef H5 */
-      padding-bottom: 80rpx;
-      /* #endif */
       user-select: none;
     }
   }
