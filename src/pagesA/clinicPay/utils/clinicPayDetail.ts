@@ -2948,6 +2948,7 @@ export const reDealMedicalFiling = async () => {
       upIdCard: '',
       upName: '',
       disabledKeys: 'idCard,patientName,idType',
+      healthCardUser: '2'
     };
     if (!args.patientName && !result.familyPayAuthNo) {
       args.patientName = result.userName;
