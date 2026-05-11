@@ -232,12 +232,12 @@ export const useTBanner = async (
     }
 
     for (const key in addition) {
-      if (!['token', 'patientId', 'herenId', 'cardNumber'].includes(key)) {
-        extraData[addition[key]] =
-          additionData[key] === undefined
-            ? extraData[addition[key]]
-            : additionData[key];
-      }
+      // if (!['token', 'patientId', 'herenId', 'cardNumber'].includes(key)) {
+      extraData[addition[key]] =
+        additionData[key] === undefined
+          ? extraData[addition[key]]
+          : additionData[key];
+      // }
     }
   }
 
