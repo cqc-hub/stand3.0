@@ -4,6 +4,7 @@ export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静�
 
 export let SYS_CODE = systemConfig.sysCode;
 
+//
 let env: 'dev' | 'test' | 'prod' = 'prod'; // dev 开发； test 测试； prod 生产
 
 const WEB_OUT_LOGIN_TIME = 0; // web 环境下自动退出登录时间 ms
@@ -42,18 +43,21 @@ const netUrl =
     ? `https://interhos.eheren.com/static/nhs/`
     : `https://testwechatnethos.eheren.com/static/nhs/`;
 
-const h5Url =
+let h5Url =
   env === 'prod'
     ? // ? 'https://h5.eheren.com/v4/#/'
       'https://h5.eheren.com/v3/#/'
     : // : 'https://health.eheren.com/v3dev/#/';
       'https://health.eheren.com/v3/#/';
 
+
+
 const getK = (k: string) => {
   return 're$v3'.replace('$', k);
 };
 
 const globalGl = {
+  isPersonal_1001035: true,
   SYS_CODE,
   BASE_IMG,
   VERSION,
@@ -76,6 +80,10 @@ const globalGl = {
   q: getK('q'),
   r: getK('s'),
 };
+
+if (globalGl.isPersonal_1001035) {
+  globalGl.h5Url = 'https://h5.eheren.com/v3_test_1001035/#/';
+}
 
 Object.defineProperties(globalGl, {
   systemInfo: {

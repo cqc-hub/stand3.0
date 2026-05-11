@@ -1,4 +1,4 @@
-import { envBasic } from '@/config/env';
+import envData from '@/config/env';
 import service from './index';
 import globalGl from '@/config/global';
 import global from '@/config/global';
@@ -558,21 +558,13 @@ const queryApi = {
   getCloudImageInfo: <T = any>(data) =>
     service.post('/phs-query/appointment/getCloudImageInfo', parm(data)),
   getScheme: <T = any>(data) =>
-    service.post('/phs-user/message/getScheme', parm(data), {
-      baseURL: envBasic.baseApi,
-    }),
+    service.post('/phs-user/message/getScheme', parm(data), {}),
   applyForAuth: <T = any>(data) =>
-    service.post('/phs-user/trdfce/applyForAuth', parm(data), {
-      // baseURL: envBasic.baseApi,
-    }),
+    service.post('/phs-user/trdfce/applyForAuth', parm(data), {}),
   getCmsList: <T = any>(data) =>
-    service.post('/phs-base/cms/getCmsList', parm(data), {
-      baseURL: envBasic.baseApi,
-    }),
+    service.post('/phs-base/cms/getCmsList', parm(data), {}),
   getCmsTypeList: <T = any>(data) =>
-    service.post('/phs-base/cms/getCmsTypeList', parm(data), {
-      baseURL: envBasic.baseApi,
-    }),
+    service.post('/phs-base/cms/getCmsTypeList', parm(data), {}),
   getCmsListByWordSearch: <T = any>(data) =>
     service.post('/phs-base/cms/getCmsListByWordSearch', parm(data)),
   //电子导诊单
@@ -1393,7 +1385,6 @@ const userApi = {
   customerEvaluate: (data: any) =>
     service.post('/phs-extend/customer/evaluate', parm(data), {
       hideLoading: false,
-      baseURL: envBasic.baseApi,
     }),
   ///检验分析
   inspectionAnalysis: (data: any) =>
@@ -1485,7 +1476,9 @@ const authApi = {
 };
 
 const api1001035 = {
-  baseURL: 'https://phs.jshtcm.com',
+  baseURL: globalGl.isPersonal_1001035
+    ? envData.baseApi
+    : 'https://phs.jshtcm.com',
   // 科室列表
   getDeptList1001035: (data: any) => {
     return service.post('/reg/getDeptList', parm(data), {
@@ -1530,7 +1523,7 @@ export default {
   ...api1001035,
 
   // 获取国籍
-  getCountryList: async () => {
+  async getCountryList() {
     const { data = [] } = await new Promise<{
       data: {
         name_zh: string;
@@ -1552,6 +1545,24 @@ export default {
     data.map((o) => {
       o.label = o.name_zh;
       o.value = o.tel;
+    });
+
+    return data;
+  },
+
+  // 获取中国节假日（需每年手动维护）
+  async getChineseHolidays() {
+    const { data = [] } = await new Promise<{
+      data: {
+        date: string;
+        name: string;
+        des: string;
+      }[];
+    }>((complete) => {
+      uni.request({
+        url: globalGl.BASE_IMG + 'country.json',
+        complete: complete as any,
+      });
     });
 
     return data;

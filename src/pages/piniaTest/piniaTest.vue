@@ -773,7 +773,7 @@
   const init = async () => {
     // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
-    useTBanner(肿瘤住院管家);
+    useTBanner(eletronicInvoice);
     // useTBanner({
     //   type: 'h5',
     //   isSelfH5: '1',

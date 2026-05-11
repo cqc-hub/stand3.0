@@ -28,6 +28,12 @@ const env = {
 };
 
 if (global.SYS_CODE === '1001035') {
+  let prodApi = 'https://netphs.eheren.com/gateway';
+
+  if (global.isPersonal_1001035) {
+    prodApi = 'https://netphs.jshtcm.com.cn/gateway';
+  }
+
   Object.assign(env, {
     dev: {
       baseApi: 'https://devphs.eheren.com/gateway',
@@ -36,8 +42,7 @@ if (global.SYS_CODE === '1001035') {
       baseApi: 'https://testphs.eheren.com/gateway',
     },
     prod: {
-      baseApi: 'https://netphs.eheren.com/gateway',
-      // baseApi: 'https://netphs.jshtcm.com.cn/gateway',
+      baseApi: prodApi,
     },
   });
 }
