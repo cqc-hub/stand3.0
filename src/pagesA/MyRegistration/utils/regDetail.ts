@@ -1033,6 +1033,7 @@ export const ywzRql1001035 = (orderInfo) => {
       return match[2].replace(/&amp;/g, '&').replace(/&quot;/g, '"');
     };
 
+    uni.showLoading({ title: '加载中' });
     uni.request({
       method: 'POST',
       url: 'https://gynecology.jshtcm.com.cn/agent/api/direct/welcome/10',
@@ -1047,9 +1048,7 @@ export const ywzRql1001035 = (orderInfo) => {
       },
 
       success({ data }) {
-        const html = typeof data === 'string' ? data : String(data);
-        const href = extractHrefFromAnchorHtml(html);
-
+        const href = extractHrefFromAnchorHtml((data as string) || '');
 
         if (href) {
           useTBanner({
@@ -1060,7 +1059,10 @@ export const ywzRql1001035 = (orderInfo) => {
         }
 
         gStores.messageStore.showMessage('未匹配到对应链接', 2000);
-        console.error('未匹配到对应链接');
+        console.error('未匹配到对应链接', data);
+      },
+      complete() {
+        uni.hideLoading();
       },
     });
     throw new Error('青玲医圣-专门预问诊');
