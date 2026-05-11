@@ -88,7 +88,13 @@
           <text class="name">医保报销</text>
           <text class="money">{{ hosInfoResObj.insuranceFee }}元</text>
         </view>
-        <view class="card-detail-item" v-if="hosInfoResObj.defrayFee">
+        <view
+          class="card-detail-item"
+          v-if="
+            !['1001094'].includes(gStores.globalStore.sysCode) &&
+            hosInfoResObj.defrayFee
+          "
+        >
           <text class="name">个人自付</text>
           <text class="money">{{ hosInfoResObj.defrayFee }}元</text>
         </view>
@@ -96,7 +102,10 @@
           <text class="name">独立结算</text>
           <text class="money">{{ hosInfoResObj.singleSelfPay }}元</text>
         </view>
-        <view class="card-detail-item">
+        <view
+          v-if="!['1001094'].includes(gStores.globalStore.sysCode)"
+          class="card-detail-item"
+        >
           <text class="name">账户余额</text>
           <text class="money">{{ hosInfoResObj.accountBalance }}元</text>
         </view>
