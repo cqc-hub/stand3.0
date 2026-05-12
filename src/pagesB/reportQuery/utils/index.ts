@@ -319,19 +319,22 @@ export const addWatermark = (text) => {
   var ctx = uni.createCanvasContext('watermarkCanvas');
   //设置文字的旋转角度，角度为45°；
   ctx.rotate((-45 * Math.PI) / 180);
+  ctx.setGlobalAlpha(0.2);
+  const fc = 'rgb(169, 169, 169)';
+
   //对斜对角线以左部分进行文字的填充
   for (let j = 1; j < 30; j++) {
     //用for循环达到重复输出文字的效果，这个for循环代表纵向循环
     ctx.beginPath();
     ctx.setFontSize(16);
-    ctx.setFillStyle('rgba(169,169,169,.2)');
+    ctx.setFillStyle(fc);
     //文本 x坐标位置  y坐标位置 需要绘制的最大宽度
     ctx.fillText(text, 0, 150 * j);
     for (let i = 1; i < 20; i++) {
       //这个for循环代表横向循环，
       ctx.beginPath();
       ctx.setFontSize(16);
-      ctx.setFillStyle('rgba(169,169,169,.2)');
+      ctx.setFillStyle(fc);
       //文本 x坐标位置  y坐标位置 需要绘制的最大宽度
       ctx.fillText(text, -200 * i, 150 * j);
       // ctx.fillText('    手机号:' + waterPhone, 350 * i, 150 * j + 20);
@@ -344,13 +347,13 @@ export const addWatermark = (text) => {
   for (let j = 0; j < 20; j++) {
     ctx.beginPath();
     ctx.setFontSize(16);
-    ctx.setFillStyle('rgba(169,169,169,.2)');
+    ctx.setFillStyle(fc);
     // 文本 x坐标位置  y坐标位置 需要绘制的最大宽度
     ctx.fillText(text, 80, -100 * j);
     for (let i = 1; i < 20; i++) {
       ctx.beginPath();
       ctx.setFontSize(16);
-      ctx.setFillStyle('rgba(169,169,169,.2)');
+      ctx.setFillStyle(fc);
       //文本 x坐标位置  y坐标位置 需要绘制的最大宽度
       ctx.fillText(text, 80 * i, -100 * j);
     }
