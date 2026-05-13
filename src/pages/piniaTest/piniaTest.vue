@@ -79,6 +79,7 @@
       token: 'token',
     },
     isLocal: '1',
+    _type: 'useTBanner',
   } as TBannerConfig;
 
   // 病历查询
@@ -481,6 +482,16 @@
     },
   } as TBannerConfig;
 
+  const b = {
+    type: 'otherProgram',
+    path: 'pages/tabs/home/index',
+    appId: 'wxe500b27a23f679e1',
+    _type: 'useTBanner',
+    addition: {
+      patientId: 'newKeyName',
+    },
+  } as TBannerConfig;
+
   const 湖三检查预约 = {
     type: 'h5',
     isSelfH5: '1',
@@ -773,11 +784,7 @@
   const init = async () => {
     // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
-    useTBanner({
-      type: 'otherProgram',
-      appId: 'wx96a1fa11ee3c15c1',
-      path: '/pages/home-tab/surgery-process/index',
-    });
+    useTBanner(queryNumber);
     // useTBanner({
     //   type: 'h5',
     //   isSelfH5: '1',
