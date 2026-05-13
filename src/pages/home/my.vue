@@ -258,7 +258,7 @@
       const { myEnvir } = opt;
 
       if (
-        (myEnvir && myEnvir === 'hosnet') ||
+        myEnvir === 'hosnet' ||
         myEnvir === 'thirdmini'
         // myEnvir === 'commonH5'
       ) {

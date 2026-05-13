@@ -503,7 +503,6 @@
     console.warn('跳转参数', options);
     const para = getparams(options);
     const path = getSrc(para, options);
-
     src.value = path;
     isShow.value = true;
 

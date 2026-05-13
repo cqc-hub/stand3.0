@@ -773,7 +773,11 @@
   const init = async () => {
     // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
-    useTBanner(eletronicInvoice);
+    useTBanner({
+      type: 'otherProgram',
+      appId: 'wx96a1fa11ee3c15c1',
+      path: '/pages/home-tab/surgery-process/index',
+    });
     // useTBanner({
     //   type: 'h5',
     //   isSelfH5: '1',

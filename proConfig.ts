@@ -890,7 +890,7 @@ export const miniProgramConfig: {
             cardType: '01',
           },
           medicalFiling: '1',
-          // isFamilyPayment: '1',
+          isFamilyPayment: '1',
         },
       },
     },

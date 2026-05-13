@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { encryptDes } from '@/common';
   import { apiAsync, GStores, wait } from '@/utils';
   import { onLoad } from '@dcloudio/uni-app';
   import { onMounted, ref } from 'vue';
@@ -114,6 +115,14 @@
   onLoad(async () => {
     formData.value.idCard = '332039293';
     formData.value.otherData = 'oopoposss';
+    console.log('233');
+
+    const a = encryptDes(
+      JSON.stringify({ deptId: 'A010224', hosId: '12930' }),
+      'phsDesKe'
+    );
+
+    console.log(a);
   });
   onMounted(() => {
     gform.value.setList([
