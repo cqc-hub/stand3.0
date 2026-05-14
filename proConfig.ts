@@ -195,7 +195,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '2021003164621092',
     name: '安康市中医医院',
     isSearchInHos: false,
-
+    h5AppidDisabledInTest: true,
     isOpenOcr: false,
     sConfig: {
       homeNavTitleLogo:
@@ -811,7 +811,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '2021005178602372',
     name: '温州市人民医院',
     isSearchInHos: true,
-     h5AppidDisabledInTest: true,
+    h5AppidDisabledInTest: true,
     isOpenOcr: false,
     sConfig: {
       homeNavTitleLogo:

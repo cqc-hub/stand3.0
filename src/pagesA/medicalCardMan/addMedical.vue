@@ -968,7 +968,13 @@
     ];
     if (!pageProps.value.verifyCode && pageProps.value.verifyType !== '1&bk') {
       // 插入验证码(框)
-      if (isSmsVerify === '1' && pageProps.value.pageType !== 'perfectReal') {
+      if (
+        isSmsVerify === '1' &&
+        !(
+          pageProps.value.pageType === 'perfectReal' &&
+          formData.value[formKey.patientPhone]
+        )
+      ) {
         let isFilterSmsVerify = false;
 
         // #ifdef MP-ALIPAY
@@ -1161,7 +1167,10 @@
         // #endif
 
         // #ifndef H5
-        if (key === formKey.patientPhone) {
+        if (
+          formData.value[formKey.patientPhone] &&
+          key === formKey.patientPhone
+        ) {
           o.disabled = true;
         }
         // #endif
