@@ -811,6 +811,7 @@ export const miniProgramConfig: {
     isvAlipayAppid: '2021005178602372',
     name: '温州市人民医院',
     isSearchInHos: true,
+     h5AppidDisabledInTest: true,
     isOpenOcr: false,
     sConfig: {
       homeNavTitleLogo:

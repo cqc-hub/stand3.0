@@ -54,11 +54,11 @@
                     :src="globalGl.BASE_IMG + 'CPC-icon2.png'"
                   ></image>
                   <view
-                    class="zizhi bg-green pt4 pb8 g-tag flex-normal flex-row rounded"
+                    class="zizhi text-no-wrap bg-green pt4 pb8 g-tag flex-normal flex-row rounded"
                     v-if="docDetail.certificationNo"
                     @click="ziZhipopup.show"
                   >
-                    <text class="iconfont color-green mt4 f28">&#xe6c7;</text>
+                    <text class="iconfont color-green mt2 f28">&#xe6c7;</text>
                     <text class="f24 color-green">医生资质</text>
                     <text class="iconfont color-green f24">&#xe66b;</text>
                   </view>
@@ -1329,9 +1329,12 @@
         border-radius: 12rpx;
         position: relative;
         top: 70rpx;
+        min-width: 142rpx;
       }
 
       .header-btn {
+        position: relative;
+        left:10rpx;
         margin-top: 20rpx;
         button {
           &:not(:last-child) {
