@@ -776,15 +776,28 @@
     _type: 'useTBanner',
   } as TBannerConfig;
 
+  const 文件下载1001094 = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesB/custom/file1001094',
+    addition: {
+      patientId: '_patientId',
+    },
+    text: '',
+    _type: 'useTBanner',
+  } as TBannerConfig;
+
+
+
   onMounted(() => {
     setTimeout(() => {
       init();
     }, 1000);
   });
   const init = async () => {
-    // useTBanner(肿瘤浙里护理护士页面);
+    useTBanner(文件下载1001094);
     // useTBanner(用药查询1001093);
-    useTBanner(queryNumber);
+    // useTBanner(queryNumber);
     // useTBanner({
     //   type: 'h5',
     //   isSelfH5: '1',

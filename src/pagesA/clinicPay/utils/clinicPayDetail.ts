@@ -872,6 +872,7 @@ export const usePayPage = () => {
   if (gStores.globalStore.ev === 'wx') {
     const {
       sConfig: { medicalMHelp },
+      // @ts-ignore
       systemConfig: { alipayAppid },
     } = globalGl;
     if (medicalMHelp) {
@@ -2948,7 +2949,7 @@ export const reDealMedicalFiling = async () => {
       upIdCard: '',
       upName: '',
       disabledKeys: 'idCard,patientName,idType',
-      healthCardUser: '2'
+      healthCardUser: '2',
     };
     if (!args.patientName && !result.familyPayAuthNo) {
       args.patientName = result.userName;
