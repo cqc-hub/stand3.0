@@ -820,7 +820,13 @@
 
     const cardNumber = item.cardNumber || pat.cardNumber;
     const patientName = item.patientName || pat.patientName;
-    const serialNo = selList.value.map((o) => o.serialNo).join(',');
+    let serialNo = selList.value.map((o) => o.serialNo).join(',');
+    if (gStores.globalStore.sysCode === '1001069') {
+      serialNo = selList.value
+        .filter((o) => !!o.serialNo)
+        .map((o) => o.serialNo)
+        .join(',');
+    }
     const costList = selList.value;
 
     uni.showLoading({
