@@ -230,6 +230,13 @@
         >
           立即支付
         </button>
+        <button
+          v-if="info.pdfUrl"
+          @click="downloadPdfs"
+          class="btn g-border btn-primary btn-plain"
+        >
+          立即下载文件
+        </button>
 
         <button
           v-if="['20', '21', '16', '17'].includes(info.orderStatus)"
@@ -291,6 +298,14 @@
     >
       <g-flag typeFg="32" isShowFgTip />
     </g-pay>
+    <g-pay
+      :list="refPayList2"
+      @pay-click="selVerifyWay"
+      ref="refPay2"
+      title="请选择需要查看与下载的文件"
+    >
+    <text class="f28 p24">点击进入预览文件，如需将文件下载到本地，请点击右上角的“...”进行保存</text>
+    </g-pay>
     <g-message />
     <g-back-home v-if="!isShowFooter" />
   </view>
@@ -314,10 +329,11 @@
     type CaseCopeItemDetail,
     isWaitForPay,
   } from './utils/recordApply';
-  import { joinQuery } from '@/common';
+  import { joinQuery, joinQueryForUrl } from '@/common';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
+  import { useCacheStore } from '@/stores';
 
   import orderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import ExpressStep from './components/ExpressStep.vue';
@@ -330,6 +346,14 @@
   }>();
   const gStores = new GStores();
   const fgTitle1209 = ref('');
+  const refPay2 = ref<any>('');
+  const refPayList2 = ref([
+    {
+      label: '第一份文件',
+      key: '',
+    },
+  ]);
+  const cacheStore = useCacheStore();
   const pickupTypeOpt = computed(() => pageConfig.value.pickupTypeOpt || []);
 
   const pageConfig = ref<ISystemConfig['medRecord'][number]>({} as any);
@@ -352,6 +376,7 @@
 
   const isShowFooter = computed(() => {
     return (
+      info.value.pdfUrl ||
       isWaitForPay(info.value) ||
       ['20', '21', '16', '17', '11', '15'].includes(info.value.orderStatus)
     );
@@ -515,6 +540,28 @@
     });
   };
 
+  const selVerifyWay = ({item}) => {
+    console.log(9999,item);
+    
+    cacheStore.changeCacheData(item.key);
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
+        name: item.label,
+        type: 'cache',
+      }),
+    });
+  };
+
+  const downloadPdfs = () => {
+    refPayList2.value =
+      info.value?.pdfUrl?.split(',')?.map((item, index) => {
+        return {
+          label: `第${index + 1}份文件`,
+          key: item,
+        };
+      }) || [];
+    refPay2.value.show();
+  };
   const applyCancel = async () => {
     const {
       title = '确定取消申请?',
@@ -597,7 +644,7 @@
   };
 
   const payAfter = async () => {
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     await wait(6000);
     uni.hideLoading();
     init();

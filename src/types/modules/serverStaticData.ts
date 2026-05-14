@@ -415,7 +415,7 @@ export interface ISystemConfig_ {
   // 病案 MEDICAL_CASE_COPY
   medRecord: {
     /**
-     * 增取件方式 1快递邮寄，2自取，3邮箱，4PDF电子版（仅提供下载链接） 
+     * 增取件方式 1快递邮寄，2自取，3邮箱，4PDF电子版 
      */
     pickupTypeOpt: IOptions<'1' | '2' | '3' | '4'>[];
 

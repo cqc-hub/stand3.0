@@ -231,6 +231,7 @@ export type CaseCopeItemDetail = Flatten<
     email: string;
     pickupType: string;
     imageJson?: IMedicalPhotoMode['children'];
+    pdfUrl?:string
   }
 >;
 
