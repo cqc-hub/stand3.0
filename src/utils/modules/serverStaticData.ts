@@ -232,12 +232,12 @@ export const useTBanner = async (
     }
 
     for (const key in addition) {
-      if (!['token', 'patientId', 'herenId', 'cardNumber'].includes(key)) {
-        extraData[addition[key]] =
-          additionData[key] === undefined
-            ? extraData[addition[key]]
-            : additionData[key];
-      }
+      // if (!['token', 'patientId', 'herenId', 'cardNumber'].includes(key)) {
+      extraData[addition[key]] =
+        additionData[key] === undefined
+          ? extraData[addition[key]]
+          : additionData[key];
+      // }
     }
   }
 
@@ -271,6 +271,7 @@ export const useTBanner = async (
       ) {
         baseUrl = h5UrlLocal;
       }
+      // baseUrl = h5UrlLocal;
 
       fullUrl = baseUrl + fullUrl;
       fullUrl = addHosIdForSelfH5Path(fullUrl);

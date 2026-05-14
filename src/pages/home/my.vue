@@ -191,7 +191,6 @@
       });
     }
     await wait(120);
-    console.log('为i照顾徐悲鸿克');
     console.log(fullUrl);
     await beforeEach({
       url: fullUrl,
@@ -259,7 +258,7 @@
       const { myEnvir } = opt;
 
       if (
-        (myEnvir && myEnvir === 'hosnet') ||
+        myEnvir === 'hosnet' ||
         myEnvir === 'thirdmini'
         // myEnvir === 'commonH5'
       ) {

@@ -38,10 +38,10 @@
       />
     </view>
     <!--  #endif -->
-    <view class="watermarkView">
-      <canvas canvas-id="watermarkCanvas"></canvas>
-    </view>
     <view class="container">
+      <view class="watermarkView w-full h-full">
+        <canvas canvas-id="watermarkCanvas" class="w-full h-full"></canvas>
+      </view>
       <view class="container-block mt24">
         <view class="container-block-top" @click="more">
           <view
@@ -858,8 +858,6 @@
       top: 0rpx;
       width: 100%;
       canvas {
-        width: 100%;
-        height: 100vh;
         bottom: 96rpx;
       }
     }

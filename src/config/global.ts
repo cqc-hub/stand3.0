@@ -42,7 +42,7 @@ const netUrl =
     ? `https://interhos.eheren.com/static/nhs/`
     : `https://testwechatnethos.eheren.com/static/nhs/`;
 
-const h5Url =
+let h5Url =
   env === 'prod'
     ? // ? 'https://h5.eheren.com/v4/#/'
       'https://h5.eheren.com/v3/#/'
@@ -54,6 +54,7 @@ const getK = (k: string) => {
 };
 
 const globalGl = {
+  isPersonal_1001035: true,
   SYS_CODE,
   BASE_IMG,
   VERSION,
@@ -76,6 +77,14 @@ const globalGl = {
   q: getK('q'),
   r: getK('s'),
 };
+
+if (
+  globalGl.isPersonal_1001035 &&
+  globalGl.SYS_CODE === '1001035' &&
+  env === 'prod'
+) {
+  globalGl.h5Url = 'https://h5.eheren.com/v3_test_1001035/#/';
+}
 
 Object.defineProperties(globalGl, {
   systemInfo: {

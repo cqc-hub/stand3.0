@@ -21,6 +21,7 @@ const userStore = defineStore('user', {
       'authPhoneVerify',
       'prevPatientId',
       'dePhone',
+      'enPhone',
     ],
   },
 
@@ -33,6 +34,7 @@ const userStore = defineStore('user', {
       cellPhoneNum: '',
       phoneNum: '', // 加密的手机号(微信才有)
       dePhone: '',
+      enPhone: '',
       patientId: '',
       patList: <IPat[]>[],
       patChoose: <IPat>{},
@@ -74,6 +76,7 @@ const userStore = defineStore('user', {
     },
 
     updatePhoneDecrypt(mobilePhoneEn: string) {
+      this.enPhone = mobilePhoneEn;
       this.dePhone = decryptDes(mobilePhoneEn, 'N1@ae^T:phone');
     },
 

@@ -16,7 +16,7 @@
                 &#xe6a7;
               </view>
               <view @click.stop="isClose = !isClose" class="ml24">
-                <text class="mr12">
+                <view class="mr12 flex items-center">
                   <text class="font-semibold">
                     {{
                       isClose
@@ -27,13 +27,13 @@
 
                   <text
                     :style="{
-                      top: '2px',
+                      top: '-2px',
                     }"
                     class="iconfont icon-resize relative f48"
                   >
                     {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
                   </text>
-                </text>
+                </view>
                 <view v-if="getShowPatId" class="f28">
                   ID
                   {{ getShowPatId }}
@@ -117,9 +117,7 @@
                     </text>
 
                     <text
-                      :style="{
-                        top: '2px',
-                      }"
+                      :style="eyesStyle"
                       class="iconfont icon-resize f48 relative"
                     >
                       {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
@@ -208,6 +206,18 @@
 
   const isHomeStyle1 = computed(() => {
     return globalGl.sConfig.homeStyle === '1';
+  });
+
+  const eyesStyle = computed(() => {
+    const s = {} as any;
+    if (gStores.globalStore.ev === 'wx') {
+      s.top = '2px';
+    }
+    if (gStores.globalStore.ev === 'alipay') {
+      s.top = '-2px';
+    }
+
+    return s;
   });
 
   const chooseAction = () => {

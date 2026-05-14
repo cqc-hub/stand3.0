@@ -76,10 +76,8 @@
           </button>
 
           <button
-            v-if="
-              isCash == '2' && lists.accountBalance !== '0'
-            "
-             @click="confirmForm1('refound')"
+            v-if="isCash == '2' && lists.accountBalance !== '0'"
+            @click="confirmForm1('refound')"
             class="btn btn-primary btn-border btn-plain f-base"
           >
             {{ '申请退款登记' }}
@@ -499,7 +497,11 @@
   const confirmForm1 = (type = '') => {
     isRefound.value = type === 'refound';
 
-    if (lists.value.stopIndicator === '0' && isRefound.value) {
+    if (
+      gStores.globalStore.sysCode !== '1001095' &&
+      lists.value.stopIndicator === '0' &&
+      isRefound.value
+    ) {
       gStores.messageStore.showMessage('账户已停用，请到现场窗口咨询！', 0, {
         useDialog: true,
         dialogOpt: {

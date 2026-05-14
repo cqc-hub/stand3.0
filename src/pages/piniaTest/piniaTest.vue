@@ -79,6 +79,7 @@
       token: 'token',
     },
     isLocal: '1',
+    _type: 'useTBanner',
   } as TBannerConfig;
 
   // 病历查询
@@ -130,6 +131,19 @@
     text: '健康档案',
     extraData: {
       rePath: 'pagesC/healthRecord/healthRecord',
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+  } as TBannerConfig;
+
+  const 手术进度1001093 = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: '手术进度1001093',
+    extraData: {
+      _type: 'ssjd1001093',
     },
     addition: {
       patientId: '_patientId',
@@ -468,6 +482,16 @@
     },
   } as TBannerConfig;
 
+  const b = {
+    type: 'otherProgram',
+    path: 'pages/tabs/home/index',
+    appId: 'wxe500b27a23f679e1',
+    _type: 'useTBanner',
+    addition: {
+      patientId: 'newKeyName',
+    },
+  } as TBannerConfig;
+
   const 湖三检查预约 = {
     type: 'h5',
     isSelfH5: '1',
@@ -760,18 +784,34 @@
   const init = async () => {
     // useTBanner(肿瘤浙里护理护士页面);
     // useTBanner(用药查询1001093);
-    // useTBanner(肿瘤住院管家);
-    useTBanner({
-      type: 'h5',
-      isSelfH5: '1',
-      path: 'pagesC/question/question1001093',
-      text: '住院退费申请',
-      isLocal: '1',
-      _type: 'useTBanner',
-    });
+    useTBanner(queryNumber);
+    // useTBanner({
+    //   type: 'h5',
+    //   isSelfH5: '1',
+    //   path: 'pagesC/question/question1001093',
+    //   text: '住院退费申请',
+    //   isLocal: '1',
+    //   _type: 'useTBanner',
+    // });
+    // useTBanner(手术进度1001093);
     // patientUtils.faceVerifyAndPData({
     //   name: '陈钦川',
     //   idCardNumber: '330326199908286713',
+    // });
+
+    // useTBanner({
+    //   type: 'otherProgram',
+    //   appId: 'wxacb96ee66c3dee84',
+    //   path:
+    //     '/pages/home/my?_type=useTBanner&type=backProgram&addition=' +
+    //     encodeURIComponent(
+    //       JSON.stringify({
+    //         token: 'token',
+    //         herenId: 'herenId',
+    //         patientId: 'patientId',
+    //       })
+    //     ) +
+    //     '&immed=1',
     // });
   };
 
