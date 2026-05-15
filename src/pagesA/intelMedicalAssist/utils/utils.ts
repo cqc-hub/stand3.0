@@ -970,7 +970,7 @@ export const clearChatId = async (id: string) => {
 
   msgState.value.lastChatId = '';
   msgState.value.requestId = '';
-  msgState.value.zntPath = '';
+  msgState.value.zntPath = undefined;
   chunkStatus.value?.isTyping && stopChunkRequest();
 };
 
