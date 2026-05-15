@@ -91,7 +91,7 @@
         <view
           class="card-detail-item"
           v-if="
-            !['1001094'].includes(gStores.globalStore.sysCode) &&
+            !['1001048', '1001094'].includes(gStores.globalStore.sysCode) &&
             hosInfoResObj.defrayFee
           "
         >
@@ -103,7 +103,7 @@
           <text class="money">{{ hosInfoResObj.singleSelfPay }}元</text>
         </view>
         <view
-          v-if="!['1001094'].includes(gStores.globalStore.sysCode)"
+          v-if="!['1001048', '1001094'].includes(gStores.globalStore.sysCode)"
           class="card-detail-item"
         >
           <text class="name">账户余额</text>
