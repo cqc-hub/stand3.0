@@ -44,6 +44,7 @@ export const pageConfig = ref(
 export const pageOrderConfig = ref({} as ISystemConfig['order']);
 export const msgList = ref<Array<MsgListType>>([]);
 export const msgState = ref<MsgStatusType>({
+  zntPath: '',
   msgText: '',
   msgLoad: false,
   lastChatId: '',
@@ -522,9 +523,12 @@ export const sendMsg = async (
   if (msgList.value.length == 0) {
     styleConfig.value.showHeader = false;
   }
-
   // #endif
   const gStores = new GStores();
+
+  if (req.zntPath) {
+    msgState.value.zntPath = req.zntPath;
+  }
 
   if (msgState.value.msgLoad || chunkStatus.value?.isTyping) {
     gStores.messageStore.showMessage('正在为你解答，请稍等~', 3000);
@@ -966,6 +970,7 @@ export const clearChatId = async (id: string) => {
 
   msgState.value.lastChatId = '';
   msgState.value.requestId = '';
+  msgState.value.zntPath = '';
   chunkStatus.value?.isTyping && stopChunkRequest();
 };
 
@@ -1416,6 +1421,7 @@ const typeInAsk = async (
         source: gStores.globalStore.browser.source == 19 ? 1 : 2,
         chatId: msgState.value.lastChatId,
         requestId: msgState.value.requestId,
+        zntPath: msgState.value.zntPath,
         cardNumber: gStores.userStore.patChoose.cardNumber,
         type: answertype,
         herenId:
@@ -1452,9 +1458,6 @@ const typeInAsk = async (
   const typeInIndex = msgList.value.length;
   requestTask = wx.request({
     ...settings,
-    success: (response) => {
-      console.log('调用成功response', response);
-    },
     fail: (err) => {
       console.log('errror', err);
       msgState.value.msgLoad = false;
@@ -1645,6 +1648,8 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     id && (msgState.value.lastChatId = id);
     questionId && (msgState.value.requestId = questionId);
     if (data) {
+      console.log('handleOneChunk 获取到data -------------');
+      console.log(data);
       await taskQueue.addTask(
         dealShowType1withStream,
         [
@@ -1663,7 +1668,8 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
   } else {
     const jsonMatch = chunk.replaceAll('\r\n', '').match(/data:(\{.*\})/);
     const jsonData = JSON.parse(jsonMatch?.length ? jsonMatch[1] : '{}');
-    console.log('提取的 JSON 数据:', jsonData);
+    console.log('handleOneChunk提取的 JSON 数据:--------------------');
+    console.log(jsonData);
     const { showType, list, requestId, chatId, tips } = jsonData;
     if (JSON.stringify({}) === '[{}]') {
       msgList.value.push({
