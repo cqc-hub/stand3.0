@@ -578,6 +578,7 @@ export const sendMsg = async (
       type: answertype || 0,
       chatId: msgState.value.lastChatId,
       requestId: msgState.value.requestId,
+      cardNumber: gStores.userStore.patChoose.cardNumber
     })
     .finally(() => {
       msgState.value.msgLoad = false;
