@@ -676,6 +676,7 @@ const switchHandleResult = async (opt: {
     }
   }
 
+  await wait(120);
   scrollToNewMsg();
 };
 
