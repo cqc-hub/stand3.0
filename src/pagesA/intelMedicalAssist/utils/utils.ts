@@ -578,7 +578,7 @@ export const sendMsg = async (
       type: answertype || 0,
       chatId: msgState.value.lastChatId,
       requestId: msgState.value.requestId,
-      cardNumber: gStores.userStore.patChoose.cardNumber
+      cardNumber: gStores.userStore.patChoose.cardNumber,
     })
     .finally(() => {
       msgState.value.msgLoad = false;
@@ -1416,6 +1416,7 @@ const typeInAsk = async (
         source: gStores.globalStore.browser.source == 19 ? 1 : 2,
         chatId: msgState.value.lastChatId,
         requestId: msgState.value.requestId,
+        cardNumber: gStores.userStore.patChoose.cardNumber,
         type: answertype,
         herenId:
           gStores.globalStore.herenId ||
