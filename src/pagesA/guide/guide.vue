@@ -745,6 +745,15 @@
     patChange();
   };
   const goRegDetail = (item: IRegistrationCardItem) => {
+    const { sysCode } = gStores.globalStore;
+
+    const _disabled: string[] = [];
+
+    // 1001094 需要支持退号
+    if (!['1001094'].includes(sysCode)) {
+      _disabled.push('refound');
+    }
+
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         ...item,
@@ -753,7 +762,7 @@
         preWz: item.orderStatus === '10' && '1',
         typeId: '1',
         _type: 'znpz',
-        _disabled: ['refound'],
+        _disabled,
       }),
     });
   };
@@ -920,6 +929,11 @@
 
   const goDocDetail = (item) => {
     const { hosId, hosDocId } = item;
+
+    if (!hosDocId) {
+      gStores.messageStore.showMessage('未获取到 hosDocId', 1500);
+      return;
+    }
 
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
