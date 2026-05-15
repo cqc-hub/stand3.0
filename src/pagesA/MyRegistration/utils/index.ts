@@ -101,6 +101,8 @@ export type TSchInfo = {
   categor: string;
   /** 医生挂号验证方式 1:验证码 2:实名认证 */
   regVerificationMode?: '1' | '2';
+  /** 医生挂号验证方式 1 实名认证  0 不需要实名 */
+  realNameRegisterRequired?: '0' | '1';
   categorName: string;
   specialClinicDept?: string;
   // 门诊类型：1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
@@ -641,6 +643,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       regVerificationMode,
       visitingArea,
       specialClinicDept,
+      realNameRegisterRequired
     } = selectSchInfo;
     const { disNo, numId, timeDesc, enData } = item;
     const { promptMessage, thRegisterId, hosId: _pHosId } = props.value;
@@ -671,6 +674,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       docTitleName,
       thRegisterId,
       regVerificationMode,
+      realNameRegisterRequired,
       visitingArea,
       specialClinicDept,
     };

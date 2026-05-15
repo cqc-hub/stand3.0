@@ -1835,10 +1835,14 @@ export const regConfirm = async (pageArg) => {
     docTitleName,
     thRegisterId,
     regVerificationMode,
+    realNameRegisterRequired,
   } = pageArg;
   let { patientId, realNameAuth } = gStores.userStore.patChoose;
   const { source } = gStores.globalStore.browser;
-  if (regVerificationMode === '2' && realNameAuth === '0') {
+  if (
+    (regVerificationMode === '2' || realNameRegisterRequired === '1') &&
+    realNameAuth === '0'
+  ) {
     await handlerConfirmPatReal();
   }
   // #ifdef MP-WEIXIN
