@@ -569,6 +569,12 @@
       options.value.code = clickPat.value._showId;
     }
 
+    tabs.value.map((o) => {
+      if (o.value === '1') {
+        o.label = showHealthCode.value ? '电子健康卡' : '电子就诊卡';
+      }
+    });
+
     barCodeOpt.value.code = options.value.code;
 
     if (pageStyle.value === '2') {
@@ -586,12 +592,6 @@
 
   const init = async () => {
     const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
-
-    tabs.value.map((o) => {
-      if (o.value === '1') {
-        o.label = isHasHealthCode.value ? '电子健康卡' : '电子就诊卡';
-      }
-    });
 
     showHealthCode.value = isHasHealthCode.value;
 
