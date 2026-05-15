@@ -931,8 +931,7 @@
     const { hosId, hosDocId } = item;
 
     if (!hosDocId) {
-      gStores.messageStore.showMessage('未获取到 hosDocId', 1500);
-      return;
+      throw new Error('未获取到 hosDocId');
     }
 
     uni.navigateTo({
