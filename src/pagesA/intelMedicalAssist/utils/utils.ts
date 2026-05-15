@@ -552,6 +552,9 @@ export const sendMsg = async (
     scrollToNewMsg();
   }
   msgState.value.msgLoad = true;
+  if (hideQuestion === '1') {
+    value = '';
+  }
   // #ifdef  MP-WEIXIN
   if (chunkStatus.value?.isWXStreamApi) {
     typeInAsk(value, answertype || 0, opt);
