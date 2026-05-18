@@ -271,7 +271,6 @@ export const useTBanner = async (
       ) {
         baseUrl = h5UrlLocal;
       }
-      // baseUrl = h5UrlLocal;
 
       fullUrl = baseUrl + fullUrl;
       fullUrl = addHosIdForSelfH5Path(fullUrl);

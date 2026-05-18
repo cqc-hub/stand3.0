@@ -28,6 +28,8 @@ export type MsgListType = {
 };
 
 export type MsgStatusType = {
+  // 智能体需要
+  zntPath?: string;
   msgText?: string;
   msgLoad: boolean;
   lastChatId?: string;

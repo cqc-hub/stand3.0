@@ -62,6 +62,19 @@
               class="bar-img mb32"
             />
             <img :src="qrImg" mode="widthFix" class="qrcode-img pb32" />
+
+            <view
+              v-if="clickPat.healthQrCodeText"
+              class="flex justify-center f28"
+            >
+              <view class="pr12 mr12 g-split-line">
+                {{ showHealthCode ? '健康码' : '就诊码' }}
+              </view>
+
+              <view @click="toggleQrCode" class="color-blue z-1 relative">
+                点击切换
+              </view>
+            </view>
           </view>
 
           <view
@@ -179,7 +192,7 @@
 
             <!-- <w-qrcode :options="qrOptions" /> -->
             <uv-qrcode
-              v-if="qrOptions.code"
+              v-if="!showHealthCode && qrOptions.code"
               :options="qrOptions2"
               :value="qrOptions.code"
               @change="qrComplete"
@@ -452,6 +465,7 @@
     }
 
     showHealthCode.value = key === '1';
+    await init2();
     setStatus();
     uni.showLoading({
       mask: true,
@@ -546,27 +560,22 @@
     barCodeImg.value = img.tempFilePath || '';
   };
 
-  const init = async () => {
-    const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
+  const init2 = async () => {
+    if (isAreaProgram()) {
+      options.value.code = clickPat.value.idCardEncry;
+    } else if (showHealthCode.value) {
+      options.value.code = clickPat.value.healthQrCodeText;
+    } else {
+      options.value.code = clickPat.value._showId;
+    }
 
     tabs.value.map((o) => {
       if (o.value === '1') {
-        o.label = isHasHealthCode.value ? '电子健康卡' : '电子就诊卡';
+        o.label = showHealthCode.value ? '电子健康卡' : '电子就诊卡';
       }
     });
 
-    showHealthCode.value = isHasHealthCode.value;
-
-    changeShowName();
-    setStatus();
-    isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
-      'pagesA/medicalCardMan/electronicMedicalCard'
-    );
-    options.value.code = isAreaProgram()
-      ? clickPat.value.idCardEncry
-      : clickPat.value.healthQrCodeText || clickPat.value._showId;
     barCodeOpt.value.code = options.value.code;
-    isPageRender.value = true;
 
     if (pageStyle.value === '2') {
       uni.showLoading({
@@ -579,6 +588,21 @@
       const { tempFilePath: img } = await refBarCode1.value.GetCodeImg();
       barImg.value = img;
     }
+  };
+
+  const init = async () => {
+    const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
+
+    showHealthCode.value = isHasHealthCode.value;
+
+    changeShowName();
+    setStatus();
+    isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
+      'pagesA/medicalCardMan/electronicMedicalCard'
+    );
+
+    isPageRender.value = true;
+    init2();
   };
 
   onMounted(async () => {
