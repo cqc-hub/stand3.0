@@ -94,7 +94,7 @@
       ['itemAddress', 'site', 'areaName'].includes(col.key)
     ) {
       //温附二
-      if (props.lab.performDeptName || props.lab.deptName) {
+      if (props.lab.billDeptId ) {
         return true;
       }
       return false;

@@ -835,9 +835,9 @@
       gStores.globalStore.sysCode === '1001067' &&
       item.hosId === '13009'
     ) {
-      if (item.deptId) {
+      if (item.billDeptId) {
         item.extend = JSON.stringify({
-          areaId: item.deptId,
+          areaId: item.billDeptId,
         });
         useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
       }

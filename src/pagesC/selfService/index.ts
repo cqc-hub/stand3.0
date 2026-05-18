@@ -11,4 +11,5 @@ export interface INucle {
   tipHide: boolean;
   showTipHideBtn: boolean;
   extend?: string;
+  chiefComplaint?: string;
 }

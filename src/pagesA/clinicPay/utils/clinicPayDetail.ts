@@ -2854,25 +2854,25 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
     Object.entries(medicalPlugin!.orgId).forEach(([k, v]) => {
       orgId = v as any;
     });
-    // const { anotherIdNo, anotherName } =
-    //   await patientUtil.getPluginFamilyDesArgs(patientId);
-    // console.log(
-    //   JSON.stringify({
-    //     // 授权获取的authCode
-    //     authCode,
-    //     // 机构ID
-    //     orgId,
-    //     anotherIdNo,
-    //     anotherName,
-    //   })
-    // );
+    const { anotherIdNo, anotherName } =
+      await patientUtil.getPluginFamilyDesArgs(patientId);
+    console.log(
+      JSON.stringify({
+        // 授权获取的authCode
+        authCode,
+        // 机构ID
+        orgId,
+        anotherIdNo,
+        anotherName,
+      })
+    );
     let token = await authPayPlugin.toArchive({
       // 授权获取的authCode
       authCode,
       // 机构ID
       orgId,
-      // anotherIdNo,
-      // anotherName,
+      anotherIdNo,
+      anotherName,
     });
 
     if (type === 'first') {

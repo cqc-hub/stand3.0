@@ -249,12 +249,12 @@
           <view class="title flex1">{{ item.label }}:</view>
           <view class="field flex2" @click="pickerShow(item)">
             <uni-easyinput
-              v-if="isItemShowPop"
               :placeholder="`请选择${item.label}`"
               :inputBorder="false"
               :clearable="false"
-              :value="item.field1"
+              :value="item.value"
               :placeholderStyle="`font-size: var(--hr-font-size-base)`"
+              :style="`font-size: var(--hr-font-size-base)`"
               class="form-input"
             />
           </view>
@@ -373,11 +373,30 @@
   let resolve: (...any) => any = () => {};
 
   const confirmAsync = () => {
+    let flag = false;
+    dialogQs.value.forEach((e) => {
+      if (!e.value) {
+        flag = true;
+      }
+    });
+    if (flag) {
+      gStores.messageStore.showMessage('请先完成填写预问诊', 3000);
+      return;
+    }
     resolve();
   };
 
   const pickerShow = (item) => {
     pickerData.value = item;
+    dialogQs.value.forEach((e) => {
+      if (e.field === item.field) {
+        if (e.field === 'symptomTime') {
+          !e.value && (e.value = '1日');
+        } else {
+          !e.value && (e.value = e.columns.map((e2) => e2[0]).toString());
+        }
+      }
+    });
     picker.value.open();
   };
 
@@ -387,7 +406,17 @@
       picker.value.setColumnValues(1, pickerData.value.columnData[index]);
     }
   };
-  const pickerConfirm = (item) => {};
+  const pickerConfirm = (item) => {
+    dialogQs.value.forEach((e) => {
+      if (e.field === pickerData.value.field) {
+        if (e.field === 'symptomTime') {
+          e.value = (item.value[1] || '1') + item.value[0][0] + '';
+        } else {
+          e.value = item.value.toString();
+        }
+      }
+    });
+  };
 
   const judgeCodeShow = async () => {
     h5QrCodeData.value = {
@@ -552,6 +581,8 @@
 
       return;
     }
+    const listLen = selList.value.length;
+
     if (extend) {
       try {
         let extend = JSON.parse(item?.extend || '');
@@ -576,13 +607,21 @@
             });
           });
         }
-        if (extend?.showPop === '1' && extend?.question?.length) {
-          console.log(99999999, extend);
+        const idx = selList.value.findIndex(
+          (o) => o.itemCode === item.itemCode
+        );
+        if (
+          extend?.showPop === '1' &&
+          extend?.question?.length &&
+          (!listLen || idx === -1)
+        ) {
           dialogQs.value = extend.question;
           await new Promise((rl) => {
             isItemShowPop.value = true;
             resolve = rl;
           });
+          item.chiefComplaint = dialogQs.value.map((i) => i.value).toString();
+          isItemShowPop.value = false;
           dialogQs.value = [];
         }
       } catch (e) {
@@ -590,7 +629,6 @@
       }
     }
 
-    const listLen = selList.value.length;
     if (pageConfig.value.multi === '1' && listLen) {
       const { billingDoc } = item;
       const { billingDoc: oldBillingDoc } = selList.value[0];
@@ -932,6 +970,7 @@
       justify-content: flex-start;
       .title {
         border-bottom: 3rpx solid var(--hr-neutral-color-11);
+        font-size: var(--hr-font-size-base) !important;
       }
       .field {
         border-bottom: 3rpx solid var(--hr-neutral-color-11);
@@ -940,5 +979,8 @@
         }
       }
     }
+  }
+  ::v-deep .uni-easyinput__content-input {
+    font-size: var(--hr-font-size-base) !important;
   }
 </style>
