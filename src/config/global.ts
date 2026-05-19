@@ -4,7 +4,7 @@ export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静�
 
 export let SYS_CODE = systemConfig.sysCode;
 
-let env: 'dev' | 'test' | 'prod' = 'test'; // dev 开发； test 测试； prod 生产
+let env: 'dev' | 'test' | 'prod' = 'prod'; // dev 开发； test 测试； prod 生产
 
 const WEB_OUT_LOGIN_TIME = 0; // web 环境下自动退出登录时间 ms
 const wxAppid = manifest['mp-weixin'].appid;
@@ -83,6 +83,7 @@ if (
   globalGl.SYS_CODE === '1001035' &&
   env === 'prod'
 ) {
+  globalGl.netUrl = 'https://testwechatnethos.eheren.com/static/nhs/';
   globalGl.h5Url = 'https://h5.eheren.com/v3_test_1001035/#/';
 }
 

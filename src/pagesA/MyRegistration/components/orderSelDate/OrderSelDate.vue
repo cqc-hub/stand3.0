@@ -126,8 +126,6 @@
   };
 
   const change = (item: IChooseDays) => {
-    console.log(props.enableDays);
-    console.log(item);
     if (props.value === item.fullDay) {
       return;
     }

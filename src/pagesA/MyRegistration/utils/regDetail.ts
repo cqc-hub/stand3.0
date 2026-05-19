@@ -1013,10 +1013,10 @@ export const ywzRql1001035 = (orderInfo) => {
   const gStores = new GStores();
   const { hosDeptId, hosDocId, hosRegVisitNo, deptName } = orderInfo;
 
-  // 省中 青玲医圣-专门预问诊
+  // 省中 青玲医圣-专门预问诊 （宫颈病专病门诊进来都走这个）
   if (
     gStores.globalStore.sysCode === '1001035' &&
-    hosDocId === '10306' &&
+    // hosDocId === '10306' &&
     hosDeptId === '1223'
   ) {
     const { cardNumber, patientAge, patientSex } = gStores.userStore.patChoose;
@@ -1061,7 +1061,8 @@ export const ywzRql1001035 = (orderInfo) => {
         gStores.messageStore.showMessage('未匹配到对应链接', 2000);
         console.error('未匹配到对应链接', data);
       },
-      complete() {
+      complete(e) {
+        console.log(e)
         uni.hideLoading();
       },
     });

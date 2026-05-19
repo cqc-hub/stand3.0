@@ -135,6 +135,7 @@
     addition: {
       patientId: '_patientId',
     },
+    _type: 'useTBanner',
   } as TBannerConfig;
 
   const 手术进度1001093 = {
@@ -148,6 +149,7 @@
     addition: {
       patientId: '_patientId',
     },
+    _type: 'useTBanner',
   } as TBannerConfig;
 
   const tiyy1001035 = {
@@ -787,7 +789,16 @@
     _type: 'useTBanner',
   } as TBannerConfig;
 
-
+  const 满意度1001093 = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat?_type=myd1001093',
+    addition: {
+      patientId: '_patientId',
+    },
+    text: '',
+    _type: 'useTBanner',
+  } as TBannerConfig;
 
   onMounted(() => {
     setTimeout(() => {
@@ -795,7 +806,7 @@
     }, 1000);
   });
   const init = async () => {
-    useTBanner(文件下载1001094);
+    useTBanner(满意度1001093);
     // useTBanner(用药查询1001093);
     // useTBanner(queryNumber);
     // useTBanner({

@@ -972,6 +972,7 @@ export const miniProgramConfig: {
     alipayAppid: '2021003104628364',
     h5Appid: 'wx425067e6f6726598',
     isvAlipayAppid: '',
+    h5AppidDisabledInTest: true,
     name: '浙江省肿瘤医院',
 
     isOpenOcr: false,
