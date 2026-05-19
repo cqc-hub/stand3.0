@@ -5,7 +5,7 @@
 export const sysConfigEnv = <const>{
   'person.isSmsVerify': '0',
   // 'person.isCanAddPatCardNo': '1',
-  // 'order.isConfirmOrderWithPay': '1',
+  'order.isShowFilterOrderInHoliday': '1',
   'person.isChangeHosPhoneWay': ['face', 'remoteFace'],
   'pay.medical': {
     isMedicalOrder: '1',

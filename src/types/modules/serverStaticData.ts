@@ -80,6 +80,8 @@ export interface ISystemConfig_ {
     calendarShowOrderStatus?: '1';
     // 过滤无号医生按钮
     isShowFilterOrderSourceBtn?: '1';
+    // 过滤仅展示 节假日号源
+    isShowFilterOrderInHoliday?: '1';
     /** 按日期, 分组名 categorName 隐藏 */
     isHideOrderCategorName?: '1';
     // 选择号源时候显示几列
@@ -415,7 +417,7 @@ export interface ISystemConfig_ {
   // 病案 MEDICAL_CASE_COPY
   medRecord: {
     /**
-     * 增取件方式 1快递邮寄，2自取，3邮箱，4PDF电子版 
+     * 增取件方式 1快递邮寄，2自取，3邮箱，4PDF电子版
      */
     pickupTypeOpt: IOptions<'1' | '2' | '3' | '4'>[];
 
@@ -750,7 +752,7 @@ export interface ISystemConfig_ {
 
     //入口选择页pagesD/common/chooseTabJump
     tabJumpConfig?: {
-      imageOptions?:  {
+      imageOptions?: {
         topImages?: TButtonConfig & {
           bgSrc?: string;
         };
@@ -874,6 +876,7 @@ type TBannerConfigOtherProgram = {
   type: 'otherProgram';
   appId: string;
   envVersion?: 'release' | 'develop' | 'trial';
+  // 继续传入到对应api
   deepProps?: BaseObject;
 } & TBannerConfigBase;
 

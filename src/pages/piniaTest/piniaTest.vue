@@ -806,7 +806,8 @@
     }, 1000);
   });
   const init = async () => {
-    useTBanner(满意度1001093);
+    // useTBanner(满意度1001093);
+    useTBanner(queryCase);
     // useTBanner(用药查询1001093);
     // useTBanner(queryNumber);
     // useTBanner({

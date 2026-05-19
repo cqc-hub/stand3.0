@@ -1583,7 +1583,7 @@ export default {
       }[];
     }>((complete) => {
       uni.request({
-        url: globalGl.BASE_IMG + 'country.json',
+        url: globalGl.BASE_IMG + 'holidays.json',
         complete: complete as any,
       });
     });
