@@ -371,6 +371,7 @@
   });
 
   let resolve: (...any) => any = () => {};
+  let reject: (...any) => any = () => {};
 
   const confirmAsync = () => {
     let flag = false;
@@ -381,6 +382,7 @@
     });
     if (flag) {
       gStores.messageStore.showMessage('请先完成填写预问诊', 3000);
+      reject();
       return;
     }
     resolve();
@@ -616,9 +618,10 @@
           (!listLen || idx === -1)
         ) {
           dialogQs.value = extend.question;
-          await new Promise((rl) => {
+          await new Promise((rl, rj) => {
             isItemShowPop.value = true;
             resolve = rl;
+            reject = rj;
           });
           item.chiefComplaint = dialogQs.value.map((i) => i.value).toString();
           isItemShowPop.value = false;

@@ -26,11 +26,7 @@
           }"
           class="item-status g-bold"
         >
-          {{
-            isWaitForPay(item)
-              ? '待补缴'
-              : applyOrderStatusMap[item.orderStatus].title
-          }}
+          {{ getStatusLabel(item) }}
         </view>
       </view>
 
@@ -124,6 +120,18 @@
     list: CaseCopyItem[];
     systemModeOld: boolean;
   }>();
+
+  const getStatusLabel = (item) => {
+    let statusLabel = applyOrderStatusMap[item.orderStatus].title;
+    if (isWaitForPay(item)) {
+      statusLabel = '待补缴';
+    } else if (item.pickupType === '4' && item.orderStatus === '14') {
+      statusLabel = '待上传';
+    } else if (item.pickupType === '4' && item.orderStatus === '18') {
+      statusLabel = '可下载';
+    }
+    return statusLabel;
+  };
 
   const emits = defineEmits(['item-click', 'express-click']);
 

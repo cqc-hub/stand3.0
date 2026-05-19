@@ -21,7 +21,7 @@
             >
               <view class="reg-header-label">
                 <view class="title">
-                  {{ isWaitForPay(info) ? '待补缴' : titleStatus.title }}
+                  {{ getStatusLabel(info) }}
                 </view>
                 <view
                   :style="{
@@ -304,7 +304,11 @@
       ref="refPay2"
       title="请选择需要查看与下载的文件"
     >
-    <text class="f28 p24">点击进入预览文件，如需将文件下载到本地，请点击右上角的“...”进行保存</text>
+      <view class="f28 p24">
+        <text>
+          点击进入预览文件，如需将文件下载到本地，请点击右上角的“...”进行保存
+        </text>
+      </view>
     </g-pay>
     <g-message />
     <g-back-home v-if="!isShowFooter" />
@@ -452,6 +456,18 @@
     };
   });
 
+  const getStatusLabel = (item) => {
+    let statusLabel: any = titleStatus.value.title;
+    if (isWaitForPay(item)) {
+      statusLabel = '待补缴';
+    } else if (item.pickupType === '4' && item.orderStatus === '14') {
+      statusLabel = '待上传';
+    } else if (item.pickupType === '4' && item.orderStatus === '18') {
+      statusLabel = '可下载';
+    }
+    return statusLabel;
+  };
+
   const getData = async () => {
     const { patientId } = gStores.userStore.patChoose;
     const arg = {
@@ -540,9 +556,7 @@
     });
   };
 
-  const selVerifyWay = ({item}) => {
-    console.log(9999,item);
-    
+  const selVerifyWay = ({ item }) => {
     cacheStore.changeCacheData(item.key);
     uni.navigateTo({
       url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
@@ -560,7 +574,11 @@
           key: item,
         };
       }) || [];
-    refPay2.value.show();
+    if (refPayList2.value?.length === 1) {
+      selVerifyWay({ item: refPayList2.value[0] });
+    } else {
+      refPay2.value.show();
+    }
   };
   const applyCancel = async () => {
     const {
