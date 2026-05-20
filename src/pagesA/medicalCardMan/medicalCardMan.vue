@@ -223,11 +223,7 @@
     ref="regDialogMedicalFiling"
   >
     {{
-      `${
-        allowFamilyMedFilling
-          ? '支持账号本人以及绑定医保亲情账户的患者'
-          : '仅账号本人可'
-      }进行医保建档,是否进行医保建档？`
+       '支持账号本人以及绑定医保亲情账户的患者进行医保建档,是否进行医保建档？'
     }}
   </Order-Reg-Confirm>
   <Order-Reg-Confirm

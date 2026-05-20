@@ -12,7 +12,7 @@
             gStores.globalStore.isTcmStyle ? '-tcm' : ''
           }.png`
         "
-        @click="avatarClick"
+        @click.prevent="showdocDialogClick"
         @error="handleImgError"
         class="doc-info-avatar mr24"
         mode="aspectFill"
@@ -35,7 +35,10 @@
       <view @click="avatarClick" class="doc-info-introduce">
         <view class="flex-between flex1 items-start">
           <text class="doc-info-introduce-header">
-            <text class="doc-info-introduce-name f36 text-no-wrap">
+            <text
+              @click.prevent="showdocDialogClick"
+              class="doc-info-introduce-name f36 text-no-wrap"
+            >
               <text class="">{{ item.docName }}</text>
             </text>
 
@@ -163,10 +166,21 @@
         >
           <view
             v-if="!item.schQukCategor && item.goodAt"
-            class="text-ellipsis ellipsis-line-clamp2"
+            class="text-ellipsis"
+            :class="
+              listNum === 1 ? 'ellipsis-line-clamp4' : 'ellipsis-line-clamp2'
+            "
           >
+            <view
+              class="doc-show-intro f28 color-blue"
+              @click.prevent="showdocDialogClick"
+            >
+              <text>查看简介</text>
+            </view>
             <rich-text
-              :nodes="HTMLParser(throughCharacterLineFeed(item.goodAt))"
+              :nodes="
+                HTMLParser(throughCharacterLineFeed(goodAtStr(item.goodAt)))
+              "
             />
           </view>
 
@@ -206,6 +220,7 @@
     isHideGoodAt?: boolean;
     isShowHosNameWithDeptName?: boolean;
     pageConfig: ISystemConfig['order'];
+    listNum?: number;
   }>();
   const gStores = new GStores();
   const isError = ref(false);
@@ -231,13 +246,22 @@
   });
 
   const isPliticalDoc = computed(() => {
+    console.log(props.item);
     return (
       props.item?.politicalStatus &&
       ['中共党员', '中共预备党员'].includes(props.item.politicalStatus)
     );
   });
 
-  const emits = defineEmits(['avatar-click', 'preregistration-click']);
+  const emits = defineEmits([
+    'avatar-click',
+    'preregistration-click',
+    'showdoc-dialog-click',
+  ]);
+
+  const goodAtStr = (goodAt) => {
+    return `<a style="color:#fff;">查看简介</a> ${goodAt}`;
+  };
 
   const handleImgError = () => {
     isError.value = true;
@@ -249,6 +273,10 @@
 
   const preregistrationClick = () => {
     emits('preregistration-click', props.item);
+  };
+
+  const showdocDialogClick = () => {
+    emits('showdoc-dialog-click', props.item);
   };
 
   const splitSpecialDeptName = (name: string) => name.split(',');
@@ -391,5 +419,8 @@
         border-radius: 0 $r $r 0;
       }
     }
+  }
+  .doc-show-intro {
+    position: absolute;
   }
 </style>

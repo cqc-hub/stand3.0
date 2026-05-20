@@ -1,11 +1,13 @@
 <template>
   <view>
     <Order-Doc-List-Container
+      :listNum="listNum"
       :item="item"
       :pageConfig="pageConfig"
       :isShowHosNameWithDeptName="pageConfig.isShowHosNameWithDeptName === '1'"
       @avatar-click="emits('avatar-click', item)"
       @preregistration-click="emits('preregistration-click', $event)"
+      @showdoc-dialog-click="emits('showdoc-dialog-click',item)"
       isAllDate
     >
       <template #footer>
@@ -84,12 +86,14 @@
     item: IDocListAll;
     patient?: boolean;
     pageConfig: ISystemConfig['order'];
+    listNum?: number;
   }>();
 
   const emits = defineEmits([
     'date-click',
     'avatar-click',
     'preregistration-click',
+    'showdoc-dialog-click'
   ]);
 
   const isCollapse = ref(true);

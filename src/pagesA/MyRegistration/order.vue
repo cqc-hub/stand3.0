@@ -29,12 +29,14 @@
       >
         <view v-for="(item, i) in _allDocList" :key="i" class="pb16">
           <Order-Doc-Item-All
+            :listNum="_allDocList.length"
             :item="item"
             :pageConfig="pageConfig"
             :patient="pageConfig.isOrderWithoutPat !== '1'"
             @date-click="(e) => dateClick(e, avatarClick)"
             @avatar-click="avatarClick"
             @preregistration-click="preregistrationClick"
+            @showdoc-dialog-click="showdocDialogClick"
           />
         </view>
 
@@ -118,6 +120,20 @@
       :pageConfig="pageConfig"
       @item-click="goPreregistration"
     />
+    <Order-Reg-Confirm
+      :headerIcon="
+        $global.BASE_IMG +
+        `v3-order-reg-confirm-add${
+          gStores.globalStore.isTcmStyle ? '-tcm' : ''
+        }.png`
+      "
+      title="医生简介"
+      isHideFooter
+      ref="regDialogConfirm"
+    >
+      <Doc-Details :detail="docDetail" />
+    </Order-Reg-Confirm>
+
     <g-message />
   </view>
 </template>
@@ -137,6 +153,7 @@
   import OrderPreSource from './components/orderSelectSource/OrderPreSource.vue';
   import OrderRecommendation from './components/orderRecommendation/orderRecommendation.vue';
   import orderFilters from './components/orderSelDate/orderFilters.vue';
+  import DocDetails from './components/DoctorDetails/DocDetails.vue';
   import { CanWrite } from '@/typeUtils';
   import api from '@/service/api';
 
@@ -187,6 +204,10 @@
     (props.secondHosDeptId && decodeURIComponent(props.secondHosDeptId)) || ''
   );
   const flagTitle9 = ref('');
+
+  const regDialogConfirm = ref<any>('');
+
+  const docDetail = ref({});
 
   const deptName = ref(decodeURIComponent(props.deptName));
   const {
@@ -293,6 +314,12 @@
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
   });
 
+  const showdocDialogClick = (item: IChooseDays) => {
+    console.log(2);
+
+    docDetail.value = item;
+    regDialogConfirm.value.show();
+  };
   const dateChange = (item: IChooseDays) => {
     checkedDay.value = item.fullDay;
 
@@ -363,6 +390,3 @@
     transform: translateY(100%);
   }
 </style>
-
-我是一名前端程序员，请你帮我写一份简历，24年五月份作为实习生进入浙江和仁科技股份有限公司的患者应用研发公司，负责小程序管理平台的功能开发与功能维护（vue2），参与浙江省人民医院、宝鸡市中医院、运城中心医院、深圳市坪山区人民医院、深圳市坪山妇幼保健院、临夏州人民医院、临夏妇幼保健院、江西妇幼保健院、江西儿童医院小程序前端，江苏省中医院公众号网页项目、东部战区总医院公众号项目前端的功能开发与维护（vue2+uniapp）。25年7月份正式入职浙江和仁科技股份有限公司，此后上述项目基本都有我负责维护与开发，期间浙江省人民医院参与智慧服务分级评估小程序与小程序管理平台前端的功能改造由我主要负责，最终浙江省人民医院成功全国第六家通过四级评估的单位。此外我还负责医院消息引擎的前端的开发（vue3+ts），该系统对接各个消息渠道，主要提供接口给其他部门系统如his系统、crm系统等负责向患者、医护人员等推送各种消息（短信、公众号信息、钉钉消息、小程序内部消息、企业微信消息等），深度参与天水第一人民医院、陕西中医院医院、安康中医院二期、江苏省中医院二期公众号过渡小程序等项目（vue3+ts）成功验收并上线运行，作为前端负责人负责东部战区总医院二期公众号过渡小程序、温州市人民小程序、温州中西医小程序、义乌中心医院小程序、舟山市普陀区人民医院（vue3+ts）成功验收并上线运行，并且参与这些项目后续维护。部分医院的官网页面（react+ts）
-如嘉兴省第二人民医院、宜兴人民医院、乐清人民医院项目我参与维护，中国人民解放军联勤保障部队第九八七医院、新疆军区总医院自助机（electron+react）项目偶尔我参与维护
