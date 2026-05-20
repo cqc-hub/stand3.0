@@ -8,7 +8,6 @@
     <Order-Recommendation :dept-info="deptInfo" />
     <view v-if="allDocList.length">
       <Order-Sel-Date
-        v-if="!isFilterHoliday"
         :value="checkedDay"
         :choose-days="chooseDays"
         :enable-days="enabledDays"
@@ -163,6 +162,7 @@
       des: string;
     }[]
   >([]);
+  const _holidays = computed(() => holidays.value.map((o) => o.date));
   watch(
     () => isFilterHoliday.value,
     async (v) => {
@@ -172,14 +172,6 @@
 
           holidays.value = await api.getChineseHolidays();
           uni.hideLoading();
-        }
-
-        if (checkedDay.value) {
-          dateChange({
-            item: {
-              fullDay: '',
-            },
-          } as any);
         }
       }
     }
@@ -233,7 +225,6 @@
 
   const _allDocList = computed(() => {
     const list = cloneUtil(allDocList.value);
-    const _holidays = holidays.value.map((o) => o.date);
 
     return list.filter((o) => {
       o.schDocSubResultList = (o.schDocSubResultList || []).filter((p) => {
@@ -244,7 +235,7 @@
         }
 
         if (isFilterHoliday.value && r) {
-          r = _holidays.includes(p.schDate);
+          r = _holidays.value.includes(p.schDate);
         }
         return r;
       });
@@ -258,10 +249,10 @@
   });
 
   const _dateDocListFilterByDate = computed(() => {
-    const list = cloneUtil(dateDocListFilterByDate.value);
+    let list = cloneUtil(dateDocListFilterByDate.value);
 
     if (isFilterDoctor.value) {
-      return list.filter((o) => {
+      list = list.filter((o) => {
         o.schDateList = (o.schDateList || []).filter((p) => {
           p.schemeList = (p.schemeList || []).filter((q) => {
             q.schemeList = (q.schemeList || []).filter((r) => {
@@ -276,6 +267,10 @@
 
         return o.schDateList.length;
       });
+    }
+
+    if (isFilterHoliday.value) {
+      list = list.filter((o) => _holidays.value.includes(o.schDate));
     }
 
     return list;
