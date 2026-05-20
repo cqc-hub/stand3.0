@@ -63,23 +63,24 @@
               </g-login>
             </view>
 
-            <view v-if="item.jsonParam" @click.stop="() => {}" class="reg-btn">
-              <g-login
-                @handler-next="
-                  goNetService(item.jsonParam, { hosDocId: item.hosDocId })
-                "
-                patient
+            <g-login v-if="netService.length" patient>
+              <view
+                @click.stop="() => {}"
+                :class="{
+                  'btn-btns': netService.length > 1,
+                }"
+                class="scheme-item-detail"
               >
                 <button
-                  @click="
-                    goNetService(item.jsonParam, { hosDocId: item.hosDocId })
-                  "
-                  class="btn btn-primary pt8 pb8 f28"
+                  v-for="s in netService"
+                  :key="s.title"
+                  @click="goNetService(s, { hosDocId: item.hosDocId })"
+                  class="btn btn-primary btn-reg"
                 >
-                  图文问诊
+                  {{ s.title }}
                 </button>
-              </g-login>
-            </view>
+              </view>
+            </g-login>
           </view>
         </view>
 
@@ -208,6 +209,26 @@
   }>();
   const gStores = new GStores();
   const isError = ref(false);
+  const netService = computed(() => {
+    const item = props.item;
+    return [
+      item.jsonParam,
+      item.pictureParam,
+      item.videoParam,
+      item.phoneParam,
+      // {
+      //   title: '图文问诊',
+      // },
+      // {
+      //   title: '视频问诊',
+      // },
+      // {
+      //   title: '电话咨询'
+      // },
+    ]
+      .filter((o, i) => o)
+      .filter((o, i) => i < 2);
+  });
 
   const isPliticalDoc = computed(() => {
     return (
@@ -335,6 +356,40 @@
       position: relative;
       left: 12rpx;
       font-size: 24rpx;
+    }
+  }
+
+  .scheme-item-detail {
+    display: flex;
+    align-items: center;
+
+    .btn-reg {
+      font-size: var(--hr-font-size-xxs);
+      height: 48rpx;
+      border-radius: 28rpx;
+      display: flex;
+      align-items: center;
+      padding: 0 24rpx;
+
+      &.btn-old {
+        padding: 30rpx;
+      }
+      &.border-left {
+        border-left: 1rpx solid #999;
+      }
+    }
+
+    &.btn-btns .btn-reg {
+      $r: 8rpx;
+      padding: 0 16rpx;
+
+      &:first-child {
+        border-radius: $r 0 0 $r;
+      }
+
+      &:last-child {
+        border-radius: 0 $r $r 0;
+      }
     }
   }
 </style>

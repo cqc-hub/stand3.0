@@ -46,6 +46,11 @@ export interface IOrderSource {
   disabled?: boolean;
 }
 
+type TNetService = {
+  receptionMode: number;
+  title: string;
+};
+
 interface IDocRow {
   deptName: string;
   docJobName: string;
@@ -65,6 +70,12 @@ interface IDocRow {
   // 快捷号别
   schQukCategor?: string;
   clinicTime?: string;
+
+  politicalStatus?: any;
+  jsonParam: TNetService;
+  pictureParam: TNetService;
+  videoParam: TNetService;
+  phoneParam: TNetService;
 }
 
 export interface IDocListAll extends IDocRow {
@@ -72,11 +83,6 @@ export interface IDocListAll extends IDocRow {
   specialClinicName?: string;
   specialClinicDept?: string;
   schDocSubResultList: TAllDayTScInfo[];
-
-  politicalStatus?: any;
-  jsonParam?: {
-    receptionMode: number;
-  };
 
   [key: string]: any;
 }
@@ -399,19 +405,75 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     docList = [] as any[],
     netDocList = [] as any[],
   }) => {
+    const gStores = new GStores();
+
+    const { sysCode } = gStores.globalStore;
     docList.map((doc) => {
       const { hosDocId } = doc;
       const netDocInfo = netDocList.find((o) => o.hosDocId === hosDocId);
 
       if (netDocInfo) {
         // 目前仅在线问诊，展示为图文问诊 1001035
-        const { receptionMode, jsonParam } = netDocInfo;
+        const {
+          receptionMode,
+          jsonParam,
+          pictureParam,
+          videoParam,
+          phoneParam,
+        } = netDocInfo;
 
-        if (receptionMode && jsonParam) {
-          doc.jsonParam =
-            receptionMode & 8 &&
-            jsonParam &&
-            JSON.parse(jsonParam)?.registerCategorys[0];
+        if (receptionMode) {
+          if (jsonParam) {
+            const o =
+              receptionMode & 8 && JSON.parse(jsonParam)?.registerCategorys[0];
+
+            if (o) {
+              o.title = '复诊开药';
+              if (sysCode === '1001035') {
+                o.title = '图文问诊';
+              }
+              if (sysCode === '1001067') {
+                o.title = '在线问诊';
+              }
+              doc.jsonParam = o;
+            }
+          }
+
+          if (pictureParam) {
+            const o =
+              receptionMode & 1 &&
+              JSON.parse(pictureParam)?.registerCategorys[0];
+
+            if (o) {
+              o.title = '图文咨询';
+              if (sysCode === '1001093') {
+                o.title = '医生咨询';
+              }
+              doc.pictureParam = o;
+            }
+          }
+
+          if (videoParam) {
+            const o =
+              receptionMode & 4 && JSON.parse(videoParam)?.registerCategorys[0];
+
+            if (o) {
+              o.title = '视频门诊';
+
+              doc.videoParam = o;
+            }
+          }
+
+          if (phoneParam) {
+            const o =
+              receptionMode & 2 && JSON.parse(phoneParam)?.registerCategorys[0];
+
+            if (o) {
+              o.title = '电话问诊';
+
+              doc.phoneParam = o;
+            }
+          }
         }
       }
     });
