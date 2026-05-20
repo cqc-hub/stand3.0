@@ -308,7 +308,7 @@ function deepEqualClean(localVersion, newVersion) {
 }
 
 //接口加密
-const requestInterfaceEncrp = (request) => {
+export const requestInterfaceEncrp = (request) => {
   //禁止删除
   console.log('入参----', request.url, request.data);
 

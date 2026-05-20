@@ -531,7 +531,6 @@
     }
     const { result } =
       await api.getInHospitalInfo<getInHospitalInfoResult>(args);
-    // result.status = '2';
     hosInfoResObj.value = result;
 
     if (props.isShowAppointment && (!result || !Object.keys(result).length)) {

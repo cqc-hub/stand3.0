@@ -71,6 +71,8 @@ export interface IDocListAll extends IDocRow {
   specialClinicName?: string;
   specialClinicDept?: string;
   schDocSubResultList: TAllDayTScInfo[];
+
+  jsonParam?: {};
 }
 
 export interface IDocListByDate {
@@ -250,7 +252,8 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       secondHosDeptId,
       isExpertDeptId,
     } = payload;
-    const { isShowFilterOrderSourceBtn } = orderConfig.value;
+    const { isShowFilterOrderSourceBtn, netHosId, orderMode } =
+      orderConfig.value;
 
     const _hosDeptId = hosDeptId || deptId;
     const args = {
@@ -271,8 +274,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       actionApi = api.getDeptSchForDoc1001035;
     }
 
-    const asyncListFnc =
-      orderConfig.value.orderMode === '1' ? api.dtSchByDoc : actionApi;
+    const asyncListFnc = orderMode === '1' ? api.dtSchByDoc : actionApi;
 
     uni.showLoading({
       title: '获取医生排班数据..',
@@ -341,6 +343,19 @@ export const useOrder = (props: Ref<IOrderProps>) => {
           }
         });
       });
+
+      if (clinicalType && ['3', '4', '6'].includes(clinicalType)) {
+        const hosDocIdList = allList.map((o) => o.hosDocId);
+
+        const netDocInfos = await getNetDocService(hosDocIdList, {
+          netHosId,
+        });
+
+        injectNetDocInfo({
+          docList: allList,
+          netDocList: netDocInfos,
+        });
+      }
       allDocList.value = allList;
 
       // allDocList.value = allList.filter((o) => {
@@ -354,6 +369,48 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     filterChooseDays();
     isComplete.value = true;
     uni.hideLoading();
+  };
+
+  const getNetDocService = async (hosDocIdList: string[], { netHosId }) => {
+    const args = {
+      hosDocIdList,
+      hosId: netHosId,
+      funcode:
+        'service-base-platform/rest/doctor/batch-query-doctor-info-by-hosDocId-list',
+    };
+    const { data = [] } = await api.sendNetHos(args).catch((err) => {
+      console.log(
+        '请求互联网接口错误 batch-query-doctor-info-by-hosDocId-list ----'
+      );
+      console.log(err);
+      return {} as any;
+    });
+
+    return data;
+  };
+
+  const injectNetDocInfo = ({
+    docList = [] as any[],
+    netDocList = [] as any[],
+  }) => {
+    docList.map((doc) => {
+      const { hosDocId } = doc;
+      const netDocInfo = netDocList.find((o) => o.hosDocId === hosDocId);
+
+      if (netDocInfo) {
+        // 目前仅在线问诊，展示为图文问诊 1001035
+        const { receptionMode, jsonParam } = netDocInfo;
+
+        if (receptionMode && jsonParam) {
+          doc.jsonParam =
+            receptionMode & 8 &&
+            jsonParam &&
+            JSON.parse(jsonParam)?.registerCategorys[0];
+          console.log('0--------');
+          console.log(doc);
+        }
+      }
+    });
   };
 
   const filterChooseDays = () => {
@@ -601,7 +658,6 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       actionApi = api.getNumberSource1001035;
     }
 
-
     let { result } = await actionApi<IOrderSource[]>(arg).finally(() => {
       isComplete.value = true;
     });
@@ -643,7 +699,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       regVerificationMode,
       visitingArea,
       specialClinicDept,
-      realNameRegisterRequired
+      realNameRegisterRequired,
     } = selectSchInfo;
     const { disNo, numId, timeDesc, enData } = item;
     const { promptMessage, thRegisterId, hosId: _pHosId } = props.value;

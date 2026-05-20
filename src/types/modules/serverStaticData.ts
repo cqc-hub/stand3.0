@@ -82,6 +82,8 @@ export interface ISystemConfig_ {
     isShowFilterOrderSourceBtn?: '1';
     // 过滤仅展示 节假日号源
     isShowFilterOrderInHoliday?: '1';
+    // 云门诊号源列表时候展示互联网医院 图文问诊(目前仅展示图文)
+    isShowNetBtnInOrderList?: '1';
     /** 按日期, 分组名 categorName 隐藏 */
     isHideOrderCategorName?: '1';
     // 选择号源时候显示几列

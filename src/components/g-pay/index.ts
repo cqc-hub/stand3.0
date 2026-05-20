@@ -57,6 +57,7 @@ export const payMoneyOnline = async (
 ) => {
   const gStores = new GStores();
   const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
+  console.log(gStores.userStore.patChoose)
 
   let requestArg: BaseObject = {
     patientName,
