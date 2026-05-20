@@ -9,8 +9,9 @@ import {
   GStores,
   apiAsync,
   wait,
+  uniqueByKey,
 } from '@/utils';
-import { joinQueryForUrl, deQueryForUrl } from '@/common/utils';
+import { joinQueryForUrl, deQueryForUrl, joinQuery } from '@/common/utils';
 import { type XOR } from '@/typeUtils/obj';
 import globalGl from '@/config/global';
 
@@ -72,7 +73,12 @@ export interface IDocListAll extends IDocRow {
   specialClinicDept?: string;
   schDocSubResultList: TAllDayTScInfo[];
 
-  jsonParam?: {};
+  politicalStatus?: any;
+  jsonParam?: {
+    receptionMode: number;
+  };
+
+  [key: string]: any;
 }
 
 export interface IDocListByDate {
@@ -406,8 +412,6 @@ export const useOrder = (props: Ref<IOrderProps>) => {
             receptionMode & 8 &&
             jsonParam &&
             JSON.parse(jsonParam)?.registerCategorys[0];
-          console.log('0--------');
-          console.log(doc);
         }
       }
     });
@@ -435,7 +439,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       secondHosDeptId,
       isExpertDeptId,
     } = payload;
-    console.log(payload);
+    const { netHosId, orderMode } = orderConfig.value;
 
     const args = {
       source: gStores.globalStore.browser.source,
@@ -452,8 +456,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       actionApi = api.getDeptSchByDate1001035;
     }
 
-    const asyncListFnc =
-      orderConfig.value.orderMode === '1' ? api.dtSchByDate : actionApi;
+    const asyncListFnc = orderMode === '1' ? api.dtSchByDate : actionApi;
 
     const { result } = await asyncListFnc<IDocListByDate[]>(args).finally(
       () => {
@@ -462,6 +465,10 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     );
 
     if (result && result.length) {
+      const collectAllDoc: any = [];
+      const shouldGetNotService =
+        clinicalType && ['3', '4', '6'].includes(clinicalType);
+
       result.map((o) => {
         const { schDateList, schDate } = o;
         if (schDateList && schDateList.length) {
@@ -506,12 +513,36 @@ export const useOrder = (props: Ref<IOrderProps>) => {
                     schQukCategor,
                     preStatus,
                   });
+
+                  if (shouldGetNotService) {
+                    collectAllDoc.push(scheme);
+                  }
                 }
               });
             }
           });
         }
       });
+
+      const uniqueDocList = uniqueByKey({
+        list: collectAllDoc,
+        key: 'hosDocId',
+      });
+
+      // 插入图文问诊信息
+      if (uniqueDocList) {
+        const netDocInfos = await getNetDocService(
+          uniqueDocList.map((o) => o.hosDocId),
+          {
+            netHosId,
+          }
+        );
+
+        injectNetDocInfo({
+          docList: collectAllDoc,
+          netDocList: netDocInfos,
+        });
+      }
     }
     dateDocList.value = result || [];
   };
@@ -887,4 +918,38 @@ export const dealNumberSourceList = (list: IOrderSource[]) => {
   });
 
   return list;
+};
+
+export const goNetService = async (item, { hosDocId }) => {
+  const { receptionMode, typeFlag } = item;
+  const gStores = new GStores();
+
+  const { title, content } = await gStores.getSysAppMore(typeFlag);
+
+  if (title) {
+    const { confirm } = await new Promise<any>(async (r) => {
+      gStores.messageStore.showMessage(content, 0, {
+        useDialog: true,
+        dialogOpt: {
+          title,
+          isShowCancel: true,
+          confirmText: '确认',
+        },
+        closeCallBack: r,
+      });
+    });
+
+    if (!confirm) {
+      return;
+    }
+  }
+
+  const arg = {
+    receptionMode,
+    docId: hosDocId,
+  };
+
+  uni.navigateTo({
+    url: joinQuery('/pagesC/cloudHospital/cloudHospital', arg),
+  });
 };

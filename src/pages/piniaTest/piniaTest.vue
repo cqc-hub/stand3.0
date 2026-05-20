@@ -807,7 +807,7 @@
   });
   const init = async () => {
     // useTBanner(满意度1001093);
-    useTBanner(文件下载1001094);
+    useTBanner(ziXun);
     // useTBanner(用药查询1001093);
     // useTBanner(queryNumber);
     // useTBanner({

@@ -3,7 +3,12 @@
     <view
       v-for="(item, idx) in serList"
       :key="idx"
-      @click="goNetService(item)"
+      @click="
+        (item) =>
+          goNetService(item, {
+            hosDocId,
+          })
+      "
       class="item g-flex-rc-cc g-border"
     >
       <image :src="item.img" class="item-img" mode="" lazy-load />
@@ -27,6 +32,7 @@
   import { onMounted, ref, watch } from 'vue';
   import globalGl from '@/config/global';
 
+  import { goNetService } from '../../utils';
   import {
     type IDocService,
     type TDocServiceItem,
@@ -145,37 +151,37 @@
     isComplete.value = true;
   };
 
-  const goNetService = async (item: (typeof serList.value)[number]) => {
-    const { receptionMode, typeFlag } = item;
-    const { title, content } = await gStores.getSysAppMore(typeFlag);
+  // const goNetService = async (item: (typeof serList.value)[number]) => {
+  //   const { receptionMode, typeFlag } = item;
+  //   const { title, content } = await gStores.getSysAppMore(typeFlag);
 
-    if (title) {
-      const { confirm } = await new Promise<any>(async (r) => {
-        gStores.messageStore.showMessage(content, 0, {
-          useDialog: true,
-          dialogOpt: {
-            title,
-            isShowCancel: true,
-            confirmText: '确认',
-          },
-          closeCallBack: r,
-        });
-      });
+  //   if (title) {
+  //     const { confirm } = await new Promise<any>(async (r) => {
+  //       gStores.messageStore.showMessage(content, 0, {
+  //         useDialog: true,
+  //         dialogOpt: {
+  //           title,
+  //           isShowCancel: true,
+  //           confirmText: '确认',
+  //         },
+  //         closeCallBack: r,
+  //       });
+  //     });
 
-      if (!confirm) {
-        return;
-      }
-    }
+  //     if (!confirm) {
+  //       return;
+  //     }
+  //   }
 
-    const arg = {
-      receptionMode,
-      docId: props.hosDocId,
-    };
+  //   const arg = {
+  //     receptionMode,
+  //     docId: props.hosDocId,
+  //   };
 
-    uni.navigateTo({
-      url: joinQuery('/pagesC/cloudHospital/cloudHospital', arg),
-    });
-  };
+  //   uni.navigateTo({
+  //     url: joinQuery('/pagesC/cloudHospital/cloudHospital', arg),
+  //   });
+  // };
 
   watch(
     () => props.docService,

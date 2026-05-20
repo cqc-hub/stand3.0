@@ -51,19 +51,35 @@
             </text>
           </text>
 
-          <view
-            v-if="item.preStatus === '1'"
-            @click.stop="() => {}"
-            class="reg-btn"
-          >
-            <g-login @handler-next="preregistrationClick" patient>
-              <button
-                @click="preregistrationClick"
-                class="btn btn-primary btn-round btn-size-small"
+          <view>
+            <view v-if="item.preStatus === '1'" @click.stop="() => {}">
+              <g-login @handler-next="preregistrationClick" patient>
+                <button
+                  @click="preregistrationClick"
+                  class="btn btn-primary btn-round btn-size-small"
+                >
+                  预约登记
+                </button>
+              </g-login>
+            </view>
+
+            <view v-if="item.jsonParam" @click.stop="() => {}" class="reg-btn">
+              <g-login
+                @handler-next="
+                  goNetService(item.jsonParam, { hosDocId: item.hosDocId })
+                "
+                patient
               >
-                预约登记
-              </button>
-            </g-login>
+                <button
+                  @click="
+                    goNetService(item.jsonParam, { hosDocId: item.hosDocId })
+                  "
+                  class="btn btn-primary pt8 pb8 f28"
+                >
+                  图文问诊
+                </button>
+              </g-login>
+            </view>
           </view>
         </view>
 
@@ -180,10 +196,10 @@
   import { GStores, ISystemConfig, throughCharacterLineFeed } from '@/utils';
   import globalGl from '@/config/global';
   import HTMLParser from '@/common/html-parser';
+  import { goNetService, IDocListAll } from '../../utils';
 
   const props = defineProps<{
-    // item: IDocListAll;
-    item: any;
+    item: IDocListAll;
     isAllDate?: boolean;
     isShowDeptName?: boolean;
     isHideGoodAt?: boolean;
@@ -313,9 +329,6 @@
     }
   }
 
-  .reg-btn {
-    text-align: right;
-  }
   .g-split-line1 {
     &::after {
       content: '|';

@@ -253,6 +253,7 @@
   const isCash = ref('');
   const gStores = new GStores();
   const confirmFgTitle = ref('');
+  // 并非list
   const lists = ref({} as IHospitalAccountDetail);
   const regDialogConfirm = ref<any>('');
   const pageConfig = ref(<ISystemConfig['hospitalCare']>{});

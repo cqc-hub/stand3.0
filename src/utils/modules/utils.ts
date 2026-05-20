@@ -900,4 +900,28 @@ export const removeDuplicateParams = (
   return `${path}?${newQuery}`;
 };
 
+// 列表去重
+export const uniqueByKey = <T extends Record<string, any>>({
+  list,
+  key,
+}: {
+  list: T[];
+  key: string;
+}): T[] => {
+  if (!Array.isArray(list)) {
+    return [];
+  }
 
+  const seen = new Set<any>();
+  const result: T[] = [];
+
+  for (const item of list) {
+    const value = item?.[key];
+    if (!seen.has(value)) {
+      seen.add(value);
+      result.push(item);
+    }
+  }
+
+  return result;
+};
