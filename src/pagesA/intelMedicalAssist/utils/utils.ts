@@ -30,7 +30,7 @@ import {
 } from '@/common';
 import type { TInstance } from '@/components/g-form/index';
 import { useDeptStore, useGlobalStore } from '@/stores';
-import { getConfigHeader, isOpenSm4 } from '@/service';
+import { getConfigHeader, isOpenSm4, requestInterfaceEncrp } from '@/service';
 import { getMyPowerQx } from '@/components/greenPower';
 import { checkLoginExpired } from '@/common/checkJump';
 import globalGl from '@/config/global';
@@ -404,7 +404,7 @@ const upLoadPicOcr = async (files: string[]) => {
   const uploadFile = async (filePath: string) => {
     const { data } = await apiAsync(uni.uploadFile, {
       // url: joinQuery(`${globalEv.prod.baseApi}/phs-extend/customer/picOcr`, {
-      url: joinQuery(`${envBasic.baseApi}/phs-extend/customer/picOcr`, {
+      url: joinQuery(`${env.baseApi}/phs-extend/customer/picOcr`, {
         sysCode,
         herenId,
         type: 'mini',
@@ -835,7 +835,7 @@ export const sendImg = async () => {
       scrollToNewMsg();
     }, 500);
 
-    let baseApi = envBasic.baseApi;
+    let baseApi = env.baseApi;
 
     const { data } = await apiAsync(uni.uploadFile, {
       url: `${baseApi}/phs-extend/customer/picOcr?sysCode=${
@@ -1405,7 +1405,22 @@ const typeInAsk = async (
   const { req = {}, hideQuestion } = opt;
 
   const gStores = new GStores();
-  let baseApi = envBasic.baseApi;
+  let baseApi = env.baseApi;
+  const reqData = {
+    ...req,
+    content: value,
+    sysCode: gStores.globalStore.sysCode,
+    source: gStores.globalStore.browser.source == 19 ? 1 : 2,
+    chatId: msgState.value.lastChatId,
+    requestId: msgState.value.requestId,
+    zntPath: msgState.value.zntPath,
+    cardNumber: gStores.userStore.patChoose.cardNumber,
+    type: answertype,
+    herenId:
+      gStores.globalStore.herenId ||
+      Number(uni.getStorageSync('v3_userRandomId')),
+  };
+
   const settings = {
     url: `${baseApi}/phs-extend/customer/aiStreamAsk`,
     method: 'POST',
@@ -1414,7 +1429,7 @@ const typeInAsk = async (
     enableChunked: true,
     headers: getConfigHeader(),
     header: getConfigHeader(),
-    data: JSON.stringify({
+    data: {
       args: {
         ...req,
         content: value,
@@ -1429,11 +1444,11 @@ const typeInAsk = async (
           gStores.globalStore.herenId ||
           Number(uni.getStorageSync('v3_userRandomId')),
       },
-    }),
+    } as any,
   };
   if (answertype === 'ocr') {
     settings.url = `${baseApi}/phs-extend/customer/aiStreamOcrAsk`;
-    settings.data = JSON.stringify({
+    settings.data = {
       args: {
         ocrId: value,
         sysCode: gStores.globalStore.sysCode,
@@ -1442,13 +1457,17 @@ const typeInAsk = async (
           gStores.globalStore.herenId ||
           Number(uni.getStorageSync('v3_userRandomId')),
       },
-    });
+    };
   }
   if (answertype == 'report') {
     settings.url = `${baseApi}/phs-extend/customer/aiStreamReportAsk`;
-    settings.data = JSON.stringify({
+    settings.data = {
       args: value,
-    });
+    };
+  }
+  // settings.data.token = gStores.globalStore.token.accessToken;
+  if (globalGl.env === 'prod') {
+    // settings.data = requestInterfaceEncrp(settings);
   }
   console.warn('手动调用接口', settings);
 
