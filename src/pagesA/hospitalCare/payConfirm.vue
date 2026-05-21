@@ -199,6 +199,7 @@
     const source = gStores.globalStore.browser.source;
     const { totalNeedPay, visitNo, recipeNo } = info.value;
     await api.outHospitalAffirmPay<any>({
+      ...info.value,
       amount: totalNeedPay,
       patientId,
       hosId,

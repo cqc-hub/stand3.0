@@ -12,7 +12,11 @@
         @click="togglePat"
       >
         <view class="color-111">
-          <text @click.stop="isClose = !isClose" class="mr24">
+          <text
+            v-if="gStores.userStore.patChoose.patientName"
+            @click.stop="isClose = !isClose"
+            class="mr24"
+          >
             <text class="mr12 font-semibold">
               {{
                 isClose
@@ -25,6 +29,7 @@
               {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
             </text>
           </text>
+
           <text
             v-if="gStores.userStore.patChoose._showId"
             class="font-semibold"
@@ -42,7 +47,7 @@
         />
       </view>
       <view v-else class="flex items-center">
-        <view class="font-semibold mr24">
+        <view class="font-semibold mr24 color-111">
           {{ getLangLabel('home:已登录') }}
         </view>
 

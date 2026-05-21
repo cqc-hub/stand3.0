@@ -800,6 +800,17 @@
     _type: 'useTBanner',
   } as TBannerConfig;
 
+  const 住院费用清单pdf1001067 = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesA/1001067/hospitalRecordList',
+    addition: {
+      patientId: '_patientId',
+    },
+    text: '',
+    _type: 'useTBanner',
+  } as TBannerConfig;
+
   onMounted(() => {
     setTimeout(() => {
       init();
@@ -807,17 +818,10 @@
   });
   const init = async () => {
     // useTBanner(满意度1001093);
-    useTBanner(ziXun);
+    useTBanner(住院费用清单pdf1001067);
+    // useTBanner(住院费用清单pdf1001067);
     // useTBanner(用药查询1001093);
     // useTBanner(queryNumber);
-    // useTBanner({
-    //   type: 'h5',
-    //   isSelfH5: '1',
-    //   path: 'pagesC/question/question1001093',
-    //   text: '住院退费申请',
-    //   isLocal: '1',
-    //   _type: 'useTBanner',
-    // });
     // useTBanner(手术进度1001093);
     // patientUtils.faceVerifyAndPData({
     //   name: '陈钦川',
