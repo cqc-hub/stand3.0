@@ -6,7 +6,26 @@
     }"
   >
     <g-flag typeFg="600" isShowFg />
+    <!-- #ifdef  MP-WEIXIN -->
+    <view
+      class="banner-1001057"
+      v-if="['1001057'].includes(gStores.globalStore.sysCode)"
+      @click="
+        useTBanner({
+          type: 'otherProgram',
+          path: '/pages/index/index?source=1-H61010300557-O4-OO-01',
+          appId: 'wxcaa66da268f4b847',
+        })
+      "
+    >
+      <view class="banner-1001057__text g-bold">
+        商业保险报销请于住院期间点击
+      </view>
+      <view class="banner-1001057__button">商保理赔</view>
+    </view>
+    <!-- #endif -->
     <g-choose-pat v-if="!pageProps.visitNo" @choosePat="pageRequest" />
+
     <g-message />
 
     <view class="tab-box" v-if="pageLoading">
@@ -84,7 +103,12 @@
   import inpatientInfo from './components/inpatientInfo.vue';
   import dailyExpenseList from './components/dailyExpenseList.vue';
   import totalList from './components/totalList.vue';
-  import { GStores, ServerStaticData, ISystemConfig } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    ISystemConfig,
+    useTBanner,
+  } from '@/utils';
   import { deQueryForUrl } from '@/common';
   import api from '@/service/api';
   import { beforeEach } from '@/router';
@@ -238,5 +262,34 @@
       flex: 1;
       justify-content: center;
     }
+  }
+
+  .banner-1001057 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14rpx 28rpx;
+    background: #0070ff;
+    color: #ffffff;
+    // border-radius: 16rpx;
+    margin: 18rpx 12rpx 0;
+  }
+
+  .banner-1001057__text {
+    flex: 1;
+    font-size: 28rpx;
+    line-height: 30rpx;
+    color: #ffffff;
+  }
+
+  .banner-1001057__button {
+    padding: 6rpx 10rpx;
+    background: #ffffff;
+    color: #0070ff;
+    border-radius: 48rpx;
+    font-size: 26rpx;
+    font-weight: 600;
+    text-align: center;
+    min-width: 180rpx;
   }
 </style>

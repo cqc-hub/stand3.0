@@ -98,6 +98,7 @@
           return item.id === pageProp.value.onlyShowDept;
         }) || [];
       isHideLv1.value = true;
+      console.log(77777,JSON.stringify(list.value))
     } else {
       list.value = result || [];
     }
