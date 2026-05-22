@@ -1440,7 +1440,7 @@ export const usePayPage = () => {
 
     const args: BaseObject = {
       personalPayFee,
-      patientName: pageProps.value.deParams?.patientName,
+      patientName: pageProps.value.deParams?.patientName || patientName,
       businessType: '1',
       patientId: pageProps.value.params ? '' : patientId,
       source,
