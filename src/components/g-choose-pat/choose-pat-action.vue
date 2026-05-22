@@ -34,6 +34,7 @@
   import globalGl from '@/config/global';
 
   import PatList from './choose-pat-list.vue';
+  import { beforeEach } from '@/router';
 
   export default defineComponent({
     emits: ['choose-pat', 'hide'],
@@ -86,29 +87,34 @@
         }
       };
 
-      const goAddPat = () => {
+      const goAddPat = async () => {
+        await beforeEach({
+          _isHerenId: true,
+        });
         actionSheet.value.hide();
+
         const pages = getCurrentPages();
         const fullPathNow = (pages[pages.length - 1] as any).$page
           .fullPath as string;
-        // if (
-        //   globalGl.systemInfo?.isOpenHealthCard &&
-        //   globalGl.systemInfo.isOpenHealthCard?.isNewMode
-        // ) {
+
+        if (
+          globalGl.systemInfo?.isOpenHealthCard &&
+          globalGl.systemInfo.isOpenHealthCard?.isNewMode
+        ) {
           uni.navigateTo({
             url:
               '/pagesA/medicalCardMan/medicalCardMan' +
               '?_url=' +
               encodeURIComponent(fullPathNow),
           });
-        // } else {
-        //   uni.navigateTo({
-        //     url:
-        //       globalGl.addPersonUrl +
-        //       '?_url=' +
-        //       encodeURIComponent(fullPathNow),
-        //   });
-        // }
+        } else {
+          uni.navigateTo({
+            url:
+              globalGl.addPersonUrl +
+              '?_url=' +
+              encodeURIComponent(fullPathNow),
+          });
+        }
       };
 
       const onActionSheetHide = () => {
