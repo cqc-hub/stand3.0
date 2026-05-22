@@ -61,12 +61,12 @@ export default defineConfig(({ command, mode }) => {
 
     build: {
       assetsDir: 'static',
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: true,
-        },
-      },
+      // minify: 'terser',
+      // terserOptions: {
+      //   compress: {
+      //     drop_console: true,
+      //   },
+      // },
     },
   };
 });
