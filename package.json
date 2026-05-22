@@ -9,6 +9,7 @@
     "dev:mp-harmony": "npm run rewrite:manifest && uni -p mp-harmony",
     "rewrite:manifest": "ts-node manifest.ts",
     "dev:mp-toutiao": "npm run rewrite:manifest && uni -p mp-toutiao",
+    "dev:obfuscate": "node obfuscate.js",
     "build:mp-weixin": "cross-env NODE_ENV=production npm run rewrite:manifest && uni build -p mp-weixin",
     "build:mp-alipay": "cross-env NODE_ENV=production npm run rewrite:manifest && uni build -p mp-alipay",
     "build:h5": "cross-env NODE_ENV=production npm run rewrite:manifest && uni build",

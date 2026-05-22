@@ -97,20 +97,7 @@
             "patient": true
           }
         },
-        // #ifndef MP-TOUTIAO
-        {
-          "path": "intelMedicalAssist/intelMedicalAssist",
-          "style": {
-            "navigationBarTitleText": "智能医助",
-            "navigationBarTextStyle": "black",
-            "navigationStyle": "custom",
-            "mp-alipay": {
-              "transparentTitle": "always",
-              "titlePenetrate": "YES"
-            }
-          }
-        },
-        // #endif
+       
 
         {
           "path": "MyRegistration/addDescribe",
@@ -563,7 +550,20 @@
           "style": {
             "navigationBarTitleText": " "
           }
+        }, // #ifndef MP-TOUTIAO
+        {
+          "path": "intelMedicalAssist/intelMedicalAssist",
+          "style": {
+            "navigationBarTitleText": "智能医助",
+            "navigationBarTextStyle": "black",
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "YES"
+            }
+          }
         }
+        // #endif
       ],
       "pagesA-plugins": ""
     },

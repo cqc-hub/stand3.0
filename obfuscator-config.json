@@ -1,0 +1,19 @@
+{
+  "compact": true,
+  "controlFlowFlattening": false,
+  "deadCodeInjection": false,
+  "debugProtection": false,
+  "disableConsoleOutput": false,
+  "identifierNamesGenerator": "mangled",
+  "renameGlobals": false,
+  "renameProperties": false,
+  "rotateStringArray": false,
+  "selfDefending": false,
+  "shuffleStringArray": false,
+  "splitStrings": false,
+  "stringArray": false,
+  "stringArrayEncoding": [],
+  "stringArrayThreshold": 0,
+  "transformObjectKeys": false,
+  "unicodeEscapeSequence": false
+}
