@@ -585,7 +585,6 @@
 
         if (cardList && cardList.length) {
           await new Promise((r) => {
-            cardList.length = 2;
             dialogSelCardShow.value = true;
             cardPatList.value = cardList;
             dialogConfirm = () => {
