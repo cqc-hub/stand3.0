@@ -29,7 +29,7 @@
         height: autoHeight,
         minWidth: width + 'rpx',
         minHeight: height + 'rpx',
-        top: sizeChange && type === 'center' ? winReTop : autoTop,
+        top: type === 'center' ? winReTop : autoTop,
         bottom: autoBottom,
         left: autoLeft,
         right: autoRight,

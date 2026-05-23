@@ -20,13 +20,11 @@ export const useLunchInit1001035 = () => {
   let uni_modules_libshadowesm_config: any = '';
   let shadowlib: any = '';
   try {
-    // @ts-expect-error
     const _uni_modules_libshadowesm_config = require('./libshadowesm1001035/config.js');
     uni_modules_libshadowesm_config = _uni_modules_libshadowesm_config;
 
     const {
       shadowlib: _shadowlib,
-      // @ts-expect-error
     } = require('./libshadowesm1001035/shadowlib.js');
     shadowlib = _shadowlib;
   } catch (error) {}

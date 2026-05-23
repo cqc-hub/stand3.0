@@ -585,6 +585,7 @@
 
         if (cardList && cardList.length) {
           await new Promise((r) => {
+            cardList.length = 2;
             dialogSelCardShow.value = true;
             cardPatList.value = cardList;
             dialogConfirm = () => {
@@ -1241,6 +1242,18 @@
     console.log('formData.value', formData.value);
   };
 
+  const assignValue = () => {
+    const { patientPhone, patientName } = pageProps.value;
+
+    if (patientPhone) {
+      formData.value.patientPhone = patientPhone;
+    }
+
+    if (patientName) {
+      formData.value.patientName = patientName;
+    }
+  };
+
   onReady(() => {
     if (pageProps.value.pageType === 'perfectReal') {
       uni.setNavigationBarTitle({
@@ -1276,6 +1289,7 @@
     if (!pageProps.value.pageType) {
       pageProps.value.pageType = 'addPatient';
     }
+    assignValue();
   });
 </script>
 
