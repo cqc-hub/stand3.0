@@ -515,7 +515,6 @@
     const { type } = pageProps.value;
 
     takeNumberConfig.value = TakeNumber;
-    console.log(takeNumberConfig.value);
     takeNumberConfig.value.headBtns;
     const {
       takeNumberQueueBtn,
@@ -534,12 +533,7 @@
     isShowQueueBtn.value = takeNumberQueueBtn === '1' && !isOnlineSign.value;
     isTakeNumberAfterBtnForGoQueueNumber.value =
       takeNumberAfterBtnForGoQueueNumber === '1';
-
-    if (Object.keys(TakeNumber)) {
-      console.log(
-        TakeNumber,
-        'takeNumberConfig.valuetakeNumberConfig.valuetakeNumberConfig.value'
-      );
+    if (Object.keys(TakeNumber)?.length) {
       if (type && TakeNumber.types && TakeNumber.types[type]) {
         // @ts-expect-error
         TakeNumber = TakeNumber.types[type];
