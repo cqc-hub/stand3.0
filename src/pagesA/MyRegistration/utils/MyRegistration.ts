@@ -267,7 +267,12 @@ export const isCanUseCustomGuide = (item) => {
 };
 
 export const judgeAllowNav = (item) => {
-  const { hosId } = item;
+  const { hosId, clinicalType } = item;
+
+  if (clinicalType === '4') {
+    return false;
+  }
+
   const sysCode = getSysCode();
   // #ifdef  MP-WEIXIN
   if (sysCode === '1001093') {
