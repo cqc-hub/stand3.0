@@ -8,6 +8,9 @@ import { toPayPull } from '@/components/g-pay';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 import { deQueryForUrl, joinQueryForUrl } from '@/common';
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek';
+dayjs.extend(isoWeek);
 
 type NeverTurnsAny<T> = T extends never ? any : T;
 
@@ -924,4 +927,23 @@ export const uniqueByKey = <T extends Record<string, any>>({
   }
 
   return result;
+};
+
+//
+export const getDateInfo = (date: string) => {
+  const _date = dayjs(date);
+  const dayMap = {
+    1: '周一',
+    2: '周二',
+    3: '周三',
+    4: '周四',
+    5: '周五',
+    6: '周六',
+    7: '周日',
+  };
+
+  return {
+    date,
+    name: dayMap[_date.isoWeekday()],
+  };
 };

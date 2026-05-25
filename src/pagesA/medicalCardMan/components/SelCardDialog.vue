@@ -8,6 +8,7 @@
       :type="type"
       :width="width"
       :height="'auto'"
+      :centerAnim="'slide-down'"
       bg-color="rgba(0,0,0,0)"
     >
       <view class="container">

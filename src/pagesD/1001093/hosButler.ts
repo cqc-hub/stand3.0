@@ -315,6 +315,43 @@ export const useHosButlerOrder = () => {
         required: true,
         showRequireIcon: true,
         placeholder: '请输入',
+        validator(value) {
+          const v = <string>value;
+
+          if (v) {
+            if (v.length < 2) {
+              return Promise.resolve({
+                success: false,
+                message: '姓名需要大于2个字符',
+              });
+            }
+            // 不允许包含数字
+            if (/\d/.test(v)) {
+              return Promise.resolve({
+                success: false,
+                message: '姓名不允许包含数字',
+              });
+            }
+            const isEng = v.match(/^[A-Za-z]+\s?[A-Za-z]+$/);
+
+            if (isEng) {
+              return Promise.resolve({
+                success: true,
+              });
+            } else {
+              if (v.length > 50) {
+                return Promise.resolve({
+                  success: false,
+                  message: '姓名不能大于 50 个字符 ',
+                });
+              }
+            }
+          }
+
+          return Promise.resolve({
+            success: true,
+          });
+        },
       },
 
       {

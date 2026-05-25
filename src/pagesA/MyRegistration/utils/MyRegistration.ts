@@ -54,8 +54,8 @@ export type IRegistrationCardItem = {
 export const HosNavData: {
   [key: string]: (...args: any[]) => TButtonConfig;
 } = {
-  13009: (item: IRegistrationCardItem)  => {
- let { areaId } = JSON.parse(item?.extend || '');
+  13009: (item: IRegistrationCardItem) => {
+    let { areaId } = JSON.parse(item?.extend || '');
     return {
       appId: 'wxe51129e09bb46147',
       path: 'pages/index/map',
@@ -70,8 +70,8 @@ export const HosNavData: {
         method: 'showPois',
         page: 'MapPage',
         // deptids:areaId
-        deptids:areaId
-      }
+        deptids: areaId,
+      },
     };
   },
   1281: () => {
@@ -121,6 +121,24 @@ Object.assign(HosNavData, {
       type: '8_2',
       typeData: JSON.stringify({
         buildingId: 209638,
+        type: '1',
+        hisName: item.hosDeptId,
+      }),
+    };
+    return {
+      appId: 'wx0815c00f0b4bd7c3',
+      path: 'pages/index/index',
+      text: '院内导航',
+      type: 'otherProgram',
+      extraData,
+    };
+  },
+  // 郑州导航
+  13153: (item: IRegistrationCardItem) => {
+    let extraData: any = {
+      type: '8_2',
+      typeData: JSON.stringify({
+        buildingId: 210856,
         type: '1',
         hisName: item.hosDeptId,
       }),
@@ -249,7 +267,12 @@ export const isCanUseCustomGuide = (item) => {
 };
 
 export const judgeAllowNav = (item) => {
-  const { hosId } = item;
+  const { hosId, clinicalType } = item;
+
+  if (clinicalType === '4') {
+    return false;
+  }
+
   const sysCode = getSysCode();
   // #ifdef  MP-WEIXIN
   if (sysCode === '1001093') {
@@ -298,8 +321,8 @@ export const judgeAllowNav = (item) => {
   }
   // #endif
 
-  // if (condition) {
-
-  // }
+  if (HosNavData[hosId]) {
+    return true;
+  }
   return false;
 };

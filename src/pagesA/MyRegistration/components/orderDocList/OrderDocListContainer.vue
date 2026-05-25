@@ -246,7 +246,6 @@
   });
 
   const isPliticalDoc = computed(() => {
-    console.log(props.item);
     return (
       props.item?.politicalStatus &&
       ['中共党员', '中共预备党员'].includes(props.item.politicalStatus)

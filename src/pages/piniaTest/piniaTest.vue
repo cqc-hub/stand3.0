@@ -484,6 +484,17 @@
     },
   } as TBannerConfig;
 
+  const 郑州导航 = {
+    type: 'otherProgram',
+    appId: 'wx0815c00f0b4bd7c3',
+    path: 'pages/index/index',
+    extraData: {
+      type: '8',
+      buildingId: '210856',
+    },
+    _type: 'useTBanner',
+  } as TBannerConfig;
+
   const b = {
     type: 'otherProgram',
     path: 'pages/tabs/home/index',
@@ -817,8 +828,8 @@
     }, 1000);
   });
   const init = async () => {
-    // useTBanner(满意度1001093);
-    useTBanner(住院费用清单pdf1001067);
+    useTBanner(满意度1001093);
+    // useTBanner(住院费用清单pdf1001067);
     // useTBanner(住院费用清单pdf1001067);
     // useTBanner(用药查询1001093);
     // useTBanner(queryNumber);
@@ -830,17 +841,12 @@
 
     // useTBanner({
     //   type: 'otherProgram',
-    //   appId: 'wxacb96ee66c3dee84',
-    //   path:
-    //     '/pages/home/my?_type=useTBanner&type=backProgram&addition=' +
-    //     encodeURIComponent(
-    //       JSON.stringify({
-    //         token: 'token',
-    //         herenId: 'herenId',
-    //         patientId: 'patientId',
-    //       })
-    //     ) +
-    //     '&immed=1',
+    //   appId: 'wx0815c00f0b4bd7c3',
+    //   path: 'pages/index/index',
+    //   extraData: {
+    //     type: '8',
+    //     buildingId: '210856',
+    //   },
     // });
   };
 
