@@ -142,7 +142,7 @@
   import { ref, computed, watch } from 'vue';
   import { onReady, onShareAppMessage, onLoad } from '@dcloudio/uni-app';
   import { useOrder, IChooseDays, type IDocListAll, TSchInfo } from './utils';
-  import { handlerWeChatThRegLogin } from '@/utils';
+  import { getDateInfo, handlerWeChatThRegLogin } from '@/utils';
   import { joinQuery, deQueryForUrl, cloneUtil } from '@/common';
 
   import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
@@ -256,7 +256,9 @@
         }
 
         if (isFilterHoliday.value && r) {
-          r = _holidays.value.includes(p.schDate);
+          r =
+            _holidays.value.includes(p.schDate) ||
+            ['周六', '周日'].includes(getDateInfo(p.schDate).name);
         }
         return r;
       });

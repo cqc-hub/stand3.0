@@ -828,7 +828,7 @@
     }, 1000);
   });
   const init = async () => {
-    // useTBanner(满意度1001093);
+    useTBanner(满意度1001093);
     // useTBanner(住院费用清单pdf1001067);
     // useTBanner(住院费用清单pdf1001067);
     // useTBanner(用药查询1001093);
@@ -839,15 +839,15 @@
     //   idCardNumber: '330326199908286713',
     // });
 
-    useTBanner({
-      type: 'otherProgram',
-      appId: 'wx0815c00f0b4bd7c3',
-      path: 'pages/index/index',
-      extraData: {
-        type: '8',
-        buildingId: '210856',
-      },
-    });
+    // useTBanner({
+    //   type: 'otherProgram',
+    //   appId: 'wx0815c00f0b4bd7c3',
+    //   path: 'pages/index/index',
+    //   extraData: {
+    //     type: '8',
+    //     buildingId: '210856',
+    //   },
+    // });
   };
 
   onLoad(() => {

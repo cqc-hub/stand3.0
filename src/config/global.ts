@@ -54,7 +54,7 @@ const getK = (k: string) => {
 };
 
 const globalGl = {
-  isPersonal_1001035: true,
+  isPersonal_1001035: false,
   SYS_CODE,
   BASE_IMG,
   VERSION,
