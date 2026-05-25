@@ -8,6 +8,7 @@ export interface IHospitalAccountDetail {
   cardList?: {
     cardNo: string;
     cardType: string;
+    accountBalance?: string;
   }[];
   reason?: {
     codeName: string;

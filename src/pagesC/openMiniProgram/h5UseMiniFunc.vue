@@ -124,6 +124,17 @@
             backStatus: 'fail',
             herenId: gStores.globalStore.herenId,
           };
+          // backUrl.value.extraData.pata = encodeURIComponent('123123');
+          // backUrl.value.extraData.backStatus = 'success';
+          // gStores.messageStore.showMessage('模拟人脸识别成功', 3000, {
+          //   closeCallBack: () => {
+          //     useTBanner(
+          //       backUrl.value,
+          //       pageProps.value?.routeType || 'reLaunch'
+          //     );
+          //   },
+          // });
+          // break;
           function backWithErr() {
             console.log(' 看看有没有走到这里');
 

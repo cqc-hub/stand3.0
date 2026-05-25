@@ -1215,6 +1215,15 @@ export const miniProgramConfig: {
         'https://phsdevoss.eheren.com/pcloud/phs3.0/1001103-home-nav-title.png',
     },
   },
+  '1001109': {
+    wxAppid: 'wxcddd0738d61b8737',
+    name: '南湖家庭医生签约小程序',
+    isSearchInHos: false,
+    isOpenOcr: false,
+    sConfig: {
+      login: { isSkipPerfect: '1' }
+    },
+  },
   '2001004': {
     wxAppid: 'wx101158c57640d854',
     alipayAppid: '',

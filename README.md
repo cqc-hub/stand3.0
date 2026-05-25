@@ -142,3 +142,9 @@ npm set registry https://registry.npmmirror.com/
 - [ ] 是否完善授权模式
 - [ ] 报告是否支持下载
 - [ ] 修改手机号的 OCR 识别（禁止后端接口模式）
+
+## 代码混淆
+
+- 打包后，单独执行dev:obfuscate进行混淆，暂支持微信
+- 脚本文件：obfuscate.js 
+- 配置文件：obfuscator-config.json

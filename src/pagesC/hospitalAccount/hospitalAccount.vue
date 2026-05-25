@@ -541,7 +541,8 @@
       accountWithdrawal();
     } else {
       // 退款不存在可提现金额
-      const { accountBalance: refundFee, accountNo } = lists.value;
+      const { accountBalance: refundFee, accountNo, cardList } = lists.value;
+
       const { hosId, isCash } = pageProps.value;
       const {
         patientPhone: patPhone,
@@ -566,6 +567,27 @@
       //   gStores.messageStore.showMessage('未查询到收款人身份证信息', 1500);
       //   return;
       // }
+      const extraData: any = {
+        refundFee,
+        accountNo,
+        hosId,
+        isCash,
+        patPhone,
+        patientName,
+        // openAccountName,
+        // openAccountIdCard,
+        patIdCard,
+      };
+      let remarks = '';
+      if (
+        cardList?.length &&
+        ['1001102'].includes(gStores.globalStore.sysCode)
+      ) {
+        remarks = cardList
+          .map((o) => `卡号${o.cardNo}:余额${o?.accountBalance || '0'}`)
+          .join(';');
+        extraData.remarks = remarks;
+      }
 
       // 申请实名打款
       useTBanner({
@@ -573,17 +595,7 @@
         isSelfH5: '1',
         path: 'pagesC/hospitalAccount/hospitalAccountRefund',
         text: '申请实名打款',
-        extraData: {
-          refundFee,
-          accountNo,
-          hosId,
-          isCash,
-          patPhone,
-          patientName,
-          // openAccountName,
-          // openAccountIdCard,
-          patIdCard,
-        },
+        extraData,
         addition: {
           token: 'token',
           herenId: 'herenId',
