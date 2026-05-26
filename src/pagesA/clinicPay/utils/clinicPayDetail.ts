@@ -1488,7 +1488,7 @@ export const usePayPage = () => {
       patientId: pageProps.value.params ? undefined : patientId,
     };
 
-    if (pageProps.value.deParams) {
+    if (pageProps.value.deParams.patientName) {
       payArg.patientName = pageProps.value.deParams.patientName;
       payArg.cardNumber = pageProps.value.deParams.cardNumber;
     } else {
