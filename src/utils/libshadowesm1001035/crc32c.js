@@ -72,7 +72,9 @@ function crc32_str(str, seed = 0) {
 }
 AR_SHADOW_CRC32.table = T0;
 AR_SHADOW_CRC32.bstr = crc32_bstr;
-AR_SHADOW_CRC32.buf = crc32_buf;
+AR_SHADOW_CRC32.buf = crc32_bstr;
+AR_SHADOW_CRC32.str = crc32_str;
+
 // ES6 模块导出
 export { AR_SHADOW_CRC32 };
 

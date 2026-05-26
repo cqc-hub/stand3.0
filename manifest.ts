@@ -187,19 +187,29 @@ const dynamicUtilFooterData = ['export {};'];
 if (sysCode === '1001035') {
   dynamicUtilHeaderData.push(
     "import { shadowlib } from './libshadowesm1001035/shadowlib.js';",
-    "import uni_modules_libshadowesm_config from './libshadowesm1001035/config.js';"
+    "import uni_modules_libshadowesm_config from './libshadowesm1001035/config.js';",
+    "import { ar_shadow_decodeResponse } from './libshadowesm1001035/decode.js';",
+    "import initCtx from './libshadowesm1001035/shadow-init.js';"
   );
 
-  dynamicUtilBodyData.push('shadowlib;', 'uni_modules_libshadowesm_config;');
+  dynamicUtilBodyData.push(
+    'shadowlib;',
+    'uni_modules_libshadowesm_config;',
+    'ar_shadow_decodeResponse;',
+    'initCtx;'
+  );
 }
 
 fs.writeFileSync(
   dynamicUtilUrl,
   [
+    '//#ifdef MP-WEIXIN | MP-ALIPAY',
+    '\n',
     ...dynamicUtilHeaderData,
     '\n',
     ...dynamicUtilBodyData,
     ...dynamicUtilFooterData,
+    '// #end if',
   ].join('\n'),
   {
     encoding: 'utf8',
