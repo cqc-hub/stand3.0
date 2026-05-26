@@ -306,7 +306,7 @@
   const isNav = (item: IRegistrationCardItem) => {
     if (props.isWaitReg) {
       return false;
-    }
+    } 
     return judgeAllowNav(item);
   };
 
