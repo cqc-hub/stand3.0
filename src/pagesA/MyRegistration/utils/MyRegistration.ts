@@ -74,10 +74,11 @@ export const HosNavData: {
       },
     };
   },
+
   1281: () => {
     return {
-      appId: 'wx8735a8a39cf58b5e',
-      path: 'pages/index?id=FBStSs2nQK&appKey=QCncL1CmoF',
+      appId: '2021001192687787',
+      path: 'pages/index?id=FBStSs2nQK&appKey=lCkFRhrEDS',
       text: '院内导航',
       type: 'otherProgram',
       addition: {
@@ -85,6 +86,7 @@ export const HosNavData: {
       },
     };
   },
+
   12930: () => {
     return {
       appId: 'wx8735a8a39cf58b5e',
@@ -116,6 +118,17 @@ export const HosNavData: {
 // #ifdef  MP-WEIXIN
 // 微信医院导航数据
 Object.assign(HosNavData, {
+  1281: () => {
+    return {
+      appId: 'wx8735a8a39cf58b5e',
+      path: 'pages/index?id=FBStSs2nQK&appKey=QCncL1CmoF',
+      text: '院内导航',
+      type: 'otherProgram',
+      addition: {
+        hosDeptId: 'poi',
+      },
+    };
+  },
   13062: (item: IRegistrationCardItem) => {
     let extraData: any = {
       type: '8_2',
@@ -274,6 +287,7 @@ export const judgeAllowNav = (item) => {
   }
 
   const sysCode = getSysCode();
+
   // #ifdef  MP-WEIXIN
   if (sysCode === '1001093') {
     return true;
@@ -298,11 +312,7 @@ export const judgeAllowNav = (item) => {
       return true;
     }
   }
-  if (sysCode === '1001033') {
-    if (['1281'].includes(hosId)) {
-      return true;
-    }
-  }
+
   if (sysCode === '1001060') {
     if (['13062'].includes(hosId)) {
       return true;
@@ -320,7 +330,11 @@ export const judgeAllowNav = (item) => {
     }
   }
   // #endif
-
+  if (sysCode === '1001033') {
+    if (['1281'].includes(hosId)) {
+      return true;
+    }
+  }
   if (HosNavData[hosId]) {
     return true;
   }
