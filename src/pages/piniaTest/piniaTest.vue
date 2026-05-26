@@ -828,11 +828,10 @@
     }, 1000);
   });
   const init = async () => {
-    useTBanner(满意度1001093);
     // useTBanner(住院费用清单pdf1001067);
     // useTBanner(住院费用清单pdf1001067);
     // useTBanner(用药查询1001093);
-    // useTBanner(queryNumber);
+    useTBanner(queryNumber);
     // useTBanner(手术进度1001093);
     // patientUtils.faceVerifyAndPData({
     //   name: '陈钦川',
