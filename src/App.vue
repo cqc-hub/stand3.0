@@ -26,11 +26,13 @@
     gStores.globalStore.onAppLaunch(opt);
 
     if (gStores.globalStore.sysCode === '1001035') {
-      // const { appLaunchInit1001035 } = useLunchInit1001035();
-      // appLaunchInit1001035();
-    } else {
-      gStores.globalStore.setShowFlag(true);
+      const { appLaunchInit1001035 } = useLunchInit1001035({
+        onShow,
+      });
+      appLaunchInit1001035();
     }
+
+    gStores.globalStore.setShowFlag(true);
     // #ifdef MP-ALIPAY
     const alipayPid = global.systemInfo.alipayPid;
     if (alipayPid) {
@@ -58,7 +60,6 @@
     //   fail: (err) => console.error('字体加载失败', err),
     // });
     // #endif
-
   });
 
   onShow(async (opt: any) => {
