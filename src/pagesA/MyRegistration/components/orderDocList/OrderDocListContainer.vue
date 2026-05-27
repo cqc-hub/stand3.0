@@ -78,7 +78,7 @@
                   v-for="s in netService"
                   :key="s.title"
                   @click="goNetService(s, { hosDocId: item.hosDocId })"
-                  class="btn btn-primary btn-reg"
+                  class="btn btn-warning btn-reg"
                 >
                   {{ s.title }}
                 </button>
