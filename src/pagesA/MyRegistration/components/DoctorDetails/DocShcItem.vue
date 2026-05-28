@@ -58,7 +58,7 @@
 
         <view
           :class="{
-            'btn-btns': isExistOrderWait,
+            'btn-btns': isExistOrderWait && getRegBtns.length > 1,
           }"
           class="scheme-item-detail"
         >
@@ -69,45 +69,8 @@
             {{ warnSchStateMap[item.schState] }}
           </button> -->
 
-          <button
-            v-if="
-              (!outHosSch || (outHosSch && pageConfig.handlerOutHosSchClick)) &&
-              !(pageConfig.isOpenAddedNum === '1' && isExistOrderWait)
-            "
-            :class="{
-              'btn-old': systemModeOld,
-              'disabled-btn': item.schState in warnSchStateMap,
-            }"
-            class="btn btn-primary btn-reg"
-          >
-            {{
-              warnSchStateMap[item.schState] ||
-              pageConfig.orderRegBtnLabel ||
-              '挂号'
-            }}
-          </button>
-
-          <button
-            v-if="isExistOrderWait"
-            :class="{
-              'btn-old': systemModeOld,
-            }"
-            class="btn btn-primary btn-reg"
-          >
-            候补
-          </button>
-          <button
-            v-if="
-              isExistOrderWait &&
-              pageConfig.isOpenAddedNum === '1' &&
-              item.addedNum
-            "
-            :class="{
-              'btn-old': systemModeOld,
-            }"
-            class="btn btn-primary btn-reg border-left"
-          >
-            加号
+          <button v-for="btn in getRegBtns" :key="btn.label" :class="btn.class">
+            {{ btn.label }}
           </button>
         </view>
       </view>
@@ -208,6 +171,17 @@
     return disabledList;
   });
 
+  const isShowAddNumBtn = computed(() => {
+    const { pageConfig, item } = props;
+
+    return (
+      isExistOrderWait.value &&
+      pageConfig.isOpenAddedNum === '1' &&
+      item.addedNum &&
+      false
+    );
+  });
+
   const isTSchInfoDisabled = (item: TSchInfo) => {
     const { hosId, hosDeptId, hosDocId } = item;
 
@@ -253,6 +227,54 @@
       pageConfig.isOpenOrderWaiting === '1'
     );
   });
+
+  const getRegBtns = computed(() => {
+    const { item, pageConfig, outHosSch } = props;
+
+    const btns = [
+      {
+        label:
+          warnSchStateMap[item.schState] ||
+          pageConfig.orderRegBtnLabel ||
+          '挂号',
+
+        class: {
+          'btn-old': props.systemModeOld,
+          'disabled-btn': item.schState in warnSchStateMap,
+          'btn btn-primary btn-reg': true,
+        },
+
+        show:
+          (!outHosSch || (outHosSch && pageConfig.handlerOutHosSchClick)) &&
+          !(pageConfig.isOpenAddedNum === '1' && isExistOrderWait.value),
+      },
+
+      {
+        label: '候补',
+
+        class: {
+          'btn-old': props.systemModeOld,
+          'btn btn-primary btn-reg': true,
+        },
+
+        show: isExistOrderWait.value,
+      },
+
+      {
+        label: '加号',
+
+        class: {
+          'btn-old': props.systemModeOld,
+          'btn btn-primary btn-reg border-left': true,
+        },
+
+        show: isShowAddNumBtn.value,
+      },
+    ];
+
+    return btns.filter((o) => o.show);
+  });
+
   const isShowFee = computed(() => {
     const fee = props.item.fee;
 
