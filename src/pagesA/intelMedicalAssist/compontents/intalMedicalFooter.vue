@@ -42,8 +42,29 @@
           </view>
         </view>
       </view>
-      <view class="agent-avatar-line p24c flex-row-center mt12 mb12">
-        <image
+
+      <view
+        v-if="agentServerList && agentServerList?.length"
+        class="agent-avatar-line p24c flex flex-row flex-row-center mt12 mb12"
+      >
+        <view
+          class="profile"
+          v-for="(item, index) in agentServerList"
+          :key="`avatar${index}`"
+          @click="avatarClick(item)"
+        >
+          <view class="avatar-container">
+            <img
+              mode="aspectFit"
+              :src="globalGl.BASE_IMG + item.avatar"
+              class="avatar-img"
+            />
+          </view>
+          <p class="name">{{ item.docName }}</p>
+          <view class="ai-badge">AI</view>
+        </view>
+
+        <!-- <image
           v-for="(item, index) in docList"
           :key="`avatar${index}`"
           @click="avatarClick(item)"
@@ -51,7 +72,7 @@
           :src="globalGl.BASE_IMG + item.avatar"
           alt=""
           mode="aspectFit"
-        />
+        /> -->
       </view>
     </view>
   </view>
@@ -277,20 +298,18 @@
 
   const props = defineProps<{
     guessServerList?: TButtonConfig[];
+    agentServerList?: Array<{
+      bust?: string;
+      avatar?: string;
+      value?: string;
+      docName?: string;
+      zntPath?: string;
+      hideQuestion?: '1' | '0';
+    }>;
     headerConfig: StyleConfigType;
     source?: string;
     waitUploadFiles: any[];
   }>();
-
-  const docList = ref([
-    {
-      avatar: 'doc-zyq-1001035.png',
-      bust: 'doc-zyq-bust-1001035.png',
-      value: '邹燕勤智能体',
-      zntPath: 'xgcszfs',
-      hideQuestion: '1',
-    },
-  ]);
 
   // #ifdef  H5
   const {
@@ -704,6 +723,65 @@
     // border-radius: 50%;
     // overflow: hidden;
     // background-color: #fff;
+  }
+  /* 整体容器：居中布局 */
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 140rpx;
+  }
+
+  /* AI 标签：右上角蓝色胶囊 */
+  .ai-badge {
+    position: relative;
+    top: -170rpx;
+    right: -50rpx;
+    background: linear-gradient(
+      to bottom,
+      rgba(115, 73, 255, 1),
+      rgba(47, 108, 255, 1)
+    ); /* 蓝白渐变边框 */
+    color: #fff; /* 白色文字 */
+    padding: 6rpx 12rpx;
+    border-radius: 20rpx; /* 圆角形成胶囊形 */
+    font-size: 22rpx;
+    font-weight: bold;
+    z-index: 10; /* 确保层级高于头像 */
+  }
+
+  /* 头像容器：外层渐变边框 + 内层白色圆形 */
+  .avatar-container {
+    position: relative;
+    width: 110rpx;
+    height: 110rpx;
+    border-radius: 50%; /* 外层圆形 */
+    background: linear-gradient(
+      to bottom,
+      rgba(153, 252, 255, 1),
+      rgba(41, 111, 255, 1)
+    ); /* 蓝白渐变边框 */
+    padding: 4rpx; /* 控制边框宽度 */
+    box-sizing: border-box; /* 让 padding 包含在尺寸内 */
+    margin-bottom: 12rpx; /* 与姓名间距 */
+  }
+
+  /* 头像图片：内层白色圆形 + 图片填充 */
+  .avatar-img {
+    width: calc(100% - 8rpx);
+    height: calc(100% - 8rpx);
+    border: 4rpx solid #fff; /* 内层白色边框 */
+    border-radius: 50%; /* 内层圆形 */
+    object-fit: cover; /* 图片自适应填充圆形 */
+    background-color: #fff; /* 内层白色背景 */
+  }
+
+  /* 姓名文本：样式调整 */
+  .name {
+    margin: 0;
+    font-size: 28rpx;
+    color: #333; /* 深灰色文字 */
+    text-align: center;
   }
   .transition {
     transition: 0.5s;

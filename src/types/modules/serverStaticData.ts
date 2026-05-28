@@ -699,6 +699,14 @@ export interface ISystemConfig_ {
       //isSelfMethod:openWxService 唤起企业微信 在 "extraData"中跟isOpenWxServiceBtn的参数一致
       //isSelfMethod:makePhone 唤起手机电话  例：在 "extraData"中{"phone":"400-060-0763"}
       guessServerList?: Array<TButtonConfig & { isSelfMethod?: string }>;
+      agentServerList?: Array<{
+        bust?: string;
+        avatar?: string;
+        value?: string;
+        docName?: string;
+        zntPath?: string;
+        hideQuestion?: '1' | '0';
+      }>;
     };
     //智能陪诊
     medicalAsistantConfig?: {

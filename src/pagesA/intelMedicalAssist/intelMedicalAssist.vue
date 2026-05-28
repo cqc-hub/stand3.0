@@ -28,6 +28,9 @@
           :guessServerList="
             pageConfig?.intelMedicalAssistConfig?.guessServerList
           "
+          :agentServerList="
+            pageConfig?.intelMedicalAssistConfig?.agentServerList
+          "
           :waitUploadFiles="waitUploadFiles"
           :source="props.source"
           :headerConfig="styleConfig"
