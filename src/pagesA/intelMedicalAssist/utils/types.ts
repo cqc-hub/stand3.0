@@ -16,6 +16,7 @@ export type MsgListType = {
   boldMsg?: string;
   requestId?: string;
   addRessList?: any[];
+  articleList?: any[];
   addRessInfo?: object;
   homeMenuConfig?: any[];
   firstCommendList?: any[];

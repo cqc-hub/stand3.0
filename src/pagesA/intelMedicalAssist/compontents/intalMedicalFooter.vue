@@ -42,6 +42,17 @@
           </view>
         </view>
       </view>
+      <view class="agent-avatar-line p24c flex-row-center mt12 mb12">
+        <image
+          v-for="(item, index) in docList"
+          :key="`avatar${index}`"
+          @click="avatarClick(item)"
+          class="doc-avatar g-border"
+          :src="globalGl.BASE_IMG + item.avatar"
+          alt=""
+          mode="aspectFit"
+        />
+      </view>
     </view>
   </view>
   <view class="bottom-bg-fff"></view>
@@ -236,6 +247,7 @@
     pageConfig,
     waitUploadFilesSelect,
     waitUploadFilesDel,
+    distinctiveImage,
   } from '../utils/utils';
   import FileSelect from './fileSelect.vue';
 
@@ -269,6 +281,17 @@
     source?: string;
     waitUploadFiles: any[];
   }>();
+
+  const docList = ref([
+    {
+      avatar: 'doc-zyq-1001035.png',
+      bust: 'doc-zyq-bust-1001035.png',
+      value: '邹燕勤智能体',
+      zntPath: 'xgcszfs',
+      hideQuestion: '1',
+    },
+  ]);
+
   // #ifdef  H5
   const {
     isCanUse: isCanUseTranslate,
@@ -284,6 +307,7 @@
     'send-img',
     'report-show',
     'stop-chunk',
+    'click-avatar',
   ]);
 
   watch(
@@ -655,6 +679,14 @@
     // #endif
   };
 
+  const avatarClick = (item) => {
+    distinctiveImage.value = '1';
+    emits('click-avatar', item);
+    setTimeout(() => {
+      distinctiveImage.value = item.bust;
+    }, 1500);
+  };
+
   onMounted(() => {
     getGuessServerBottom();
 
@@ -666,6 +698,13 @@
   });
 </script>
 <style lang="scss" scoped>
+  .doc-avatar {
+    width: 100rpx;
+    height: 200rpx;
+    // border-radius: 50%;
+    // overflow: hidden;
+    // background-color: #fff;
+  }
   .transition {
     transition: 0.5s;
     .guess-server {

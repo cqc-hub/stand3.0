@@ -608,6 +608,7 @@ const switchHandleResult = async (opt: {
     showType,
     list,
   });
+  console.log('list', JSON.stringify(list));
   if (!(list && list.length)) {
     msgList.value.push({
       my: false,
@@ -659,6 +660,11 @@ const switchHandleResult = async (opt: {
 
       case 13:
         dealShowType13(opt);
+        break;
+
+      //健康宣教
+      case 19:
+        dealShowType19(list);
         break;
 
       case 101:
@@ -1308,6 +1314,27 @@ const dealShowType13 = (opt) => {
       requestId,
       chatId,
       // isSysAppMore: judgeIsSysAppMore(requestId),
+    });
+  }
+};
+
+const dealShowType19 = (list) => {
+  if (list.length) {
+    msgList.value.push({
+      my: false,
+      // articleList: list,
+      articleList:[{"titleImg":"","action":{"path":"https://www.zchospital.com/cn/article/139","type":"h5","isLocal":"1"},"title":"门诊患者就诊流程","desc":"门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程"},{"source":"官方","createTime":"2022-02-02 14:30:24","titleImg":"https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/ZX1001093image/file-202512251829035b7010a74c1b42698a93d138a6fc97d7jzzn.jpg","action":{"path":"https://www.zchospital.com/cn/article/139","type":"h5","isLocal":"1"},"title":"门诊患者就诊流程","desc":"门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程"}],
+      msg: '为您推荐: ',
+      showType: '19',
+      type: 19,
+      // isSysAppMore: judgeIsSysAppMore(requestId),
+    });
+  } else {
+    msgList.value.push({
+      my: false,
+      msg: '抱歉，暂未匹配到相关的健康宣教内容',
+      showType: '19',
+      type: 19,
     });
   }
 };

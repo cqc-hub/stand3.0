@@ -174,6 +174,11 @@
                       <Recommend-Menu :list="msgItem.firstCommendList" />
                     </view>
 
+                    <!-- 健康宣教 -->
+                    <view v-if="msgItem.articleList" class="pt20">
+                      <Recommend-Article :list="msgItem.articleList" />
+                    </view>
+
                     <view v-if="msgItem.addRessList">
                       <Recommend-Address :list="msgItem.addRessList" />
                     </view>
@@ -264,6 +269,7 @@
   import SecondRecommend from './SecondRecommend.vue';
   import RecommendInfo from './RecommendInfo.vue';
   import RecommendMenu from './RecommendMenu.vue';
+  import RecommendArticle from './RecommendArticle.vue';
   import RecommendCard from './RecommendCard.vue';
 
   import EvaluateBtn1 from './EvaluateBtn1.vue';

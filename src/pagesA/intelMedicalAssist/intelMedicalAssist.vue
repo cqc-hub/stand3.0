@@ -35,6 +35,7 @@
           @on-blur="onBlur"
           @send-msg="sendMsg"
           @send-img="sendImg"
+          @click-avatar="handleGuess"
           @report-show="reportShow"
           @stop-chunk="stopChunkRequest"
         />
