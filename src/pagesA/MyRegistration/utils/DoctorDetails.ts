@@ -198,10 +198,10 @@ export class UseDoctorDetail extends GStores {
   }
 
   async getDocSch() {
-    const { isSchNoDept, isSchNoHos } = await ServerStaticData.getSystemConfig(
-      'order'
-    );
+    const { isSchNoDept, isSchNoHos } =
+      await ServerStaticData.getSystemConfig('order');
     const { source } = this.globalStore.browser;
+    const { cardNumber } = this.userStore.patChoose;
     let { clinicalType, docName, hosDeptId, hosDocId, hosId } = this.props;
     let schList: IDocSchListItem[] = [],
       enabledDays: Record<string, string> = {};
@@ -221,6 +221,7 @@ export class UseDoctorDetail extends GStores {
       hosDeptId,
       hosDocId,
       hosId,
+      cardNumber,
       source,
     };
 

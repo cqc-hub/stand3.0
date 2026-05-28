@@ -26,6 +26,8 @@ export interface IPageProps {
   specialClinicDept?: number;
   /** 医生挂号验证方式 1:验证码 2:实名认证 */
   regVerificationMode?: '1' | '2';
+  /** 1 必须实名 */
+  realNameRegisterRequired?: '0' | '1';
   schState?: string;
 
   // 省中疾病描述提交后的id
