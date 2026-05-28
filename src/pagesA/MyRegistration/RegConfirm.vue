@@ -19,6 +19,7 @@
             :pat="quickPat"
             :isOrderWithoutPat="isOrderWithoutPat"
             :pb0="isOrderWithoutPat"
+            :disabled="pageConfig.isDisabledSwitchPatInConfirmOrder === '1'"
             @choose-pat="patChoose"
           >
             <template #footer="{ chooseAction, showPat }">
@@ -506,7 +507,6 @@
 
       return;
     }
-
 
     if (
       (regVerificationMode === '2' || realNameRegisterRequired === '1') &&
