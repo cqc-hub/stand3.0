@@ -97,7 +97,6 @@
             "patient": true
           }
         },
-       
 
         {
           "path": "MyRegistration/addDescribe",
@@ -1015,6 +1014,26 @@
         }
       ],
       "pagesG-plugins": ""
+    },
+    {
+      "root": "zai",
+      "pages": [
+        // #ifndef MP-TOUTIAO
+        {
+          "path": "intelMedicalAssist/intelMedicalAssist",
+          "style": {
+            "navigationBarTitleText": "智能医助",
+            "navigationBarTextStyle": "black",
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "YES"
+            }
+          }
+        }
+        // #endif
+      ],
+      "zai-plugins": ""
     },
     {
       "root": "cacheUtil",
