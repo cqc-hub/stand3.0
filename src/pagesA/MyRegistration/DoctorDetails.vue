@@ -668,7 +668,7 @@
   const selOutHosId = ref('');
   const selOutHosDay = ref('');
   const flagTitle9 = ref('');
-  const ziZhipopup = ref('');
+  const ziZhipopup = ref('' as any);
   const isMultHosDoc = ref(false);
   const isError = ref(false);
 
