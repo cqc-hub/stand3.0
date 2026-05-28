@@ -147,7 +147,9 @@
 
   const payClick = async () => {
     if (Number(info.value.totalNeedPay) > 0) {
-      getRefPay(info.value.totalNeedPay);
+      getRefPay(info.value.totalNeedPay, {
+        type: 'payConfirm',
+      });
     } else {
       getOutHospitalAffirmPay();
     }

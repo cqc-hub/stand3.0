@@ -254,7 +254,7 @@ export const useHosPayPage = () => {
     });
   };
 
-  const getRefPay = async (fee?) => {
+  const getRefPay = async (fee?, opt: { type?: string } = {}) => {
     if (!fee) {
       return;
     }
@@ -263,12 +263,13 @@ export const useHosPayPage = () => {
       return;
     }
     const feeNum = fee * 1;
+    const { type } = opt;
 
     if (!feeNum) {
       gStores.messageStore.showMessage('请输入金额');
       return;
     }
-    if (feeNum <= 1) {
+    if (feeNum <= 1 && type !== 'payConfirm') {
       gStores.messageStore.showMessage('充值金额需要大于1元, 请输入其它金额');
       return;
     }

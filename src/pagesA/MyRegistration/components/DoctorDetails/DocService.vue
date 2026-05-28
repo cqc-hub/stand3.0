@@ -21,6 +21,15 @@
         </text>
         <text class="color-888 f24 text-no-wrap">{{ item.util }}</text>
       </view>
+
+      <view v-if="['1001035'].includes(gStores.globalStore.sysCode)">
+        <text class="f24 text-no-wrap">
+          <text class="color-888">剩余号源:</text>
+        </text>
+        <text class="f28 text-no-wrap color-error g-bold">
+          {{ item.surplusCount }}
+        </text>
+      </view>
     </view>
 
     <view class="a">233</view>
@@ -71,6 +80,7 @@
       key: 'pictureParam',
       receptionMode: '1',
       typeFlag: '1251', // 协议
+      surplusCount: 0,
     },
     {
       img:
@@ -81,6 +91,7 @@
       key: 'phoneParam',
       receptionMode: '2',
       typeFlag: '1252',
+      surplusCount: 0,
     },
     {
       img:
@@ -91,6 +102,7 @@
       key: 'videoParam',
       receptionMode: '4',
       typeFlag: '1253',
+      surplusCount: 0,
     },
     {
       img:
@@ -101,6 +113,7 @@
       key: 'jsonParam',
       receptionMode: '8',
       typeFlag: '1254',
+      surplusCount: 0,
     },
   ]);
   const isComplete = ref(false);
@@ -114,6 +127,7 @@
       const v = <TDocServiceItem>item[key];
       if (v) {
         o.fee = v.servicePrice;
+        Object.assign(o, v);
       }
 
       if (key === 'jsonParam') {
