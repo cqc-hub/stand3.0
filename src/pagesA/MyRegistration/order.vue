@@ -9,7 +9,7 @@
     <view v-if="allDocList.length">
       <Order-Sel-Date
         :value="checkedDay"
-        :choose-days="chooseDays"
+        :choose-days="_chooseDays"
         :enable-days="enabledDays"
         :isShowOrderStatus="pageConfig.calendarShowOrderStatus === '1'"
         @change="dateChange"
@@ -141,9 +141,10 @@
 <script lang="ts" setup>
   import { ref, computed, watch } from 'vue';
   import { onReady, onShareAppMessage, onLoad } from '@dcloudio/uni-app';
-  import { useOrder, IChooseDays, type IDocListAll, TSchInfo } from './utils';
+  import { useOrder, IChooseDays, type IDocListAll } from './utils';
   import { getDateInfo, handlerWeChatThRegLogin } from '@/utils';
   import { joinQuery, deQueryForUrl, cloneUtil } from '@/common';
+  import { IDocDetail } from './utils/DoctorDetails';
 
   import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
@@ -179,7 +180,12 @@
       des: string;
     }[]
   >([]);
-  const _holidays = computed(() => holidays.value.map((o) => o.date));
+  const _holidays = computed(() => {
+    if (Array.isArray(holidays.value)) {
+      return holidays.value.map((o) => o.date);
+    }
+    return [];
+  });
   watch(
     () => isFilterHoliday.value,
     async (v) => {
@@ -190,9 +196,31 @@
           holidays.value = await api.getChineseHolidays();
           uni.hideLoading();
         }
+
+        if (checkedDay.value) {
+          if (
+            !(
+              _holidays.value.includes(checkedDay.value) ||
+              ['周六', '周日'].includes(getDateInfo(checkedDay.value).name)
+            )
+          ) {
+            checkedDay.value = '';
+          }
+        }
       }
     }
   );
+
+  const _chooseDays = computed(() => {
+    if (isFilterHoliday.value) {
+      return chooseDays.value.filter(
+        (o) =>
+          _holidays.value.includes(o.fullDay) ||
+          ['周六', '周日'].includes(getDateInfo(o.fullDay).name)
+      );
+    }
+    return chooseDays.value;
+  });
 
   const hosDeptId = ref(
     (props.hosDeptId && decodeURIComponent(props.hosDeptId)) || ''
@@ -207,7 +235,7 @@
 
   const regDialogConfirm = ref<any>('');
 
-  const docDetail = ref({});
+  const docDetail = ref({} as IDocDetail);
 
   const deptName = ref(decodeURIComponent(props.deptName));
   const {
@@ -293,7 +321,11 @@
     }
 
     if (isFilterHoliday.value) {
-      list = list.filter((o) => _holidays.value.includes(o.schDate));
+      list = list.filter(
+        (o) =>
+          _holidays.value.includes(o.schDate) ||
+          ['周六', '周日'].includes(getDateInfo(o.schDate).name)
+      );
     }
 
     return list;
@@ -316,9 +348,7 @@
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
   });
 
-  const showdocDialogClick = (item: IChooseDays) => {
-    console.log(2);
-
+  const showdocDialogClick = (item: IDocDetail) => {
     docDetail.value = item;
     regDialogConfirm.value.show();
   };

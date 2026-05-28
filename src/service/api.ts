@@ -1575,7 +1575,7 @@ export default {
 
   // 获取中国节假日（需每年手动维护）
   async getChineseHolidays() {
-    const { data = [] } = await new Promise<{
+    const res = await new Promise<{
       data: {
         date: string;
         name: string;
@@ -1585,9 +1585,13 @@ export default {
       uni.request({
         url: globalGl.BASE_IMG + 'holidays.json',
         complete: complete as any,
+        success: (res) => {
+          console.log(res)
+        }
       });
     });
-
+    console.log(res);
+    const { data = [] } = res;
     return data;
   },
 };

@@ -4,10 +4,9 @@
       v-for="(item, idx) in serList"
       :key="idx"
       @click="
-        (item) =>
-          goNetService(item, {
-            hosDocId,
-          })
+        goNetService(item, {
+          hosDocId,
+        })
       "
       class="item g-flex-rc-cc g-border"
     >

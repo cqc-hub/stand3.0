@@ -97,7 +97,11 @@
             候补
           </button>
           <button
-            v-if="isExistOrderWait && pageConfig.isOpenAddedNum === '1'"
+            v-if="
+              isExistOrderWait &&
+              pageConfig.isOpenAddedNum === '1' &&
+              item.addedNum
+            "
             :class="{
               'btn-old': systemModeOld,
             }"

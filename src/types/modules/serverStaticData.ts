@@ -84,6 +84,10 @@ export interface ISystemConfig_ {
     isShowFilterOrderInHoliday?: '1';
     // 云门诊号源列表时候展示互联网医院 图文问诊(目前仅展示图文)
     isShowNetBtnInOrderList?: '1';
+    // 号源列表时候传入 cardNumber (开启后页面直接开撕就诊人拦截)
+    orderListWithCardNumber?: '1';
+    // 确认挂号页面是否能切换就诊人
+    isCanSwitchPatInConfirmOrder?: '1';
     /** 按日期, 分组名 categorName 隐藏 */
     isHideOrderCategorName?: '1';
     // 选择号源时候显示几列
