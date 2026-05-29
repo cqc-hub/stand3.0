@@ -1324,7 +1324,31 @@ const dealShowType19 = (list) => {
     msgList.value.push({
       my: false,
       // articleList: list,
-      articleList:[{"titleImg":"","action":{"path":"https://www.zchospital.com/cn/article/139","type":"h5","isLocal":"1"},"title":"门诊患者就诊流程","desc":"门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程"},{"source":"官方","createTime":"2022-02-02 14:30:24","titleImg":"https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/ZX1001093image/file-202512251829035b7010a74c1b42698a93d138a6fc97d7jzzn.jpg","action":{"path":"https://www.zchospital.com/cn/article/139","type":"h5","isLocal":"1"},"title":"门诊患者就诊流程","desc":"门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程"}],
+      articleList: [
+        {
+          titleImg: '',
+          action: {
+            path: 'https://www.zchospital.com/cn/article/139',
+            type: 'h5',
+            isLocal: '1',
+          },
+          title: '门诊患者就诊流程',
+          desc: '门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程',
+        },
+        {
+          source: '官方',
+          createTime: '2022-02-02 14:30:24',
+          titleImg:
+            'https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/ZX1001093image/file-202512251829035b7010a74c1b42698a93d138a6fc97d7jzzn.jpg',
+          action: {
+            path: 'https://www.zchospital.com/cn/article/139',
+            type: 'h5',
+            isLocal: '1',
+          },
+          title: '门诊患者就诊流程',
+          desc: '门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程门诊患者就诊流程',
+        },
+      ],
       msg: '为您推荐: ',
       showType: '19',
       type: 19,

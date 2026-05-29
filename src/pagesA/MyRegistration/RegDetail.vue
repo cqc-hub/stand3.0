@@ -482,7 +482,6 @@
     cloneUtil,
     setLocalStorage,
     getLocalStorage,
-    getSysCode,
   } from '@/common';
   import { beforeEach } from '@/router';
 
@@ -531,6 +530,8 @@
   const refFormPatient = ref<any>('');
   const pageProps = ref({} as IPageProps);
   const gStores = new GStores();
+  const sysCode = gStores.globalStore.sysCode;
+
   const isRender = ref(false);
   const showQrCode = ref(false);
   const isShowRefreshQrCode = ref(false);
@@ -731,7 +732,7 @@
       inquiriesBack !== '1' &&
       categorName === '门诊MDT' &&
       categor === '22' &&
-      getSysCode() === '1001035'
+      sysCode
     ) {
       const preConsultation: TButtonConfig = {
         type: 'h5',
@@ -955,7 +956,7 @@
       timeTravel.value.downTime = 100;
       clearInterval(_timeTravel);
     }
-    if (totalCost && !(Number(totalCost) == 0 && getSysCode() === '1001083')) {
+    if (totalCost && !(Number(totalCost) == 0 && sysCode === '1001083')) {
       result._totalCost = totalCost + '元';
     }
 
@@ -974,7 +975,7 @@
       (result.fee || result.totalCost) &&
       !(
         (Number(result.totalCost) == 0 || Number(result.fee) == 0) &&
-        getSysCode() === '1001083'
+        sysCode === '1001083'
       )
     ) {
       result._fee = (result.fee || result.totalCost) + '元';
@@ -982,7 +983,7 @@
     result._category = result.schQukCategor || result.categorName;
     orderRegInfo.value = result;
     qrCodeOpt.value.code = result[qrCode];
-    if (getSysCode() === '1001036') {
+    if (sysCode === '1001036') {
       qrCodeOpt.value.code = `${result.hosOrderId}|${result.cardNumber}`;
     }
     showConsultationDialog();
@@ -1100,7 +1101,7 @@
   const payOrder = async () => {
     beforePay1001035();
     const { fee } = orderRegInfo.value;
-    if (fee === 0) {
+    if (fee === 0 && sysCode !== '1001048') {
       toPay();
       return;
     }

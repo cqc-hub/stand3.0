@@ -1,10 +1,10 @@
 "use strict";
 
 // 配置常量
-const ar_shadow_noxhrurls = "https://appdemo.underriver.cn/pub";
-const ar_shadow_publickeyurl = "https://appdemo.underriver.cn/pub";
-// const ar_shadow_noxhrurls = "https://netphs.jshtcm.com.cn/pub";
-// const ar_shadow_publickeyurl = "https://netphs.jshtcm.com.cn/pub";
+// const ar_shadow_noxhrurls = "https://appdemo.underriver.cn/pub";
+// const ar_shadow_publickeyurl = "https://appdemo.underriver.cn/pub";
+const ar_shadow_noxhrurls = "https://netphs.jshtcm.com.cn/pub";
+const ar_shadow_publickeyurl = "https://netphs.jshtcm.com.cn/pub";
 
 // ES6 模块导出
 export { ar_shadow_noxhrurls, ar_shadow_publickeyurl };

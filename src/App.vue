@@ -26,10 +26,10 @@
     gStores.globalStore.onAppLaunch(opt);
 
     if (gStores.globalStore.sysCode === '1001035') {
-      // const { appLaunchInit1001035 } = useLunchInit1001035({
-      //   onShow,
-      // });
-      // appLaunchInit1001035();
+      const { appLaunchInit1001035 } = useLunchInit1001035({
+        onShow,
+      });
+      appLaunchInit1001035();
     }
 
     gStores.globalStore.setShowFlag(true);

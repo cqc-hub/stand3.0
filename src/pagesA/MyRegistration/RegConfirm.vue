@@ -19,6 +19,7 @@
             :pat="quickPat"
             :isOrderWithoutPat="isOrderWithoutPat"
             :pb0="isOrderWithoutPat"
+            :disabled="pageConfig.isDisabledSwitchPatInConfirmOrder === '1'"
             @choose-pat="patChoose"
           >
             <template #footer="{ chooseAction, showPat }">
@@ -198,8 +199,8 @@
             isWaitReg
               ? '候补预约'
               : pageConfig.isConfirmOrderWithPay === '1'
-              ? '去支付'
-              : '确定预约'
+                ? '去支付'
+                : '确定预约'
           }}
         </button>
       </view>
@@ -229,7 +230,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed ,nextTick} from 'vue';
+  import { ref, computed, nextTick } from 'vue';
 
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
@@ -473,6 +474,7 @@
       thRegisterId,
       regVerificationMode,
       enData,
+      realNameRegisterRequired,
     } = props.value;
     let { patientId, realNameAuth } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
@@ -506,7 +508,10 @@
       return;
     }
 
-    if (regVerificationMode === '2' && realNameAuth === '0') {
+    if (
+      (regVerificationMode === '2' || realNameRegisterRequired === '1') &&
+      realNameAuth === '0'
+    ) {
       await handlerConfirmPatReal();
     }
 
@@ -1192,7 +1197,7 @@
         .getDeptDetail({
           hosDeptId: props.value.specialClinicDept || props.value.hosDeptId,
         })
-        .catch(() => ({} as any));
+        .catch(() => ({}) as any);
 
       if (promptMessage) {
         await new Promise<{ confirm: boolean }>((r) => {

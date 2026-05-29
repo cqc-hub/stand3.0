@@ -14,6 +14,7 @@ import {
 import { joinQueryForUrl, deQueryForUrl, joinQuery } from '@/common/utils';
 import { type XOR } from '@/typeUtils/obj';
 import globalGl from '@/config/global';
+import { beforeEach } from '@/router';
 
 dayjs.extend(isoWeek);
 export interface IQueryRegNum {
@@ -266,10 +267,12 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     } = payload;
     const { isShowFilterOrderSourceBtn, netHosId, orderMode } =
       orderConfig.value;
+    const { cardNumber } = gStores.userStore.patChoose;
 
     const _hosDeptId = hosDeptId || deptId;
     const args = {
       source: gStores.globalStore.browser.source,
+      cardNumber,
       hosId,
       clinicalType,
       hosDeptId: _hosDeptId,
@@ -502,9 +505,11 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       isExpertDeptId,
     } = payload;
     const { netHosId, orderMode } = orderConfig.value;
+    const { cardNumber } = gStores.userStore.patChoose;
 
     const args = {
       source: gStores.globalStore.browser.source,
+      cardNumber,
       hosId,
       clinicalType,
       hosDeptId,
@@ -866,6 +871,15 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     }
 
     chooseDays.value = getChooseDays(orderConfig.value.chooseDay);
+
+    const { orderListWithCardNumber } = config;
+
+    if (orderListWithCardNumber === '1') {
+      await wait(300);
+      await beforeEach({
+        _isPatient: true,
+      });
+    }
 
     if (query) {
       getListAll(checkedDay.value, query);

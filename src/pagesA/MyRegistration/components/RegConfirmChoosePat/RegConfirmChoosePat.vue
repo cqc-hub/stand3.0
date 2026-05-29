@@ -24,7 +24,7 @@
 
         <view>
           <view
-            v-if="!isOrderWithoutPat"
+            v-if="!isOrderWithoutPat && !disabled"
             class="choose-icon flex-normal"
             @click="chooseAction"
           >
@@ -71,6 +71,7 @@
   const props = defineProps<{
     pat?: any;
     isOrderWithoutPat?: boolean;
+    disabled?: boolean;
     isUnSelPat?: boolean;
     pb0?: boolean;
   }>();
