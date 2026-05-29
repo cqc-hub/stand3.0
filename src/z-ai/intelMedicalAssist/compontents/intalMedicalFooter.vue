@@ -28,7 +28,7 @@
         !(pageConfig?.intelMedicalAssistConfig?.isIntelligentGuidance === '1')
       "
     >
-      <view class="guess-title pt24 pb12 pl24 f26">您可能需要以下服务</view>
+      <view v-if="serverArray && serverArray.length" class="guess-title pt24 pb12 pl24 f26">您可能需要以下服务</view>
       <view class="guess-content">
         <view class="guess-grid">
           <view
