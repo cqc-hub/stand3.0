@@ -97,7 +97,7 @@
     reportPopupRefTitle,
     reportPopupRefType,
     waitUploadFiles,
-  } from './utils/utils';
+  } from './utils/utils.js';
   import { throttle, GStores, wait } from '@/utils';
   import { useCacheStore, type IPat } from '@/stores';
 

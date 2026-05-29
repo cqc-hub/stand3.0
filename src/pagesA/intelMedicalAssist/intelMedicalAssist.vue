@@ -39,7 +39,7 @@
   onLoad(async (options) => {
     await wait(300);
     uni.navigateTo({
-      url: '/zai/intelMedicalAssist/intelMedicalAssist',
+      url: '/z-ai/intelMedicalAssist/intelMedicalAssist',
     });
   });
 </script>
