@@ -228,7 +228,16 @@
       const res = await payMoneyOnline(payArg);
 
       await toPayPull(res, '住院缴费');
-      payAfter();
+      // payAfter();
+
+      await wait(800);
+      uni.showLoading({
+        mask: true,
+        title: '结算中....',
+      });
+      await wait(5000);
+      await getNormalData();
+      await payClick();
     } catch (error) {
       console.error(error);
     } finally {
