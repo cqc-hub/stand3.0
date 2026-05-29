@@ -17,7 +17,13 @@ import {
 } from '@/stores';
 import { getSysCode, joinQuery } from '@/common';
 import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
-import { apiAsync, cacheUtil, nameConvert, ServerStaticData } from '@/utils';
+import {
+  apiAsync,
+  cacheUtil,
+  nameConvert,
+  ServerStaticData,
+  wait,
+} from '@/utils';
 import { useViewerStore } from '@/stores/modules/viewer';
 
 import api from '@/service/api';
@@ -177,14 +183,17 @@ export class GStores {
         isSuccess = false;
         return {} as any;
       });
-      flagData = result.find((item) => item.typeFlag === typeFlag);
-      isSuccess &&
+      flagData = result.find((item) => `${item.typeFlag}` === `${typeFlag}`);
+
+      if (isSuccess) {
         this.globalStore.setFlagsCaches(
           result.map((item) => {
             return { ...item, initialText: item.content };
           })
         );
+      }
     }
+
     let content = '';
     let title = '';
     let initialText = '';
