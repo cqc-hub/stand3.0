@@ -4,7 +4,9 @@
       <view class="pat-label">
         <!-- <text class="pat-name bold">{{pat.healthQrCodeText ? pat.patientNameEncry : pat.patientName }}</text> -->
         <text class="pat-name bold">
-          {{ gStores && gStores.userStore && gStores.userStore.getPatName(pat) }}
+          {{
+            gStores && gStores.userStore && gStores.userStore.getPatName(pat)
+          }}
         </text>
         <text class="pat-sex bold">{{ pat.patientSex }}</text>
         <g-tag
@@ -20,7 +22,7 @@
           class="mr12"
         />
         <g-tag
-          v-if="globalGl.SYS_CODE !== '1001067' && pat.healthCardUser === '2'"
+          v-if="pat.healthCardUser === '2'"
           type="blue"
           text="医保"
           class="mr12"
@@ -63,7 +65,13 @@
         <view class="health-card-footer">
           <view class="health-card-info flex-normal-between">
             <view class="health-card-info-content">
-              <view>{{ gStores && gStores.userStore && gStores.userStore.getPatName(pat) }}</view>
+              <view>
+                {{
+                  gStores &&
+                  gStores.userStore &&
+                  gStores.userStore.getPatName(pat)
+                }}
+              </view>
               <view>{{ pat.idCard }}</view>
             </view>
 
@@ -89,7 +97,10 @@
         </view>
       </view>
 
-      <view v-if="getPageConfigValue('isQrCodeDisabled') !== '1'" class="card-container">
+      <view
+        v-if="getPageConfigValue('isQrCodeDisabled') !== '1'"
+        class="card-container"
+      >
         <image class="qr-code" :src="'/static/image/v-qrcode.png'" />
       </view>
     </view>
@@ -127,7 +138,8 @@
 
       const getPageConfigValue = (key: keyof ISystemConfig['person']) => {
         try {
-          const config = typeof pageConfig === 'function' ? pageConfig() : pageConfig;
+          const config =
+            typeof pageConfig === 'function' ? pageConfig() : pageConfig;
           return config?.[key];
         } catch (e) {
           console.warn('pageConfig 获取失败:', e);
