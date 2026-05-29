@@ -196,6 +196,7 @@ export const init = async (props) => {
     historyMess: false,
     headerLineMenu: props?.type?.includes('homePage') || 'back',
   };
+  distinctiveImage.value=''
   const { setNavBarTitle } = props;
   setNavBarTitle && (title.value = setNavBarTitle);
   const gStores = new GStores();
