@@ -83,8 +83,12 @@ export const decryptDesParam = function (query) {
 
 // 页面扫码加解密
 const DES_PAGE = 'phsDesKey';
-export const encryptForPage = (query: BaseObject) => {
-  return encodeURIComponent(encryptDes(JSON.stringify(query), DES_PAGE));
+export const encryptForPageByStr = (str: string) => {
+  return encryptDes(str, DES_PAGE);
+};
+export const encryptForPage = (query: BaseObject | string) => {
+  const str = typeof query === 'string' ? query : JSON.stringify(query);
+  return encodeURIComponent(encryptForPageByStr(str));
 };
 
 export const decryptForPage = (str: string) => {
@@ -111,5 +115,3 @@ const customAtob = (base64) => {
 
   return result;
 };
-
-
