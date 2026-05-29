@@ -232,6 +232,17 @@ Object.assign(HosNavData, {
       },
     };
   },
+  13159: () => {
+    return {
+      appId: 'wx8735a8a39cf58b5e',
+      path: 'pages/index?id=kXwN9l2qtt&appKey=la0MNIncsW',
+      text: '院内导航',
+      type: 'otherProgram',
+      addition: {
+        hosDeptId: 'poi',
+      },
+    };
+  },
   13152: (item: IRegistrationCardItem) => {
     const { deptName: name, hosDeptId } = item;
 
