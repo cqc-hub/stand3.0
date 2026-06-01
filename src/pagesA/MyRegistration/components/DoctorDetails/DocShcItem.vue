@@ -177,8 +177,7 @@
     return (
       isExistOrderWait.value &&
       pageConfig.isOpenAddedNum === '1' &&
-      item.addedNum &&
-      false
+      item.addedNum
     );
   });
 
