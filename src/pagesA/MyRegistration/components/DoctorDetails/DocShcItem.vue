@@ -244,9 +244,9 @@
           'btn btn-primary btn-reg': true,
         },
 
-        show:
-          (!outHosSch || (outHosSch && pageConfig.handlerOutHosSchClick)) &&
-          !(pageConfig.isOpenAddedNum === '1' && isExistOrderWait.value),
+        show: !isShowAddNumBtn.value,
+        // (!outHosSch || (outHosSch && pageConfig.handlerOutHosSchClick)) &&
+        // !(pageConfig.isOpenAddedNum === '1' && isExistOrderWait.value),
       },
 
       {

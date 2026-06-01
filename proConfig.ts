@@ -618,7 +618,7 @@ export const miniProgramConfig: {
       login: { isSkipPerfect: '1', isAliAuthBase: '1', isLoginByOpenId: '1' },
       isOpenHelpOld: '1',
       isOpenMessageAuth: '1',
-      isOpenAssistMessage: '1',
+      // isOpenAssistMessage: '1',
       isOpenWechatSI: true,
       medicalMHelp: {
         alipay: {
@@ -631,7 +631,7 @@ export const miniProgramConfig: {
             },
             cardType: '01',
           },
-          medicalFiling: '1',
+          // medicalFiling: '1',
         },
       },
     },
