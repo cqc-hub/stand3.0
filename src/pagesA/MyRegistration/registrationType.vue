@@ -21,7 +21,7 @@
           <view class="safe-height"></view>
           <view class="safe-height"></view>
           <view class="safe-height"></view>
-          <text class="color-666 pl42">{{ item.tip }}</text>
+        <text class="color-666 pl42">{{ item.tip }}</text>
         </view>
       </view>
     </view>

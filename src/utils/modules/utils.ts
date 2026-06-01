@@ -7,12 +7,51 @@ import { GStores } from '@/utils';
 import { toPayPull } from '@/components/g-pay';
 import api from '@/service/api';
 import globalGl from '@/config/global';
-import { deQueryForUrl, joinQueryForUrl } from '@/common';
+import {
+  deQueryForUrl,
+  getLocalStorage,
+  joinQueryForUrl,
+  setLocalStorage,
+} from '@/common';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 dayjs.extend(isoWeek);
 
 type NeverTurnsAny<T> = T extends never ? any : T;
+
+// 缓存设备码，避免重复计算
+let cachedDeviceCode = '';
+
+// 获取设备码 - 多平台兼容（微信小程序、支付宝小程序、鸿蒙元服务、抖音小程序、H5）
+export const getDeviceCode = (): string => {
+  if (cachedDeviceCode) return cachedDeviceCode;
+
+  try {
+    // #ifdef H5
+    // H5 无原生 deviceId，用 localStorage 持久化生成唯一标识
+    let h5DeviceCode = getLocalStorage('h5_device_code');
+    if (!h5DeviceCode) {
+      h5DeviceCode = `${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+      setLocalStorage({ h5_device_code: h5DeviceCode });
+    }
+    cachedDeviceCode = h5DeviceCode;
+    return cachedDeviceCode;
+    // #endif
+
+    // 小程序 / 鸿蒙元服务：优先取原生 deviceId，否则用设备信息组合
+    const sysInfo = uni.getSystemInfoSync();
+    if (sysInfo.deviceId) {
+      cachedDeviceCode = sysInfo.deviceId;
+    } else {
+      const { deviceModel = '', deviceBrand = '', pixelRatio = 0 } = sysInfo;
+      cachedDeviceCode = `${deviceBrand}_${deviceModel}_${pixelRatio}`;
+    }
+    return cachedDeviceCode;
+  } catch (e) {
+    cachedDeviceCode = `unknown_${Date.now()}`;
+    return cachedDeviceCode;
+  }
+};
 
 export const getPressCompanyLabel = (expressCompany) => {
   switch (expressCompany) {

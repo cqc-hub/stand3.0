@@ -9,12 +9,14 @@ import {
   getLocalStorage,
   setLocalStorage,
   deepClone,
+  encryptForPageByStr,
 } from '@/common';
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useMessageStore } from '@/stores';
 import {
   LoginUtils,
   ServerStaticData,
+  getDeviceCode,
   getQKey,
   getRKey,
   outLogin,
@@ -210,6 +212,8 @@ export const getConfigHeader = () => {
     'Content-Type': 'application/json',
     hrCode: encryptDes(getSysCode(), 'hrtest22'),
     Authorization: getToken(),
+    sign: encryptForPageByStr(getDeviceCode()),
+    st: encryptForPageByStr(`${new Date().getTime()}`),
   };
 
   if (isOpenSm4) {
