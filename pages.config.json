@@ -555,7 +555,6 @@
           "style": {
             "navigationBarTitleText": "智能医助",
             "navigationBarTextStyle": "black",
-            "navigationStyle": "custom",
             "mp-alipay": {
               "transparentTitle": "always",
               "titlePenetrate": "YES"

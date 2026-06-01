@@ -22,7 +22,9 @@
         </view>
 
         <view class="info-description">
-          <text class="mr12 pr12 g-split-line">{{ item.source || '官方' }}</text>
+          <text class="mr12 pr12 g-split-line">
+            {{ item.source || '官方' }}
+          </text>
           <text>{{ getTimeFormatter(item) }}</text>
         </view>
       </view>
@@ -34,7 +36,7 @@
             <view class="desc" v-if="item.desc">{{ item.desc }}</view>
             <view class="info-description">
               <text v-if="item.source" class="mr12 pr12 g-split-line">
-                {{ item.source  }}
+                {{ item.source }}
               </text>
               <text v-if="item.createTime">{{ getTimeFormatter(item) }}</text>
             </view>
@@ -54,6 +56,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, PropType, computed } from 'vue';
+  import { type TButtonConfig, useTBanner } from '@/utils';
   import dayjs from 'dayjs';
 
   export default defineComponent({
@@ -87,7 +90,9 @@
       };
 
       const itemClick = (item) => {
-        ctx.emit('item-click', item);
+        // ctx.emit('item-click', item);
+        // console.log('item', item);
+        useTBanner(item.action);
       };
 
       return {

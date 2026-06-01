@@ -6,7 +6,11 @@
       @click="itemClick(item)"
       class="flex-normal"
     >
-      <img :src="$global.BASE_IMG+item.ico" class="mr8 menu-ico" lazy-load />
+      <img
+        :src="item.iconfont ? item.iconfont : $global.BASE_IMG + item.ico"
+        class="mr8 menu-ico"
+        lazy-load
+      />
       <view class="f32 color-blue">{{ item.label }}</view>
     </view>
   </view>
@@ -117,11 +121,11 @@
       },
 
       goServiceCenter() {
-         // #ifndef H5
+        // #ifndef H5
         uni.navigateTo({
           url: '/pagesA/serviceCenter/serviceCenter',
         });
-         // #endif
+        // #endif
 
         // #ifdef H5
         useTBanner({
