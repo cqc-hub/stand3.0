@@ -42,7 +42,10 @@
                   <view class="flex-1"></view>
                   <!-- v-if="item.completionStatus === 1" -->
                   <!-- v-if="item.title !== '门诊缴费'" -->
-                  <view class="mr60 absolute tag-status">
+                  <view
+                    v-if="item.completionStatus !== undefined"
+                    class="mr60 absolute tag-status"
+                  >
                     <Tag-Status
                       :color="
                         item.completionStatus === 1 ? '#B0F0DF' : '#ffb5a5'
@@ -366,6 +369,15 @@
                 />
               </view>
 
+              <view v-else-if="item.title === '诊后管理'">
+                <GuideContentListCol :cols="zhglCol" :lab="item" />
+                <GuideBtns
+                  :item="item"
+                  :btns="zhglBtns"
+                  @btn-click="(v) => emits('btn-click', v)"
+                />
+              </view>
+
               <view v-else>暂未实现</view>
             </view>
           </g-collapse>
@@ -408,7 +420,7 @@
   };
 
   const isActive = (item) => {
-    return item.completionStatus === 0;
+    return item.completionStatus === 0 || item.defaultExpand;
   };
 
   const jyBtns = computed(() => {
@@ -592,6 +604,29 @@
       key: 'areaName',
     },
   ]);
+
+  // 诊后管理
+  const zhglCol = ref([
+    {
+      label: '温馨提示',
+      key: 'tip',
+    },
+  ]);
+
+  const zhglBtns = computed<TGuideButtonConfig[]>(() => {
+    return [
+      {
+        type: 'self',
+        path: 'pagesC/commonHosNet/commonHosNet?returnUrl=pages/v3/afterDiagnosis/home',
+        text: '慢病管理',
+        addition: {
+          patientId: '_pd',
+        },
+        btnClass: 'btn-primary color-fff'
+      },
+    ];
+    // return [] as TGuideButtonConfig[];
+  });
 
   // const mzqdCol = ref([
 

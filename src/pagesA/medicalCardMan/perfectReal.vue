@@ -1285,6 +1285,8 @@
 
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    console.log('获取到页面参数---- ');
+    console.log(pageProps.value);
     if (!pageProps.value.pageType) {
       pageProps.value.pageType = 'addPatient';
     }
