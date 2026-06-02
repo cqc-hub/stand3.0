@@ -3164,12 +3164,13 @@ export const handlerMedicalPayDongRuan = async ({
     appId,
     authCode,
     // retCode: 0,
-    resultConfig: encodeURIComponent(
-      JSON.stringify({
-        cancelAuthRedirectUrl: resultConfig.cancelUrl,
-        orderStatusRedirectUrl: resultConfig.successUrl,
-      })
-    ),
+
+    // resultConfig: encodeURIComponent(
+    //   JSON.stringify({
+    //     cancelAuthRedirectUrl: resultConfig.cancelUrl,
+    //     orderStatusRedirectUrl: resultConfig.successUrl,
+    //   })
+    // ),
   };
 
   const url = joinQuery(
