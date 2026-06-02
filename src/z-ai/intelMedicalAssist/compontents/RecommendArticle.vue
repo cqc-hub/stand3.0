@@ -91,7 +91,7 @@
 
       const itemClick = (item) => {
         // ctx.emit('item-click', item);
-        // console.log('item', item);
+        console.log('item', item);
         useTBanner(item.action);
       };
 

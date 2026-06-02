@@ -946,6 +946,11 @@ export const miniProgramConfig: {
       login: { isAliAuthBase: '1', isSkipPerfect: '1' },
       medicalMHelp: {
         isOpenPatToMedicalPat: {},
+        alipay: {
+          medicalNation: {},
+          isMedicalOrder: '1',
+          isGbFamilyPayment: '1',
+        },
         wx: {
           medicalNation: {
             appId: 'wxe183cd55df4b4369',
@@ -1221,7 +1226,7 @@ export const miniProgramConfig: {
     isSearchInHos: false,
     isOpenOcr: false,
     sConfig: {
-      login: { isSkipPerfect: '1' }
+      login: { isSkipPerfect: '1' },
     },
   },
   '2001004': {

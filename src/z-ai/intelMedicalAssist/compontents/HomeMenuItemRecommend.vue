@@ -11,7 +11,17 @@
     >
       <view class="p32 flex-between">
         <view class="flex-normal">
-          <view :class="[item.iconfont]" class="icon-font menu-icon mr16" />
+          <img
+            v-if="item.iconfont.startsWith('http')"
+            :src="item.iconfont"
+            class="icon-font menu-icon mr16"
+            lazy-load
+          />
+          <view
+            v-else
+            :class="[item.iconfont]"
+            class="icon-font menu-icon mr16"
+          />
 
           <view>
             <view class="g-bold title f32">{{ item.title }}</view>

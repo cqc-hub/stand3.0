@@ -1321,10 +1321,16 @@ const dealShowType13 = (opt) => {
 
 const dealShowType19 = (list) => {
   if (list.length) {
+    list=list.map((o)=>{
+      if(o.action.isSelf=='1'){
+        o.action.isSelfH5='1'
+      }
+      return o
+    })
     msgList.value.push({
       my: false,
       articleList: list,
-      msg: '为您推荐健康宣教: ',
+      msg: '为您推荐以下内容: ',
       showType: '19',
       type: 19,
       // isSysAppMore: judgeIsSysAppMore(requestId),
@@ -1332,7 +1338,7 @@ const dealShowType19 = (list) => {
   } else {
     msgList.value.push({
       my: false,
-      msg: '抱歉，暂未匹配到相关的健康宣教内容',
+      msg: '抱歉，暂未匹配到相关的内容',
       showType: '19',
       type: 19,
     });
