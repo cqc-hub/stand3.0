@@ -304,6 +304,28 @@
 
     item.hosDeptId = hosDeptId || deptId;
   };
+
+  const dealListWith1001035 = (list: TVisitInfo[]) => {
+    if (gStores.globalStore.sysCode === '1001035') {
+      const isAllComplete = list.every((o) => {
+        if (o) {
+          return o.completionStatus === 1;
+        }
+
+        return true;
+      });
+
+      if (isAllComplete) {
+        list.unshift({
+          ...list[0],
+          title: '诊后管理',
+          tip: '您可按需选择签约我院慢病管理服务,为您的健康保驾护航！',
+          defaultExpand: true,
+          completionStatus: undefined,
+        } as any);
+      }
+    }
+  };
   const visitList = ref(<TVisitRecord[]>[]);
   const visitItemSel = ref(<TVisitRecord>{});
   const visitInfoList = ref(<TVisitInfo[]>[]);
@@ -409,7 +431,9 @@
         dealItem(o);
       }
     });
+
     visitInfoList.value = rList.reverse();
+    dealListWith1001035(visitInfoList.value);
   };
 
   const isShowEmpty = computed(() => {
@@ -634,6 +658,8 @@
           if (t.itemList.length) {
             t.itemList = t.itemList.sort((a, b) => b.sort - a.sort);
           }
+
+          dealListWith1001035(t.itemList);
           return t;
         });
     }

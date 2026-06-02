@@ -294,7 +294,7 @@ export function initShadowSDK() {
 			}
 
 			// 确认是需要加密的域名，才设置 responseType 为 arraybuffer
-			args.responseType = 'arraybuffer';
+			// args.responseType = 'arraybuffer';
 
 			const publicKey = uni.getStorageSync('ar_shadow_publicKey');
 
