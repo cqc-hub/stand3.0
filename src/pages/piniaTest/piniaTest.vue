@@ -831,7 +831,7 @@
     // useTBanner(住院费用清单pdf1001067);
     // useTBanner(住院费用清单pdf1001067);
     // useTBanner(用药查询1001093);
-    useTBanner(queryNumber);
+    useTBanner(ziXun);
     // useTBanner(手术进度1001093);
     // patientUtils.faceVerifyAndPData({
     //   name: '陈钦川',

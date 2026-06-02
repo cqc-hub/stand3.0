@@ -26,7 +26,12 @@
     useTBanner,
     wait,
   } from '@/utils';
-  import { deQueryForUrl, getLocalStorage, removeLocation } from '@/common';
+  import {
+    deQueryForUrl,
+    getLocalStorage,
+    joinQuery,
+    removeLocation,
+  } from '@/common';
   import { CanWrite } from '@/typeUtils';
   import { useCacheStore } from '@/stores';
 
@@ -90,7 +95,12 @@
   });
 
   onShareAppMessage((opt) => {
-    return {};
+    return {
+      path: joinQuery('/pagesA/webView/webView', {
+        cache: '0',
+        https: encodeURIComponent(src.value || cacheStore.cacheData),
+      }),
+    };
   });
 </script>
 
