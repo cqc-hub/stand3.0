@@ -304,7 +304,7 @@
         authCode = 1;
       }
 
-      if (insuranceParamsWx.authCode === 1) {
+      if (authCode === 1) {
         let payBackParams = JSON.stringify(fd.payBackParams);
         setLocalStorage({
           'get-wx-medical-netWork-path': encodeURIComponent(

@@ -546,14 +546,6 @@ export const _getQxMedicalNation = async (
   result.payAuthNo = result.payAuthNo || result.familyPayAuthNo;
   result.loginIdCard = result.idCard;
 
-  let playMedicalCount = getLocalStorage('playMedicalCount');
-  if (!playMedicalCount) {
-    playMedicalCount = 1;
-    setLocalStorage({
-      playMedicalCount,
-    });
-  }
-
   return <TWxAuthorize>result;
 };
 
