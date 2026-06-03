@@ -371,9 +371,18 @@
 
               <view v-else-if="item.title === '诊后管理'">
                 <GuideContentListCol
+                  v-if="(config.zhglNode1001035.cols || []).length"
                   :cols="config.zhglNode1001035.cols || []"
                   :lab="item"
                 />
+
+                <view
+                  v-if="config.zhglNode1001035 && config.zhglNode1001035.tip"
+                  class="g-break-word f28 color-warn mt12"
+                >
+                  {{ config.zhglNode1001035.tip }}
+                </view>
+
                 <GuideBtns
                   :item="item"
                   :btns="zhglBtns"
@@ -607,7 +616,6 @@
       key: 'areaName',
     },
   ]);
-
 
   const zhglBtns = computed<TGuideButtonConfig[]>(() => {
     return props.config.zhglNode1001035?.btns || [];
