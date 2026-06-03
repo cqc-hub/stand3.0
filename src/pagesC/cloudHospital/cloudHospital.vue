@@ -86,7 +86,7 @@
       });
 
       if (authCode) {
-        // 获取授权码
+        // 获取授权码返回互联网医院即可
         if (getLocalStorage('get-wx-medical-netWork-path')) {
           const resultConfig = JSON.parse(
             decodeURIComponent(getLocalStorage('get-wx-medical-netWork-path'))
@@ -96,7 +96,14 @@
 
           let authInfo1 = {};
           if (resultConfig?.payAuthNo) {
-            authInfo1 = await getQxMedicalNation({});
+            const auth = await getQxMedicalNation({});
+
+            const { authNo } = auth;
+
+            if (authNo) {
+              auth.payAuthNo = authNo;
+            }
+            authInfo1 = auth;
           }
           setLocalStorage({
             'get-wx-medical-netWork-path': '',
