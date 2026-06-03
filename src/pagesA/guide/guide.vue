@@ -309,7 +309,9 @@
     if (gStores.globalStore.sysCode === '1001035') {
       const isAllComplete = list.every((o) => {
         if (o) {
-          return o.completionStatus === 1 || o.title === '复诊签到';
+          return (
+            o.completionStatus === 1 || ['复诊签到', '云候诊'].includes(o.title)
+          );
         }
 
         return true;
@@ -347,7 +349,7 @@
       });
 
     const {
-      node1Info,
+      node1Info = {},
       node2Info,
       node3Info,
       node4Info,
@@ -404,6 +406,17 @@
         }
 
         return true;
+      })
+      // 云候诊
+      .filter((o) => {
+        if (_regWay === '1' && gStores.globalStore.sysCode === '1001035') {
+          const { title } = o;
+
+          if (['门诊签到', '门诊取号', '复诊签到'].includes(title)) {
+            return false;
+          }
+        }
+        return true;
       });
 
     // 新增逻辑：处理复诊签到节点
@@ -433,7 +446,25 @@
       }
     });
 
+    if (_regWay === '1' && gStores.globalStore.sysCode === '1001035') {
+      rList.unshift({
+        title: '云候诊',
+        completionStatus: rList.some((o) => o && o.completionStatus === 1)
+          ? 1
+          : 0,
+        _regWay,
+      });
+
+      rList.unshift({
+        ...node1Info,
+        title: '挂号',
+        completionStatus: 1,
+        _regWay,
+      });
+    }
+
     visitInfoList.value = rList.reverse();
+
     dealListWith1001035(visitInfoList.value);
   };
 
@@ -504,13 +535,19 @@
           const {
             processResultList,
             deptId,
-            deptName,
+            deptName = '',
+            address = '',
             disposeTime,
             hosId,
             hosName,
             visitNo,
             hosDocId,
           } = t;
+          // 维护这个值 '1' 云诊室 '0' 其他
+          const _regWay =
+            address.includes('云诊室') || deptName.includes('云诊室')
+              ? '1'
+              : '0';
 
           const info = {
             ...t,
@@ -655,6 +692,33 @@
               ...info,
               title: '就诊完成',
               sort: 10,
+              completionStatus: 1,
+            });
+          }
+
+          if (
+            gStores.globalStore.sysCode === '1001035' &&
+            _regWay === '1' &&
+            t.itemList.length
+          ) {
+            t.itemList = t.itemList.filter(
+              (o) =>
+                o &&
+                ![
+                  '门诊签到',
+                  '门诊取号',
+                  '复诊签到',
+                  '诊区签到',
+                  '门诊就诊',
+                ].includes(o.title)
+            );
+            t.itemList.push({
+              title: '云候诊',
+              completionStatus: 1,
+            });
+            t.itemList.push({
+              title: '挂号',
+              ...t,
               completionStatus: 1,
             });
           }

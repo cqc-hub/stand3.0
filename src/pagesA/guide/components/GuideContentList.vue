@@ -33,7 +33,8 @@
                 :class="{
                   'collapse-header-open': arrowBottom,
                   'collapse-header-close': !arrowBottom,
-                  'collapse-unfinished': isActive(item) && item.completionStatus !== undefined,
+                  'collapse-unfinished':
+                    isActive(item) && item.completionStatus !== undefined,
                 }"
                 class="pl24 pr24 pt32 pb32 bg-white animate__animated relative collapse-header"
               >
@@ -390,6 +391,49 @@
                 />
               </view>
 
+              <view v-else-if="item.title === '云候诊'">
+                <view v-if="config.yunNode1001035">
+                  <GuideContentListCol
+                    v-if="(config.yunNode1001035.cols || []).length"
+                    :cols="config.yunNode1001035.cols || []"
+                    :lab="item"
+                  />
+
+                  <view
+                    v-if="config.yunNode1001035 && config.yunNode1001035.tip"
+                    class="g-break-word f28 color-warn mt12"
+                  >
+                    {{ config.yunNode1001035.tip }}
+                  </view>
+
+                  <GuideBtns
+                    :item="item"
+                    :btns="config.yunNode1001035.btns || []"
+                    @btn-click="(v) => emits('btn-click', v)"
+                  />
+                </view>
+              </view>
+
+              <view
+                v-else-if="
+                  item.title === '挂号' &&
+                  gStores.globalStore.sysCode === '1001035'
+                "
+              >
+                <GuideContentListCol
+                  :cols="mzqhCol"
+                  :lab="item"
+                  @click-row="(v) => colRowClick(item, v)"
+                  @go-address-map="handlerAddressMap"
+                />
+
+                <GuideBtns
+                  :item="item"
+                  :btns="mzqhBtns"
+                  @btn-click="(v) => emits('btn-click', v)"
+                />
+              </view>
+
               <view v-else>暂未实现</view>
             </view>
           </g-collapse>
@@ -403,7 +447,7 @@
   import { watch, ref, computed } from 'vue';
   import TagStatus from './TagStatus.vue';
   import { TVisitInfo } from '../guide';
-  import { ApiParamsConfig, TButtonConfig, TGuideButtonConfig } from '@/types';
+  import { ApiParamsConfig, TGuideButtonConfig } from '@/types';
   import { GStores } from '@/utils';
   import GuideContentListCol from './GuideContentListCol.vue';
   import GuideReportProgress from './GuideReportProgress.vue';
@@ -419,10 +463,10 @@
       list: () => [],
     }
   );
+  const gStores = new GStores();
 
   // 为了温附二的特殊需求 要求前两个节点标题展示不一样
   const getNodeTitle = (item) => {
-    const gStores = new GStores();
     // 如果 susCode 是 1001067，则修改前两个节点的标题
     if (gStores.globalStore.sysCode === '1001067') {
       if (item.title === '门诊取号') return '挂号信息'; // 第一个节点改为“挂号信息”

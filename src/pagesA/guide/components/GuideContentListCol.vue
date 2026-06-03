@@ -80,6 +80,10 @@
 
   const showAddress = (col) => {
     HosNavData;
+    const { address = '' } = props.lab;
+    if (address.includes('云诊室')) {
+      return false;
+    }
     if (
       gStores.globalStore.sysCode === '1001035' &&
       ['12675', '12713'].includes(props.lab.hosId) &&

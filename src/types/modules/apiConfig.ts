@@ -63,6 +63,12 @@ export type ApiParamsConfig = {
       cols: { label: string; key: string }[];
       btns: TGuideButtonConfig[];
     };
+    //云候诊 1001035
+    yunNode1001035: {
+      tip: string;
+      cols: { label: string; key: string }[];
+      btns: TGuideButtonConfig[];
+    };
   };
 
   // 健康档案
