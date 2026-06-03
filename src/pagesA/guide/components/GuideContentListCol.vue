@@ -30,7 +30,8 @@
                     v-if="
                       !showAddress(col) &&
                       ['categorName', 'site', 'areaName'].includes(col.key) &&
-                      lab.hosId
+                      lab.hosId &&
+                      lab.areaName !== '网络就诊'
                     "
                     class="ml12 color-blue"
                   >
@@ -94,7 +95,7 @@
       ['itemAddress', 'site', 'areaName'].includes(col.key)
     ) {
       //温附二
-      if (props.lab.billDeptId ) {
+      if (props.lab.billDeptId) {
         return true;
       }
       return false;
@@ -104,7 +105,7 @@
 
   const emits = defineEmits(['go-report', 'go-address-map', 'click-row']);
   const rowClick = (col) => {
-    if (showAddress(col)) {
+    if (showAddress(col) && props.lab.areaName !== '网络就诊') {
       emits('go-address-map', props.lab);
     }
 

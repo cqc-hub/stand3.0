@@ -15,7 +15,7 @@
       <view class="flex">
         <view
           :class="{
-            ['bg-blue']: isActive(item),
+            ['bg-blue']: isActive(item) && item.completionStatus !== undefined,
           }"
           class="progress-number z-1 flex items-center justify-center relative f26 color-fff mr12"
         >
@@ -33,7 +33,7 @@
                 :class="{
                   'collapse-header-open': arrowBottom,
                   'collapse-header-close': !arrowBottom,
-                  'collapse-unfinished': isActive(item),
+                  'collapse-unfinished': isActive(item) && item.completionStatus !== undefined,
                 }"
                 class="pl24 pr24 pt32 pb32 bg-white animate__animated relative collapse-header"
               >
@@ -651,7 +651,8 @@
   const colRowClick = (item, { col }) => {
     if (
       ['categorName', 'site', 'areaName', 'hosName'].includes(col.key) &&
-      item.hosId
+      item.hosId &&
+      item.areaName !== '网络就诊'
     ) {
       emits('open-hos-location', item);
     }
