@@ -29,7 +29,10 @@
       >
         <view class="assist-card animate__animated animate__fadeIn">
           <view class="flex-normal-between">
-            <view @click.stop="guideToHos(messData)" class="flex p24v f32 items-center">
+            <view
+              @click.stop="guideToHos(messData)"
+              class="flex p24v f32 items-center"
+            >
               <text class="iconfont icon-location ml12 f40">&#xe6d7;</text>
               <view class="hos pr12">{{ messData.hosName }}</view>
               <view class="dept pl12">{{ messData.deptName }}</view>
@@ -96,8 +99,7 @@
                     class="dot"
                     :class="{
                       active: item.value * 1 <= messData.activeStausIndex * 1,
-                      [`active-${messData.activeStausIndex - item.value}`]:
-                        true,
+                      [`active-${messData.activeStausIndex - item.value}`]: true,
                     }"
                     v-for="item in getFourItemsSmart(
                       messData.statusList,
@@ -128,7 +130,14 @@
             >
               <view class="title f24 flex ellipsis-line-clamp2">
                 <view class="wxts flex">
-                  <text class="iconfont color-warn mr12 f26">&#xe6d1;</text>
+                  <text
+                    :style="{
+                      top: '6rpx',
+                    }"
+                    class="iconfont color-warn mr12 f26 relative"
+                  >
+                    &#xe6d1;
+                  </text>
                   <text class="color-warn f26 mr12 text-ellipsis">
                     就诊提示 :
                   </text>

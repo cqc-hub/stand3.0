@@ -319,9 +319,10 @@
         list.unshift({
           ...list[0],
           title: '诊后管理',
-          tip: '您可按需选择签约我院慢病管理服务,为您的健康保驾护航！',
+          // tip: '您可按需选择签约我院慢病管理服务,为您的健康保驾护航！',
           defaultExpand: true,
           completionStatus: undefined,
+          ...(pageConfig.value.zhglNode1001035 || {}),
         } as any);
       }
     }
@@ -466,6 +467,8 @@
       .finally(() => {
         isComplete.value = true;
       });
+
+    // console.log(JSON.stringify(result))
 
     if (result && result.length) {
       visitList.value = result;

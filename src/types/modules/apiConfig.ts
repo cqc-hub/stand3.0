@@ -56,6 +56,13 @@ export type ApiParamsConfig = {
     otherTip?: string;
     // 复诊签到
     fzqdTip?: string;
+
+    // 诊后管理 1001035 专用
+    zhglNode1001035: {
+      tip: string;
+      cols: { label: string; key: string }[];
+      btns: TGuideButtonConfig[];
+    };
   };
 
   // 健康档案

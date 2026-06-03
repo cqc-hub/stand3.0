@@ -42,6 +42,7 @@ export const miniProgramConfig: {
     toutiaoAppid: 'tt00a7761a9facebee01',
     harmonyBundleName: 'com.atomicservice.6917564602329951506',
     name: '江苏省中医院',
+    h5AppidDisabledInTest: true,
 
     isOpenOcr: false,
     isSearchInHos: true,
@@ -324,8 +325,8 @@ export const miniProgramConfig: {
                 // zs
                 // 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui/#/pay-loading',
 
-              // cs
-              'https://ybj.jszwfw.gov.cn/mmc/hsa-mms-ui/#/pay-loading',
+                // cs
+                'https://ybj.jszwfw.gov.cn/mmc/hsa-mms-ui/#/pay-loading',
             },
           },
           isMedicalOrder: '1',
@@ -1218,6 +1219,27 @@ export const miniProgramConfig: {
       login: { isSkipPerfect: '1' },
       homeNavTitleLogo:
         'https://phsdevoss.eheren.com/pcloud/phs3.0/1001103-home-nav-title.png',
+
+      medicalMHelp: {
+        wx: {
+          medicalNation: {
+            appId: 'wxe183cd55df4b4369',
+            path: 'auth/pages/bindcard/auth/index',
+            pathExtraData: {
+              openType: 'getAuthCode',
+              cityCode: '520100',
+              orgCodg: 'H52011502116',
+              orgChnlCrtfCodg:
+                'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsS2jF/3mS+4Bcso0t0tn9n',
+              bizType: '04107',
+              orgAppId: '1JQ5I9QQO1264460C80A0000E7FF961B',
+              channel: 'AAG8URt7KPQsxjUVCYfXexpu',
+            },
+          },
+          isMedicalOrder: '1',
+          isGbFamilyPayment: '1',
+        },
+      },
     },
   },
   '1001109': {

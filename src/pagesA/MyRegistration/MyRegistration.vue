@@ -398,7 +398,7 @@
 
   const ywzClick = async (item: IRegistrationCardItem) => {
     // 省中 青玲医圣-专门预问诊
-    ywzRql1001035(item);
+    // ywzRql1001035(item);
 
     if (gStores.globalStore.sysCode === '1001045') {
       goAskForDoc1001045(item);

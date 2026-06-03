@@ -20,6 +20,7 @@ import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
 import {
   apiAsync,
   cacheUtil,
+  getMiniProgramEnv,
   nameConvert,
   ServerStaticData,
   wait,
@@ -237,7 +238,10 @@ export class LoginUtils extends GStores {
           loginData: this.globalStore.token.loginData,
           source: this.globalStore.browser.source,
         });
-        await api.wfePatSync(reqData);
+
+        if ((await getMiniProgramEnv()) !== 'develop') {
+          await api.wfePatSync(reqData);
+        }
       }
       if (['1001086', '1001094'].includes(sysCode) && ev === 'wx') {
         const reqData = getH5OpenidParam({

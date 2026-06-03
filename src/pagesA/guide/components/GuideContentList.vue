@@ -370,7 +370,10 @@
               </view>
 
               <view v-else-if="item.title === '诊后管理'">
-                <GuideContentListCol :cols="zhglCol" :lab="item" />
+                <GuideContentListCol
+                  :cols="config.zhglNode1001035.cols || []"
+                  :lab="item"
+                />
                 <GuideBtns
                   :item="item"
                   :btns="zhglBtns"
@@ -605,26 +608,21 @@
     },
   ]);
 
-  // 诊后管理
-  const zhglCol = ref([
-    {
-      label: '温馨提示',
-      key: 'tip',
-    },
-  ]);
 
   const zhglBtns = computed<TGuideButtonConfig[]>(() => {
-    return [
-      {
-        type: 'self',
-        path: 'pagesC/commonHosNet/commonHosNet?returnUrl=pages/v3/afterDiagnosis/home',
-        text: '慢病管理',
-        addition: {
-          patientId: '_pd',
-        },
-        btnClass: 'btn-primary color-fff'
-      },
-    ];
+    return props.config.zhglNode1001035?.btns || [];
+
+    // [
+    //   {
+    //     type: 'self',
+    //     path: 'pagesC/commonHosNet/commonHosNet?returnUrl=pages/v3/afterDiagnosis/home',
+    //     text: '慢病管理',
+    //     addition: {
+    //       patientId: '_pd',
+    //     },
+    //     btnClass: 'btn-primary color-fff'
+    //   },
+    // ];
     // return [] as TGuideButtonConfig[];
   });
 
