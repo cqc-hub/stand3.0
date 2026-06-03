@@ -309,7 +309,7 @@
     if (gStores.globalStore.sysCode === '1001035') {
       const isAllComplete = list.every((o) => {
         if (o) {
-          return o.completionStatus === 1;
+          return o.completionStatus === 1 || o.title === '复诊签到';
         }
 
         return true;
