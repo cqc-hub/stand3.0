@@ -352,6 +352,7 @@
           schId,
           source,
           sysCode,
+          cardNumber: gStores.userStore.patChoose.cardNumber
         };
 
         let actionApi = api.getNumberSource;

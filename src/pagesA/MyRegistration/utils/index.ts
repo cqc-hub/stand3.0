@@ -746,6 +746,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       schDate,
       schId,
       source,
+      cardNumber: gStores.userStore.patChoose.cardNumber,
     };
 
     orderSourceList.value = [];
