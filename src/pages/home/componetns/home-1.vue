@@ -99,7 +99,7 @@
       {
         imageCode: 'dongzong_gzhCode.jpg',
         title: '欢迎关注',
-        subTitle: '长按识别二维码，关注公众号',
+        subTitle: '长按识别二维码，关注服务号',
         isHideInfo: true,
         theme: '公众号',
         name: '联勤集结号',

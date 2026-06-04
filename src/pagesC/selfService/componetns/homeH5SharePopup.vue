@@ -37,7 +37,7 @@
           </view>
 
           <view class="g-flex-rc-cc color-444 mb32">
-            {{ configData.subTitle || '长按识别二维码，关注公众号' }}
+            {{ configData.subTitle || '长按识别二维码，关注服务号' }}
           </view>
 
           <view
@@ -106,7 +106,7 @@
           imageCode: '',
           theme: '公众号',
           title: '欢迎关注',
-          subTitle: '长按识别二维码，关注公众号',
+          subTitle: '长按识别二维码，关注服务号',
           isHideInfo: false,
         };
       },

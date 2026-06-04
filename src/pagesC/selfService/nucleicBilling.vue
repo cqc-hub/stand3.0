@@ -426,7 +426,7 @@
       imageCode: pageProps.value.showCareModel,
       theme: '公众号',
       title: '欢迎关注',
-      subTitle: '长按识别二维码，关注公众号',
+      subTitle: '长按识别二维码，关注服务号',
       isShowInfo: true,
     };
     console.log('await isSubscribeWx()', await isSubscribeWx());
