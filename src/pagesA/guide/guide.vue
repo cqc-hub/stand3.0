@@ -461,6 +461,11 @@
         completionStatus: 1,
         _regWay,
       });
+
+      //  没返回其他节点（检查检验、取药、处置、其他）不显示门诊缴费
+      if (!(node5Info || node6Info || node7Info || node8Info)) {
+        rList = rList.filter((o) => o && !['门诊缴费'].includes(o.title));
+      }
     }
 
     visitInfoList.value = rList.reverse();
