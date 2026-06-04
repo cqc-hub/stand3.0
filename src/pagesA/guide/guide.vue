@@ -309,9 +309,7 @@
     if (gStores.globalStore.sysCode === '1001035') {
       const isAllComplete = list.every((o) => {
         if (o) {
-          return (
-            o.completionStatus === 1 || ['复诊签到', '云候诊'].includes(o.title)
-          );
+          return o.completionStatus === 1 || ['复诊签到'].includes(o.title);
         }
 
         return true;
@@ -324,6 +322,7 @@
           // tip: '您可按需选择签约我院慢病管理服务,为您的健康保驾护航！',
           defaultExpand: true,
           completionStatus: undefined,
+          _regWay: list[0]?._regWay,
           ...(pageConfig.value.zhglNode1001035 || {}),
         } as any);
       }
@@ -423,7 +422,6 @@
     const hasNode5To7 = !!(node5Info || node6Info || node7Info);
 
     if (hasNode5To7) {
-      //
       // 如果存在5、6、7中任意一个节点，则添加"复诊签到"节点, 内容同步"诊区签到"
       const reviewSignNode = {
         ...(node2Info || {}),
@@ -446,6 +444,7 @@
       }
     });
 
+    // 云候诊处理
     if (_regWay === '1' && gStores.globalStore.sysCode === '1001035') {
       rList.unshift({
         title: '云候诊',
@@ -645,6 +644,7 @@
                   [key]: [],
                   completionStatus: -1,
                   sort,
+                  _regWay
                 };
                 t.itemList.push(item);
               }
@@ -678,6 +678,7 @@
               const { key } = typeMap[orderClass] || typeMap['-1'];
               const itemList = o[key] || [];
               o.completionStatus = o.completionStatus || 0;
+              o._regWay = _regWay;
 
               if (itemList.length) {
                 o.completionStatus =
@@ -698,6 +699,7 @@
               title: '就诊完成',
               sort: 10,
               completionStatus: 1,
+              _regWay,
             });
           }
 
@@ -720,11 +722,16 @@
             t.itemList.push({
               title: '云候诊',
               completionStatus: 1,
+              _regWay,
             });
             t.itemList.push({
               title: '挂号',
               ...t,
               completionStatus: 1,
+              appointmentTime: t.disposeTime,
+              categorName: t.deptName,
+              areaName: '网络就诊',
+              _regWay,
             });
           }
           if (t.itemList.length) {

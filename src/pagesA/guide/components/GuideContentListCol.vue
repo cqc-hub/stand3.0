@@ -31,7 +31,7 @@
                       !showAddress(col) &&
                       ['categorName', 'site', 'areaName'].includes(col.key) &&
                       lab.hosId &&
-                      lab.areaName !== '网络就诊'
+                      !isNetOrder
                     "
                     class="ml12 color-blue"
                   >
@@ -68,6 +68,7 @@
   import globalGl from '@/config/global';
   import { HosNavData } from '@/pagesA/MyRegistration/utils/MyRegistration';
   import { GStores } from '@/utils';
+  import { computed } from 'vue';
 
   const gStores = new GStores();
   const props = withDefaults(
@@ -80,8 +81,7 @@
 
   const showAddress = (col) => {
     HosNavData;
-    const { address = '' } = props.lab;
-    if (address.includes('云诊室')) {
+    if (isNetOrder.value) {
       return false;
     }
     if (
@@ -109,7 +109,7 @@
 
   const emits = defineEmits(['go-report', 'go-address-map', 'click-row']);
   const rowClick = (col) => {
-    if (showAddress(col) && props.lab.areaName !== '网络就诊') {
+    if (showAddress(col) && !isNetOrder.value) {
       emits('go-address-map', props.lab);
     }
 
@@ -117,6 +117,13 @@
       col,
     });
   };
+
+  // 判断时候网络就诊, 不显示导航
+  const isNetOrder = computed(() => {
+    const { _regWay } = props.lab;
+
+    return _regWay === '1';
+  });
 </script>
 
 <style lang="scss" scoped>
