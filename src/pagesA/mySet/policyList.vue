@@ -86,14 +86,14 @@
       text-align: center;
 
       image {
-        width: 147upx;
+        width: 200upx;
         // height: 77upx;
         margin: 93upx 0 10upx 0;
       }
 
       view {
         color: #999;
-        font-size: var(--hr-font-size-xs);
+        font-size: var(--hr-font-size-xxs);
         line-height: 40upx;
       }
     }
