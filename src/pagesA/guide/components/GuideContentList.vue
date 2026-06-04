@@ -29,12 +29,13 @@
             :border="false"
           >
             <template #header="{ isShow: arrowBottom }">
+              <!--
+                  'collapse-unfinished':
+                    isActive(item) && item.completionStatus !== undefined, -->
               <view
                 :class="{
                   'collapse-header-open': arrowBottom,
                   'collapse-header-close': !arrowBottom,
-                  'collapse-unfinished':
-                    isActive(item) && item.completionStatus !== undefined,
                 }"
                 class="pl24 pr24 pt32 pb32 bg-white animate__animated relative collapse-header"
               >
@@ -93,7 +94,10 @@
 
                     <GuideContentListCol
                       :cols="drugCol"
-                      :lab="drug"
+                      :lab="{
+                        ...item,
+                        ...drug,
+                      }"
                       @go-address-map="
                         (e) =>
                           handlerAddressMap({
@@ -696,7 +700,7 @@
     if (
       ['categorName', 'site', 'areaName', 'hosName'].includes(col.key) &&
       item.hosId &&
-      item.areaName !== '网络就诊'
+      item._regWay !== '1'
     ) {
       emits('open-hos-location', item);
     }
