@@ -179,15 +179,16 @@
       text-align: center;
 
       image {
-        width: 147upx;
+        width: 200upx;
         // height: 77upx;
         margin: 93upx 0 10upx 0;
       }
 
       view {
         color: #999;
-        font-size: var(--hr-font-size-xs);
+        font-size: var(--hr-font-size-xxs);
         line-height: 40upx;
+        opacity: 0.6;
       }
     }
 
@@ -230,22 +231,5 @@
   }
   .g-container {
     height: calc(100vh - 540rpx);
-  }
-  .top-info {
-    height: 250rpx;
-    text-align: center;
-
-    image {
-      width: 200upx;
-      // height: 77upx;
-      margin: 93upx 0 10upx 0;
-    }
-
-    view {
-      color: #999;
-      font-size: var(--hr-font-size-xs);
-      line-height: 40upx;
-      opacity: 0.6;
-    }
   }
 </style>
