@@ -15,7 +15,7 @@ export const titleMap = {
   5: '检查项目',
   6: '检验项目',
   7: '其他项目',
-  8: '门诊取药',
+  8: '取药',
   9: '复诊签到',
 } as const;
 
@@ -23,6 +23,7 @@ type TTitleMap = typeof titleMap;
 
 export type TVisitInfo = {
   title: TTitleMap[keyof TTitleMap];
+  _title?: string; // 因为很多地方把title当作key， 所以如果需要特别修改title名字， 用这个字段
   appointmentTime: string;
   areaId: string;
   areaName: string;

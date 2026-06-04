@@ -78,7 +78,7 @@
             </template>
 
             <view class="bg-white pr24 pl24 pt24 pb24 collapse-content f28 row">
-              <view v-if="item.title === '门诊取药'" class="">
+              <view v-if="item.title === '取药'" class="">
                 <view v-if="item.drugs && item.drugs.length">
                   <view
                     v-for="(drug, p) in item.drugs"
@@ -476,7 +476,7 @@
       if (item.title === '门诊取号') return '挂号信息'; // 第一个节点改为“挂号信息”
       if (item.title === '诊区签到') return '门诊取号'; // 第二个节点改为“门诊取号”
     }
-    return item.title; // 其他情况保持原样
+    return item._title || item.title; // 其他情况保持原样
   };
 
   const isActive = (item) => {
@@ -506,7 +506,7 @@
     return props.config.zqqdBtns || [];
   });
 
-  // 门诊取药下面按钮
+  // 取药下面按钮
   const takeDrugBtns = computed(() => {
     return props.config.takeDrugBtns || [];
   });
@@ -734,7 +734,7 @@
     }
 
     switch (item.title) {
-      case '门诊取药':
+      case '取药':
         tip = config.tabDrugTip || '';
         break;
 

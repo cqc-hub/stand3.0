@@ -430,7 +430,7 @@
       };
 
       // 将复诊签到节点插入到节点8之前
-      const node8Index = rList.findIndex((node) => node.title === '门诊取药'); // 节点8是"门诊取药"
+      const node8Index = rList.findIndex((node) => node.title === '取药'); // 节点8是"取药"
       if (node8Index !== -1) {
         rList.splice(node8Index, 0, reviewSignNode);
       } else {
@@ -604,12 +604,12 @@
               sort: 7,
             },
             A: {
-              title: '门诊取药',
+              title: '取药',
               key: 'drugs',
               sort: 8,
             },
             B: {
-              title: '门诊取药',
+              title: '取药',
               key: 'drugs',
               sort: 9,
             },
